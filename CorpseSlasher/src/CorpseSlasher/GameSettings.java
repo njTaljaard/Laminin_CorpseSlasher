@@ -5,6 +5,8 @@ import com.jme3.system.AppSettings;
 /**
  * @author Laminin
  * @param  Derivco
+ * @param  University of Pretoria
+ * @param  COS301
  * GameSettings will be used to load and store the users custom game settings
  * at launch and during game changes. Read Setttings form ./GameSettings.txt
  */

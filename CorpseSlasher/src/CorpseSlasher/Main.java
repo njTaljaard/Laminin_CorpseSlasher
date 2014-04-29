@@ -7,6 +7,8 @@ import com.jme3.renderer.RenderManager;
  * @author normenhansen
  * @author Laminin
  * @param  Derivco
+ * @param  University of Pretoria
+ * @param  COS301
  * Main class to handle program start up until graphical main loop is reached.
  */
 public class Main extends SimpleApplication {
@@ -22,7 +24,13 @@ public class Main extends SimpleApplication {
      */
     @Override
     public void simpleInitApp() {
-        
+        /**
+         * TODO:
+         *      Load game setting into final class to be readable through game.
+         *      Create game start with map name, rootNode, assetManager.
+         */
+        GameScene gameScene = new GameScene(0);
+        rootNode.attachChild(gameScene.retrieveSceneNode());
     }
 
     @Override

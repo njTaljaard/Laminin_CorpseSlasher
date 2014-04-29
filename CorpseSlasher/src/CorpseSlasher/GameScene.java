@@ -1,32 +1,43 @@
 package CorpseSlasher;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 
 /**
  * @author Laminin
  * @param  Derivco
- * GameScene will load and compile the scene. It implements runnable to improve
- * loading of models into the scene.
+ * @param  University of Pretoria
+ * @param  COS301
+ * GameScene will load and compile the scene with its various assets.
  */
-public class GameScene implements Runnable {
+public class GameScene {
     
     /**
      * All global variables required to initialize each scene element.
      */
-    AssetManager assetManager;
+    private Spatial sceneModel;
+    private AssetManager assetManager;
+    private Node sceneNode;
+    private int map;
     
-    public GameScene() {
-        try {
-            assetManager = AssetManager.class.newInstance();
-        } catch (InstantiationException | IllegalAccessException ex) {
-            //TODO: extend to use ExceptionHandler
+    public GameScene(int selectedMap) {
+        map = selectedMap;
+        initScene();
+    }
+    
+    private void initScene() {
+        switch(map) {
+            case(0) :   
+                BasicScene basicScene = new BasicScene("ZombieScene1");
+                sceneNode.attachChild(basicScene.retrieveSceneNode());
+                break;
+            default :
+                break;
         }
     }
-
-    /**
-     * This is a thread run to compose scene elements.
-     */
-    public void run() {
-        
+    
+    public Node retrieveSceneNode() {
+        return sceneNode;
     }
 }
