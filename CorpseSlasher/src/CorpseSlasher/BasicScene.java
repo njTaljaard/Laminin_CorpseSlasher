@@ -1,6 +1,9 @@
 package CorpseSlasher;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Plane;
 import com.jme3.math.Quaternion;
@@ -34,11 +37,47 @@ public class BasicScene {
     private Spatial sceneModel;
     private String sceneName;
     private Node sceneNode;
+    private Node lightNode;
     
-    public BasicScene(String mapName) {
+    /**
+     * BasicScene will create the scene attached to sceneNode.
+     * @param mapName - Map that you desire to load.
+     * @param assMan - Assetmanager passed through from main game.
+     * @param vp - ViewPort required for water, contains position of camara.
+     */
+    public BasicScene(String mapName, AssetManager assMan, ViewPort vp) {
         sceneName = mapName;
+        assetManager =  assMan;
+        viewPort = vp;
+        sceneNode = new Node("TerrainWater");
+        lightNode = new Node("AmbientSun");
+        
+        initAmbientLight();
+        initSunLight();
         initTerrain();
         initWater();
+    }
+    
+    /**
+     * initAmbientLight will crreate the basic ambient light to be able to see 
+     * within the scene.
+     */
+    private void initAmbientLight() {
+            /** A white ambient light source. */ 
+        AmbientLight ambient = new AmbientLight();
+        ambient.setColor(ColorRGBA.White);
+        sceneNode.addLight(ambient); 
+    }
+    
+    /**
+     * 
+     */
+    private void initSunLight() {
+        Vector3f lightDir = new Vector3f(-4.9236743f, -1.27054665f, 5.896916f);
+        DirectionalLight sun = new DirectionalLight();
+        sun.setDirection(lightDir);
+        sun.setColor(ColorRGBA.White.clone().multLocal(1.7f));
+        sceneNode.addLight(sun);
     }
     
     /**
@@ -46,7 +85,7 @@ public class BasicScene {
      * it to the basic scene node.
      */
     private void initTerrain() {
-        sceneModel = assetManager.loadModel("Scenes/ZombieScene1.j3o");
+        sceneModel = assetManager.loadModel("Scenes/" + sceneName + ".j3o");
         if (sceneModel != null) {
             sceneNode.attachChild(sceneModel);
         } else {
@@ -76,17 +115,17 @@ public class BasicScene {
         Vector3f waterLocation = new Vector3f(0,-6,0); 
         waterProcessor.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation.dot(Vector3f.UNIT_Y))); 
         viewPort.addProcessor(waterProcessor); 
-        waterProcessor.setWaterDepth(10); 
+        waterProcessor.setWaterDepth(15); 
         // transparency of water 
         waterProcessor.setDistortionScale(0.05f); 
         // strength of waves 
-        waterProcessor.setWaveSpeed(0.05f); 
+        waterProcessor.setWaveSpeed(0.02f); 
         // speed of waves 
-        Quad quad = new Quad(800,800); 
+        Quad quad = new Quad(1000,1000); 
         quad.scaleTextureCoordinates(new Vector2f(6f,6f)); 
         Geometry water = new Geometry("water", quad); 
         water.setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X)); 
-        water.setLocalTranslation(-400, 0.32f, 400); 
+        water.setLocalTranslation(-200, -6, 250); 
         water.setShadowMode(RenderQueue.ShadowMode.Receive); 
         water.setMaterial(waterProcessor.getMaterial()); 
         sceneNode.attachChild(water);
@@ -98,22 +137,26 @@ public class BasicScene {
      */
     public void initPPcWater() { 
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-        Vector3f lightDir = new Vector3f(-4.0f, -1.0f, -5.0f);
+        Vector3f lightDir = new Vector3f(-4.0f, -5.0f, -5.0f);
         WaterFilter water = new WaterFilter(sceneNode, lightDir); 
-        water.setUseHQShoreline(true);
+        
+        water.setWaveScale(0.003f);
+        water.setMaxAmplitude(3.0f);
+        water.setFoamExistence(new Vector3f(1f, 4, 0.5f));
+        //water.setUseHQShoreline(true);
         water.setUseRefraction(true);
         water.setUseRipples(true);
         water.setUseSpecular(true);
-        water.setShoreHardness(0.05f);
-        water.setUnderWaterFogDistance(80);
-        water.setWindDirection(new Vector2f(0.7f, 0.2f));
+        water.setShoreHardness(0.005f);
+        water.setUnderWaterFogDistance(60);
+        water.setWindDirection(new Vector2f(0.25f, 0.25f));
         water.setCenter(Vector3f.ZERO); 
         water.setRadius(2600); 
-        water.setWaveScale(0.003f); 
-        water.setMaxAmplitude(6.0f); 
-        water.setFoamExistence(new Vector3f(1.0f, 4.0f, 0.5f)); 
+        water.setWaveScale(0.005f); 
+        water.setFoamExistence(new Vector3f(2.5f, 2.0f, 3.0f)); 
         water.setFoamTexture((Texture2D) assetManager.loadTexture("Common/MatDefs/Water/Textures/foam2.jpg")); 
-        water.setRefractionStrength(0.2f); water.setWaterHeight(5.0f); 
+        water.setRefractionStrength(0.2f); water.setWaterHeight(10.0f); 
+        
         fpp.addFilter(water); 
         viewPort.addProcessor(fpp); 
     }
@@ -123,5 +166,9 @@ public class BasicScene {
      */
     public Node retrieveSceneNode() {
         return sceneNode;
+    }
+    
+    public Node retrieveLightNode() {
+        return lightNode;
     }
 }

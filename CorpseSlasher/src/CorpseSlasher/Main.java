@@ -1,6 +1,7 @@
 package CorpseSlasher;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 
 /**
@@ -29,8 +30,18 @@ public class Main extends SimpleApplication {
          *      Load game setting into final class to be readable through game.
          *      Create game start with map name, rootNode, assetManager.
          */
-        GameScene gameScene = new GameScene(0);
+        
+        /**
+         * Turn this value up to move faster.
+         */
+        flyCam.setMoveSpeed(50f);
+        
+        cam.setLocation(new Vector3f(0.0f, 60.0f, 0.0f));
+        GameScene gameScene = new GameScene(0, assetManager, viewPort);
         rootNode.attachChild(gameScene.retrieveSceneNode());
+        
+        rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0); //terrain & water
+        rootNode.attachChildAt(gameScene.retrieveLightNode(), 1); //All light
     }
 
     @Override
