@@ -3,7 +3,6 @@ package CorpseSlasher;
 import com.jme3.asset.AssetManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 
 /**
  * @author Laminin
@@ -17,9 +16,7 @@ public class GameScene {
     /**
      * All global variables required to initialize each scene element.
      */
-    private Spatial sceneModel;
     private Node sceneNode;
-    private Node lightNode;
     private int map;
     
     /**
@@ -29,8 +26,7 @@ public class GameScene {
      */
     public GameScene(int selectedMap, AssetManager assestManager, ViewPort viewPort) {
         map = selectedMap;
-        sceneNode = new Node("scene");
-        lightNode = new Node("light");
+        sceneNode = new Node("GameScene");
         initScene(assestManager, viewPort);
     }
     
@@ -47,9 +43,5 @@ public class GameScene {
     
     public Node retrieveSceneNode() {
         return sceneNode;
-    }
-    
-    public Node retrieveLightNode() {
-        return lightNode;
     }
 }

@@ -35,9 +35,8 @@ public class BasicScene {
     private AssetManager assetManager;
     private ViewPort viewPort;
     private Spatial sceneModel;
-    private String sceneName;
+    private Vector3f lightDir;
     private Node sceneNode;
-    private Node lightNode;
     
     /**
      * BasicScene will create the scene attached to sceneNode.
@@ -46,15 +45,14 @@ public class BasicScene {
      * @param vp - ViewPort required for water, contains position of camara.
      */
     public BasicScene(String mapName, AssetManager assMan, ViewPort vp) {
-        sceneName = mapName;
         assetManager =  assMan;
         viewPort = vp;
-        sceneNode = new Node("TerrainWater");
-        lightNode = new Node("AmbientSun");
+        sceneNode = new Node("BasicScene");
+        lightDir = new Vector3f(2.9236743f, -3.27054665f, 5.896916f);
         
         initAmbientLight();
         initSunLight();
-        initTerrain();
+        initTerrain(mapName);
         initWater();
     }
     
@@ -73,7 +71,6 @@ public class BasicScene {
      * 
      */
     private void initSunLight() {
-        Vector3f lightDir = new Vector3f(-4.9236743f, -1.27054665f, 5.896916f);
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(lightDir);
         sun.setColor(ColorRGBA.White.clone().multLocal(1.7f));
@@ -84,7 +81,7 @@ public class BasicScene {
      * initTerrain will load the Scene j3o for the appropriate scene and attach
      * it to the basic scene node.
      */
-    private void initTerrain() {
+    private void initTerrain(String sceneName) {
         sceneModel = assetManager.loadModel("Scenes/" + sceneName + ".j3o");
         if (sceneModel != null) {
             sceneNode.attachChild(sceneModel);
@@ -137,19 +134,17 @@ public class BasicScene {
      */
     public void initPPcWater() { 
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-        Vector3f lightDir = new Vector3f(-4.0f, -5.0f, -5.0f);
         WaterFilter water = new WaterFilter(sceneNode, lightDir); 
         
         water.setWaveScale(0.003f);
         water.setMaxAmplitude(3.0f);
-        water.setFoamExistence(new Vector3f(1f, 4, 0.5f));
-        //water.setUseHQShoreline(true);
+        //water.setUseHQShoreline(true); //to high resource usage.
         water.setUseRefraction(true);
         water.setUseRipples(true);
         water.setUseSpecular(true);
         water.setShoreHardness(0.005f);
         water.setUnderWaterFogDistance(60);
-        water.setWindDirection(new Vector2f(0.25f, 0.25f));
+        water.setWindDirection(new Vector2f(0.35f, 0.35f));
         water.setCenter(Vector3f.ZERO); 
         water.setRadius(2600); 
         water.setWaveScale(0.005f); 
@@ -166,9 +161,5 @@ public class BasicScene {
      */
     public Node retrieveSceneNode() {
         return sceneNode;
-    }
-    
-    public Node retrieveLightNode() {
-        return lightNode;
     }
 }

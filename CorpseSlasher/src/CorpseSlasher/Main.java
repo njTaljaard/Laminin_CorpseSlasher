@@ -41,7 +41,6 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(gameScene.retrieveSceneNode());
         
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0); //terrain & water
-        rootNode.attachChildAt(gameScene.retrieveLightNode(), 1); //All light
     }
 
     @Override
