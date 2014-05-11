@@ -3,6 +3,7 @@ package CorpseSlasher;
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
+import jme3utilities.sky.SkyControl;
 
 /**
  * @author normenhansen
@@ -39,7 +40,14 @@ public class Main extends SimpleApplication {
         cam.setLocation(new Vector3f(0.0f, 60.0f, 0.0f));
         GameScene gameScene = new GameScene(0, assetManager, viewPort, cam);
         
-        rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0); //scene objects
+        rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0); //BasicScene objects
+        
+        /**
+         * @TODO test setting to see if advanced day night system should be used
+         */
+        SkyControl skyControl = gameScene.initDayNightSystem(assetManager, viewPort, cam);
+        rootNode.addControl(skyControl);
+        skyControl.setEnabled(true);
     }
 
     @Override

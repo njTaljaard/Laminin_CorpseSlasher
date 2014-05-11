@@ -4,6 +4,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import jme3utilities.sky.SkyControl;
 
 /**
  * @author Laminin
@@ -18,6 +19,7 @@ public class GameScene {
      * All global variables required to initialize each scene element.
      */
     private Node sceneNode;
+    private BasicScene basicScene;
     private int map;
     
     /**
@@ -34,12 +36,16 @@ public class GameScene {
     private void initScene(AssetManager assestManager, ViewPort viewPort, Camera cam) {
         switch(map) {
             case(0) :   
-                BasicScene basicScene = new BasicScene("ZombieScene1", assestManager, viewPort, cam);
+                basicScene = new BasicScene("ZombieScene1", assestManager, viewPort, cam);
                 sceneNode.attachChild(basicScene.retrieveSceneNode());
                 break;
             default :
                 break;
         }
+    }
+    
+    public SkyControl initDayNightSystem(AssetManager assMan, ViewPort vp, Camera cam) {
+        return basicScene.initDayNightSkyBox(assMan, vp, cam);
     }
     
     public Node retrieveSceneNode() {
