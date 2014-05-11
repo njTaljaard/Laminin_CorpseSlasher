@@ -3,6 +3,7 @@ package CorpseSlasher;
 import com.jme3.asset.AssetManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.Light;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Plane;
@@ -10,6 +11,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
@@ -17,8 +19,14 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture2D;
+import com.jme3.util.SkyFactory;
+import jme3utilities.sky.SkyControl;
 import com.jme3.water.SimpleWaterProcessor;
 import com.jme3.water.WaterFilter;
+import com.jme3.math.FastMath;
+import com.jme3.post.filters.BloomFilter;
+import java.util.Calendar;
+import jme3utilities.Misc;
 
 /**
  * @author Laminin
@@ -34,25 +42,32 @@ public class BasicScene {
      */
     private AssetManager assetManager;
     private ViewPort viewPort;
+    private Camera camera;
     private Spatial sceneModel;
     private Vector3f lightDir;
     private Node sceneNode;
+    private SkyControl skyControl;
+    private String sceneName;
     
     /**
      * BasicScene will create the scene attached to sceneNode.
      * @param mapName - Map that you desire to load.
      * @param assMan - Assetmanager passed through from main game.
      * @param vp - ViewPort required for water, contains position of camara.
+     * @param cam - Camera required to create a day night skybox system.
      */
-    public BasicScene(String mapName, AssetManager assMan, ViewPort vp) {
+    public BasicScene(String mapName, AssetManager assMan, ViewPort vp, Camera cam) {
         assetManager =  assMan;
         viewPort = vp;
+        camera = cam;
+        sceneName = mapName;
         sceneNode = new Node("BasicScene");
         lightDir = new Vector3f(2.9236743f, -3.27054665f, 5.896916f);
         
         initAmbientLight();
         initSunLight();
-        initTerrain(mapName);
+        initSkyBox();
+        initTerrain();
         initWater();
     }
     
@@ -60,20 +75,24 @@ public class BasicScene {
      * initAmbientLight will crreate the basic ambient light to be able to see 
      * within the scene.
      */
-    private void initAmbientLight() {
-            /** A white ambient light source. */ 
+    private void initAmbientLight() { 
         AmbientLight ambient = new AmbientLight();
         ambient.setColor(ColorRGBA.White);
+        ambient.setName("Ambient");
+        
         sceneNode.addLight(ambient); 
     }
     
     /**
-     * 
+     * initSunLight will create the scenes sunlight with a given direction and
+     * color.
      */
     private void initSunLight() {
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(lightDir);
-        sun.setColor(ColorRGBA.White.clone().multLocal(1.7f));
+        sun.setColor(ColorRGBA.White.clone().multLocal(1.5f));
+        sun.setName("Sun");
+        
         sceneNode.addLight(sun);
     }
     
@@ -81,10 +100,11 @@ public class BasicScene {
      * initTerrain will load the Scene j3o for the appropriate scene and attach
      * it to the basic scene node.
      */
-    private void initTerrain(String sceneName) {
+    private void initTerrain() {
         sceneModel = assetManager.loadModel("Scenes/" + sceneName + ".j3o");
         if (sceneModel != null) {
-            sceneNode.attachChild(sceneModel);
+            Node node = new Node("Terrain");
+            sceneNode.attachChild(node);
         } else {
             /**
              * @TODO throw exception to exception handler.
@@ -99,6 +119,7 @@ public class BasicScene {
         /**
          * @TODO determine if simpleWater or PPcWater should be used.
          */
+        //initSimpleWater();
         initPPcWater();
     }
     
@@ -125,7 +146,9 @@ public class BasicScene {
         water.setLocalTranslation(-200, -6, 250); 
         water.setShadowMode(RenderQueue.ShadowMode.Receive); 
         water.setMaterial(waterProcessor.getMaterial()); 
-        sceneNode.attachChild(water);
+        
+        Node node = new Node("SimpleWater");
+        sceneNode.attachChild(node);
     }     
     
     /**
@@ -134,11 +157,17 @@ public class BasicScene {
      */
     public void initPPcWater() { 
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-        WaterFilter water = new WaterFilter(sceneNode, lightDir); 
+        WaterFilter water;
         
+        if (skyControl == null) {
+            water = new WaterFilter(sceneNode, lightDir); 
+        } else {
+            water = new WaterFilter(sceneNode, skyControl.getUpdater().getDirection()); 
+        }
+        
+        //water.setUseHQShoreline(true); //to high resource usage. //see setting if high end build running.
         water.setWaveScale(0.003f);
         water.setMaxAmplitude(3.0f);
-        //water.setUseHQShoreline(true); //to high resource usage.
         water.setUseRefraction(true);
         water.setUseRipples(true);
         water.setUseSpecular(true);
@@ -154,6 +183,79 @@ public class BasicScene {
         
         fpp.addFilter(water); 
         viewPort.addProcessor(fpp); 
+    }
+    
+    /**
+     * initSkyBox will determine if the user would like to create a day night 
+     * system skybox or for low performance setting a simple skybox from a dds
+     * texture.
+     */
+    private void initSkyBox() {
+        /**
+         * @TODO determine if textureSkyBox or DayNightSkyBox should be used.
+         */
+        //initTextureSkyBox(sceneName);
+        initDayNightSkyBox();
+    }
+    
+    /**
+     * initDayNightSkyBox creates a day-night system with a sun, moon, stars &
+     * clouds.
+     */
+    private void initDayNightSkyBox() {
+        /**
+         * @param AssetManager, Camera, Cloud Flattening, Star motion, Bottom dome )
+         */
+        skyControl = new SkyControl(assetManager, camera, 0.5f, true, false);
+        /skyControl.setCloudModulation(true);
+        skyControl.setCloudiness(1f);
+        skyControl.setCloudYOffset(0.4f);
+        skyControl.getSunAndStars().setHour(12f);
+        skyControl.getSunAndStars().setObserverLatitude(0.2f);
+        
+        //Add scene light to skycontrol
+        for (Light light : sceneNode.getLocalLightList()) {
+            if (light.getName().equals("Ambient")) {
+                skyControl.getUpdater().setAmbientLight((AmbientLight) light);
+            } else if (light.getName().equals("Sun")) {
+                skyControl.getUpdater().setMainLight((DirectionalLight) light);
+            }
+        }
+        
+        /**
+         * @TODO Test setting if bloom is activated
+         */
+        skyControl.getUpdater().addBloomFilter(initBloomLight());
+        
+        sceneNode.addControl(skyControl);
+        skyControl.setEnabled(true);
+    }
+    
+    /**
+     * initTextureSkyBox will create a simple skybox from a dds texture 
+     * corrisponding to the scene name
+     */
+    private void initTextureSkyBox() {
+        Spatial skyFactory = SkyFactory.createSky(assetManager, "Textures/Skybox/" 
+                + sceneName + ".dds", false);
+        
+        if (skyFactory != null) {
+            Node node = new Node("Skybox");
+            sceneNode.attachChild(node);
+        }            
+        
+        /**
+         * @TODO If not a successfull load through exception and exit.
+         */
+    }
+    
+    private BloomFilter initBloomLight() {
+        BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
+        bloom.setBlurScale(2.5f);
+        bloom.setExposurePower(1f);
+        Misc.getFpp(viewPort, assetManager).addFilter(bloom);
+        
+        return bloom;
     }
     
     /**

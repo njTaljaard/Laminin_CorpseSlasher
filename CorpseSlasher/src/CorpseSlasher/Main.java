@@ -37,10 +37,9 @@ public class Main extends SimpleApplication {
         flyCam.setMoveSpeed(50f);
         
         cam.setLocation(new Vector3f(0.0f, 60.0f, 0.0f));
-        GameScene gameScene = new GameScene(0, assetManager, viewPort);
-        rootNode.attachChild(gameScene.retrieveSceneNode());
+        GameScene gameScene = new GameScene(0, assetManager, viewPort, cam);
         
-        rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0); //terrain & water
+        rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0); //scene objects
     }
 
     @Override
