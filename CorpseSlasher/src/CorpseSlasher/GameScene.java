@@ -36,16 +36,13 @@ public class GameScene {
     private void initScene(AssetManager assestManager, ViewPort viewPort, Camera cam) {
         switch(map) {
             case(0) :   
-                basicScene = new BasicScene("ZombieScene1", assestManager, viewPort, cam);
+                basicScene = new BasicScene("ZombieScene1");
+                basicScene.createScene(assestManager, viewPort, cam);
                 sceneNode.attachChild(basicScene.retrieveSceneNode());
                 break;
             default :
                 break;
         }
-    }
-    
-    public SkyControl initDayNightSystem(AssetManager assMan, ViewPort vp, Camera cam) {
-        return basicScene.initDayNightSkyBox(assMan, vp, cam);
     }
     
     public Node retrieveSceneNode() {

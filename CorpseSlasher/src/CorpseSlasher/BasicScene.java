@@ -51,16 +51,27 @@ public class BasicScene {
      * @param vp - ViewPort required for water, contains position of camara.
      * @param cam - Camera required to create a day night skybox system.
      */
-    public BasicScene(String mapName, AssetManager assMan, ViewPort vp, Camera cam) {
+    public BasicScene(String mapName) {
         sceneName = mapName;
         sceneNode = new Node("BasicScene");
         lightDir = new Vector3f(2.9236743f, -3.27054665f, 5.896916f);
-        
+    }
+    
+    /**
+     * createScene will call the appopriate functions to create the scene and
+     * attached it to sceneNode, which will be added to rootNode higher up to
+     * be able to draw.
+     * @param assMan - Assetmanager passed through from main game.
+     * @param vp - ViewPort required for water, contains position of camara.
+     * @param cam - Camera required to create a day night skybox system.
+     */
+    public void createScene(AssetManager assMan, ViewPort vp, Camera cam) {
         initAmbientLight();
         initSunLight();
-        initTerrain(assMan);
         initSkyBox(assMan, vp, cam);
+        initTerrain(assMan);
         initWater(assMan, vp);
+        //initDepthOfField(assMan, vp);
     }
     
     /**
@@ -69,7 +80,7 @@ public class BasicScene {
      */
     private void initAmbientLight() { 
         AmbientLight ambient = new AmbientLight();
-        ambient.setColor(ColorRGBA.White);
+        ambient.setColor(ColorRGBA.White.clone().multLocal(1.5f));
         ambient.setName("Ambient");
         
         sceneNode.addLight(ambient); 
@@ -82,7 +93,7 @@ public class BasicScene {
     private void initSunLight() {
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(lightDir);
-        sun.setColor(ColorRGBA.White.clone().multLocal(1.5f));
+        sun.setColor(ColorRGBA.White.clone().multLocal(2.5f));
         sun.setName("Sun");
         
         sceneNode.addLight(sun);
@@ -113,7 +124,7 @@ public class BasicScene {
         /**
          * @TODO determine if simpleWater or PPcWater should be used.
          */
-        //initSimpleWater();
+        //initSimpleWater(assMan, vp);
         initPPcWater(assMan, vp);
     }
     
@@ -121,29 +132,29 @@ public class BasicScene {
      * initSimpleWater will create a basic water quad and add it to the scene.
      * To be used by the lower end system.
      */
-    private void initSimpleWater(AssetManager assMan, ViewPort vp) { 
+    /* LOOKS HORRIBLE DONT USE!!!!
+     private void initSimpleWater(AssetManager assMan, ViewPort vp) { 
         SimpleWaterProcessor waterProcessor = new SimpleWaterProcessor(assMan);
         waterProcessor.setReflectionScene(sceneModel); 
-        Vector3f waterLocation = new Vector3f(0,-6,0); 
-        waterProcessor.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation.dot(Vector3f.UNIT_Y))); 
-        vp.addProcessor(waterProcessor); 
-        waterProcessor.setWaterDepth(15); 
-        // transparency of water 
+        waterProcessor.setDebug(true);
+        vp.addProcessor(waterProcessor);
+        
+        Vector3f waterLocation = new Vector3f(0,45,0); 
+        waterProcessor.setLightPosition(lightDir);
+        waterProcessor.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation.dot(Vector3f.UNIT_Y)));  
+        waterProcessor.setWaterDepth(50f); 
         waterProcessor.setDistortionScale(0.05f); 
-        // strength of waves 
         waterProcessor.setWaveSpeed(0.02f); 
-        // speed of waves 
         Quad quad = new Quad(1000,1000); 
         quad.scaleTextureCoordinates(new Vector2f(6f,6f)); 
         Geometry water = new Geometry("water", quad); 
         water.setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X)); 
         water.setLocalTranslation(-200, -6, 250); 
-        water.setShadowMode(RenderQueue.ShadowMode.Receive); 
         water.setMaterial(waterProcessor.getMaterial()); 
         
         water.setName("SimpleWater");
         sceneNode.attachChild(water);
-    }     
+    }     */
     
     /**
      * initPPcWater will create a per pixel motion water quad and add it to the scene.
@@ -153,12 +164,7 @@ public class BasicScene {
         FilterPostProcessor fpp = new FilterPostProcessor(assMan);
         WaterFilter water;
         
-        if (skyControl == null) {
-            water = new WaterFilter(sceneNode, lightDir); 
-        } else {
-            water = new WaterFilter(sceneNode, skyControl.getUpdater().getDirection()); 
-        }
-        
+        water = new WaterFilter(sceneNode, lightDir); 
         //water.setUseHQShoreline(true); //to high resource usage. //see setting if high end build running.
         water.setWaveScale(0.003f);
         water.setMaxAmplitude(3.0f);
@@ -190,14 +196,14 @@ public class BasicScene {
          * @TODO determine if textureSkyBox or DayNightSkyBox should be used.
          */
         //initTextureSkyBox(assMan);
-        //initDayNightSkyBox(assMan, vp, cam);
+        initDayNightSkyBox(assMan, vp, cam);
     }
     
     /**
      * initDayNightSkyBox creates a day-night system with a sun, moon, stars &
      * clouds.
      */
-    public SkyControl initDayNightSkyBox(AssetManager assMan, ViewPort vp, Camera cam) {
+    private void initDayNightSkyBox(AssetManager assMan, ViewPort vp, Camera cam) {
         /**
          * @param AssetManager, Camera, Cloud Flattening, Star motion, Bottom dome )
          */
@@ -205,7 +211,6 @@ public class BasicScene {
         skyControl.setCloudModulation(true);
         skyControl.setCloudiness(0.6f);
         skyControl.setCloudYOffset(0.5f);
-        skyControl.getSunAndStars().setHour(12f);
         skyControl.getSunAndStars().setObserverLatitude(37.4046f * FastMath.DEG_TO_RAD);
         
         //Add scene light to skycontrol
@@ -225,7 +230,7 @@ public class BasicScene {
          */
         //skyControl.getUpdater().addBloomFilter(initBloomLight(assMan, vp));
         
-        return skyControl;
+        sceneNode.addControl(skyControl);
     }
     
     /**
