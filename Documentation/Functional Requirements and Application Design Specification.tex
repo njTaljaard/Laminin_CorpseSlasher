@@ -133,61 +133,104 @@
 		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Access channel requirements }}} \addcontentsline{toc}{section}{Access channel requirements}
 		\vspace{0.1in}
 		
-		
+		The system will be accessible by human users through the following channels:
+		\begin{itemize}
+			\item From a desktop application running on any Windows/Linux operating system.
+			\item From a mobile device running Android application clients.
+		\end{itemize}
 		
 		\vspace{0.2in}
 		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Quality requirements}}} \addcontentsline{toc}{section}{Quality requirements}
 		\vspace{0.1in}
 		
+		The quality requirements are the requirements around the quality attributes of the systems and the
+		services it provides.
+		
 		\subsection*{Performance}
 		\addcontentsline{toc}{subsection}{Performance}
 		\vspace{0.1in}
 		
+		\begin{enumerate}
+			\item Desktop \& Mobile application:
+				\begin{itemize}
+					\item Should not go under a playable frames rate of 60.
+					\item Should not have high data transfers for sending \& receiving information.
+					\item Should not require more the 4 logical processing cores.
+				\end{itemize}
 		
+			\item Desktop application:
+				\begin{itemize}
+					\item Should not use more the 3GB of system memory.
+				\end{itemize}
 		
-		\vspace{0.2in}
+			\item Mobile application:
+				\begin{itemize}
+					\item Should not use more the 2GB of system memory.
+					\item Should not use access battery usage.
+				\end{itemize}
+				
+			\item Backend server:
+				\begin{itemize}
+					\item Should be able to handle at least 100 connections.
+					\item Should not use more then 10GB of system memory to handle connections.
+					\item Database updates should be complete within a 1 second time frame.
+					\item Database requests should be complete within 5 second time frame.
+				\end{itemize}
+		\end{enumerate}
+		
 		\subsection*{Reliability}
 		\addcontentsline{toc}{subsection}{Reliability}
 		\vspace{0.1in}
 		
+		\begin{enumerate}
+			\item Desktop \& Mobile:
+				\begin{itemize}
+					\item Client should be able to recover from a crash within 30 seconds.
+					\item Retry opening connection within 5 seconds if connection loss.
+					\item Reload assets if data is lost.
+				\end{itemize}
+			\item Backend Server:
+				\begin{itemize}
+					\item Should provide 99\% connection availability.
+					\item Should provide 99\% OAuth login availability.
+					\item Should not crash due to over welling client connections.
+					\item Should not crash due to undefined incoming data.
+				\end{itemize}
+		\end{enumerate}
 		
-		
-		\vspace{0.2in}
 		\subsection*{Scalability}
 		\addcontentsline{toc}{subsection}{Scalability}
 		\vspace{0.1in}
 		
+		\begin{enumerate}
+			\item The server should be able to add multiple servers to handle clients.
+			\item The server should scale to any amount of client connections.
+		\end{enumerate}
 		
-		
-		\vspace{0.2in}
 		\subsection*{Security}
 		\addcontentsline{toc}{subsection}{Security}
 		\vspace{0.1in}
 		
+		General security conditions.
+		\begin{enumerate}
+			\item Use OAuth LDAP for connection through social media e.g. Facebook, Twitter, Google+.
+			\item Clean up all incoming data on client and server for incorrect formats, data types \& lengths.
+			\item Test if the incoming data comes from authenticated user.
+			\item Local authentication users needs secure connection for login and password retrieval.
+		\end{enumerate}
 		
-		
-		\vspace{0.2in}
-		\subsection*{Flexibility}
-		\addcontentsline{toc}{subsection}{Flexibility}
-		\vspace{0.1in}
-		
-		
-		
-		\vspace{0.2in}
 		\subsection*{Maintainability}
 		\addcontentsline{toc}{subsection}{Maintainability}
 		\vspace{0.1in}
 		
 		
 		
-		\vspace{0.2in}
 		\subsection*{Auditability / Monitorability}
 		\addcontentsline{toc}{subsection}{Maintainability}
 		\vspace{0.1in}
 		
 		
 		
-		\vspace{0.2in}
 		\subsection*{Integrability}
 		\addcontentsline{toc}{subsection}{Integrability}
 		\vspace{0.1in}
