@@ -78,7 +78,7 @@ public class Main extends SimpleApplication {
             SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
             skyControl.setEnabled(true);
         
-            timeOfDay = new TimeOfDay(1.0f);
+            timeOfDay = new TimeOfDay(3.0f);
             stateManager.attach(timeOfDay);
             timeOfDay.setRate(1000f);
         }
