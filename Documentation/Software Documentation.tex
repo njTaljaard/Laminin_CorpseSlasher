@@ -1,0 +1,372 @@
+\documentclass[letterpaper]{article}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{epigraph}
+\usepackage{lipsum}
+\usepackage{hyperref}
+\usepackage{tocloft}
+
+\usepackage{setspace, amsmath}
+
+\usepackage[centering,includeheadfoot,margin=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{calc,blindtext}
+
+\renewcommand\epigraphflush{flushright}
+\renewcommand\epigraphsize{\normalsize}
+\setlength\epigraphwidth{0.7\textwidth}
+
+\definecolor{titlepagecolor}{cmyk}{1,.60,0,.40}
+
+\DeclareFixedFont{\titlefont}{T1}{ppl}{b}{it}{1.0in}
+
+\makeatletter
+\def\printauthor{%
+    {\large \@author}}
+\makeatother
+\author{%
+    Nico Taljaard \\
+    10153285 \vspace{20pt} \\
+    Gerhard Smit \\
+    12282945 \vspace{20pt} \\
+    Martin Schoeman \\
+    10651994 \\
+}
+
+% The following code is borrowed from: http://tex.stackexchange.com/a/86310/10898
+
+\newcommand\titlepagedecoration{%
+	\begin{tikzpicture}[remember picture,overlay,shorten >= -10pt]
+	
+		\coordinate (aux1) at ([yshift=-15pt]current page.north east);
+		\coordinate (aux2) at ([yshift=-410pt]current page.north east);
+		\coordinate (aux3) at ([xshift=-4.5cm]current page.north east);
+		\coordinate (aux4) at ([yshift=-150pt]current page.north east);
+		
+		\begin{scope}[titlepagecolor!40,line width=12pt,rounded corners=12pt]
+			\draw
+			  (aux1) -- coordinate (a)
+			  ++(225:5) --
+			  ++(-45:5.1) coordinate (b);
+			\draw[shorten <= -10pt]
+			  (aux3) --
+			  (a) --
+			  (aux1);
+			\draw[opacity=0.6,titlepagecolor,shorten <= -10pt]
+			  (b) --
+			  ++(225:2.2) --
+			  ++(-45:2.2);
+		\end{scope}
+			\draw[titlepagecolor,line width=8pt,rounded corners=8pt,shorten <= -10pt]
+			  (aux4) --
+			  ++(225:0.8) --
+			  ++(-45:0.8);
+		\begin{scope}[titlepagecolor!70,line width=6pt,rounded corners=8pt]
+			\draw[shorten <= -10pt]
+			  (aux2) --
+			  ++(225:3) coordinate[pos=0.45] (c) --
+			  ++(-45:3.1);
+			\draw
+			  (aux2) --
+			  (c) --
+			  ++(135:2.5) --
+			  ++(45:2.5) --
+			  ++(-45:2.5) coordinate[pos=0.3] (d);   
+			\draw 
+			  (d) -- +(45:1);
+		\end{scope}
+	\end{tikzpicture}
+}
+
+\begin{document}
+
+\begin{titlepage}
+
+\noindent
+\titlefont Laminin \par
+\epigraph{Documentation type: Software Documentation.\\
+Project name: Derivco - XGame.\\
+Client name: Rodney Pillay.
+}%
+{\textit{23 May 2014 }\\ \textsc{ }}
+\null\vfill
+\vspace*{4cm}
+\noindent
+\hfill
+\begin{minipage}{0.35\linewidth}
+    \begin{flushright}
+        \printauthor
+    \end{flushright}
+\end{minipage}
+%
+\begin{minipage}{0.02\linewidth}
+    \rule{1pt}{125pt}
+\end{minipage}
+\titlepagedecoration
+\end{titlepage}
+
+% % % % % % % % % % % % % % %
+% 							%
+%	Remainder of document	%
+% 							%
+% % % % % % % % % % % % % % % 
+
+\newpage
+		{\LARGE \bf Change Log}\\[2em]
+		
+		\begin{tabbing}
+			\hspace*{2.5cm}\=\hspace*{2.5cm}\=\hspace*{8cm}\=\hspace*{3cm} \kill
+			17/05/2014	\> Version 1.0	\> Documents Created 							\> Nico Taljaard \\
+			17/05/2014	\> Version 1.0	\> Access channel \& Quality requirements		\> Nico Taljaard \\
+			18/05/2014	\> Version 1.0	\> Integration requirements, Architectural constraints \\
+						\>				\>	\& added quality requirements 				\> Nico Taljaard \\
+			19/05/2014  \> Version 1.0  \> Vision										\> Martin Schoeman\\
+			20/05/2014  \> Version 1.0  \> Combining of Documents and Vision updated.	\> Martin Schoeman\\
+		\end{tabbing}
+	
+
+	\newpage
+		\renewcommand\contentsname{TABLE OF CONTENTS}
+		\newcommand\contentsnameLC{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Table of Contents}}}
+		
+		\renewcommand{\cftdot}{}
+		\hypersetup{linktocpage}
+		\tableofcontents
+		
+		\begin{flushleft}
+			\LARGE\href{https://github.com/njTaljaard/Laminin_CorpseSlasher/}{Git repository: Laminin - Corpse Slasher}
+		\end{flushleft}
+		
+		\newpage
+		
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Vision and Scope }}} \addcontentsline{toc}{section}{Vision and Scope}
+		
+		\vspace{0.2in}
+		
+		\subsection*{Vision}\addcontentsline{toc}{subsection}{Vision}
+		
+		\vspace{0.1in}
+		
+		The vision of this project is to create a game that supports multiple platforms, for example android devices and windows computers. The game should be connected to a server where game data can be saved and retrieved real time. The user should be able to log in using a custom log in or an OAuth log in that uses social media like Facebook and Twitter. There must also be a live leader board and achievements. It must be able to develop the game in three months. The project must be developed using only open source and freeware technologies.
+		
+		\vspace{0.2in}
+		
+		\subsection*{Scope, Limitations \& Exclusions}\addcontentsline{toc}{subsection}{Scope, Limitations \& Exclusions}
+		
+		\vspace{0.1in}
+		
+		
+		
+		\vspace{0.2in}
+		
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Architecture requirements}}} \addcontentsline{toc}{section}{Architecture requirements}
+		
+		
+		\vspace{0.2in}
+		
+		\subsection*{Access channel requirements}\addcontentsline{toc}{subsection}{Access channel requirements}
+		
+		\vspace{0.1in}
+		
+		The system will be accessible by human users through the following channels:
+		\begin{itemize}
+			\item From a desktop application running on any Windows/Linux operating system.
+			\item From a mobile device running Android application clients.
+		\end{itemize}
+		
+		\vspace{0.2in}
+		
+		\subsection*{Quality requirements}\addcontentsline{toc}{subsection}{Quality requirements}
+		
+		\vspace{0.1in}
+		
+		The quality requirements are the requirements around the quality attributes of the systems and the
+			services it provides.
+			
+			\subsubsection*{Performance}
+			\addcontentsline{toc}{subsubsection}{Performance}
+			\vspace{0.1in}
+			
+			\begin{enumerate}
+				\item Desktop \& Mobile application:
+					\begin{itemize}
+						\item Should not go under a playable frames rate of 60.
+						\item Should not have high data transfers for sending \& receiving information.
+						\item Should not require more the 4 logical processing cores.
+					\end{itemize}
+			
+				\item Desktop application:
+					\begin{itemize}
+						\item Should not use more the 3GB of system memory.
+					\end{itemize}
+			
+				\item Mobile application:
+					\begin{itemize}
+						\item Should not use more the 2GB of system memory.
+						\item Should not use access battery usage.
+					\end{itemize}
+					
+				\item Backend server:
+					\begin{itemize}
+						\item Should be able to handle at least 100 connections.
+						\item Should not use more then 10GB of system memory to handle connections.
+						\item Database updates should be complete within a 1 second time frame.
+						\item Database requests should be complete within 5 second time frame.
+					\end{itemize}
+			\end{enumerate}
+			
+			\subsubsection*{Reliability}
+			\addcontentsline{toc}{subsubsection}{Reliability}
+			\vspace{0.1in}
+			
+			\begin{enumerate}
+				\item Desktop \& Mobile:
+					\begin{itemize}
+						\item Client should be able to recover from a crash within 30 seconds.
+						\item Retry opening connection within 5 seconds if connection loss.
+						\item Reload assets if data is lost.
+					\end{itemize}
+				\item Backend Server:
+					\begin{itemize}
+						\item Should provide 99\% connection availability.
+						\item Should provide 99\% OAuth login availability.
+						\item Should not crash due to over welling client connections.
+						\item Should not crash due to undefined incoming data.
+					\end{itemize}
+			\end{enumerate}
+			
+			\subsubsection*{Scalability}
+			\addcontentsline{toc}{subsubsection}{Scalability}
+			\vspace{0.1in}
+			
+			\begin{enumerate}
+				\item The server should be able to add multiple servers to handle clients.
+				\item The server should scale to any amount of client connections.
+			\end{enumerate}
+			
+			\subsubsection*{Security}
+			\addcontentsline{toc}{subsubsection}{Security}
+			\vspace{0.1in}
+			
+			General security conditions.
+			\begin{enumerate}
+				\item Use OAuth LDAP for connection through social media e.g. Facebook, Twitter, Google+.
+				\item Clean up all incoming data on client and server for incorrect formats, data types \& lengths.
+				\item Test if the incoming data comes from authenticated user.
+				\item Local authentication users needs secure connection for login and password retrieval.
+			\end{enumerate}
+			
+			\subsubsection*{Maintainability}
+			\addcontentsline{toc}{subsubsection}{Maintainability}
+			\vspace{0.1in}
+			
+			\begin{enumerate}
+				\item Database off site backups should be creatable.
+				\item Desktop \& mobile application should be update able with further maps.
+			\end{enumerate}
+			
+		
+		\vspace{0.2in}
+		
+		\subsection*{Integration requirements}\addcontentsline{toc}{subsection}{Integration requirements}
+		
+		\vspace{0.1in}
+		
+		\subsubsection*{Integration channels}
+			\addcontentsline{toc}{subsubsection}{Integration channels}
+			\vspace{0.1in}
+			
+			This system will be able to access:
+			\begin{enumerate}
+				\item A local MySQL datbase to access player information \& leader board.
+				\item External social media LDAP servers for players who would like to share their achievements.
+				\item External application connection to the server should only be encrypted during login.
+			\end{enumerate}
+		
+			\vspace{0.2in}
+			\subsubsection*{Protocols}
+			\addcontentsline{toc}{subsubsection}{Protocols}
+			\vspace{0.1in}
+		
+			This system will use the following protocols:
+			\begin{enumerate}
+				\item Java client server for communication between the Desktop \& Mobile application and the backend server. 
+				\item JSON is used for the data encoding 
+				\item LDAP protocol is used by the LDAP adapter to communicate with the LDAP database.
+				\item SQL to communicate with the relational datebase.
+			\end{enumerate}
+		
+			\vspace{0.2in}
+			\subsubsection*{API specification}
+			\addcontentsline{toc}{subsubsection}{API specification}
+			\vspace{0.1in}
+		
+		
+		\vspace{0.2in}
+		
+		\subsection*{Architecture constraints}\addcontentsline{toc}{subsection}{Scope}
+		
+		\vspace{0.1in}
+		
+		\subsubsection*{Technologies}
+			\addcontentsline{toc}{subsubsection}{Technologies}
+			\vspace{0.1in}
+			
+				\begin{enumerate}					
+					\item \textbf{Graphics}
+					\\OpenGL 3.0 - 4.4 will be used as the rendering language within the game engine.
+					
+					\item \textbf{Audio}
+					\\OpenAL will be used for audio within the game.
+					
+					\item \textbf{Development language}
+					\\The desktop \& mobile application as well as the server will be implemented using JavaSE.
+					
+					\item \textbf{LDAP integration}
+					\\SocialAuth is a Java implemented OAuth library that will be the used to communicate with external LDAP servers.
+					
+					\item \textbf{Networking}
+					\\jSpiderMonkey will be used to handle client side networking within the jMonkeyEngine framework.
+					
+					\item \textbf{Persistence}
+					\\MySQL will be used to store all data which is accessible through a JDBC connection.
+				\end{enumerate}
+				
+			\subsubsection*{Architectural patterns/frameworks}
+			\addcontentsline{toc}{subsubsection}{Architectural patterns/frameworks}
+			\vspace{0.1in}
+			
+				\begin{enumerate}
+					\item \textbf{Game Engine}
+					\\jMonkeyEngine 3.0 is a Java Framework that will be used to implement the game.
+					
+					\item \textbf{Client Server}
+					\\A client server pattern should be used between the external application and the backend server.
+					
+					\item \textbf{Layering}
+					\\The backend server should implement layering from connections to clients down to the LDAP and MySQL server connections.
+				\end{enumerate}
+			
+				
+		\vspace{0.2in}
+		
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Software Architecture Documentation}}} \addcontentsline{toc}{section}{Software Architecture Documentation}
+		
+		\vspace{0.2in}
+		
+		
+		\vspace{0.2in}
+		
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Functional Requirements and Application Design}}} \addcontentsline{toc}{section}{Functional Requirements and Application Design}
+		
+		\vspace{0.2in}
+		
+		
+		\vspace{0.2in}
+		
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Glossary}}} \addcontentsline{toc}{section}{Glossary}
+		
+		\vspace{0.2in}
+		
+		
+\end{document}
