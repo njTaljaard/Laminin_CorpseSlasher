@@ -6,6 +6,7 @@
 \usepackage{hyperref}
 \usepackage{tocloft}
 \usepackage{graphicx}
+\usepackage{float}
 
 \usepackage{setspace, amsmath}
 
@@ -85,7 +86,9 @@
 
 \noindent
 \titlefont Laminin \par
-\epigraph{ XGame - Derivco \\ Vision \& Scope.}%
+\epigraph{Documentation type: Vision \& Scope.\\
+Project name: XGame - Derivco.\\
+Client name: Rodney Pillay.}%
 {\textit{ 23/05/2014 }\\ \textsc{ }}
 \null\vfill
 \vspace*{4cm}
@@ -118,6 +121,9 @@
 			19/05/2014  \> Version 1.0  \> Added Vision									\> Martin Schoeman \\
 			21/05/2014  \> Version 1.0  \> Added High Level Use Case Diagram			\> Martin Schoeman\\
 			22/05/2014  \> Version 1.0  \> Added Sub Level Use Case Diagram				\> Martin Schoeman\\
+			23/05/2014  \> Version 1.0  \> Corrected Page Format						\> Martin Schoeman \\
+			23/05/2014  \> Version 1.0  \> Added Title Page Information					\> Martin Schoeman \\
+			23/05/2014  \> Version 1.0  \> Added Limitations \& Exclusions				\> Martin Schoeman \\
 		\end{tabbing}
 
 	\newpage
@@ -134,43 +140,12 @@
 		
 		\newpage
 		
-		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Vision \& Scope }}} \addcontentsline{toc}{section}{Vision \& Scope}
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Vision }}} \addcontentsline{toc}{section}{Vision}
 		\vspace{0.2in}
-		
-		\subsection*{Vision}
-		\addcontentsline{toc}{subsection}{Vision}
-		\vspace{0.1in}
 		
 		The vision of this project is to create a game that supports multiple platforms, for example android devices and windows computers. The game should be connected to a server where game data can be saved and retrieved real time. The user should be able to log in using a custom log in or an OAuth log in that uses social media like Facebook and Twitter. There must also be a live leader board and achievements. It must be able to develop the game in three months. The project must be developed using only open source and freeware technologies.
-
-		
-		\vspace{0.2in}
-		\subsection*{Scope}
-		\addcontentsline{toc}{subsection}{Scope}
-		\vspace{0.1in}
-		
-		
-		\vspace{0.2in}
-		
-		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Limitations \& Exclusions}}} \addcontentsline{toc}{section}{Limitations \& Exclusions}
-		\vspace{0.2in}
-		
-		\subsection*{Limitations}
-		\addcontentsline{toc}{subsection}{Limitations}
-		\vspace{0.1in}
-		
-		
-		\vspace{0.2in}
-		\subsection*{Exclusions}
-		\addcontentsline{toc}{subsection}{Exclusions}
-		\vspace{0.1in}
-		
-		
-		
-		\vspace{0.2in}
-				
-		\newpage		
-		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} High-level use case}}} \addcontentsline{toc}{section}{High-level use case}
+					
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Scope}}} \addcontentsline{toc}{section}{Scope}
 		
 		\vspace{0.2in}
 		
@@ -184,11 +159,11 @@
 		\vspace{0.2in}
 		
 		\newpage
-		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Sub-level use case}}} \addcontentsline{toc}{section}{Sub-level use case}
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Sub-level use case diagrams}}} \addcontentsline{toc}{section}{Sub-level use case diagrams}
 		
 		\vspace{0.2in}
 		
-		\begin{figure}[ht!]
+		\begin{figure}[H]
 		\centering
 		\includegraphics[width=180mm]{login}
 		\caption{Login use case diagram}
@@ -197,7 +172,7 @@
 		
 		\vspace{0.2in}
 		
-		\begin{figure}[ht!]
+		\begin{figure}[H]
 		\centering
 		\includegraphics[width=180mm]{signup}
 		\caption{Sign up use case diagram}
@@ -206,11 +181,20 @@
 		
 		\vspace{0.2in}
 		
-		\begin{figure}[ht!]
+		\begin{figure}[H]
 		\centering
 		\includegraphics[width=180mm]{game_menu}
 		\caption{Game menu use case diagram}
 		\label{overflow}
 		\end{figure}
-
+		
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Limitations \& Exclusions}}} \addcontentsline{toc}{section}{Limitations \& Exclusions}
+		\vspace{0.2in}
+		
+		\begin{itemize}
+  		\item Download, we only have to develop the game. We have no responsibility of distribution.
+  		\item Install, we are not responsible for the development of an installer.
+  		\item Compatibility, the game will not necessarily work with all hardware.
+		\end{itemize}		
+		
 \end{document}
