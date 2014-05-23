@@ -117,6 +117,7 @@
 			17/05/2014	\> Version 1.0	\> Access channel \& Quality requirements		\> Nico Taljaard \\
 			18/05/2014	\> Version 1.0	\> Integration requirements, Architectural constraints \\
 						\>				\>	\& added quality requirements 				\> Nico Taljaard \\
+			23/05/2014 \> Version 1.1 \> API Specification was added \> Gerhard Smit			
 		\end{tabbing}
 		
 	\newpage
@@ -263,6 +264,18 @@
 			\subsection*{API specification}
 			\addcontentsline{toc}{subsection}{API specification}
 			\vspace{0.1in}
+			\begin{enumerate}
+			\item \textbf{Client Connection}
+			\\This will create a connection object that will be sent to the listening server checking the validity of the connection such as username and password, or if they chose one of the other options such as logging in through social media checking if that user has an account there, if successful returns success and allows the user to continue. The user can also choose to create an account and then the client sends a request object and allows the user to fill in all appropriate details and an account is made. If the user forgot his password they will have the ability to request it from the server.
+			\item \textbf{Server}
+			\\A server will be running at all times that listens for incoming connections, if one tries to connect to the server a request object is sent to the server along with all the login details, or with a request to retrieve a lost or forgotten password, or to create a new account. If the server accepts the request it returns either with successful login moving to the menu screen or the password.
+			\item \textbf{Menu Screen}
+			\\There will be a main menu from which the settings for the game, such as difficulty, video quality, audio settings and game difficulty can be altered. Once all selections and settings have been made, the object will proceed to call the load game and request will be sent and if all is correct and the validity of the settings are checked, the game object will return with success and proceed to the next state, or an exit request is sent and the game is closed.
+			\item \textbf{Settins Screen}
+			\\This object will receive a request from the menu screen and respond with success and return the settings object which will allow the changing of settings and sending through the changed settings to the game object to update the state. Once the game object has responded with a successful update the object can either send a return request to the menu screen or to wait for more changes.
+			\item \textbf{Game object}
+			\\This will be the main object which will send requests and updates to the server database each time an event takes place, such as a kill is made or experience is gained, the server will receive an object with a value to update corresponding to the object's id as each object created will have thier own id linked to that of player who signed in. A request can be sent to the menu screen, if successful the menu screen will appear, if the game object crashes due to power failure or server connection issues, the state will be saved and when the object is reinstantiated, will resume in the dead state and will carry have to start from the safe zone.
+			\end{enumerate}
 		
 		
 		
