@@ -37,7 +37,7 @@ public class Main extends SimpleApplication {
          */
         flyCam.setMoveSpeed(50f);
         
-        cam.setLocation(new Vector3f(0.0f, 60.0f, 0.0f));
+        cam.setLocation(new Vector3f(0.0f, 70.0f, 0.0f));
         
         loadGame();
     }

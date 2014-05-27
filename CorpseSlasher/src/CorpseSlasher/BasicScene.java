@@ -180,7 +180,8 @@ public class BasicScene {
         water.setWaveScale(0.005f); 
         water.setFoamExistence(new Vector3f(2.5f, 2.0f, 3.0f)); 
         water.setFoamTexture((Texture2D) assMan.loadTexture("Common/MatDefs/Water/Textures/foam2.jpg")); 
-        water.setRefractionStrength(0.2f); water.setWaterHeight(10.0f); 
+        water.setRefractionStrength(0.2f); 
+        water.setWaterHeight(10.0f); 
         
         fpp.addFilter(water); 
         vp.addProcessor(fpp); 
@@ -211,6 +212,7 @@ public class BasicScene {
         skyControl.setCloudModulation(true);
         skyControl.setCloudiness(0.6f);
         skyControl.setCloudYOffset(0.5f);
+        skyControl.setTopVerticalAngle(1.65f);
         skyControl.getSunAndStars().setObserverLatitude(37.4046f * FastMath.DEG_TO_RAD);
         
         //Add scene light to skycontrol
