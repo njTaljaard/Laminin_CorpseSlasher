@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.json.*;
 
 /**
  * @author Laminin
@@ -40,16 +41,31 @@ public class Main implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.println("Im ready for action!!!");
-            System.out.println("Waiting for new meat on 32323...");
             ServerSocket serverSocket = new ServerSocket(32323);
-            
+            System.out.println("Socket create on port 32323");
             while(true) {
                 Socket clientSocket = serverSocket.accept();
                 threadExecutors.execute(new ClientConnection(clientSocket));
-                System.out.println(clientSocket.getLocalAddress().toString() 
-                        + " wants try and play with us!!! Let the games begin"
-                        + " muhahaha...");
+                System.out.println("Client: " + clientSocket.getLocalAddress().toString() + " connected to server");
+                
+                //test
+                JSONObject obj = new JSONObject();
+                try {
+                obj.put("username", "usern");
+                obj.put("password", "pass");
+                obj.put("screenName", "sn");
+                obj.put("name", "n");
+                obj.put("surname", "s");
+                obj.put("dateOfBirth", "2000/05/20");
+                obj.put("gender", true);
+                obj.put("email", "m2g.com");
+                DatabaseUpdate dbu = new DatabaseUpdate();
+                dbu.setNewUser(obj);
+                }
+                catch (Exception exc)
+                {
+                    System.out.println("User json obj creation error:"+exc);
+                }
             }
             
         } catch (IOException ex) {
