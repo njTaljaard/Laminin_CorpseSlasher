@@ -1,11 +1,17 @@
 package CorpseSlasher;
 
+import GUI.LoginScreen;
+import GUI.UserInterfaceManager;
+//import GUI.UserInterfaceManager;
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.RenderManager;
 import com.jme3.water.WaterFilter;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.screen.ScreenController;
 import jme3utilities.TimeOfDay;
 import jme3utilities.sky.SkyControl;
 
@@ -17,14 +23,18 @@ import jme3utilities.sky.SkyControl;
  * @param  COS301
  * Main class to handle program start up until graphical main loop is reached.
  */
-public class Main extends SimpleApplication {
+public class Main extends SimpleApplication implements ScreenController{
 
     TimeOfDay timeOfDay;
     boolean sky;
+    LoginScreen login;
+    static int byPass = 0;
+    UserInterfaceManager UI = new UserInterfaceManager();
     
     public static void main(String[] args) {
-        Main app = new Main();
+        Main app = new Main();       
         app.start();
+        
     }
 
     /**
@@ -35,11 +45,15 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {/**
          * Turn this value up to move faster.
          */
-        flyCam.setMoveSpeed(50f);
-        
-        cam.setLocation(new Vector3f(0.0f, 70.0f, 0.0f));
-        
-        loadGame();
+
+       // inputManager.setCursorVisible(true);
+        flyCam.setEnabled(false);
+        inputManager.setCursorVisible(true);
+        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
+        UI.loginScreen();
+
+       // loadGame();
+         
     }
 
     @Override
@@ -68,6 +82,10 @@ public class Main extends SimpleApplication {
         /**
         * @TODO load settings here.
         */
+        inputManager.setCursorVisible(false);
+        flyCam.setEnabled(true);
+        flyCam.setMoveSpeed(50f);
+        cam.setLocation(new Vector3f(0.0f, 70.0f, 0.0f));
         sky = true;
         
         GameScene gameScene = new GameScene(0, assetManager, viewPort, cam);
@@ -83,4 +101,29 @@ public class Main extends SimpleApplication {
             timeOfDay.setRate(1000f);
         }
     }
+
+    @Override
+    public void bind(Nifty nifty, Screen screen) 
+    {
+        
+    }
+
+    @Override
+    public void onStartScreen() 
+    {
+        
+    }
+
+    @Override
+    public void onEndScreen()
+    {
+        
+    }
+   public void quitGame()
+   {
+        guiViewPort.getProcessors().remove(0);
+        loadGame();
+   }
+    
+
 }
