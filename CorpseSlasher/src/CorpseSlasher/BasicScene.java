@@ -1,26 +1,21 @@
 package CorpseSlasher;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Plane;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
-import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture2D;
-import com.jme3.util.SkyFactory;
 import jme3utilities.sky.SkyControl;
-import com.jme3.water.SimpleWaterProcessor;
 import com.jme3.water.WaterFilter;
 import com.jme3.math.FastMath;
 import com.jme3.post.filters.BloomFilter;
@@ -31,7 +26,7 @@ import jme3utilities.Misc;
  * @param  Derivco
  * @param  University of Pretoria
  * @param  COS301
- * BasicScene will setup the terrain as well as water.
+ * BasicScene will setup the terrain, water, lighting and skybox.
  */
 public class BasicScene {
     
@@ -64,12 +59,15 @@ public class BasicScene {
      * @param assMan - Assetmanager passed through from main game.
      * @param vp - ViewPort required for water, contains position of camara.
      * @param cam - Camera required to create a day night skybox system.
+     * @param bullet - BulletAppState which controls the physics of the scene.
+     * @param  app - SimpleApplication to retrieve camera positions.
      */
-    public void createScene(AssetManager assMan, ViewPort vp, Camera cam) {
+    public void createScene(AssetManager assMan, ViewPort vp, Camera cam, 
+            BulletAppState bullet) {
         initAmbientLight();
         initSunLight();
-        initSkyBox(assMan, vp, cam);
-        initTerrain(assMan);
+        initSkyBox(assMan, cam);
+        initTerrain(assMan, bullet);
         initWater(assMan, vp);
         //initDepthOfField(assMan, vp);
     }
@@ -101,11 +99,17 @@ public class BasicScene {
     
     /**
      * initTerrain will load the Scene j3o for the appropriate scene and attach
-     * it to the basic scene node.
+     * it to the basic scene node. Add collision detection to the terrain.
+     * @param assMan - Assetmanager passed through from main game.
+     * @param cam - Camera required to create a day night skybox system.
+     * @param bullet - BulletAppState which controls the physics of the scene.
      */
-    private void initTerrain(AssetManager assMan) {
+    private void initTerrain(AssetManager assMan, BulletAppState bullet) {
         sceneModel = assMan.loadModel("Scenes/" + sceneName + ".j3o");
         sceneModel.setName("Terrian");
+        
+        sceneModel.addControl(new RigidBodyControl(0));
+        bullet.getPhysicsSpace().add(sceneModel);
         
         if (sceneModel != null) {
             sceneNode.attachChild(sceneModel);
@@ -118,49 +122,12 @@ public class BasicScene {
     }
     
     /**
-     * initWater will load the water into the scene with the appropriate values.
+     * initWater will create a per pixel motion water quad and add it to the scene.
+     * To be used by the higher end system.     * 
+     * @param assMan - Assetmanager passed through from main game.
+     * @param vp - ViewPort required for water, contains position of camara.
      */
     private void initWater(AssetManager assMan, ViewPort vp) {
-        /**
-         * @TODO determine if simpleWater or PPcWater should be used.
-         */
-        //initSimpleWater(assMan, vp);
-        initPPcWater(assMan, vp);
-    }
-    
-    /**
-     * initSimpleWater will create a basic water quad and add it to the scene.
-     * To be used by the lower end system.
-     */
-    /* LOOKS HORRIBLE DONT USE!!!!
-     private void initSimpleWater(AssetManager assMan, ViewPort vp) { 
-        SimpleWaterProcessor waterProcessor = new SimpleWaterProcessor(assMan);
-        waterProcessor.setReflectionScene(sceneModel); 
-        waterProcessor.setDebug(true);
-        vp.addProcessor(waterProcessor);
-        
-        Vector3f waterLocation = new Vector3f(0,45,0); 
-        waterProcessor.setLightPosition(lightDir);
-        waterProcessor.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation.dot(Vector3f.UNIT_Y)));  
-        waterProcessor.setWaterDepth(50f); 
-        waterProcessor.setDistortionScale(0.05f); 
-        waterProcessor.setWaveSpeed(0.02f); 
-        Quad quad = new Quad(1000,1000); 
-        quad.scaleTextureCoordinates(new Vector2f(6f,6f)); 
-        Geometry water = new Geometry("water", quad); 
-        water.setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X)); 
-        water.setLocalTranslation(-200, -6, 250); 
-        water.setMaterial(waterProcessor.getMaterial()); 
-        
-        water.setName("SimpleWater");
-        sceneNode.attachChild(water);
-    }     */
-    
-    /**
-     * initPPcWater will create a per pixel motion water quad and add it to the scene.
-     * To be used by the higher end system.
-     */
-    private void initPPcWater(AssetManager assMan, ViewPort vp) { 
         FilterPostProcessor fpp = new FilterPostProcessor(assMan);
         WaterFilter water;
         
@@ -188,25 +155,14 @@ public class BasicScene {
     }
     
     /**
-     * initSkyBox will determine if the user would like to create a day night 
-     * system skybox or for low performance setting a simple skybox from a dds
-     * texture.
+     * initSkyBox will create a day night system skybox consisting of a moving 
+     * sun and moon, a rotating star system and a changing day night sky.
+     * @param assMan - Assetmanager passed through from main game.
+     * @param cam - Camera required to create a day night skybox system.
      */
-    private void initSkyBox(AssetManager assMan, ViewPort vp, Camera cam) {
+    private void initSkyBox(AssetManager assMan, Camera cam) {
         /**
-         * @TODO determine if textureSkyBox or DayNightSkyBox should be used.
-         */
-        //initTextureSkyBox(assMan);
-        initDayNightSkyBox(assMan, vp, cam);
-    }
-    
-    /**
-     * initDayNightSkyBox creates a day-night system with a sun, moon, stars &
-     * clouds.
-     */
-    private void initDayNightSkyBox(AssetManager assMan, ViewPort vp, Camera cam) {
-        /**
-         * @param AssetManager, Camera, Cloud Flattening, Star motion, Bottom dome )
+         * @param AssetManager, Camera, Cloud Flattening, Star motion, Bottom dome
          */
         skyControl = new SkyControl(assMan, cam, 0.7f, true, true);
         skyControl.setCloudModulation(true);
@@ -236,23 +192,11 @@ public class BasicScene {
     }
     
     /**
-     * initTextureSkyBox will create a simple skybox from a dds texture 
-     * corrisponding to the scene name
+     * initBloomLight will create bloom lighting effect and add it to the skybox
+     * day night system controler.
+     * @param assMan - Assetmanager passed through from main game.
+     * @param vp - ViewPort required for water, contains position of camara.
      */
-    private void initTextureSkyBox(AssetManager assMan) {
-        Spatial skyFactory = SkyFactory.createSky(assMan, "Textures/Skybox/" 
-                + sceneName + ".dds", false);
-        skyFactory.setName("Skybox");
-        
-        if (skyFactory != null) {
-            sceneNode.attachChild(skyFactory);
-        }            
-        
-        /**
-         * @TODO If not a successfull load through exception and exit.
-         */
-    }
-    
     private BloomFilter initBloomLight(AssetManager assMan, ViewPort vp) {
         BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
         bloom.setBlurScale(2.5f);
