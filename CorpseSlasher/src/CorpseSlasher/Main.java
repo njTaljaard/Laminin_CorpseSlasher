@@ -46,9 +46,8 @@ public class Main extends SimpleApplication implements ScreenController{
     @Override
     public void simpleInitApp() {
         loggedIn = false;
-        
-        flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
+        flyCam.setEnabled(false);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
         UI.loginScreen();
     }
@@ -74,7 +73,7 @@ public class Main extends SimpleApplication implements ScreenController{
             /**
              * Update walk.
              */
-            cam.setLocation(gameScene.updateCharacterPosition(cam));
+            gameScene.updateCharacterPosition(cam);
         }
     }
 
@@ -87,13 +86,10 @@ public class Main extends SimpleApplication implements ScreenController{
         /**
         * @TODO load settings here.
         */
-        
         inputManager.setCursorVisible(false);
         flyCam.setEnabled(true);
-        flyCam.setMoveSpeed(50f);
-        //cam.setLocation(new Vector3f(0.0f, 70.0f, 0.0f));
-        
         bulletAppState = new BulletAppState();
+        bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
         
         gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager);
@@ -102,9 +98,9 @@ public class Main extends SimpleApplication implements ScreenController{
         SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
         skyControl.setEnabled(true);
                 
-        timeOfDay = new TimeOfDay(3.0f);
+        timeOfDay = new TimeOfDay(5.0f);
         stateManager.attach(timeOfDay);
-        timeOfDay.setRate(1000f);
+        timeOfDay.setRate(350f);
         loggedIn = true;
     }
 

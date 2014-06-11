@@ -10,21 +10,27 @@ import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseAxisTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import com.jme3.scene.debug.SkeletonDebugger;
 
 /**
  * @author Laminin
  * @param  Derivco
  * @param  University of Pretoria
  * @param  COS301
- * Character will control main character animations with keybindings.
+ * Character will load the player model with material and rigging, control main 
+ * character animations with keybindings and control the update of model and 
+ * camera movement and positions.
  */
 public class Character {
     
@@ -33,67 +39,166 @@ public class Character {
     private AnimChannel channel;
     private AnimControl control;
     private AnimEventListener animationListener;
-    private CharacterControl character;
+    private ActionListener actionListener;
+    private AnalogListener analogListener;
+    private CharacterControl characterControl;
     private Vector3f walkDirection;
-    private boolean walk, slash, left, right, up, down;
+    private Vector3f viewDirection;
+    private boolean slash, left, right, up, down, jump;
     
-    public Character(AssetManager assMan, InputManager inMan, BulletAppState bullet) {
+    /**
+     * Character will consist of loading the model with its materials and rigging,
+     * add physics to the model and bind the camera to the model.
+     * @param assMan - AssetManager required to load model and material.
+     * @param inMan - InputManager required to set up key bindings.
+     * @param bullet - BulletAppState required to add physics to player and camera.
+     */
+    public Character(AssetManager assMan, InputManager inMan, BulletAppState bullet,
+            Camera cam) {
         playerNode = new Node("Player");
         walkDirection = new Vector3f();
-        walk = slash = left = right = up = down = false;
+        slash = left = right = up = down = jump = false;
+        initActionListener();
         initAnimEventListener();
-        initModel(assMan, bullet);
+        initModel(assMan, bullet, cam);
         initKeys(inMan);
     }
     
-    private void initModel(AssetManager assMan, BulletAppState bullet) {
+    /**
+     * initModel loads model, adds physics to it and bind the camera to it.
+     * @param assMan - AssetManager required to load model and material.
+     * @param inMan - InputManager required to set up key bindings.
+     * @param cam - Camera required to obtain camera position and look at.
+     */
+    private void initModel(AssetManager assMan, BulletAppState bullet, Camera cam) {
         /**
          * Fix camera to be controlled by physics.
          */
-        CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
-        character = new CharacterControl(capsuleShape, 0.05f);
-        character.setPhysicsLocation(new Vector3f(0.0f, 47.0f, 0.0f));
-        bullet.getPhysicsSpace().add(character);
+        CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(2.0f, 0.0f, 1);
+        characterControl = new CharacterControl(capsuleShape, 8.0f);
+        characterControl.setUseViewDirection(true);
+        characterControl.setViewDirection(new Vector3f(200, 25, -500));
+        characterControl.setJumpSpeed(10.0f);
+        bullet.getPhysicsSpace().add(characterControl);
         
         /**
          * Load player model.
          */
         player = (Node) assMan.loadModel("Models/cyborg/cyborg.j3o");
-        player.setLocalTranslation(5.0f, 47.0f, 0.0f);
-        playerNode.attachChild(player);  
+        player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, -4.2f));
+        player.lookAt(cam.getDirection(), cam.getUp());
+        player.addControl(characterControl);
+        playerNode.attachChild(player); 
         Material mat1 = new Material(assMan, "Common/MatDefs/Misc/Unshaded.j3md");
         mat1.setColor("Color", ColorRGBA.Red);
         player.setMaterial(mat1);
         
         /**
-         * Display rigging.
+         * Set animation.
          */
         control = player.getChild("Cube-ogremesh").getControl(AnimControl.class);
-        SkeletonDebugger skeletonDebug = new SkeletonDebugger("skeleton", control.getSkeleton());
+        control.addListener(animationListener);
+        channel = control.createChannel();
+        channel.setAnim("Stand");
+        channel.setLoopMode(LoopMode.Loop);
+        
+        /**
+         * Display rigging.
+         */
+        /*SkeletonDebugger skeletonDebug = new SkeletonDebugger("skeleton", control.getSkeleton());
         Material mat2 = new Material(assMan, "Common/MatDefs/Misc/Unshaded.j3md");
         mat2.getAdditionalRenderState().setWireframe(true);
         mat2.setColor("Color", ColorRGBA.Green);
         mat2.getAdditionalRenderState().setDepthTest(false);
         skeletonDebug.setMaterial(mat2);
-        player.attachChild(skeletonDebug);
-        
-        /**
-         * Set animation.
-         */
-        control.addListener(animationListener);
-        channel = control.createChannel();
-        channel.setAnim("Stand");
-        channel.setLoopMode(LoopMode.DontLoop);
+        player.attachChild(skeletonDebug);*/        
     }
     
+    /**
+     * updateCharacterPosition will be called from the main game update function 
+     * on every frame update, where this will move the player as well as the 
+     * camera according to the corrisponding key bindings press.
+     * @param cam - Camera to retrieve the directional vectors required to calculate
+     * the direction to move the camera and model in.
+     */
+    public void updateCharacterPostion(Camera cam) {
+        Vector3f camDir = cam.getDirection().clone().multLocal(0.25f);
+        Vector3f camLeft = cam.getLeft().clone().multLocal(0.125f);
+        camDir.y = 0;
+        camLeft.y = 0;
+        walkDirection.set(0, 0, 0);
+        //viewDirection = characterControl.getViewDirection();
+        
+        if (left) { walkDirection.addLocal(camLeft); }
+        
+        if (right) { walkDirection.addLocal(camLeft.negate()); }
+        
+        if (up) { walkDirection.addLocal(camDir); }
+        
+        if (down) { walkDirection.addLocal(camDir.negate()); }
+        
+        characterControl.setWalkDirection(walkDirection);
+        //characterControl.setViewDirection(cam.getDirection());
+        //player.lookAt(cam.getDirection(), cam.getUp());
+        //player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, 4.2f));
+        cam.setLocation(characterControl.getPhysicsLocation().add(0.8f, 5.5f, 4.2f));
+        //cam.lookAt(characterControl.getViewDirection(), cam.getUp());
+        handleAnimations();
+    }
+    
+    /**
+     * handleAnimations updates animations where required.
+     */
+    private void handleAnimations() {        
+        if (slash) {
+            switch (channel.getAnimationName()) {
+                case "Stand":
+                    channel.setAnim("Slash", 1.0f);
+                    channel.setLoopMode(LoopMode.DontLoop);
+                    break;
+                case "Walk":
+                    channel.setAnim("Slash", 1.0f);
+                    channel.setLoopMode(LoopMode.Cycle);
+                    break;
+            }
+        }
+        
+        if (left || right || up || down) {
+            if (channel.getAnimationName().equals("Stand")) {
+                channel.setAnim("Walk", 0.0f);
+                channel.setLoopMode(LoopMode.Cycle);
+            }
+        } else {
+            if (channel.getAnimationName().equals("Walk")) {
+                channel.setLoopMode(LoopMode.DontLoop);
+            }
+        }
+        
+        if (jump) {
+            /**
+             * @TODO add jump animation and action channel change.
+             */
+            characterControl.jump();
+        }
+    }
+    
+    /**
+     * initKeys sets up the key bindings that will be used to control the player model.
+     * @param inMan - InputManager add all the required key mappings to be triggered
+     * when pressed.
+     */
     private void initKeys(InputManager inMan) {
         inMan.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
         inMan.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
         inMan.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
         inMan.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
         inMan.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
-        inMan.addMapping("Walk", new KeyTrigger(KeyInput.KEY_1));
-        inMan.addMapping("Slash", new KeyTrigger(KeyInput.KEY_2));
+        
+        inMan.addMapping("Slash", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));        
+        inMan.addMapping("TurnLeft", new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+        inMan.addMapping("TurnRight", new MouseAxisTrigger(MouseInput.AXIS_Y, false));      
+        inMan.addMapping("LookUp", new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        inMan.addMapping("LookDown", new MouseAxisTrigger(MouseInput.AXIS_X, false));
         
         inMan.addListener(actionListener, "Left");
         inMan.addListener(actionListener, "Right");
@@ -102,81 +207,120 @@ public class Character {
         inMan.addListener(actionListener, "Jump");
         inMan.addListener(actionListener, "Walk");
         inMan.addListener(actionListener, "Slash");
+        inMan.addListener(analogListener, "TurnLeft");
+        inMan.addListener(analogListener, "TurnRight");
+        inMan.addListener(analogListener, "LookUp");
+        inMan.addListener(analogListener, "LookDown");
     }
       
-    private ActionListener actionListener = new ActionListener() {
-        @Override
-        public void onAction(String binding, boolean value, float tpf) {
-            switch (binding) {
-                case "Walk":
-                    if (value) {
-                        walk = true;
-                    } else {
-                        walk = false;
-                    }
-                    break;
-                case "Slash":
-                    if (value) {
-                        slash = true;
-                    } else {
-                        slash = false;
-                    }
-                    break;
-                case "Left":
-                    if (value) { 
-                        left = true; 
-                    } else { 
-                        left = false; 
-                    }
-                    break;
-                case "Right":
-                    if (value) { 
-                        right = true; 
-                    } else { 
-                        right = false; 
-                    }
-                    break;
-                case "Up":
-                    if (value) { 
-                        up = true; 
-                    } else { 
-                        up = false; 
-                    }
-                    break;
-                case "Down":
-                    if (value) {
-                        down = true; 
-                    } else { 
-                        down = false; 
-                    }
-                    break;
-                case "Jump":
-                    break;
+    /**
+     * initActionListener to update the required keys being pressed and mouse
+     * motion.
+     */
+    private void initActionListener() {
+        actionListener = new ActionListener() {
+            @Override
+            public void onAction(String binding, boolean value, float tpf) {
+                switch (binding) {
+                    case "Slash":
+                        if (value) {
+                            slash = true;
+                        } else {
+                            slash = false;
+                        }
+                        break;
+                    case "Left":
+                        if (value) { 
+                            left = true; 
+                        } else { 
+                            left = false; 
+                        }
+                        break;
+                    case "Right":
+                        if (value) { 
+                            right = true; 
+                        } else { 
+                            right = false; 
+                        }
+                        break;
+                    case "Up":
+                        if (value) { 
+                            up = true; 
+                        } else { 
+                            up = false; 
+                        }
+                        break;
+                    case "Down":
+                        if (value) {
+                            down = true; 
+                        } else { 
+                            down = false; 
+                        }
+                        break;
+                    case "Jump":
+                        if (value) {
+                            jump = true;
+                        } else {
+                            jump = false;
+                        }
+                        break;
+                }
             }
-        }
-    };
+        };
+            
+        analogListener = new AnalogListener() {
+            @Override
+            public void onAnalog(String name, float value, float tpf) {
+                Quaternion turn = new Quaternion();
+                switch(name) {
+                    case "TurnLeft":
+                        //turn.fromAngleAxis(value, Vector3f.UNIT_Y);
+                        //characterControl.setViewDirection(turn.mult(characterControl.getViewDirection()));
+                        break;
+                    case "TurnRight":
+                        //turn.fromAngleAxis(-value, Vector3f.UNIT_Y);
+                        //characterControl.setViewDirection(turn.mult(characterControl.getViewDirection()));
+                        break;
+                    case "LookUp":
+                        
+                        break;
+                    case "LookDown":
+                        
+                        break;
+                }
+            }
+        };
+    }
     
     
+    
+    /**
+     * initAminEventListener will trigger on animation change as well as when a 
+     * cycle of an animations if completed to run it again.
+     */
     private void initAnimEventListener() {
         animationListener = new AnimEventListener() {
             @Override
             public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
                 switch (animName) {
                     case "Walk":
-                        channel.setAnim("Walk", 0.0f);
-                        channel.setLoopMode(LoopMode.Cycle);
-                        channel.setSpeed(1f);
-                        break;
-                    
+                        if (channel.getLoopMode().equals(LoopMode.Cycle)) {
+                            channel.setAnim("Walk", 0.0f);
+                            channel.setLoopMode(LoopMode.Cycle);
+                            channel.setSpeed(1f);
+                        } else {
+                            channel.setAnim("Stand", 0.0f);
+                            channel.setLoopMode(LoopMode.Loop);
+                        }
+                        break;                    
                     case "Stand":
                         channel.setAnim("Stand", 0.0f);
-                        channel.setLoopMode(LoopMode.DontLoop);
+                        channel.setLoopMode(LoopMode.Loop);
                         channel.setSpeed(1f);
-                        break;
-                        
+                        break;                        
                     case "Slash":
                         channel.setAnim("Stand", 0.0f);
-                        channel.setLoopMode(LoopMode.DontLoop);
+                        channel.setLoopMode(LoopMode.Loop);
                         channel.setSpeed(1f);
                         break;
                 }
@@ -187,55 +331,10 @@ public class Character {
         };
     }
     
-    
-    public Vector3f updateCharacterPostion(Camera cam) {
-        Vector3f camDir = cam.getDirection().clone().multLocal(1.6f);
-        Vector3f camLeft = cam.getLeft().clone().multLocal(1.4f);
-        walkDirection.set(0, 0, 0);
-            
-        if (left) { 
-            walkDirection.addLocal(camLeft); 
-        }
-        
-        if (right) { 
-            walkDirection.addLocal(camLeft.negate()); 
-        }
-        
-        if (up) { 
-            walkDirection.addLocal(camDir); 
-        }
-        
-        if (down) { 
-            walkDirection.addLocal(camDir.negate()); 
-        }
-        
-        if (walk) {
-            if (channel.getAnimationName().equals("Stand")) {
-                channel.setAnim("Walk", 0.0f);
-                channel.setLoopMode(LoopMode.Cycle);
-            }
-        }
-        
-        if (slash) {
-            if (channel.getAnimationName().equals("Stand")) {
-                channel.setAnim("Slash", 1.0f);
-                channel.setLoopMode(LoopMode.DontLoop);
-            } else if (channel.getAnimationName().equals("Walk")) {
-                channel.setAnim("Slash", 1.0f);
-                channel.setLoopMode(LoopMode.Cycle);
-            }
-        }
-        
-        /*if (!walk && ! slash) {
-            channel.setAnim("Stand", 1.0f);
-            channel.setLoopMode(LoopMode.DontLoop);            
-        }*/
-        
-        character.setWalkDirection(walkDirection);
-        
-        return character.getPhysicsLocation();
-    }
-    
+    /**
+     * retrievePlayerNode an accessor to the game node containing the player model.
+     * @return player node containing the model data.
+     */
     public Node retrievePlayerNode() {
         return playerNode;
     }
