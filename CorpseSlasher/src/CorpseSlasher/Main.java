@@ -9,6 +9,9 @@ import com.jme3.water.WaterFilter;
 import jme3utilities.TimeOfDay;
 import jme3utilities.sky.SkyControl;
 
+import java.io.*;
+import java.net.Socket;
+
 /**
  * @author normenhansen
  * @author Laminin
@@ -23,6 +26,10 @@ public class Main extends SimpleApplication {
     boolean sky;
     
     public static void main(String[] args) {
+        //server test
+        ClientConnection cc = new ClientConnection();
+        cc.Login();
+        //end of server test
         Main app = new Main();
         app.start();
     }

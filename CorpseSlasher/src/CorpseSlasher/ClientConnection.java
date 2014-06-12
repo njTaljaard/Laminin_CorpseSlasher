@@ -25,15 +25,15 @@ public final class ClientConnection {
     private static Socket clientSocket;
     private static BufferedReader inReader;
     private static PrintWriter outWriter;
-    private final String hostAddress = "10.0.0.1";
+    private final String hostAddress = "localhost";
     private final int hostPortNumber = 32323;
     
-    private ClientConnection() {
+    public ClientConnection() {
         try {
             clientSocket = new Socket(hostAddress, hostPortNumber);
             inReader = new BufferedReader(new 
                     InputStreamReader(clientSocket.getInputStream()));
-            outWriter = new PrintWriter(clientSocket.getOutputStream());
+            outWriter = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (Exception ex) {
             //TODO: Raise exceptions through the ExceptionHandler class 
         }
@@ -45,7 +45,7 @@ public final class ClientConnection {
      * @return if login was successfull or not.
      */
     public boolean Login() {
-        
+        outWriter.println("login");
         return true;
     }
     
