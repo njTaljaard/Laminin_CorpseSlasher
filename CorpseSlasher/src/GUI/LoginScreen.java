@@ -6,9 +6,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
-import com.jme3.audio.Listener;
 import com.jme3.input.InputManager;
-import com.jme3.input.controls.ActionListener;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
 
@@ -17,15 +15,16 @@ import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
+import de.lessvoid.nifty.controls.imageselect.builder.ImageSelectBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.radiobutton.builder.RadioButtonBuilder;
 import de.lessvoid.nifty.controls.radiobutton.builder.RadioGroupBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
+import de.lessvoid.nifty.effects.impl.Hide;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
 
-public class LoginScreen{
-    private final String  message = "message";
+public class LoginScreen {
     private int             selection;
     private AssetManager    assetManger;
     private InputManager    inputManager;
@@ -34,15 +33,16 @@ public class LoginScreen{
     private NiftyJmeDisplay loginScreen;
     private AppStateManager appState;
     private Application     app;
+
     /**
-     * 
+     *
      * @param assetManager
      * @param inputManager
      * @param audioRenderer
-     * @param guiViewPort 
+     * @param guiViewPort
      */
     public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
-                       ViewPort guiViewPort,AppStateManager appState, Application app) {
+                       ViewPort guiViewPort, AppStateManager appState, Application app) {
         this.assetManger   = assetManager;
         this.inputManager  = inputManager;
         this.audioRenderer = audioRenderer;
@@ -53,23 +53,27 @@ public class LoginScreen{
         loginScreen        = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
         build();
     }
+
     /**
-     * 
+     * Buiilds the NiftyGui
      */
     private void build() {
         Nifty nifty = loginScreen.getNifty();
 
         guiViewPort.addProcessor(loginScreen);
-        buildGui(nifty);     
+        buildGui(nifty);
         nifty.gotoScreen("Login_Screen");
     }
 
+    /**
+     * helper function for build
+     * @param nifty display object from which the panels and buttons are created
+     */
     private void buildGui(Nifty nifty) {
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
         nifty.addScreen("Login_Screen", new ScreenBuilder("Login To Connect") {
             {
-                
                 controller((ScreenController) app);
                 layer(new LayerBuilder("background") {
                     {
@@ -149,6 +153,7 @@ public class LoginScreen{
                                                 control(new RadioButtonBuilder("Custom_ID") {
                                                     {
                                                         width("40px");
+                                                        //backgroundImage("Icons/google+.jpg");
                                                         group("Selections");
                                                     }
                                                 });
@@ -160,6 +165,7 @@ public class LoginScreen{
                                                 control(new RadioButtonBuilder("Facebook_ID") {
                                                     {
                                                         width("40px");
+                                                        //backgroundImage("Icons/fb.jpg");
                                                         group("Selections");
                                                     }
                                                 });
@@ -171,6 +177,7 @@ public class LoginScreen{
                                                 control(new RadioButtonBuilder("Twitter_ID") {
                                                     {
                                                         width("40px");
+                                                        //backgroundImage("Icons/twitter.jpg");
                                                         group("Selections");
                                                     }
                                                 });
@@ -182,7 +189,9 @@ public class LoginScreen{
                                                 control(new RadioButtonBuilder("Google+_ID") {
                                                     {
                                                         width("40px");
+                                                        //backgroundImage("Icons/google+.jpg");
                                                         group("Selections");
+                                                        
                                                     }
                                                 });
                                             }
@@ -193,14 +202,74 @@ public class LoginScreen{
                                     {
                                         alignCenter();
                                         valign(VAlign.Bottom);
-                                        marginBottom("18%");
+                                        marginBottom("13%");
                                         height("5%");
                                         width("15%");
-                                        interactOnClick("quitGame()");  
+                                        interactOnClick("loadingScreen()");
                                     }
-
-                                   
-                                    
+                                });
+                                control(new LabelBuilder("New_Account_ID", "Create New Account") {
+                                    {
+                                        marginLeft("-5%");
+                                        marginBottom("-44%");
+                                        height("5%");
+                                        width("15%");
+                                        interactOnClick("newAccount()");
+                                    }
+                                });
+                                control(new LabelBuilder("Retrieve_Password_ID", "Retrieve Password") {
+                                    {
+                                        marginLeft("5%");
+                                        marginBottom("-44%");
+                                        height("5%");
+                                        width("15%");
+                                        interactOnClick("retrievePassword()");
+                                    }
+                                });
+                            }
+                            ;
+                        });
+                        panel(new PanelBuilder("Button_Panel") {
+                            {
+                                childLayoutHorizontal();
+                                align(Align.Left);
+                                valign(VAlign.Top);
+                                marginLeft("44.4%");
+                                marginTop("-25%");
+                                height("5%");
+                                width("15%");
+                                paddingLeft("7px");
+                                paddingRight("7px");
+                                paddingTop("4px");
+                                paddingBottom("4px");
+                                visibleToMouse(true);
+                                panel(new PanelBuilder() {
+                                    {
+                                        childLayoutHorizontal();
+                                        backgroundImage("Icons/google+.jpg");
+                                        width("40px");
+                                    }
+                                });
+                                panel(new PanelBuilder() {
+                                    {
+                                        childLayoutHorizontal();
+                                        backgroundImage("Icons/fb.jpg");
+                                        width("40px");
+                                    }
+                                });
+                                panel(new PanelBuilder() {
+                                    {
+                                        childLayoutHorizontal();
+                                        backgroundImage("Icons/twitter.jpg");
+                                        width("40px");
+                                    }
+                                });
+                                panel(new PanelBuilder() {
+                                    {
+                                        childLayoutHorizontal();
+                                        backgroundImage("Icons/google+.jpg");
+                                        width("40px");
+                                    }
                                 });
                             }
                         });
@@ -209,9 +278,6 @@ public class LoginScreen{
             }
         }.build(nifty));
     }
-
-
-    
 }
 
 

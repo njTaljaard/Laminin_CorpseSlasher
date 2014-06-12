@@ -46,6 +46,12 @@ public final class UserInterfaceManager {
     public void loginScreen() {
         LoginScreen login = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app);
     }
+    public void newAccount(){
+        NewAccount newAcc = new NewAccount(assetManager, inputManager, audioRenderer, guiViewPort, appState, app);
+    }
+    public void retrievePassword(){
+        RetrievePassword password = new RetrievePassword(assetManager, inputManager, audioRenderer, guiViewPort, appState, app);
+    }
 }
 
 
