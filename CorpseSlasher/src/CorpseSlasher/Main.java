@@ -1,16 +1,19 @@
 package CorpseSlasher;
 
+import GUI.LoginScreen;
+import GUI.UserInterfaceManager;
 import com.jme3.app.SimpleApplication;
+import com.jme3.bullet.BulletAppState;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.RenderManager;
 import com.jme3.water.WaterFilter;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.screen.ScreenController;
 import jme3utilities.TimeOfDay;
 import jme3utilities.sky.SkyControl;
-
-import java.io.*;
-import java.net.Socket;
 
 /**
  * @author normenhansen
@@ -20,38 +23,40 @@ import java.net.Socket;
  * @param  COS301
  * Main class to handle program start up until graphical main loop is reached.
  */
-public class Main extends SimpleApplication {
-
+public class Main extends SimpleApplication implements ScreenController{
+    
+    GameScene gameScene;
+    BulletAppState bulletAppState;
     TimeOfDay timeOfDay;
-    boolean sky;
+    LoginScreen login;
+    boolean loggedIn;
+    static int byPass = 0;
+    UserInterfaceManager UI = new UserInterfaceManager();
     
     public static void main(String[] args) {
-        //server test
-        ClientConnection cc = new ClientConnection();
-        cc.Login();
-        //end of server test
-        Main app = new Main();
+        Main app = new Main();       
         app.start();
     }
 
     /**
-     * This function only gets called once. Use this function to setup the entire scene.
-     * This will inculde add all objects to the scene, set all bound values ex. Water settings.
+     * This function only gets called once. Use this function to create the login
+     * screen where after the scene will be compiled during loading screen.
      */
     @Override
-    public void simpleInitApp() {/**
-         * Turn this value up to move faster.
-         */
-        flyCam.setMoveSpeed(50f);
-        
-        cam.setLocation(new Vector3f(0.0f, 70.0f, 0.0f));
-        
-        loadGame();
+    public void simpleInitApp() {
+        loggedIn = false;
+        inputManager.setCursorVisible(true);
+        flyCam.setEnabled(false);
+        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
+        UI.loginScreen();
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        if (sky) {
+        if (loggedIn) {
+            /**
+             * Update sunlight direction and time of day.
+             */
             SkyControl sc = rootNode.getChild("BasicScene").getControl(SkyControl.class);
             sc.update(tpf);
             sc.getSunAndStars().setHour(timeOfDay.getHour());
@@ -63,6 +68,11 @@ public class Main extends SimpleApplication {
             FilterPostProcessor waterProcessor = (FilterPostProcessor) viewPort.getProcessors().get(0);
             WaterFilter water = waterProcessor.getFilter(WaterFilter.class);
             water.setLightDirection(scLight);
+            
+            /**
+             * Update walk.
+             */
+            gameScene.updateCharacterPosition(cam);
         }
     }
 
@@ -75,19 +85,45 @@ public class Main extends SimpleApplication {
         /**
         * @TODO load settings here.
         */
-        sky = true;
+        inputManager.setCursorVisible(false);
+        flyCam.setEnabled(true);
+        bulletAppState = new BulletAppState();
+        bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
+        stateManager.attach(bulletAppState);
         
-        GameScene gameScene = new GameScene(0, assetManager, viewPort, cam);
+        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager);
+        rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
         
-        rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0); //BasicScene objects
+        SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
+        skyControl.setEnabled(true);
+                
+        timeOfDay = new TimeOfDay(5.0f);
+        stateManager.attach(timeOfDay);
+        timeOfDay.setRate(350f);
+        loggedIn = true;
+    }
+
+    @Override
+    public void bind(Nifty nifty, Screen screen) 
+    {
         
-        if (sky) {
-            SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
-            skyControl.setEnabled(true);
+    }
+
+    @Override
+    public void onStartScreen() 
+    {
         
-            timeOfDay = new TimeOfDay(3.0f);
-            stateManager.attach(timeOfDay);
-            timeOfDay.setRate(1000f);
-        }
+    }
+
+    @Override
+    public void onEndScreen()
+    {
+        
+    }
+   
+    public void quitGame()
+    {
+        guiViewPort.getProcessors().remove(0);
+        loadGame();
     }
 }
