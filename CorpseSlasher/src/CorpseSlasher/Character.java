@@ -18,9 +18,11 @@ import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 
 /**
@@ -43,8 +45,20 @@ public class Character {
     private AnalogListener analogListener;
     private CharacterControl characterControl;
     private Vector3f walkDirection;
-    private Vector3f viewDirection;
-    private boolean slash, left, right, up, down, jump;
+    private ThirdPersonCamera camera;
+    private boolean slash, left, right, up, down, jump, walkFlag;
+    
+    private Node pivot;
+    private float walkSpeed = 0.15f;
+    private float verticalAngle = 30 * FastMath.DEG_TO_RAD;
+    private float maxVerticalAngle = 85 * FastMath.DEG_TO_RAD;
+    private float minVerticalAngle = 5 * FastMath.DEG_TO_RAD;
+    
+    /**
+     * @TODO remove and read directly from settings.
+     */
+    private float xMovementSpeed;
+    private float yMovementSpeed;
     
     /**
      * Character will consist of loading the model with its materials and rigging,
@@ -57,7 +71,14 @@ public class Character {
             Camera cam) {
         playerNode = new Node("Player");
         walkDirection = new Vector3f();
-        slash = left = right = up = down = jump = false;
+        slash = left = right = up = down = jump = walkFlag = false;
+        
+        /**
+         * @TODO add mouse sensitivity to settings.
+         */
+        xMovementSpeed = 0.5f;
+        yMovementSpeed = 0.5f;
+        
         initActionListener();
         initAnimEventListener();
         initModel(assMan, bullet, cam);
@@ -74,24 +95,25 @@ public class Character {
         /**
          * Fix camera to be controlled by physics.
          */
-        CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(2.0f, 0.0f, 1);
-        characterControl = new CharacterControl(capsuleShape, 8.0f);
-        characterControl.setUseViewDirection(true);
-        characterControl.setViewDirection(new Vector3f(200, 25, -500));
-        characterControl.setJumpSpeed(10.0f);
+        CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.01f, 0.05f, 1);
+        characterControl = new CharacterControl(capsuleShape, 1.0f);
+        characterControl.setGravity(10.0f);
+        characterControl.setJumpSpeed(50.0f);
         bullet.getPhysicsSpace().add(characterControl);
         
         /**
          * Load player model.
          */
         player = (Node) assMan.loadModel("Models/cyborg/cyborg.j3o");
-        player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, -4.2f));
+        player.setLocalTranslation(cam.getLocation().add(0.8f, -6.5f, -4.2f));
         player.lookAt(cam.getDirection(), cam.getUp());
         player.addControl(characterControl);
         playerNode.attachChild(player); 
         Material mat1 = new Material(assMan, "Common/MatDefs/Misc/Unshaded.j3md");
         mat1.setColor("Color", ColorRGBA.Red);
         player.setMaterial(mat1);
+        
+        camera = new ThirdPersonCamera("3rdCam", cam, player);
         
         /**
          * Set animation.
@@ -100,7 +122,7 @@ public class Character {
         control.addListener(animationListener);
         channel = control.createChannel();
         channel.setAnim("Stand");
-        channel.setLoopMode(LoopMode.Loop);
+        channel.setLoopMode(LoopMode.Cycle);
         
         /**
          * Display rigging.
@@ -122,12 +144,11 @@ public class Character {
      * the direction to move the camera and model in.
      */
     public void updateCharacterPostion(Camera cam) {
-        Vector3f camDir = cam.getDirection().clone().multLocal(0.25f);
-        Vector3f camLeft = cam.getLeft().clone().multLocal(0.125f);
+        Vector3f camDir = cam.getDirection().clone().multLocal(0.3f);
+        Vector3f camLeft = cam.getLeft().clone().multLocal(0.2f);
         camDir.y = 0;
         camLeft.y = 0;
         walkDirection.set(0, 0, 0);
-        //viewDirection = characterControl.getViewDirection();
         
         if (left) { walkDirection.addLocal(camLeft); }
         
@@ -137,12 +158,7 @@ public class Character {
         
         if (down) { walkDirection.addLocal(camDir.negate()); }
         
-        characterControl.setWalkDirection(walkDirection);
-        //characterControl.setViewDirection(cam.getDirection());
-        //player.lookAt(cam.getDirection(), cam.getUp());
-        //player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, 4.2f));
-        cam.setLocation(characterControl.getPhysicsLocation().add(0.8f, 5.5f, 4.2f));
-        //cam.lookAt(characterControl.getViewDirection(), cam.getUp());
+        characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
         handleAnimations();
     }
     
@@ -151,26 +167,29 @@ public class Character {
      */
     private void handleAnimations() {        
         if (slash) {
-            switch (channel.getAnimationName()) {
-                case "Stand":
+            if (channel.getAnimationName().equals("Stand")) {
+                channel.setAnim("Slash");
+                channel.setLoopMode(LoopMode.DontLoop);
+            } else {
+                if (!channel.getAnimationName().equals("Slash")) {
                     channel.setAnim("Slash", 1.0f);
                     channel.setLoopMode(LoopMode.DontLoop);
-                    break;
-                case "Walk":
-                    channel.setAnim("Slash", 1.0f);
-                    channel.setLoopMode(LoopMode.Cycle);
-                    break;
+                    channel.setTime(0);
+                }
             }
+            slash = false;
         }
         
         if (left || right || up || down) {
             if (channel.getAnimationName().equals("Stand")) {
-                channel.setAnim("Walk", 0.0f);
-                channel.setLoopMode(LoopMode.Cycle);
+                channel.setAnim("Walk");
+                channel.setLoopMode(LoopMode.Loop);
+                channel.setSpeed(1.5f);
             }
         } else {
-            if (channel.getAnimationName().equals("Walk")) {
-                channel.setLoopMode(LoopMode.DontLoop);
+            if (!channel.getAnimationName().equals("Slash")) {
+                channel.setAnim("Stand");
+                channel.setLoopMode(LoopMode.Cycle);                    
             }
         }
         
@@ -195,10 +214,10 @@ public class Character {
         inMan.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
         
         inMan.addMapping("Slash", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));        
-        inMan.addMapping("TurnLeft", new MouseAxisTrigger(MouseInput.AXIS_Y, true));
-        inMan.addMapping("TurnRight", new MouseAxisTrigger(MouseInput.AXIS_Y, false));      
-        inMan.addMapping("LookUp", new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        inMan.addMapping("LookDown", new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        inMan.addMapping("TurnLeft", new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        inMan.addMapping("TurnRight", new MouseAxisTrigger(MouseInput.AXIS_X, false));      
+        inMan.addMapping("LookUp", new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+        inMan.addMapping("LookDown", new MouseAxisTrigger(MouseInput.AXIS_Y, true));
         
         inMan.addListener(actionListener, "Left");
         inMan.addListener(actionListener, "Right");
@@ -206,6 +225,7 @@ public class Character {
         inMan.addListener(actionListener, "Down");
         inMan.addListener(actionListener, "Jump");
         inMan.addListener(actionListener, "Walk");
+        
         inMan.addListener(actionListener, "Slash");
         inMan.addListener(analogListener, "TurnLeft");
         inMan.addListener(analogListener, "TurnRight");
@@ -223,11 +243,8 @@ public class Character {
             public void onAction(String binding, boolean value, float tpf) {
                 switch (binding) {
                     case "Slash":
-                        if (value) {
+                        if (value) 
                             slash = true;
-                        } else {
-                            slash = false;
-                        }
                         break;
                     case "Left":
                         if (value) { 
@@ -274,18 +291,18 @@ public class Character {
                 Quaternion turn = new Quaternion();
                 switch(name) {
                     case "TurnLeft":
-                        //turn.fromAngleAxis(value, Vector3f.UNIT_Y);
-                        //characterControl.setViewDirection(turn.mult(characterControl.getViewDirection()));
+                        turn.fromAngleAxis(xMovementSpeed * value, Vector3f.UNIT_Y);
+                        characterControl.setViewDirection(turn.mult(characterControl.getViewDirection()));
                         break;
                     case "TurnRight":
-                        //turn.fromAngleAxis(-value, Vector3f.UNIT_Y);
-                        //characterControl.setViewDirection(turn.mult(characterControl.getViewDirection()));
+                        turn.fromAngleAxis(-xMovementSpeed * value, Vector3f.UNIT_Y);
+                        characterControl.setViewDirection(turn.mult(characterControl.getViewDirection()));
                         break;
                     case "LookUp":
-                        
+                        camera.verticalRotate(yMovementSpeed*value);
                         break;
                     case "LookDown":
-                        
+                        camera.verticalRotate(-yMovementSpeed*value);
                         break;
                 }
             }
@@ -304,10 +321,10 @@ public class Character {
             public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
                 switch (animName) {
                     case "Walk":
-                        if (channel.getLoopMode().equals(LoopMode.Cycle)) {
+                        if (channel.getLoopMode().equals(LoopMode.Loop)) {
                             channel.setAnim("Walk", 0.0f);
-                            channel.setLoopMode(LoopMode.Cycle);
-                            channel.setSpeed(1f);
+                            channel.setLoopMode(LoopMode.Loop);
+                            channel.setSpeed(1.5f);
                         } else {
                             channel.setAnim("Stand", 0.0f);
                             channel.setLoopMode(LoopMode.Loop);
@@ -329,6 +346,22 @@ public class Character {
             @Override
             public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {}
         };
+    }
+    
+    public void verticalRotate(float angle)
+    {
+	verticalAngle += angle;
+ 
+	if(verticalAngle > maxVerticalAngle)
+	{
+	    verticalAngle = maxVerticalAngle;
+	}
+	else if(verticalAngle < minVerticalAngle)
+	{
+	    verticalAngle = minVerticalAngle;
+	}
+ 
+	pivot.getLocalRotation().fromAngleAxis(-verticalAngle, Vector3f.UNIT_X);
     }
     
     /**
