@@ -2,7 +2,6 @@ package CorpseSlasher;
 
 import GUI.LoginScreen;
 import GUI.UserInterfaceManager;
-//import GUI.UserInterfaceManager;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.light.DirectionalLight;

@@ -22,7 +22,8 @@ public class GameScene {
     private Character character;
     
     /**
-     * 
+     * GameScene will combine all the entities of the entire game into a node 
+     * for a reverance point for the game engine.
      * @param selectedMap - the desired map to load.
      * @param Assetmanager - Assetmanager passed through from main game.
      * @param ViewPort - ViewPort required for water, contains position of camara.
@@ -36,12 +37,16 @@ public class GameScene {
     }
     
     /**
-     * 
-     * @param assestManager
-     * @param viewPort
-     * @param cam
-     * @param bullet
-     * @param map 
+     * initScene will retrieve and combine all the variase assets that will
+     * make up the entire scene.
+     * @param assestManager - AssestManager for loading all required models and
+     * textures.
+     * @param viewPort - ViewPort required for post processing filter: Water.
+     * @param cam - Camera required for the sky controller to update the postion
+     * of assets.
+     * @param bullet - BulletAppState to add collision detection to the terrain
+     * and its added assest.
+     * @param map - Corresponding scene number to assign the required terrain.
      */
     private void initScene(AssetManager assestManager, ViewPort viewPort, Camera cam,
             BulletAppState bullet, int map) {
@@ -57,10 +62,13 @@ public class GameScene {
     }
     
     /**
-     * 
-     * @param assMan
-     * @param inMan
-     * @param bullet 
+     * initMainCharacter will load the main player model, add it to a character
+     * handler to be able to add gravity and move it around, also add the key
+     * and mouse functionality to control and update it the model and camera
+     * positions.
+     * @param assMan - AssetManager to be able to load models and textures.
+     * @param inMan - InputManager for adding key and mouse binding to be triggered.
+     * @param bullet - BulletAppState to add the model to the physics handler.
      */
     private void initMainCharacter(AssetManager assMan, InputManager inMan, 
             BulletAppState bullet, Camera cam) {
@@ -69,9 +77,10 @@ public class GameScene {
     }
     
     /**
-     * 
-     * @param cam
-     * @param map 
+     * initCameraPosition will be used the multiple maps are create to define the
+     * correct camera position.
+     * @param cam - Camera from main game.
+     * @param map - The scene to be loaded.
      */
     private void initCameraPosition(Camera cam, int map) {
         switch(map) {
@@ -85,16 +94,18 @@ public class GameScene {
     }
     
     /**
-     * 
-     * @param cam 
+     * updateCameraPosition will be called on each frame render to update the 
+     * position of the model and in correlation the camera.
+     * @param cam - Camera to be use for updating camera position.
      */
     public void updateCharacterPosition(Camera cam) {
         character.updateCharacterPostion(cam);
     }
     
     /**
-     * 
-     * @return 
+     * retrieveSceneNode to obtain the node that contains all the assests of the
+     * scene which will be added to the rootNode for it to be renderable.
+     * @return sceneNode consisting of the entire scene.
      */
     public Node retrieveSceneNode() {
         return sceneNode;
