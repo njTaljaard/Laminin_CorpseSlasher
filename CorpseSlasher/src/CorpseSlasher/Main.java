@@ -10,6 +10,8 @@ import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.RenderManager;
 import com.jme3.water.WaterFilter;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import jme3utilities.TimeOfDay;
@@ -31,8 +33,8 @@ public class Main extends SimpleApplication implements ScreenController{
     LoginScreen login;
     boolean loggedIn;
     static int byPass = 0;
-    UserInterfaceManager UI = new UserInterfaceManager();
-    
+    UserInterfaceManager UI = new UserInterfaceManager();  
+    private RadioButtonGroupStateChangedEvent selectedButton;
     public static void main(String[] args) {
         Main app = new Main();       
         app.start();
@@ -45,6 +47,7 @@ public class Main extends SimpleApplication implements ScreenController{
     @Override
     public void simpleInitApp() {
         loggedIn = false;
+        flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
         flyCam.setEnabled(false);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
@@ -104,13 +107,13 @@ public class Main extends SimpleApplication implements ScreenController{
     }
 
     @Override
-    public void bind(Nifty nifty, Screen screen) 
+    public void bind(Nifty nifty, Screen screen)
     {
         
     }
 
     @Override
-    public void onStartScreen() 
+    public void onStartScreen()
     {
         
     }
@@ -120,10 +123,31 @@ public class Main extends SimpleApplication implements ScreenController{
     {
         
     }
-   
-    public void quitGame()
+    @NiftyEventSubscriber(id="Selections")
+    public void radioButtons(final String id,final RadioButtonGroupStateChangedEvent event)
     {
-        guiViewPort.getProcessors().remove(0);
-        loadGame();
+        selectedButton = event;
+        System.out.println(selectedButton.getSelectedId() + " was chosen");
     }
+   public void loadingScreen()
+   {
+        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+        //System.out.println(selectedButton.getSelectedId() + " was chosen");
+        loadGame();
+   }
+   public void newAccount()
+   {
+       guiViewPort.getProcessors().remove(0);
+       UI.newAccount();
+   }
+   public void retrievePassword()
+   {
+       guiViewPort.getProcessors().remove(0);
+       UI.retrievePassword();
+   }
+   public void loginScreen()
+   {
+       guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+       UI.loginScreen();
+   }
 }

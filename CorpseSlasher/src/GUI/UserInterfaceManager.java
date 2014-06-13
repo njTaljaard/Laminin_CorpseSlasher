@@ -7,6 +7,7 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.input.InputManager;
+import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
 
 public final class UserInterfaceManager {
@@ -16,6 +17,7 @@ public final class UserInterfaceManager {
     private ViewPort        guiViewPort;
     private AppStateManager appState;
     private Application     app;
+    private NiftyJmeDisplay Screen;
 
     public void init(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
                      ViewPort guiViewPort, AppStateManager appState, Application app) {
@@ -25,6 +27,7 @@ public final class UserInterfaceManager {
         this.guiViewPort   = guiViewPort;
         this.app           = app;
         this.appState      = appState;
+        Screen = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
     }
 
     public AssetManager getAssetManger() {
@@ -44,7 +47,13 @@ public final class UserInterfaceManager {
     }
 
     public void loginScreen() {
-        LoginScreen login = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app);
+        LoginScreen login = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
+    }
+    public void newAccount(){
+        NewAccount newAcc = new NewAccount(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
+    }
+    public void retrievePassword(){
+        RetrievePassword password = new RetrievePassword(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
     }
 }
 
