@@ -15,42 +15,27 @@ import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
-import de.lessvoid.nifty.controls.imageselect.builder.ImageSelectBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.radiobutton.builder.RadioButtonBuilder;
 import de.lessvoid.nifty.controls.radiobutton.builder.RadioGroupBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
-import de.lessvoid.nifty.effects.impl.Hide;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
 
-public class LoginScreen {
-    private int             selection;
-    private AssetManager    assetManger;
-    private InputManager    inputManager;
-    private AudioRenderer   audioRenderer;
-    private ViewPort        guiViewPort;
-    private NiftyJmeDisplay loginScreen;
-    private AppStateManager appState;
-    private Application     app;
+public class LoginScreen extends Screens {
 
-    /**
-     *
-     * @param assetManager
-     * @param inputManager
-     * @param audioRenderer
-     * @param guiViewPort
-     */
-    public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
-                       ViewPort guiViewPort, AppStateManager appState, Application app) {
-        this.assetManger   = assetManager;
-        this.inputManager  = inputManager;
-        this.audioRenderer = audioRenderer;
-        this.guiViewPort   = guiViewPort;
-        this.selection     = 0;
-        this.appState      = appState;
-        this.app           = app;
-        loginScreen        = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
+/**
+ *
+ * @param assetManager
+ * @param inputManager
+ * @param audioRenderer
+ * @param guiViewPort
+ */
+public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
+                   ViewPort guiViewPort, AppStateManager appState, Application app,NiftyJmeDisplay screen) {
+        super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
+
+        // loginScreen        = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
         build();
     }
 
@@ -58,9 +43,9 @@ public class LoginScreen {
      * Buiilds the NiftyGui
      */
     private void build() {
-        Nifty nifty = loginScreen.getNifty();
+        Nifty nifty = screen.getNifty();
 
-        guiViewPort.addProcessor(loginScreen);
+        guiViewPort.addProcessor(screen);
         buildGui(nifty);
         nifty.gotoScreen("Login_Screen");
     }
@@ -153,7 +138,8 @@ public class LoginScreen {
                                                 control(new RadioButtonBuilder("Custom_ID") {
                                                     {
                                                         width("40px");
-                                                        //backgroundImage("Icons/google+.jpg");
+
+                                                        // backgroundImage("Icons/google+.jpg");
                                                         group("Selections");
                                                     }
                                                 });
@@ -165,7 +151,8 @@ public class LoginScreen {
                                                 control(new RadioButtonBuilder("Facebook_ID") {
                                                     {
                                                         width("40px");
-                                                        //backgroundImage("Icons/fb.jpg");
+
+                                                        // backgroundImage("Icons/fb.jpg");
                                                         group("Selections");
                                                     }
                                                 });
@@ -177,7 +164,8 @@ public class LoginScreen {
                                                 control(new RadioButtonBuilder("Twitter_ID") {
                                                     {
                                                         width("40px");
-                                                        //backgroundImage("Icons/twitter.jpg");
+
+                                                        // backgroundImage("Icons/twitter.jpg");
                                                         group("Selections");
                                                     }
                                                 });
@@ -189,9 +177,9 @@ public class LoginScreen {
                                                 control(new RadioButtonBuilder("Google+_ID") {
                                                     {
                                                         width("40px");
-                                                        //backgroundImage("Icons/google+.jpg");
+
+                                                        // backgroundImage("Icons/google+.jpg");
                                                         group("Selections");
-                                                        
                                                     }
                                                 });
                                             }

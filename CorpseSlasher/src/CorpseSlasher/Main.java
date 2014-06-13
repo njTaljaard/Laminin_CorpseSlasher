@@ -30,7 +30,7 @@ public class Main extends SimpleApplication implements ScreenController{
     boolean sky;
     LoginScreen login;
     static int byPass = 0;
-    UserInterfaceManager UI = new UserInterfaceManager();
+    UserInterfaceManager UI = new UserInterfaceManager();  
     private RadioButtonGroupStateChangedEvent selectedButton;
     public static void main(String[] args) {
         Main app = new Main();       
@@ -123,21 +123,24 @@ public class Main extends SimpleApplication implements ScreenController{
     }
    public void loadingScreen()
    {
-        guiViewPort.getProcessors().remove(0);       
+        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         //System.out.println(selectedButton.getSelectedId() + " was chosen");
         loadGame();
    }
    public void newAccount()
    {
-       //System.out.println("new Account");
        guiViewPort.getProcessors().remove(0); 
        UI.newAccount();
    }
    public void retrievePassword()
    {
-       //System.out.println("retrieve password");
        guiViewPort.getProcessors().remove(0); 
        UI.retrievePassword();
+   }
+   public void loginScreen()
+   {
+       guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+       UI.loginScreen();
    }
     
 

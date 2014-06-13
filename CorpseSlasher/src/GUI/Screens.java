@@ -18,20 +18,21 @@ import com.jme3.renderer.ViewPort;
  */
 public class Screens 
 {
-    protected AssetManager    assetManger;
+    protected AssetManager    assetManager;
     protected InputManager    inputManager;
     protected AudioRenderer   audioRenderer;
     protected ViewPort        guiViewPort;
-    protected NiftyJmeDisplay loginScreen;
+    protected NiftyJmeDisplay screen;
     protected AppStateManager appState;
     protected Application     app;
-    Screens(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app)
+    Screens(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app,NiftyJmeDisplay screen)
     {
-        this.assetManger   = assetManager;
+        this.assetManager   = assetManager;
         this.inputManager  = inputManager;
         this.audioRenderer = audioRenderer;
         this.guiViewPort   = guiViewPort;
         this.appState      = appState;
-        this.app           = app;
+        this.app           = app;  
+        this.screen        = screen;
     }
 }
