@@ -234,7 +234,7 @@ public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRe
                                 panel(new PanelBuilder() {
                                     {
                                         childLayoutHorizontal();
-                                        backgroundImage("Icons/google+.jpg");
+                                        backgroundImage("Icons/zombie.jpg");
                                         width("40px");
                                     }
                                 });

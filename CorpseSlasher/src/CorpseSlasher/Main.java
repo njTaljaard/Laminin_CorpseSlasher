@@ -120,6 +120,7 @@ public class Main extends SimpleApplication implements ScreenController{
     public void radioButtons(final String id,final RadioButtonGroupStateChangedEvent event)
     {
         selectedButton = event;
+        System.out.println(selectedButton.getSelectedId() + " was chosen");
     }
    public void loadingScreen()
    {
