@@ -75,8 +75,8 @@ public class Character {
         /**
          * Fix camera to be controlled by physics.
          */
-        CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.01f, 0.05f, 1);
-        characterControl = new CharacterControl(capsuleShape, 1.0f);
+        CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.01f, 0.1f, 1);
+        characterControl = new CharacterControl(capsuleShape, 1.5f);
         characterControl.setGravity(10.0f);
         characterControl.setJumpSpeed(50.0f);
         bullet.getPhysicsSpace().add(characterControl);

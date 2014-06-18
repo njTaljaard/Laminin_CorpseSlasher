@@ -19,6 +19,9 @@ import jme3utilities.sky.SkyControl;
 import com.jme3.water.WaterFilter;
 import com.jme3.math.FastMath;
 import com.jme3.post.filters.BloomFilter;
+import com.jme3.post.filters.DepthOfFieldFilter;
+import com.jme3.terrain.geomipmap.TerrainLodControl;
+import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import jme3utilities.Misc;
 
 /**
@@ -38,6 +41,7 @@ public class BasicScene {
     private Node sceneNode;
     private SkyControl skyControl;
     private String sceneName;
+    private FilterPostProcessor fpp;
     
     /**
      * BasicScene will create the scene attached to sceneNode.
@@ -64,12 +68,13 @@ public class BasicScene {
      */
     public void createScene(AssetManager assMan, ViewPort vp, Camera cam, 
             BulletAppState bullet) {
+        fpp = new FilterPostProcessor(assMan);
         initAmbientLight();
         initSunLight();
-        initSkyBox(assMan, cam);
         initTerrain(assMan, bullet);
         initWater(assMan, vp);
-        //initDepthOfField(assMan, vp);
+        initSkyBox(assMan, cam);
+        //initDepthOfField(vp);
     }
     
     /**
@@ -109,6 +114,7 @@ public class BasicScene {
         sceneModel.setName("Terrian");
         
         sceneModel.addControl(new RigidBodyControl(0));
+        //System.out.println(sceneModel.getControl(TerrainLodControl.class).getLodCalculator().isLodOff());
         bullet.getPhysicsSpace().add(sceneModel);
         
         if (sceneModel != null) {
@@ -128,7 +134,6 @@ public class BasicScene {
      * @param vp - ViewPort required for water, contains position of camara.
      */
     private void initWater(AssetManager assMan, ViewPort vp) {
-        FilterPostProcessor fpp = new FilterPostProcessor(assMan);
         WaterFilter water;
         
         water = new WaterFilter(sceneNode, lightDir); 
@@ -204,6 +209,15 @@ public class BasicScene {
         Misc.getFpp(vp, assMan).addFilter(bloom);
         
         return bloom;
+    }
+    
+    private void initDepthOfField(ViewPort vp) {
+        DepthOfFieldFilter dofFilter = new DepthOfFieldFilter();
+        dofFilter.setFocusDistance(50);
+        dofFilter.setFocusRange(100);
+        dofFilter.setBlurScale(1.15f);
+        fpp.addFilter(dofFilter);
+        vp.addProcessor(fpp);
     }
     
     /**

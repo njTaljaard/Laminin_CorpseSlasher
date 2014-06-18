@@ -100,7 +100,7 @@ public class Main extends SimpleApplication implements ScreenController{
         SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
         skyControl.setEnabled(true);
                 
-        timeOfDay = new TimeOfDay(5.0f);
+        timeOfDay = new TimeOfDay(5.5f);
         stateManager.attach(timeOfDay);
         timeOfDay.setRate(350f);
         loggedIn = true;
