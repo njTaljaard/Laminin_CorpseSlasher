@@ -14,8 +14,6 @@ import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -100,19 +98,6 @@ public class Character {
         channel = control.createChannel();
         channel.setAnim("Stand");
         channel.setLoopMode(LoopMode.Cycle);
-        
-        /**
-         * Display rigging.
-         */
-        /*
-        SkeletonDebugger skeletonDebug = new SkeletonDebugger("skeleton", control.getSkeleton());
-        Material mat2 = new Material(assMan, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat2.getAdditionalRenderState().setWireframe(true);
-        mat2.setColor("Color", ColorRGBA.Green);
-        mat2.getAdditionalRenderState().setDepthTest(false);
-        skeletonDebug.setMaterial(mat2);
-        player.attachChild(skeletonDebug);
-        */
     }
     
     /**

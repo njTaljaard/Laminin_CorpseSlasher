@@ -7,6 +7,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import jme3utilities.TimeOfDay;
 
 /**
  * @author Laminin
@@ -95,11 +96,14 @@ public class GameScene {
     }
     
     /**
-     * updateCameraPosition will be called on each frame render to update the 
-     * position of the model and in correlation the camera.
+     * update will update the all the corrisponding assets of the game. From 
+     * light direction, time of day, water light reflection, character position.
      * @param cam - Camera to be use for updating camera position.
+     * @param tod - TimeOfDay to update the skycontrol time of day.
+     * @param tpf - Update value of time between frames.
      */
-    public void updateCharacterPosition(Camera cam) {
+    public void update(Camera cam, TimeOfDay tod, float tpf) {
+        basicScene.update(tod, tpf);
         character.updateCharacterPostion(cam);
     }
     

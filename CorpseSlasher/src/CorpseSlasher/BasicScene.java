@@ -21,6 +21,7 @@ import com.jme3.math.FastMath;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
 import jme3utilities.Misc;
+import jme3utilities.TimeOfDay;
 
 /**
  * @author Laminin
@@ -40,7 +41,10 @@ public class BasicScene {
     private SkyControl skyControl;
     private String sceneName;
     private FilterPostProcessor fpp;
-    
+    private AmbientLight ambient;
+    private DirectionalLight sun;
+    private WaterFilter water;
+        
     /**
      * BasicScene will create the scene attached to sceneNode.
      * @param mapName - Map that you desire to load.
@@ -79,7 +83,7 @@ public class BasicScene {
      * within the scene.
      */
     private void initAmbientLight() { 
-        AmbientLight ambient = new AmbientLight();
+        ambient = new AmbientLight();
         ambient.setColor(ColorRGBA.White.clone().multLocal(1.5f));
         ambient.setName("Ambient");
         
@@ -91,7 +95,7 @@ public class BasicScene {
      * color.
      */
     private void initSunLight() {
-        DirectionalLight sun = new DirectionalLight();
+        sun = new DirectionalLight();
         sun.setDirection(lightDir);
         sun.setColor(ColorRGBA.White.clone().multLocal(2.5f));
         sun.setName("Sun");
@@ -130,8 +134,6 @@ public class BasicScene {
      * @param vp - ViewPort required for water, contains position of camara.
      */
     private void initWater(AssetManager assMan, ViewPort vp) {
-        WaterFilter water;
-        
         water = new WaterFilter(sceneNode, lightDir); 
         //water.setUseHQShoreline(true); //to high resource usage. //see setting if high end build running.
         water.setWaveScale(0.003f);
@@ -214,6 +216,13 @@ public class BasicScene {
         dofFilter.setBlurScale(1.15f);
         fpp.addFilter(dofFilter);
         vp.addProcessor(fpp);
+    }
+    
+    public void update(TimeOfDay tod, float tpf) {
+        skyControl.update(tpf);
+        skyControl.getSunAndStars().setHour(tod.getHour());
+        sun.setDirection(skyControl.getUpdater().getDirection());
+        water.setLightDirection(skyControl.getUpdater().getDirection());
     }
     
     /**

@@ -35,6 +35,7 @@ public class Main extends SimpleApplication implements ScreenController{
     static int byPass = 0;
     UserInterfaceManager UI = new UserInterfaceManager();  
     private RadioButtonGroupStateChangedEvent selectedButton;
+    
     public static void main(String[] args) {
         Main app = new Main();       
         app.start();
@@ -57,25 +58,7 @@ public class Main extends SimpleApplication implements ScreenController{
     @Override
     public void simpleUpdate(float tpf) {
         if (loggedIn) {
-            /**
-             * Update sunlight direction and time of day.
-             */
-            SkyControl sc = rootNode.getChild("BasicScene").getControl(SkyControl.class);
-            sc.update(tpf);
-            sc.getSunAndStars().setHour(timeOfDay.getHour());
-
-            Vector3f scLight = sc.getUpdater().getDirection();
-            DirectionalLight sun = (DirectionalLight) rootNode.getChild("BasicScene").getLocalLightList().get(1);
-            sun.setDirection(scLight);
-
-            FilterPostProcessor waterProcessor = (FilterPostProcessor) viewPort.getProcessors().get(0);
-            WaterFilter water = waterProcessor.getFilter(WaterFilter.class);
-            water.setLightDirection(scLight);
-            
-            /**
-             * Update walk.
-             */
-            gameScene.updateCharacterPosition(cam);
+            gameScene.update(cam, timeOfDay, tpf);
         }
     }
 
