@@ -54,7 +54,8 @@ public class GameScene {
             case(0) :   
                 basicScene = new BasicScene("ZombieScene1");
                 basicScene.createScene(assestManager, viewPort, cam, bullet);
-                sceneNode.attachChild(basicScene.retrieveSceneNode());
+                sceneNode = basicScene.retrieveSceneNode();
+                //sceneNode.attachChild(basicScene.retrieveLightNode());
                 break;
             default :
                 break;

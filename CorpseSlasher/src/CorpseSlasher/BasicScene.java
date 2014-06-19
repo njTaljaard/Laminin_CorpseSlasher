@@ -20,8 +20,6 @@ import com.jme3.water.WaterFilter;
 import com.jme3.math.FastMath;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
-import com.jme3.terrain.geomipmap.TerrainLodControl;
-import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import jme3utilities.Misc;
 
 /**
@@ -74,7 +72,6 @@ public class BasicScene {
         initTerrain(assMan, bullet);
         initWater(assMan, vp);
         initSkyBox(assMan, cam);
-        //initDepthOfField(vp);
     }
     
     /**
@@ -114,7 +111,6 @@ public class BasicScene {
         sceneModel.setName("Terrian");
         
         sceneModel.addControl(new RigidBodyControl(0));
-        //System.out.println(sceneModel.getControl(TerrainLodControl.class).getLodCalculator().isLodOff());
         bullet.getPhysicsSpace().add(sceneModel);
         
         if (sceneModel != null) {

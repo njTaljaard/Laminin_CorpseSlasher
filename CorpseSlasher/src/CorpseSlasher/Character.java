@@ -89,9 +89,6 @@ public class Character {
         player.lookAt(cam.getDirection(), cam.getUp());
         player.addControl(characterControl);
         playerNode.attachChild(player); 
-        Material mat1 = new Material(assMan, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat1.setColor("Color", ColorRGBA.Red);
-        player.setMaterial(mat1);
         
         cameraController = new CharacterCameraControl("3rdCam", cam, player);
         
