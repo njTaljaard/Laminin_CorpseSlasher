@@ -11,7 +11,18 @@ import com.jme3.system.AppSettings;
  * at launch and during game changes. Read Setttings form ./GameSettings.txt
  */
 public class GameSettings {
+    protected boolean postWater;
+    protected boolean waterReflections;
+    protected boolean waterRippels;
+    protected boolean waterSpecular;
+    protected boolean waterFoam;
     
+    protected boolean skyDome;
+    protected boolean starMotion;
+    protected boolean cloudMotion;
+    
+    protected boolean bloomLight;
+    protected boolean lightScatter;
     
     public GameSettings() {
         
