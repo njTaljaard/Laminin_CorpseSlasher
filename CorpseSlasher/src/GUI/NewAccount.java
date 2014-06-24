@@ -129,7 +129,7 @@ public class NewAccount extends Screens {
                                         visibleToMouse(true);
                                     }
                                 });
-                                control(new LabelBuilder("Username_ID", "Username :") {
+                                control(new LabelBuilder("Username_ID_2", "Username :") {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
@@ -140,7 +140,7 @@ public class NewAccount extends Screens {
                                         visibleToMouse(true);
                                     }
                                 });
-                                control(new TextFieldBuilder("Username_Input_ID", "Enter Username") {
+                                control(new TextFieldBuilder("Username_Input_ID_2", "Enter Username") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -150,7 +150,7 @@ public class NewAccount extends Screens {
                                         visibleToMouse(true);
                                     }
                                 });
-                                control(new LabelBuilder("Password_ID", "Password :") {
+                                control(new LabelBuilder("Password_ID_2", "Password :") {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
@@ -161,7 +161,7 @@ public class NewAccount extends Screens {
                                         visibleToMouse(true);
                                     }
                                 });
-                                control(new TextFieldBuilder("Password_Input_ID", "Enter Password") {
+                                control(new TextFieldBuilder("Password_Input_ID_2", "Enter Password") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -171,7 +171,7 @@ public class NewAccount extends Screens {
                                         visibleToMouse(true);
                                     }
                                 });
-                                control(new LabelBuilder("Password_ID_2", "RE-Password :") {
+                                control(new LabelBuilder("Password_ID_2_2", "RE-Password :") {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
@@ -182,7 +182,7 @@ public class NewAccount extends Screens {
                                         visibleToMouse(true);
                                     }
                                 });
-                                control(new TextFieldBuilder("Password_Input_ID_2", "RE-Enter Password") {
+                                control(new TextFieldBuilder("Password_Input_ID_2_2", "RE-Enter Password") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -199,7 +199,7 @@ public class NewAccount extends Screens {
                                         marginBottom("5%");
                                         height("5%");
                                         width("15%");
-                                        interactOnClick("loadingScreen()");
+                                        interactOnClick("createNewAccount()");
                                     }
                                 });
                             }

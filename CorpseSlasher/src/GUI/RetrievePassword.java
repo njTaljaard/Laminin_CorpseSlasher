@@ -72,7 +72,7 @@ public class RetrievePassword extends Screens {
                                         visibleToMouse(true);
                                     }
                                 });
-                                control(new TextFieldBuilder("Username_Input_ID", "Enter Username") {
+                                control(new TextFieldBuilder("Username_Input_ID_3", "Enter Username") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
