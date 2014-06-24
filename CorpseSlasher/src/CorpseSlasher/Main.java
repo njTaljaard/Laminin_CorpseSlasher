@@ -34,6 +34,8 @@ public class Main extends SimpleApplication implements ScreenController{
     boolean loggedIn;
     static int byPass = 0;
     UserInterfaceManager UI = new UserInterfaceManager();  
+	TextField usernameTxt;
+    TextField passwordTxt;
     private RadioButtonGroupStateChangedEvent selectedButton;
     
     public static void main(String[] args) {
@@ -50,7 +52,7 @@ public class Main extends SimpleApplication implements ScreenController{
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
-        flyCam.setEnabled(false);
+	    //inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
         UI.loginScreen();
     }
@@ -92,7 +94,8 @@ public class Main extends SimpleApplication implements ScreenController{
     @Override
     public void bind(Nifty nifty, Screen screen)
     {
-        
+        usernameTxt = screen.findNiftyControl("Username_Input_ID", TextField.class);
+        passwordTxt = screen.findNiftyControl("Password_Input_ID", TextField.class);   
     }
 
     @Override
