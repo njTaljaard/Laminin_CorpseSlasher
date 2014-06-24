@@ -11,6 +11,7 @@ import com.jme3.water.WaterFilter;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import jme3utilities.TimeOfDay;
@@ -31,6 +32,8 @@ public class Main extends SimpleApplication implements ScreenController{
     LoginScreen login;
     static int byPass = 0;
     UserInterfaceManager UI = new UserInterfaceManager();  
+    TextField usernameTxt;
+    TextField passwordTxt;
     private RadioButtonGroupStateChangedEvent selectedButton;
     public static void main(String[] args) {
         Main app = new Main();       
@@ -48,7 +51,8 @@ public class Main extends SimpleApplication implements ScreenController{
          */
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
-        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
+        //inputManager.deleteMapping(INPUT_MAPPING_EXIT);
+        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);        
         UI.loginScreen();
          
     }
@@ -102,7 +106,8 @@ public class Main extends SimpleApplication implements ScreenController{
     @Override
     public void bind(Nifty nifty, Screen screen) 
     {
-        
+        usernameTxt = screen.findNiftyControl("Username_Input_ID", TextField.class);
+        passwordTxt = screen.findNiftyControl("Password_Input_ID", TextField.class);
     }
 
     @Override
