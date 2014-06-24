@@ -17,6 +17,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.SizeValue;
 
 /**
  *
@@ -25,7 +26,6 @@ import de.lessvoid.nifty.tools.Color;
 public class LoadingScreen extends Screens
 {
     private Element progressBarElement;
-    private TextRenderer textRenderer;
     LoadingScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
        super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
        build(0.0f);
@@ -86,11 +86,13 @@ public class LoadingScreen extends Screens
   
     }
     public void update(float value){
+        int MIN_WIDTH = 32;
+        int pixelWidth = (int) ((int)(MIN_WIDTH + progressBarElement.getParent().getWidth() - MIN_WIDTH) * value);
+        progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
+        progressBarElement.getParent().layoutElements();
         
     }
-    public void set(TextRenderer text, Element ele)
-    {
-        textRenderer = text;
+    public void set(Element ele){
         progressBarElement = ele;
     }
 }

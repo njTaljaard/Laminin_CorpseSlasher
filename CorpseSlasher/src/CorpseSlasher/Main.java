@@ -2,6 +2,7 @@ package CorpseSlasher;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import GUI.LoadingScreen;
 import GUI.LoginScreen;
 import GUI.UserInterfaceManager;
 
@@ -113,21 +114,26 @@ public class Main extends SimpleApplication implements ScreenController {
         stateManager.attach(timeOfDay);
         timeOfDay.setRate(350f);
         loggedIn = true;
+        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());       
     }
 
     @Override
     public void bind(Nifty nifty, Screen screen) {
-        usernameTxt        = screen.findNiftyControl("Username_Input_ID", TextField.class);
-        passwordTxt        = screen.findNiftyControl("Password_Input_ID", TextField.class);
-        accUser            = screen.findNiftyControl("Username_Input_ID_2", TextField.class);
-        accEmail           = screen.findNiftyControl("Email_Input_ID", TextField.class);
-        accSurname         = screen.findNiftyControl("Surname_Input_ID", TextField.class);
-        accName            = screen.findNiftyControl("Name_Input_ID", TextField.class);
-        accPassword        = screen.findNiftyControl("Password_Input_ID_2", TextField.class);
-        accPasswordRE      = screen.findNiftyControl("Password_Input_ID_2_2", TextField.class);
-        retUser            = screen.findNiftyControl("Username_Input_ID_3", TextField.class);
-        progressBarElement = screen.findElementByName("Inner_Progress");
-        UI.getLoadingScreen().set(textRenderer, progressBarElement);
+        usernameTxt   = screen.findNiftyControl("Username_Input_ID", TextField.class);
+        passwordTxt   = screen.findNiftyControl("Password_Input_ID", TextField.class);
+        accUser       = screen.findNiftyControl("Username_Input_ID_2", TextField.class);
+        accEmail      = screen.findNiftyControl("Email_Input_ID", TextField.class);
+        accSurname    = screen.findNiftyControl("Surname_Input_ID", TextField.class);
+        accName       = screen.findNiftyControl("Name_Input_ID", TextField.class);
+        accPassword   = screen.findNiftyControl("Password_Input_ID_2", TextField.class);
+        accPasswordRE = screen.findNiftyControl("Password_Input_ID_2_2", TextField.class);
+        retUser       = screen.findNiftyControl("Username_Input_ID_3", TextField.class);
+
+        if (nifty.getScreen("Loading") != null) {
+            progressBarElement = nifty.getScreen("Loading").findElementByName("Inner_Progress");
+            UI.getLoadingScreen().set(progressBarElement);
+            //UI.getLoadingScreen().update(0.5f);
+        }
     }
 
     @Override
@@ -189,10 +195,6 @@ public class Main extends SimpleApplication implements ScreenController {
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         ClientConnection.RetrievePassword(retUser.getRealText());
         UI.loginScreen();
-    }
-
-    public void bind(Nifty nifty, Screen screen, Element elmnt, Properties prprts, Attributes atrbts) {
-        progressBarElement = elmnt.findElementByName("Inner_Progress");
     }
 }
 
