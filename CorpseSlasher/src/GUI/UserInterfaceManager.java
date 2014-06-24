@@ -22,6 +22,7 @@ public final class UserInterfaceManager {
     private Application     app;
     private NiftyJmeDisplay Screen;
     private ActionListener  action;
+    private LoadingScreen   loading;
 
     public void init(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
                      ViewPort guiViewPort, AppStateManager appState, Application app) {
@@ -34,23 +35,6 @@ public final class UserInterfaceManager {
         settingsScreen();
         Screen = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
     }
-
-    public AssetManager getAssetManger() {
-        return assetManager;
-    }
-
-    public InputManager getInputManager() {
-        return inputManager;
-    }
-
-    public AudioRenderer getAudioRenderer() {
-        return audioRenderer;
-    }
-
-    public ViewPort getGuiViewPort() {
-        return guiViewPort;
-    }
-
     public void loginScreen() {
         LoginScreen login = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                 Screen);
@@ -80,6 +64,18 @@ public final class UserInterfaceManager {
         };
         inputManager.addMapping("ESCAPE", new KeyTrigger(KeyInput.KEY_ESCAPE));
         inputManager.addListener(action, "ESCAPE");
+    }
+
+    public void settings(String selection) {
+       
+    }
+
+    public void loadingScreen() {
+         loading = new LoadingScreen(assetManager, inputManager, audioRenderer, guiViewPort,
+                                        appState, app, Screen);
+    }
+    public LoadingScreen getLoadingScreen(){
+        return loading;
     }
 }
 

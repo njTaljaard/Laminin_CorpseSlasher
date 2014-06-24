@@ -61,7 +61,7 @@ public class RetrievePassword extends Screens {
                         panel(new PanelBuilder("Main_Retrieve_Password"){
                             {
                                 childLayoutCenter();
-                                control(new LabelBuilder("USername", "Username :") {
+                                control(new LabelBuilder("Username", "Username :") {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
@@ -84,6 +84,7 @@ public class RetrievePassword extends Screens {
                                 });
                                 control(new ButtonBuilder("Get_Password", "Retrieve Password") {
                                     {
+                                        visibleToMouse(false);
                                         alignCenter();
                                         valign(VAlign.Bottom);
                                         marginBottom("25%");
