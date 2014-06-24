@@ -24,7 +24,7 @@ public class DatabaseUpdate {
         try {
             Database db = new Database();
             db.connect();
-            db.addUser(JSONObj.get("username").toString(), JSONObj.get("password").toString(), JSONObj.get("screenName").toString(), JSONObj.get("name").toString(), JSONObj.get("surname").toString(), JSONObj.get("dateOfBirth").toString(), Boolean.parseBoolean(JSONObj.get("gender").toString()), JSONObj.get("email").toString());
+            db.addUser(JSONObj.get("username").toString(), JSONObj.get("password").toString(), JSONObj.get("name").toString(), JSONObj.get("surname").toString(), JSONObj.get("email").toString());
             return true;
         } catch (Exception exc) {
             System.out.println("Set new user error: " + exc.toString());
@@ -52,7 +52,28 @@ public class DatabaseUpdate {
 
             return false;
         }
+    }
 
+    /**
+     * checkUsernameAvailable - sends to username to the database in a JSON
+     * object to check for availability.
+     *
+     * @param JSONObj - JSON object containing the client's username.
+     *
+     * @return - returns true is username is available and false if not.
+     */
+    public boolean checkUsernameAvailable(JSONObject JSONObj) {
+        try {
+            Database db = new Database();
+            db.connect();
+            if (db.availableUsername(JSONObj.get("username").toString())) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception exc) {
+            return false;
+        }
     }
 
     /**
@@ -69,7 +90,6 @@ public class DatabaseUpdate {
             db.connect();
             return db.getZombieKills(JSONObj.get("username").toString());
         } catch (Exception exc) {
-
             return -1;
         }
     }
@@ -139,7 +159,6 @@ public class DatabaseUpdate {
                 return false;
             }
         } catch (Exception exc) {
-
             return false;
         }
     }
@@ -161,7 +180,6 @@ public class DatabaseUpdate {
             mail.sendMail(db.getMail(username), "Corpse Slasher Password", "Your Corpse Slasher Password: " + db.getPassword(username));
             return true;
         } catch (Exception exc) {
-
             return false;
         }
     }

@@ -41,20 +41,16 @@ public class Database {
      *
      * @param username - client's username.
      * @param password - client's password.
-     * @param screenName - client's screenName.
      * @param name - client's name.
      * @param surname - client's surname.
-     * @param dateOfBirth - client's dateOfBirth.
-     * @param gender - client's gender.
      * @param email - client's email.
      * @return returns true if user details was successfully stored in database
      * or false if it failed.
      */
-    public boolean addUser(String username, String password, String screenName, String name, String surname, String dateOfBirth, boolean gender, String email) {
+    public boolean addUser(String username, String password, String name, String surname, String email) {
         try {
             Statement stmt = conn.createStatement();
-            int intGender = gender ? 1 : 0;//convert boolean to integer, true = 1 and false = 0
-            String query = "INSERT INTO user (username,password,screenName,name,surname,dateOfBirth,gender,email,zombieKills) VALUES ('" + username + "','" + password + "','" + screenName + "','" + name + "','" + surname + "','" + dateOfBirth + "'," + intGender + ",'" + email + "',0)";
+            String query = "INSERT INTO user (username,password,name,surname,email,zombieKills) VALUES ('" + username + "','" + password + "','" + name + "','" + surname + "','" + email + "',0)";
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
@@ -225,6 +221,34 @@ public class Database {
         } catch (Exception exc) {
             System.out.println("Get email error:" + exc);
             return "";
+            //TODO: Send exception to exception handler class to process. 
+        }
+    }
+
+    /**
+     * availableUsername - check if the username does not already exist in the
+     * database.
+     *
+     * @param username - client's username.
+     *
+     * @return - returns true if the database does not contain the username and
+     * false if the database does contain the username.
+     */
+    public boolean availableUsername(String username) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT username FROM user WHERE username = '" + username + "'";
+            ResultSet rs = stmt.executeQuery(query);
+            rs.next();
+            String result = rs.getString("username");
+            if (result.compareTo(username) == 0) {
+                return false;
+            }
+            return true;
+
+        } catch (Exception exc) {
+            System.out.println("available username error:" + exc);
+            return true;
             //TODO: Send exception to exception handler class to process. 
         }
     }
