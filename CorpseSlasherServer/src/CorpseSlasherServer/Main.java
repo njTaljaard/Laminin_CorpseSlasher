@@ -42,7 +42,7 @@ public class Main implements Runnable {
     public void run() {
         try {
             ServerSocket serverSocket = new ServerSocket(32323);
-            System.out.println("Socket create on port 32323");
+            System.out.println("Socket created on port 32323");
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 threadExecutors.execute(new ClientConnection(clientSocket));

@@ -26,12 +26,10 @@ public class Input {
             JSONObject clientObj = new JSONObject(value);
             JSONObject obj = new JSONObject();
             DatabaseUpdate dbu = new DatabaseUpdate();
-
             switch (clientObj.get("type").toString()) {
                 case "login": {
                     obj.put("username", clientObj.get("username").toString());
                     obj.put("password", clientObj.get("password").toString());
-
                     if (dbu.checkLogin(obj)) {
                         return "true";
                     } else {
@@ -41,13 +39,9 @@ public class Input {
                 case "addUser": {
                     obj.put("username", clientObj.get("username").toString());
                     obj.put("password", clientObj.get("password").toString());
-                    obj.put("screenName", clientObj.get("screenName").toString());
                     obj.put("name", clientObj.get("name").toString());
                     obj.put("surname", clientObj.get("surname").toString());
-                    obj.put("dateOfBirth", clientObj.get("dateOfBirth").toString());
-                    obj.put("gender", clientObj.get("gender").toString());
                     obj.put("email", clientObj.get("email").toString());
-
                     if (dbu.setNewUser(obj)) {
                         return "true";
                     } else {
@@ -56,7 +50,6 @@ public class Input {
                 }
                 case "getKills": {
                     obj.put("username", clientObj.get("username").toString());
-
                     return Integer.toString(dbu.getKills(obj));
                 }
                 case "setKills": {
@@ -79,12 +72,10 @@ public class Input {
                 case "setPassword": {
                     obj.put("username", clientObj.get("username").toString());
                     obj.put("password", clientObj.get("password").toString());
-
                     if (dbu.setPassword(obj)) {
                         return "true";
                     } else {
                         return "false";
-
                     }
                 }
                 case "retrievePassword": {
@@ -94,9 +85,17 @@ public class Input {
                         return "true";
                     } else {
                         return "false";
-
                     }
                 }
+                case "checkUsernameAvailable": {
+                    obj.put("username", clientObj.get("username").toString());
+
+                    if (dbu.checkUsernameAvailable(obj)) {
+                        return "true";
+                    } else {
+                        return "false";
+                    }
+                }  
                 default:
                     return "";
             }
