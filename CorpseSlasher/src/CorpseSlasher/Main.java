@@ -121,6 +121,7 @@ public class Main extends SimpleApplication implements ScreenController{
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         //System.out.println(selectedButton.getSelectedId() + " was chosen");
         loadGame();
+        //UI.loadingScreen();
    }
    public void newAccount()
    {
@@ -136,5 +137,9 @@ public class Main extends SimpleApplication implements ScreenController{
    {
        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
        UI.loginScreen();
+   }
+   public void settings(String selection)
+   {
+       UI.settings(selection);
    }
 }
