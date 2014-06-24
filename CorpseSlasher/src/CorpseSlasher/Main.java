@@ -18,11 +18,14 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.xml.xpp3.Attributes;
-import java.util.Properties;
 
 import jme3utilities.TimeOfDay;
 
 import jme3utilities.sky.SkyControl;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Properties;
 
 /**
  * @author normenhansen
@@ -114,15 +117,15 @@ public class Main extends SimpleApplication implements ScreenController {
 
     @Override
     public void bind(Nifty nifty, Screen screen) {
-        usernameTxt   = screen.findNiftyControl("Username_Input_ID", TextField.class);
-        passwordTxt   = screen.findNiftyControl("Password_Input_ID", TextField.class);
-        accUser       = screen.findNiftyControl("Username_Input_ID_2", TextField.class);
-        accEmail      = screen.findNiftyControl("Email_Input_ID", TextField.class);
-        accSurname    = screen.findNiftyControl("Surname_Input_ID", TextField.class);
-        accName       = screen.findNiftyControl("Name_Input_ID", TextField.class);
-        accPassword   = screen.findNiftyControl("Password_Input_ID_2", TextField.class);
-        accPasswordRE = screen.findNiftyControl("Password_Input_ID_2_2", TextField.class);
-        retUser       = screen.findNiftyControl("Username_Input_ID_3", TextField.class);
+        usernameTxt        = screen.findNiftyControl("Username_Input_ID", TextField.class);
+        passwordTxt        = screen.findNiftyControl("Password_Input_ID", TextField.class);
+        accUser            = screen.findNiftyControl("Username_Input_ID_2", TextField.class);
+        accEmail           = screen.findNiftyControl("Email_Input_ID", TextField.class);
+        accSurname         = screen.findNiftyControl("Surname_Input_ID", TextField.class);
+        accName            = screen.findNiftyControl("Name_Input_ID", TextField.class);
+        accPassword        = screen.findNiftyControl("Password_Input_ID_2", TextField.class);
+        accPasswordRE      = screen.findNiftyControl("Password_Input_ID_2_2", TextField.class);
+        retUser            = screen.findNiftyControl("Username_Input_ID_3", TextField.class);
         progressBarElement = screen.findElementByName("Inner_Progress");
     }
 
@@ -159,15 +162,18 @@ public class Main extends SimpleApplication implements ScreenController {
 
     public void createNewAccount() {
         if (accPassword.getRealText().equals(accPasswordRE.getRealText())) {
-            boolean success = ClientConnection.AddUser(accUser.getRealText(), accPassword.getRealText(), "Hello",
-                                  accName.getRealText(), accSurname.getRealText(), "1990/08/16", false,
-                                  accEmail.getRealText());
+            if (ClientConnection.CheckUsernameAvailable(accUser.getRealText())) {
+                boolean success = ClientConnection.AddUser(accUser.getRealText(), accPassword.getRealText(),
+                                      accName.getRealText(), accSurname.getRealText(), accEmail.getRealText());
 
-            if (success) {
-                guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                loginScreen();
+                if (success) {
+                    guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+                    loginScreen();
+                } else {
+                    System.out.println("Failed adding user");
+                }
             } else {
-                System.out.println("Failed adding user");
+                System.out.println("Username already exists please try again");
             }
         } else {
             System.out.println("Missmatch password");
@@ -184,7 +190,8 @@ public class Main extends SimpleApplication implements ScreenController {
         ClientConnection.RetrievePassword(retUser.getRealText());
         UI.loginScreen();
     }
-     public void bind(Nifty nifty, Screen screen, Element elmnt, Properties prprts, Attributes atrbts) {
+
+    public void bind(Nifty nifty, Screen screen, Element elmnt, Properties prprts, Attributes atrbts) {
         progressBarElement = elmnt.findElementByName("Inner_Progress");
     }
 }
