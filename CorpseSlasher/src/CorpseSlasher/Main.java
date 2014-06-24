@@ -127,6 +127,7 @@ public class Main extends SimpleApplication implements ScreenController {
         accPasswordRE      = screen.findNiftyControl("Password_Input_ID_2_2", TextField.class);
         retUser            = screen.findNiftyControl("Username_Input_ID_3", TextField.class);
         progressBarElement = screen.findElementByName("Inner_Progress");
+        UI.getLoadingScreen().set(textRenderer, progressBarElement);
     }
 
     @Override
@@ -149,7 +150,6 @@ public class Main extends SimpleApplication implements ScreenController {
         if (success) {
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
             UI.loadingScreen();
-            UI.getLoadingScreen().set(textRenderer, progressBarElement);
         } else {
             System.out.println("Username or password incorrect");
         }
