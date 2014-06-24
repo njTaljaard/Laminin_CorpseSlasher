@@ -6,6 +6,7 @@ import com.jme3.animation.LoopMode;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -35,7 +36,8 @@ public class Character {
     private AnimChannel channel;
     private AnimControl control;
     private AnalogListener analogListener;
-    private CharacterControl characterControl;
+    //private CharacterControl characterControl;
+    private BetterCharacterControl characterControl;
     private CharacterAnimControl animController;
     private CharacterCameraControl cameraController;
     private CharacterMotionControl motionController;
@@ -73,16 +75,22 @@ public class Character {
         /**
          * Fix camera to be controlled by physics.
          */
-        CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.01f, 0.1f, 1);
+        /*CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.01f, 0.1f, 1);
         characterControl = new CharacterControl(capsuleShape, 1.5f);
         characterControl.setGravity(10.0f);
         characterControl.setJumpSpeed(50.0f);
+        characterControl.setCollisionGroup(5);
+        bullet.getPhysicsSpace().add(characterControl);*/
+        
+        characterControl = new BetterCharacterControl(2.5f, 5, 1);
+        characterControl.setGravity(new Vector3f(0, -8, 0));
         bullet.getPhysicsSpace().add(characterControl);
         
         /**
          * Load player model.
          */
         player = (Node) assMan.loadModel("Models/cyborg/cyborg.j3o");
+        player.setName("Player");
         player.setLocalTranslation(cam.getLocation().add(0.8f, -6.5f, -4.2f));
         player.lookAt(cam.getDirection(), cam.getUp());
         player.addControl(characterControl);

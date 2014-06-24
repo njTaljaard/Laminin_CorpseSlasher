@@ -21,6 +21,7 @@ public class GameScene {
     private Node sceneNode;
     private BasicScene basicScene;
     private Character character;
+    private MobsHandler mobHandler;
     
     /**
      * GameScene will combine all the entities of the entire game into a node 
@@ -35,6 +36,7 @@ public class GameScene {
         initCameraPosition(cam, selectedMap);
         initScene(assestManager, viewPort, cam, bullet, selectedMap);
         initMainCharacter(assestManager, inMan, bullet, cam);
+        initMobs(inMan, bullet, assestManager);
     }
     
     /**
@@ -56,7 +58,6 @@ public class GameScene {
                 basicScene = new BasicScene("ZombieScene1");
                 basicScene.createScene(assestManager, viewPort, cam, bullet);
                 sceneNode = basicScene.retrieveSceneNode();
-                //sceneNode.attachChild(basicScene.retrieveLightNode());
                 break;
             default :
                 break;
@@ -76,6 +77,12 @@ public class GameScene {
             BulletAppState bullet, Camera cam) {
         character = new Character(assMan, inMan, bullet, cam);
         sceneNode.attachChild(character.retrievePlayerNode());
+    }
+    
+    private void initMobs(InputManager inMan, BulletAppState bullet,
+            AssetManager assMan) {
+        mobHandler = new MobsHandler(inMan, bullet, assMan);
+        sceneNode.attachChild(mobHandler.retrieveMobs());
     }
     
     /**
