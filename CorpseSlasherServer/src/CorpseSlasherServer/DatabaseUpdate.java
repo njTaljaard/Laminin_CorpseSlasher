@@ -24,13 +24,12 @@ public class DatabaseUpdate {
         try {
             Database db = new Database();
             db.connect();
-            db.addUser(JSONObj.get("username").toString(), JSONObj.get("password").toString(), JSONObj.get("screenName").toString(), JSONObj.get("name").toString(), JSONObj.get("surname").toString(), JSONObj.get("dateOfBirth").toString(), (boolean) JSONObj.get("gender"), JSONObj.get("email").toString());
+            db.addUser(JSONObj.get("username").toString(), JSONObj.get("password").toString(), JSONObj.get("screenName").toString(), JSONObj.get("name").toString(), JSONObj.get("surname").toString(), JSONObj.get("dateOfBirth").toString(), Boolean.parseBoolean(JSONObj.get("gender").toString()), JSONObj.get("email").toString());
             return true;
         } catch (Exception exc) {
-
+            System.out.println("Set new user error: " + exc.toString());
             return false;
         }
-
     }
 
     /**

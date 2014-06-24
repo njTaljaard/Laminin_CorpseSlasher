@@ -15,7 +15,8 @@ public class ClientConnection implements Runnable {
 
     private BufferedReader in;
     private Socket client;
-
+    private PrintWriter out;
+    
     /**
      *
      * @param clientSocket - receives the client socket
@@ -32,6 +33,9 @@ public class ClientConnection implements Runnable {
         try {
             in = new BufferedReader(new InputStreamReader(
                     client.getInputStream()));
+            out = new PrintWriter(client.getOutputStream(), true);
+        
+            
             Input data = new Input();
             while (true) {
                 String recievedValue = in.readLine();
@@ -39,7 +43,8 @@ public class ClientConnection implements Runnable {
                     client.close();
                     break;
                 } else {
-                    data.getInput(recievedValue);
+                    
+                    out.println(data.getInput(recievedValue));
                 }
 
             }

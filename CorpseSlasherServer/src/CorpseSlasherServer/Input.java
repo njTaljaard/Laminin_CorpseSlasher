@@ -1,5 +1,7 @@
 package CorpseSlasherServer;
 
+import org.json.*;
+
 /**
  * @author Laminin
  * @param Derivco
@@ -19,7 +21,88 @@ public class Input {
      *
      * @param value - The string received from the client.
      */
-    public void getInput(String value) {
-        System.out.println("Input: " + value);
+    public String getInput(String value) {
+        try {
+            JSONObject clientObj = new JSONObject(value);
+            JSONObject obj = new JSONObject();
+            DatabaseUpdate dbu = new DatabaseUpdate();
+
+            switch (clientObj.get("type").toString()) {
+                case "login": {
+                    obj.put("username", clientObj.get("username").toString());
+                    obj.put("password", clientObj.get("password").toString());
+
+                    if (dbu.checkLogin(obj)) {
+                        return "true";
+                    } else {
+                        return "false";
+                    }
+                }
+                case "addUser": {
+                    obj.put("username", clientObj.get("username").toString());
+                    obj.put("password", clientObj.get("password").toString());
+                    obj.put("screenName", clientObj.get("screenName").toString());
+                    obj.put("name", clientObj.get("name").toString());
+                    obj.put("surname", clientObj.get("surname").toString());
+                    obj.put("dateOfBirth", clientObj.get("dateOfBirth").toString());
+                    obj.put("gender", clientObj.get("gender").toString());
+                    obj.put("email", clientObj.get("email").toString());
+
+                    if (dbu.setNewUser(obj)) {
+                        return "true";
+                    } else {
+                        return "false";
+                    }
+                }
+                case "getKills": {
+                    obj.put("username", clientObj.get("username").toString());
+
+                    return Integer.toString(dbu.getKills(obj));
+                }
+                case "setKills": {
+                    obj.put("username", clientObj.get("username").toString());
+                    obj.put("zombieKills", clientObj.get("zombieKills").toString());
+                    if (dbu.setKills(obj)) {
+                        return "true";
+                    } else {
+                        return "false";
+                    }
+                }
+                case "addOneKill": {
+                    obj.put("username", clientObj.get("username").toString());
+                    if (dbu.increaseKillsByOne(obj)) {
+                        return "true";
+                    } else {
+                        return "false";
+                    }
+                }
+                case "setPassword": {
+                    obj.put("username", clientObj.get("username").toString());
+                    obj.put("password", clientObj.get("password").toString());
+
+                    if (dbu.setPassword(obj)) {
+                        return "true";
+                    } else {
+                        return "false";
+
+                    }
+                }
+                case "retrievePassword": {
+                    obj.put("username", clientObj.get("username").toString());
+
+                    if (dbu.retrievePassword(obj)) {
+                        return "true";
+                    } else {
+                        return "false";
+
+                    }
+                }
+                default:
+                    return "";
+            }
+        } catch (Exception exc) {
+            System.out.println("Input error: " + exc);
+        }
+        return "";
     }
 }
