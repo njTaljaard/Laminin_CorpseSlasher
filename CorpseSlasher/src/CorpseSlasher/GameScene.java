@@ -1,5 +1,6 @@
 package CorpseSlasher;
 
+import GUI.LoadingScreen;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.input.InputManager;
@@ -30,11 +31,12 @@ public class GameScene {
      * @param ViewPort - ViewPort required for water, contains position of camara.
      */
     public GameScene(int selectedMap, AssetManager assestManager, ViewPort viewPort, 
-            Camera cam, BulletAppState bullet, InputManager inMan) {
+            Camera cam, BulletAppState bullet, InputManager inMan, LoadingScreen ui) {
         sceneNode = new Node("GameScene");
         initCameraPosition(cam, selectedMap);
-        initScene(assestManager, viewPort, cam, bullet, selectedMap);
+        initScene(assestManager, viewPort, cam, bullet, selectedMap, ui);
         initMainCharacter(assestManager, inMan, bullet, cam);
+        ui.update(0.9f);
     }
     
     /**
@@ -50,11 +52,11 @@ public class GameScene {
      * @param map - Corresponding scene number to assign the required terrain.
      */
     private void initScene(AssetManager assestManager, ViewPort viewPort, Camera cam,
-            BulletAppState bullet, int map) {
+            BulletAppState bullet, int map, LoadingScreen ui) {
         switch(map) {
             case(0) :   
                 basicScene = new BasicScene("ZombieScene1");
-                basicScene.createScene(assestManager, viewPort, cam, bullet);
+                basicScene.createScene(assestManager, viewPort, cam, bullet, ui);
                 sceneNode = basicScene.retrieveSceneNode();
                 //sceneNode.attachChild(basicScene.retrieveLightNode());
                 break;

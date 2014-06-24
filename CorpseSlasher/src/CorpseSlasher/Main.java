@@ -104,7 +104,8 @@ public class Main extends SimpleApplication implements ScreenController {
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
-        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager);
+        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, 
+                inputManager, UI.getLoadingScreen());
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
 
         SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
@@ -114,7 +115,7 @@ public class Main extends SimpleApplication implements ScreenController {
         stateManager.attach(timeOfDay);
         timeOfDay.setRate(350f);
         loggedIn = true;
-        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());       
+        //guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());       
     }
 
     @Override
@@ -132,6 +133,7 @@ public class Main extends SimpleApplication implements ScreenController {
         if (nifty.getScreen("Loading") != null) {
             progressBarElement = nifty.getScreen("Loading").findElementByName("Inner_Progress");
             UI.getLoadingScreen().set(progressBarElement);
+            loadGame();
             //UI.getLoadingScreen().update(0.5f);
         }
     }
