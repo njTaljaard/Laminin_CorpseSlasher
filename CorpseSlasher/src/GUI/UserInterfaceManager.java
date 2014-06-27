@@ -12,6 +12,7 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
+import com.sun.org.apache.bcel.internal.generic.GOTO;
 
 public final class UserInterfaceManager {
     private AssetManager    assetManager;
@@ -23,6 +24,8 @@ public final class UserInterfaceManager {
     private NiftyJmeDisplay Screen;
     private ActionListener  action;
     private LoadingScreen   loading;
+    private SettingsScreen  settings;
+    private boolean         menuOpen = false;
 
     public void init(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
                      ViewPort guiViewPort, AppStateManager appState, Application app) {
@@ -58,14 +61,30 @@ public final class UserInterfaceManager {
         action = new ActionListener() {
             @Override
             public void onAction(String name, boolean isPressed, float tpf) {
-                System.out.println("hellooooo");
-                
+                if(isPressed==true)
+                menuOpen = !menuOpen;
+                //System.out.println(name);
+               // System.out.println(isPressed);
+                if(menuOpen)
+                {
+                    inputManager.setCursorVisible(true);
+                    settings.gotTo();
+                }
+                else
+                {
+                    guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+                    inputManager.setCursorVisible(false);
+                }
             }
         };
         inputManager.addMapping("ESCAPE", new KeyTrigger(KeyInput.KEY_ESCAPE));
         inputManager.addListener(action, "ESCAPE");
     }
-
+    public void optionScreen()
+    {
+        settings = new SettingsScreen(assetManager, inputManager, audioRenderer, guiViewPort,
+                                        appState, app, Screen);
+    }
     public void settings(String selection) {
        
     }

@@ -69,13 +69,15 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
+        
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
 
-        // inputManager.deleteMapping(INPUT_MAPPING_EXIT);
+        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
         ClientConnection.StartClientConnection();
+        UI.optionScreen();
         UI.loginScreen();
 
         // UI.loadingScreen();
@@ -115,7 +117,7 @@ public class Main extends SimpleApplication implements ScreenController {
         stateManager.attach(timeOfDay);
         timeOfDay.setRate(350f);
         loggedIn = true;
-        //guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());       
+        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());       
     }
 
     @Override
@@ -129,13 +131,6 @@ public class Main extends SimpleApplication implements ScreenController {
         accPassword   = screen.findNiftyControl("Password_Input_ID_2", TextField.class);
         accPasswordRE = screen.findNiftyControl("Password_Input_ID_2_2", TextField.class);
         retUser       = screen.findNiftyControl("Username_Input_ID_3", TextField.class);
-
-        if (nifty.getScreen("Loading") != null) {
-            progressBarElement = nifty.getScreen("Loading").findElementByName("Inner_Progress");
-            UI.getLoadingScreen().set(progressBarElement);
-            loadGame();
-            //UI.getLoadingScreen().update(0.5f);
-        }
     }
 
     @Override
@@ -154,12 +149,16 @@ public class Main extends SimpleApplication implements ScreenController {
 
         // System.out.println(selectedButton.getSelectedId() + " was chosen");
         boolean success = ClientConnection.Login(usernameTxt.getRealText(), passwordTxt.getRealText());
-
+        
         if (success) {
-            guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+            guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());           
             UI.loadingScreen();
+            loadGame();
         } else {
             System.out.println("Username or password incorrect");
+            guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());   
+            UI.loadingScreen();
+            loadGame();
         }
     }
 

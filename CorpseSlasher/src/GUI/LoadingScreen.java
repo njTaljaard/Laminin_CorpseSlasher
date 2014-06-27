@@ -12,6 +12,8 @@ import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
+import de.lessvoid.nifty.controls.Button;
+import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -25,14 +27,14 @@ import de.lessvoid.nifty.tools.SizeValue;
  */
 public class LoadingScreen extends Screens
 {
-    private Element progressBarElement;
+    private Nifty nifty;
     LoadingScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
        super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
        build(0.0f);
     }
     private void build(float value)
     {
-        Nifty nifty = screen.getNifty();
+        nifty = screen.getNifty();
         guiViewPort.addProcessor(screen);
         buildGui(nifty,value);
         nifty.gotoScreen("Loading");
@@ -86,13 +88,13 @@ public class LoadingScreen extends Screens
   
     }
     public void update(float value){
+        Element progressBarElement = nifty.getScreen("Loading").findElementByName("Inner_Progress");
         int MIN_WIDTH = 32;
         int pixelWidth = (int) ((int)(MIN_WIDTH + progressBarElement.getParent().getWidth() - MIN_WIDTH) * value);
         progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
         progressBarElement.getParent().layoutElements();
-        
+        System.out.println(pixelWidth+"px");
+        nifty.gotoScreen("Loading");
     }
-    public void set(Element ele){
-        progressBarElement = ele;
-    }
+
 }

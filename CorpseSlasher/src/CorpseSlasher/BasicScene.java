@@ -21,6 +21,7 @@ import com.jme3.water.WaterFilter;
 import com.jme3.math.FastMath;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jme3utilities.Misc;
@@ -78,12 +79,12 @@ public class BasicScene {
         ui.update(0.1f);
         initSunLight();
         ui.update(0.2f);
-        initTerrain(assMan, bullet);
-        ui.update(0.5f);
         initWater(assMan, vp);
-        ui.update(0.65f);
+        ui.update(0.45f);
         initSkyBox(assMan, cam);
-        ui.update(0.8f);
+        ui.update(0.6f);
+        initTerrain(assMan, bullet);
+        ui.update(0.85f);
     }
     
     /**
