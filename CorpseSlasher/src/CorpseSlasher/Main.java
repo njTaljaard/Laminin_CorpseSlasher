@@ -197,6 +197,18 @@ public class Main extends SimpleApplication implements ScreenController {
         ClientConnection.RetrievePassword(retUser.getRealText());
         UI.loginScreen();
     }
+    public void quitGame(){
+     System.exit(0);
+    }    
+    public void graphicsScreen(){
+        UI.goTo("Graphics_Settings");
+    }    
+    public void audioScreen(){
+        UI.goTo("Audio_Settings");
+    }    
+    public void difficultyScreen(){
+        UI.goTo("Difficulty_Settings");
+    }
 }
 
 

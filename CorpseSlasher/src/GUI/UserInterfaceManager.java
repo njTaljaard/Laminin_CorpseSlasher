@@ -63,12 +63,10 @@ public final class UserInterfaceManager {
             public void onAction(String name, boolean isPressed, float tpf) {
                 if(isPressed==true)
                 menuOpen = !menuOpen;
-                //System.out.println(name);
-               // System.out.println(isPressed);
                 if(menuOpen)
                 {
                     inputManager.setCursorVisible(true);
-                    settings.gotTo();
+                    settings.gotTo("Option_Screen");
                 }
                 else
                 {
@@ -96,6 +94,10 @@ public final class UserInterfaceManager {
     public LoadingScreen getLoadingScreen(){
         return loading;
     }
+    public void goTo(String _screen){
+        settings.gotTo(_screen);
+    }
+    
 }
 
 
