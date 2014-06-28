@@ -33,6 +33,7 @@ public class GameScene {
     public GameScene(int selectedMap, AssetManager assestManager, ViewPort viewPort, 
             Camera cam, BulletAppState bullet, InputManager inMan) {
         sceneNode = new Node("GameScene");
+        bullet.getPhysicsSpace().enableDebug(assestManager);
         initCameraPosition(cam, selectedMap);
         initScene(assestManager, viewPort, cam, bullet, selectedMap);
         initMainCharacter(assestManager, inMan, bullet, cam);
@@ -112,6 +113,7 @@ public class GameScene {
     public void update(Camera cam, TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
         character.updateCharacterPostion(cam);
+        mobHandler.updateMobs(sceneNode.getChild("Player"));
     }
     
     /**

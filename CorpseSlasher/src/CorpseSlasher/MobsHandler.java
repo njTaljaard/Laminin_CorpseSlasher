@@ -5,6 +5,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.input.InputManager;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 
 /**
@@ -20,8 +21,7 @@ public class MobsHandler {
     private ArrayList<Mob> mobs;
     private ArrayList<Vector3f> positions;
     
-    public MobsHandler(InputManager inMan, BulletAppState bullet,
-            AssetManager assMan) {
+    public MobsHandler(InputManager inMan, BulletAppState bullet, AssetManager assMan) {
         mobNode = new Node("Mobs");
         mobs = new ArrayList<>();
         positions = new ArrayList<>();
@@ -30,22 +30,23 @@ public class MobsHandler {
     }
     
     private void initPositions() {
-        positions.add(new Vector3f(200.0f, 48.0f, -220.0f));
+        positions.add(new Vector3f(180.0f, 55.0f, -200.0f));
     }
     
     private void createMobs(InputManager inMan, BulletAppState bullet, AssetManager assMan) {    
         Mob newMob;
         
-        for (Vector3f pos : positions) {
-            newMob = new Mob(pos, inMan, bullet, assMan);
+        int size = positions.size();
+        for (int i = 0; i < size; i++) {
+            newMob = new Mob(positions.get(i), inMan, bullet, assMan, "mob"+i);
             mobs.add(newMob);
             mobNode.attachChild(newMob.retrieveMob());
         }
     }
     
-    public void updateMobs() {
+    public void updateMobs(Spatial player) {
         for (Mob mob : mobs) {
-            mob.updateMob();
+            mob.updateMob(player);
         }
     }
     
