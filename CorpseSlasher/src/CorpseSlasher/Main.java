@@ -157,9 +157,13 @@ public class Main extends SimpleApplication implements ScreenController {
 
         if (success) {
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-            UI.loadingScreen();
+            //UI.loadingScreen();
+            loadGame();
         } else {
             System.out.println("Username or password incorrect");
+              guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+            //UI.loadingScreen();
+            loadGame();
         }
     }
 
