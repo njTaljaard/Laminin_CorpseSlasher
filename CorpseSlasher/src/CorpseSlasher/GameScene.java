@@ -113,7 +113,7 @@ public class GameScene {
     public void update(Camera cam, TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
         character.updateCharacterPostion(cam);
-        mobHandler.updateMobs(sceneNode.getChild("Player"));
+        mobHandler.updateMobs(cam.getDirection());
     }
     
     /**

@@ -26,6 +26,7 @@ public class Mob implements PhysicsCollisionListener  {
     private boolean attack;
     private GhostControl ghost;
     private BetterCharacterControl characterControl;
+    private float walkSpeed = 8.0f;
     
     public Mob(Vector3f position, InputManager inMan, BulletAppState bullet,
             AssetManager assMan, String mName) {
@@ -69,11 +70,10 @@ public class Mob implements PhysicsCollisionListener  {
         }
     }
     
-    public void updateMob(Spatial player) {
+    public void updateMob(Vector3f attackDirection) {
         if (attack) {
-            System.out.println("Trigger attack!!!");
-            //characterControl.setViewDirection(player.getControl(BetterCharacterControl.class).getViewDirection().negate());
-            //characterControl.setWalkDirection(player.getControl(BetterCharacterControl.class).getWalkDirection().negate());
+            characterControl.setViewDirection(attackDirection.normalize().multLocal(walkSpeed));
+            characterControl.setWalkDirection(attackDirection.normalize().multLocal(walkSpeed));
             
         }
     }

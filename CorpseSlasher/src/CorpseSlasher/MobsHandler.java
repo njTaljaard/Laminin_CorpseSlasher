@@ -44,9 +44,11 @@ public class MobsHandler {
         }
     }
     
-    public void updateMobs(Spatial player) {
+    public void updateMobs(Vector3f attackDirection) {
+        attackDirection = attackDirection.negate();
+        attackDirection.y = 0.0f;
         for (Mob mob : mobs) {
-            mob.updateMob(player);
+            mob.updateMob(attackDirection);
         }
     }
     
