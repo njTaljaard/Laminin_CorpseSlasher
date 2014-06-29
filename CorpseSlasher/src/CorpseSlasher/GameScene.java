@@ -36,7 +36,7 @@ public class GameScene {
         initCameraPosition(cam, selectedMap);
         initScene(assestManager, viewPort, cam, bullet, selectedMap, ui);
         initMainCharacter(assestManager, inMan, bullet, cam);
-        ui.update(0.9f);
+       // ui.update(0.9f);
     }
     
     /**

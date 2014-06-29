@@ -75,15 +75,15 @@ public class BasicScene {
             BulletAppState bullet, LoadingScreen ui) {
         fpp = new FilterPostProcessor(assMan);
         initAmbientLight();
-        ui.update(0.1f);
+        //ui.update(0.1f);
         initSunLight();
-        ui.update(0.2f);
+       // ui.update(0.2f);
         initTerrain(assMan, bullet);
-        ui.update(0.5f);
+       // ui.update(0.5f);
         initWater(assMan, vp);
-        ui.update(0.65f);
+        //ui.update(0.65f);
         initSkyBox(assMan, cam);
-        ui.update(0.8f);
+        //ui.update(0.8f);
     }
     
     /**
