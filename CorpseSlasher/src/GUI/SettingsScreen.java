@@ -167,7 +167,13 @@ public class SettingsScreen extends Screens {
                                 childLayoutVertical();
                                 control(new ScrollbarBuilder("Selections",true){
                                     {
-                                        marginLeft("48%");
+                                       marginLeft("48%");
+                                    }
+                                });
+                                control(new LabelBuilder("Label_1", "Post Water"){
+                                    {
+                                        marginLeft("8%");
+                                        marginBottom("80%");
                                     }
                                 });
                             }
