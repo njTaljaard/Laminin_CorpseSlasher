@@ -37,7 +37,7 @@ public class GameScene {
         initCameraPosition(cam, selectedMap);
         initScene(assestManager, viewPort, cam, bullet, selectedMap);
         initMainCharacter(assestManager, inMan, bullet, cam);
-        initMobs(inMan, bullet, assestManager);
+        initMobs(bullet, assestManager);
     }
     
     /**
@@ -80,9 +80,14 @@ public class GameScene {
         sceneNode.attachChild(character.retrievePlayerNode());
     }
     
-    private void initMobs(InputManager inMan, BulletAppState bullet,
-            AssetManager assMan) {
-        mobHandler = new MobsHandler(inMan, bullet, assMan);
+    /**
+     * initMobs will be responsible for creating all the mobs at specified positions
+     * also update its position, animation and aggression control.
+     * @param bullet - BulletAppState for add collision boxes and controllers.
+     * @param assMan - AssetManager for loading the model.
+     */
+    private void initMobs(BulletAppState bullet, AssetManager assMan) {
+        mobHandler = new MobsHandler(bullet, assMan);
         sceneNode.attachChild(mobHandler.retrieveMobs());
     }
     

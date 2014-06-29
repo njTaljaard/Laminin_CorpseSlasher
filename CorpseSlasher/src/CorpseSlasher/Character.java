@@ -58,53 +58,64 @@ public class Character {
         walkDirection = new Vector3f();
         
         initActionListener();
-        initModel(assMan, bullet, cam);
+        initModel(assMan, cam);
+        initControl();
+        assemblePlayer(bullet);
+        setupCamera(cam);
+        setupAnim();
         initKeys(inMan);
     }
     
     /**
-     * initModel loads model, adds physics to it and bind the camera to it.
+     * initModel loads the model and sets it to the specified position.
      * @param assMan - AssetManager required to load model and material.
-     * @param inMan - InputManager required to set up key bindings.
      * @param cam - Camera required to obtain camera position and look at.
      */
-    private void initModel(AssetManager assMan, BulletAppState bullet, Camera cam) {
-        /**
-         * Load player model.
-         */
+    private void initModel(AssetManager assMan, Camera cam) {
         player = (Node) assMan.loadModel("Models/cyborg/cyborg.j3o");
         player.setName("Player");
         player.setLocalTranslation(cam.getLocation().add(0.8f, -6.5f, -4.2f));
         player.lookAt(cam.getDirection(), cam.getUp());
-        
-        /**
-         * Add create motion controller.
-         */
+    }
+    
+    /**
+     * initControl sets up the character controller responsible for collision,
+     * motion and forces control.
+     */
+    private void initControl() {
         characterControl = new BetterCharacterControl(1.0f, 5, 1000);
         characterControl.setGravity(new Vector3f(0, -800, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
-        
-        /**
-         * Add controllers and models together.
-         */
+    }
+    
+    /**
+     * assemblePlayer add the controllers to the player and to the physics handler.
+     * @param bullet - BulletAppState physics controller.
+     */
+    private void assemblePlayer(BulletAppState bullet) {
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().addAll(player);
         player.addControl(characterControl);
         playerNode.attachChild(player); 
-        
-        /**
-         * Craete camera motion.
-         */
+    }
+    
+    /**
+     * setupCamera will attach the camera to the player for motion control.
+     * @param cam - Camera to be attach to the player.
+     */
+    private void setupCamera(Camera cam) {
         cameraController = new CharacterCameraControl("3rdCam", cam, player);
-        
-        /**
-         * Set animation.
-         */
+    }
+    
+    /**
+     * setupAnim
+     */
+    private void setupAnim() {
         control = player.getChild("Cube-ogremesh").getControl(AnimControl.class);
         control.addListener(animController.getAnimationListener());
         channel = control.createChannel();
         channel.setAnim("Stand");
-        channel.setLoopMode(LoopMode.Cycle);
+        channel.setLoopMode(LoopMode.Cycle);        
     }
     
     /**
@@ -184,7 +195,7 @@ public class Character {
     
     /**
      * retrievePlayerNode an accessor to the game node containing the player model.
-     * @return player node containing the model data.
+     * @return playernode - Node containing the model data.
      */
     public Node retrievePlayerNode() {
         return playerNode;
