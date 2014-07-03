@@ -6,6 +6,7 @@ import com.jme3.input.InputManager;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import jme3utilities.TimeOfDay;
 
@@ -33,7 +34,7 @@ public class GameScene {
     public GameScene(int selectedMap, AssetManager assestManager, ViewPort viewPort, 
             Camera cam, BulletAppState bullet, InputManager inMan) {
         sceneNode = new Node("GameScene");
-        bullet.getPhysicsSpace().enableDebug(assestManager);
+        //bullet.getPhysicsSpace().enableDebug(assestManager);
         initCameraPosition(cam, selectedMap);
         initScene(assestManager, viewPort, cam, bullet, selectedMap);
         initMainCharacter(assestManager, inMan, bullet, cam);
@@ -100,7 +101,7 @@ public class GameScene {
     private void initCameraPosition(Camera cam, int map) {
         switch(map) {
             case(0) :
-                cam.setLocation(new Vector3f(195.0f, 37.0f, -225.0f));
+                cam.setLocation(new Vector3f(195.0f, 36.0f, -225.0f));
                 cam.lookAt(new Vector3f(200, 25, -500), cam.getUp());
                 break;
             default :
@@ -118,7 +119,7 @@ public class GameScene {
     public void update(Camera cam, TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
         character.updateCharacterPostion(cam);
-        mobHandler.updateMobs(cam.getDirection());
+        mobHandler.updateMobs(character.getPosition());
     }
     
     /**

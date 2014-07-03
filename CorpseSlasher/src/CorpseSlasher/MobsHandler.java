@@ -2,10 +2,8 @@ package CorpseSlasher;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.input.InputManager;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 
 /**
@@ -41,7 +39,7 @@ public class MobsHandler {
      * initPositions initialize a list of positions where mobs are to be spawned.
      */
     private void initPositions() {
-        positions.add(new Vector3f(180.0f, 45.0f, -200.0f));
+        positions.add(new Vector3f(180.0f, 33.0f, -200.0f));
     }
     
     /**
@@ -53,6 +51,7 @@ public class MobsHandler {
      */
     private void createMobs(BulletAppState bullet, AssetManager assMan) {    
         int size = positions.size();
+        
         for (int i = 0; i < size; i++) {
             mobs.add(new Mob(positions.get(i), bullet, assMan, "mob"+i));
             mobNode.attachChild(mobs.get(i).retrieveMob());
@@ -63,11 +62,9 @@ public class MobsHandler {
      * updateMobs will update each of the mobs individually.
      * @param attackDirection - Vector3f with is the direction towards the player.
      */
-    public void updateMobs(Vector3f attackDirection) {
-        attackDirection = attackDirection.negate();
-        attackDirection.y = 0.0f;
+    public void updateMobs(Vector3f point) {
         for (Mob mob : mobs) {
-            mob.updateMob(attackDirection);
+            mob.updateMob(point);
         }
     }
     

@@ -1,15 +1,14 @@
 package CorpseSlasher;
 
+import com.jme3.scene.Node;
+import com.jme3.math.Vector3f;
 import com.jme3.asset.AssetManager;
-import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.GhostControl;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
-import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.input.InputManager;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
 
 /**
  * @author Laminin
@@ -23,10 +22,11 @@ public class Mob implements PhysicsCollisionListener  {
     private Node mob;
     private String mobName;
     private GhostControl ghost;
+    private Vector3f motionDirection;
     private Vector3f passivePosition;
     private BetterCharacterControl characterControl;
-    private float runSpeed;
-    private float walkSpeed;
+    private final float runSpeed = 8.0f;
+    private final float walkSpeed = 6.0f;
     private boolean attack;
     private boolean passive;
     
@@ -44,9 +44,8 @@ public class Mob implements PhysicsCollisionListener  {
         mobName = mName;
         attack = false;
         passive = true;
-        runSpeed = 8.0f;
-        walkSpeed = 4.0f;
         passivePosition = position;
+        motionDirection = new Vector3f();
         initMob(assMan);
         initControl();
         initGhost();
@@ -62,7 +61,6 @@ public class Mob implements PhysicsCollisionListener  {
         mob = (Node) assMan.loadModel("Models/zom/zom.j3o");
         mob.setLocalTranslation(passivePosition);
         mob.setName(mobName);
-        passivePosition.y = 0;
     }
     
     /**
@@ -70,10 +68,10 @@ public class Mob implements PhysicsCollisionListener  {
      * motion and forces control.
      */
     private void initControl() {
-        characterControl = new BetterCharacterControl(1.0f,4, 1);
-        characterControl.setGravity(new Vector3f(0, -8, 0));
+        characterControl = new BetterCharacterControl(1.0f, 4, 5000);
+        characterControl.setGravity(new Vector3f(0, -800, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
-        
+        characterControl.setApplyPhysicsLocal(true);
     }
     
     /**
@@ -108,14 +106,12 @@ public class Mob implements PhysicsCollisionListener  {
      */
     @Override
     public void collision(PhysicsCollisionEvent event) {
-        if (event.getNodeA().getName().equals("Player") && event.getNodeB().getName().equals(mobName)) {
-            //System.out.println("Touch A");
+        if (event.getNodeA().getName().equals("Player") & event.getNodeB().getName().equals(mobName)) {
             if (passive) {
                 attack = true;
                 passive = false;
             }
-        } else if (event.getNodeB().getName().equals("Player") && event.getNodeA().getName().equals(mobName)) {
-            //System.out.println("Touch B");
+        } else if (event.getNodeB().getName().equals("Player") & event.getNodeA().getName().equals(mobName)) {
             if (passive) {
                 attack = true;
                 passive = false;
@@ -129,21 +125,32 @@ public class Mob implements PhysicsCollisionListener  {
      * @param attackDirection - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
      */
-    public void updateMob(Vector3f attackDirection) {
+    public void updateMob(Vector3f point) {
         if (attack) {
-            characterControl.setViewDirection(attackDirection.normalize().multLocal(runSpeed));
-            characterControl.setWalkDirection(attackDirection.normalize().multLocal(runSpeed));
+            point.subtract(mob.getLocalTranslation(), motionDirection);
+            motionDirection.y = 0.0f;
             
-            if (Math.abs((attackDirection.x - passivePosition.x)) > 20 || Math.abs((attackDirection.z - passivePosition.z)) > 20) {
+            characterControl.setViewDirection(motionDirection.normalize().multLocal(runSpeed));
+            characterControl.setWalkDirection(motionDirection.normalize().multLocal(runSpeed)); 
+            
+            if (passivePosition.distance(mob.getLocalTranslation()) > 25.0f) {
                 attack = false;
             }
-        } else if (!passive & characterControl.getWalkDirection().add(passivePosition.negate()) != Vector3f.ZERO) {
-            System.out.println("Lose aggro go back");
-            characterControl.setViewDirection(passivePosition.normalize().multLocal(walkSpeed));
-            characterControl.setWalkDirection(passivePosition.normalize().multLocal(walkSpeed));
-        } else {
-            passive = true;
-            //set animation channel to passive animation.
+        } else { 
+            if (!passive) {
+                if (passivePosition.distance(mob.getLocalTranslation()) > 3.0f) {
+                    passivePosition.subtract(mob.getLocalTranslation(), motionDirection);
+                    motionDirection.y = 0.0f;
+                    
+                    characterControl.setViewDirection(motionDirection.normalize().multLocal(walkSpeed));
+                    characterControl.setWalkDirection(motionDirection.normalize().multLocal(walkSpeed));
+                } else {
+                    passive = true;
+                    characterControl.setViewDirection(new Vector3f(0, 0, 0));
+                    characterControl.setWalkDirection(new Vector3f(0, 0, 0));
+                    //set animation channel to passive animation. */
+                }
+            }
         }
     }
     
