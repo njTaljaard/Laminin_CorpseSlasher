@@ -73,10 +73,10 @@ public class Main extends SimpleApplication implements ScreenController {
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
 
-        // inputManager.deleteMapping(INPUT_MAPPING_EXIT);
+        //inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
         ClientConnection.StartClientConnection();
-        UI.loginScreen();
+        //UI.loginScreen();
 
         // UI.loadingScreen();
     }

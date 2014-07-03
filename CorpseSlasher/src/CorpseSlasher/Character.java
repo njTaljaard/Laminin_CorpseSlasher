@@ -3,18 +3,18 @@ package CorpseSlasher;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
+import com.jme3.animation.SkeletonControl;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
-import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
-import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -34,14 +34,12 @@ public class Character {
     private Node playerNode;
     private AnimChannel channel;
     private AnimControl control;
-    private AnalogListener analogListener;
-    private CharacterControl characterControl;
+    private GhostControl swordControl;
+    private BetterCharacterControl characterControl;
     private CharacterAnimControl animController;
     private CharacterCameraControl cameraController;
     private CharacterMotionControl motionController;
-    private float xMovementSpeed = 0.5f;
-    private float yMovementSpeed = 0.5f;
-    private float walkSpeed = 0.15f;
+    private final float walkSpeed = 15.0f;
     private Vector3f walkDirection;
     
     /**
@@ -58,46 +56,77 @@ public class Character {
         motionController = new CharacterMotionControl();
         walkDirection = new Vector3f();
         
-        initActionListener();
-        initModel(assMan, bullet, cam);
+        initModel(assMan, cam);
+        initControl();
+        initSwordGhost();
+        assemblePlayer(bullet);
+        setupCamera(cam);
+        setupAnim();
         initKeys(inMan);
     }
     
     /**
-     * initModel loads model, adds physics to it and bind the camera to it.
+     * initModel loads the model and sets it to the specified position.
      * @param assMan - AssetManager required to load model and material.
-     * @param inMan - InputManager required to set up key bindings.
      * @param cam - Camera required to obtain camera position and look at.
      */
-    private void initModel(AssetManager assMan, BulletAppState bullet, Camera cam) {
-        /**
-         * Fix camera to be controlled by physics.
-         */
-        CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.01f, 0.1f, 1);
-        characterControl = new CharacterControl(capsuleShape, 1.5f);
-        characterControl.setGravity(10.0f);
-        characterControl.setJumpSpeed(50.0f);
-        bullet.getPhysicsSpace().add(characterControl);
-        
-        /**
-         * Load player model.
-         */
+    private void initModel(AssetManager assMan, Camera cam) {
         player = (Node) assMan.loadModel("Models/cyborg/cyborg.j3o");
-        player.setLocalTranslation(cam.getLocation().add(0.8f, -6.5f, -4.2f));
+        player.setName("Player");
+        player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, -6.2f));
         player.lookAt(cam.getDirection(), cam.getUp());
+    }
+    
+    /**
+     * initControl sets up the character controller responsible for collision,
+     * motion and forces control.
+     */
+    private void initControl() {
+        characterControl = new BetterCharacterControl(1.0f, 5, 1000);
+        characterControl.setGravity(new Vector3f(0, -800, 0));
+        characterControl.setJumpForce(new Vector3f(0, 4, 0));
+        characterControl.setApplyPhysicsLocal(true);
+    }
+    
+    /**
+     * 
+     */
+    private void initSwordGhost() {
+        swordControl = new GhostControl(new BoxCollisionShape(new Vector3f(0.05f, 1.65f, 0.15f)));
+        swordControl.setCollisionGroup(7);
+        swordControl.setCollideWithGroups(6);
+    }
+    
+    /**
+     * assemblePlayer add the controllers to the player and to the physics handler.
+     * @param bullet - BulletAppState physics controller.
+     */
+    private void assemblePlayer(BulletAppState bullet) {
+        bullet.getPhysicsSpace().add(characterControl);
+        bullet.getPhysicsSpace().add(swordControl);
+        bullet.getPhysicsSpace().addAll(player);
         player.addControl(characterControl);
         playerNode.attachChild(player); 
-        
-        cameraController = new CharacterCameraControl("3rdCam", cam, player);
-        
-        /**
-         * Set animation.
-         */
+        player.getChild("Cube-ogremesh").getControl(SkeletonControl.class).getAttachmentsNode("Sword").addControl(swordControl);
+    }
+    
+    /**
+     * setupCamera will attach the camera to the player for motion control.
+     * @param cam - Camera to be attach to the player.
+     */
+    private void setupCamera(Camera cam) {
+        cameraController = new CharacterCameraControl("3rdCam", cam, player, characterControl);
+    }
+    
+    /**
+     * setupAnim
+     */
+    private void setupAnim() {
         control = player.getChild("Cube-ogremesh").getControl(AnimControl.class);
         control.addListener(animController.getAnimationListener());
         channel = control.createChannel();
         channel.setAnim("Stand");
-        channel.setLoopMode(LoopMode.Cycle);
+        channel.setLoopMode(LoopMode.Cycle);        
     }
     
     /**
@@ -140,44 +169,19 @@ public class Character {
         inMan.addListener(motionController.getMotionController(), "Jump");
         
         inMan.addListener(motionController.getMotionController(), "Slash");
-        inMan.addListener(analogListener, "TurnLeft");
-        inMan.addListener(analogListener, "TurnRight");
-        inMan.addListener(analogListener, "LookUp");
-        inMan.addListener(analogListener, "LookDown");
+        inMan.addListener(cameraController.getAnalogListener(), "TurnLeft");
+        inMan.addListener(cameraController.getAnalogListener(), "TurnRight");
+        inMan.addListener(cameraController.getAnalogListener(), "LookUp");
+        inMan.addListener(cameraController.getAnalogListener(), "LookDown");
     }
-      
-    /**
-     * initActionListener to update the required keys being pressed and mouse
-     * motion.
-     */
-    private void initActionListener() {
-        analogListener = new AnalogListener() {
-            @Override
-            public void onAnalog(String name, float value, float tpf) {
-                Quaternion turn = new Quaternion();
-                switch(name) {
-                    case "TurnLeft":
-                        turn.fromAngleAxis(xMovementSpeed * value, Vector3f.UNIT_Y);
-                        characterControl.setViewDirection(turn.mult(characterControl.getViewDirection()));
-                        break;
-                    case "TurnRight":
-                        turn.fromAngleAxis(-xMovementSpeed * value, Vector3f.UNIT_Y);
-                        characterControl.setViewDirection(turn.mult(characterControl.getViewDirection()));
-                        break;
-                    case "LookUp":
-                        cameraController.verticalRotate(yMovementSpeed*value);
-                        break;
-                    case "LookDown":
-                        cameraController.verticalRotate(-yMovementSpeed*value);
-                        break;
-                }
-            }
-        };
+    
+    public Vector3f getPosition() {
+        return player.getLocalTranslation();
     }
     
     /**
      * retrievePlayerNode an accessor to the game node containing the player model.
-     * @return player node containing the model data.
+     * @return playernode - Node containing the model data.
      */
     public Node retrievePlayerNode() {
         return playerNode;

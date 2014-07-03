@@ -3,6 +3,7 @@ package CorpseSlasher;
 import GUI.LoadingScreen;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -21,8 +22,7 @@ import com.jme3.water.WaterFilter;
 import com.jme3.math.FastMath;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import jme3utilities.Misc;
 import jme3utilities.TimeOfDay;
 
@@ -38,7 +38,7 @@ public class BasicScene {
     /**
      * All global variables required to initialize each scene element.
      */
-    private Spatial sceneModel;
+    private Node sceneModel;
     private Vector3f lightDir;
     private Node sceneNode;
     private SkyControl skyControl;
@@ -77,9 +77,9 @@ public class BasicScene {
         initAmbientLight();
         //ui.update(0.1f);
         initSunLight();
-       // ui.update(0.2f);
+        //ui.update(0.2f);
         initTerrain(assMan, bullet);
-       // ui.update(0.5f);
+        //ui.update(0.5f);
         initWater(assMan, vp);
         //ui.update(0.65f);
         initSkyBox(assMan, cam);
@@ -119,13 +119,27 @@ public class BasicScene {
      * @param bullet - BulletAppState which controls the physics of the scene.
      */
     private void initTerrain(AssetManager assMan, BulletAppState bullet) {
-        sceneModel = assMan.loadModel("Scenes/" + sceneName + ".j3o");
-        sceneModel.setName("Terrian");
+        sceneModel = (Node) assMan.loadModel("Scenes/" + sceneName + ".j3o");
         
-        sceneModel.addControl(new RigidBodyControl(0));
-        bullet.getPhysicsSpace().add(sceneModel);
-        
-        if (sceneModel != null) {
+        if (sceneModel != null) {    
+            sceneModel.setName("Terrian");        
+            Spatial terrain = sceneModel.getChild("terrain-ZombieScene1");
+            terrain.addControl(new RigidBodyControl(0));
+            terrain.getControl(RigidBodyControl.class).setCollisionGroup(1);
+            bullet.getPhysicsSpace().add(terrain);
+            
+            Node treeNode = (Node) sceneModel.getChild("Tree");
+            List<Spatial> treeList = treeNode.getChildren();
+            
+            for (int i = 0; i < treeList.size(); i++) {
+                BoxCollisionShape treeCol = new BoxCollisionShape(new Vector3f(3.5f, 15, 3.5f));
+                RigidBodyControl rig = new RigidBodyControl(treeCol,0);
+                rig.setCollisionGroup(1);
+                
+                treeList.get(i).addControl(rig);
+                bullet.getPhysicsSpace().add(treeList.get(i));
+            }
+            
             sceneNode.attachChild(sceneModel);
         } else {
             System.out.println("I am not loaded - terrain");

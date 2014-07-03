@@ -7,6 +7,7 @@ import com.jme3.input.InputManager;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import jme3utilities.TimeOfDay;
 
@@ -22,6 +23,7 @@ public class GameScene {
     private Node sceneNode;
     private BasicScene basicScene;
     private Character character;
+    private MobsHandler mobHandler;
     
     /**
      * GameScene will combine all the entities of the entire game into a node 
@@ -33,10 +35,12 @@ public class GameScene {
     public GameScene(int selectedMap, AssetManager assestManager, ViewPort viewPort, 
             Camera cam, BulletAppState bullet, InputManager inMan, LoadingScreen ui) {
         sceneNode = new Node("GameScene");
+        //bullet.getPhysicsSpace().enableDebug(assestManager);
         initCameraPosition(cam, selectedMap);
         initScene(assestManager, viewPort, cam, bullet, selectedMap, ui);
         initMainCharacter(assestManager, inMan, bullet, cam);
-       // ui.update(0.9f);
+        //ui.update(0.9f);
+        initMobs(bullet, assestManager);
     }
     
     /**
@@ -58,7 +62,6 @@ public class GameScene {
                 basicScene = new BasicScene("ZombieScene1");
                 basicScene.createScene(assestManager, viewPort, cam, bullet, ui);
                 sceneNode = basicScene.retrieveSceneNode();
-                //sceneNode.attachChild(basicScene.retrieveLightNode());
                 break;
             default :
                 break;
@@ -81,6 +84,17 @@ public class GameScene {
     }
     
     /**
+     * initMobs will be responsible for creating all the mobs at specified positions
+     * also update its position, animation and aggression control.
+     * @param bullet - BulletAppState for add collision boxes and controllers.
+     * @param assMan - AssetManager for loading the model.
+     */
+    private void initMobs(BulletAppState bullet, AssetManager assMan) {
+        mobHandler = new MobsHandler(bullet, assMan);
+        sceneNode.attachChild(mobHandler.retrieveMobs());
+    }
+    
+    /**
      * initCameraPosition will be used the multiple maps are create to define the
      * correct camera position.
      * @param cam - Camera from main game.
@@ -89,7 +103,7 @@ public class GameScene {
     private void initCameraPosition(Camera cam, int map) {
         switch(map) {
             case(0) :
-                cam.setLocation(new Vector3f(195.0f, 37.0f, -225.0f));
+                cam.setLocation(new Vector3f(195.0f, 36.0f, -225.0f));
                 cam.lookAt(new Vector3f(200, 25, -500), cam.getUp());
                 break;
             default :
@@ -107,6 +121,7 @@ public class GameScene {
     public void update(Camera cam, TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
         character.updateCharacterPostion(cam);
+        mobHandler.updateMobs(character.getPosition());
     }
     
     /**

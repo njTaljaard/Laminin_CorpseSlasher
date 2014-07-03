@@ -92,8 +92,8 @@ public class CharacterMotionControl {
      * magnatude of the motion.
      */
     public Vector3f updateCharacterMotion(Camera cam) {
-        Vector3f camDir = cam.getDirection().clone().multLocal(0.3f);
-        Vector3f camLeft = cam.getLeft().clone().multLocal(0.2f);
+        Vector3f camDir = cam.getDirection().clone();
+        Vector3f camLeft = cam.getLeft().clone();
         camDir.y = 0;
         camLeft.y = 0;
         walkDirection.set(0, 0, 0);
