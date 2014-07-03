@@ -48,6 +48,7 @@ public class BasicScene {
     private AmbientLight ambient;
     private DirectionalLight sun;
     private WaterFilter water;
+    private GameSettings settings;
         
     /**
      * BasicScene will create the scene attached to sceneNode.
@@ -73,18 +74,19 @@ public class BasicScene {
      * @param  app - SimpleApplication to retrieve camera positions.
      */
     public void createScene(AssetManager assMan, ViewPort vp, Camera cam, 
-            BulletAppState bullet, LoadingScreen ui) {
+            BulletAppState bullet, LoadingScreen ui,GameSettings settings) {
+        this.settings = settings;
         fpp = new FilterPostProcessor(assMan);
         initAmbientLight();
-        ui.update(0.1f);
+        //ui.update(0.1f);
         initSunLight();
-        ui.update(0.2f);
+        //ui.update(0.2f);
         initWater(assMan, vp);
-        ui.update(0.45f);
+        //ui.update(0.45f);
         initSkyBox(assMan, cam);
-        ui.update(0.6f);
+        //ui.update(0.6f);
         initTerrain(assMan, bullet);
-        ui.update(0.85f);
+        //ui.update(0.85f);
     }
     
     /**

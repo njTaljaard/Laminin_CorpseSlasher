@@ -12,6 +12,7 @@ import com.jme3.renderer.RenderManager;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
@@ -26,7 +27,14 @@ import jme3utilities.sky.SkyControl;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
 import java.util.Properties;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author normenhansen
@@ -69,11 +77,9 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
-        
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
-
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
         ClientConnection.StartClientConnection();
@@ -96,18 +102,50 @@ public class Main extends SimpleApplication implements ScreenController {
         // TODO: add render code
     }
 
-    public void loadGame() {
+    public boolean[] loadSettings() {
+        boolean[] settings2 = new boolean[10];
+        int       pos       = 0;
 
-        /**
-         * @TODO load settings here.
-         */
+        try {
+            Scanner in = new Scanner(new FileReader("GameSettings.txt")).useDelimiter("=");
+
+            while (in.hasNext()) {
+                String next = in.next();
+
+                System.out.println(next);
+
+                if (next.equals("true")) {
+                    settings2[pos++] = true;
+                }
+
+                if (next.equals("false")) {
+                    settings2[pos++] = false;
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+
+        System.out.println("here");
+
+        return settings2;
+    }
+
+    public void loadGame() {
+        System.out.println("breakng");
+
+        boolean[] settings2 = loadSettings();
+
+        // Settings file loaded and now must be used in program
+        GameSettings settingsF = new GameSettings(settings2);
+
         inputManager.setCursorVisible(false);
         flyCam.setEnabled(true);
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
-        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, 
-                inputManager, UI.getLoadingScreen());
+        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager, UI.getLoadingScreen(),
+                                  settingsF);
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
 
         SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
@@ -117,7 +155,8 @@ public class Main extends SimpleApplication implements ScreenController {
         stateManager.attach(timeOfDay);
         timeOfDay.setRate(350f);
         loggedIn = true;
-        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());       
+        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+        UI.changeState();
     }
 
     @Override
@@ -149,15 +188,17 @@ public class Main extends SimpleApplication implements ScreenController {
 
         // System.out.println(selectedButton.getSelectedId() + " was chosen");
         boolean success = ClientConnection.Login(usernameTxt.getRealText(), passwordTxt.getRealText());
-        
+
         if (success) {
-            guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());           
-            UI.loadingScreen();
+            guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+
+            // UI.loadingScreen();
             loadGame();
         } else {
             System.out.println("Username or password incorrect");
-            guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());   
-            UI.loadingScreen();
+            guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+
+            // UI.loadingScreen();
             loadGame();
         }
     }
@@ -197,16 +238,20 @@ public class Main extends SimpleApplication implements ScreenController {
         ClientConnection.RetrievePassword(retUser.getRealText());
         UI.loginScreen();
     }
-    public void quitGame(){
-     System.exit(0);
-    }    
-    public void graphicsScreen(){
+
+    public void quitGame() {
+        System.exit(0);
+    }
+
+    public void graphicsScreen() {
         UI.goTo("Graphics_Settings");
-    }    
-    public void audioScreen(){
+    }
+
+    public void audioScreen() {
         UI.goTo("Audio_Settings");
-    }    
-    public void difficultyScreen(){
+    }
+
+    public void difficultyScreen() {
         UI.goTo("Difficulty_Settings");
     }
 }

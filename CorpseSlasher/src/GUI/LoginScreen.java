@@ -24,15 +24,15 @@ import de.lessvoid.nifty.tools.Color;
 
 public class LoginScreen extends Screens {
 
-/**
- *
- * @param assetManager
- * @param inputManager
- * @param audioRenderer
- * @param guiViewPort
- */
-public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
-                   ViewPort guiViewPort, AppStateManager appState, Application app,NiftyJmeDisplay screen) {
+    /**
+     *
+     * @param assetManager
+     * @param inputManager
+     * @param audioRenderer
+     * @param guiViewPort
+     */
+    public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
+                       ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
 
         // loginScreen        = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);

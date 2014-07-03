@@ -1,0 +1,10 @@
+PostWater=true=
+WaterReflections=false=
+WaterRipples=true=
+WaterSpecular=false=
+WaterFoam=true=
+SkyDome=false=
+StarMotion=true=
+CloudMotion=false=
+BloomLight=true=
+LightScatter=true=

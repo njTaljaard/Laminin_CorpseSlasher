@@ -31,12 +31,12 @@ public class GameScene {
      * @param ViewPort - ViewPort required for water, contains position of camara.
      */
     public GameScene(int selectedMap, AssetManager assestManager, ViewPort viewPort, 
-            Camera cam, BulletAppState bullet, InputManager inMan, LoadingScreen ui) {
+            Camera cam, BulletAppState bullet, InputManager inMan, LoadingScreen ui, GameSettings settings) {
         sceneNode = new Node("GameScene");
         initCameraPosition(cam, selectedMap);
-        initScene(assestManager, viewPort, cam, bullet, selectedMap, ui);
+        initScene(assestManager, viewPort, cam, bullet, selectedMap, ui, settings);
         initMainCharacter(assestManager, inMan, bullet, cam);
-        ui.update(0.9f);
+        //ui.update(0.9f);
     }
     
     /**
@@ -52,11 +52,11 @@ public class GameScene {
      * @param map - Corresponding scene number to assign the required terrain.
      */
     private void initScene(AssetManager assestManager, ViewPort viewPort, Camera cam,
-            BulletAppState bullet, int map, LoadingScreen ui) {
+            BulletAppState bullet, int map, LoadingScreen ui,GameSettings settings) {
         switch(map) {
             case(0) :   
                 basicScene = new BasicScene("ZombieScene1");
-                basicScene.createScene(assestManager, viewPort, cam, bullet, ui);
+                basicScene.createScene(assestManager, viewPort, cam, bullet, ui,settings);
                 sceneNode = basicScene.retrieveSceneNode();
                 //sceneNode.attachChild(basicScene.retrieveLightNode());
                 break;
