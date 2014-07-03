@@ -1,5 +1,6 @@
 package CorpseSlasher;
 
+import GUI.LoadingScreen;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
@@ -21,7 +22,12 @@ import com.jme3.water.WaterFilter;
 import com.jme3.math.FastMath;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
+<<<<<<< HEAD
+import java.util.logging.Level;
+import java.util.logging.Logger;
+=======
 import java.util.List;
+>>>>>>> origin/MobControl
 import jme3utilities.Misc;
 import jme3utilities.TimeOfDay;
 
@@ -71,13 +77,18 @@ public class BasicScene {
      * @param  app - SimpleApplication to retrieve camera positions.
      */
     public void createScene(AssetManager assMan, ViewPort vp, Camera cam, 
-            BulletAppState bullet) {
+            BulletAppState bullet, LoadingScreen ui) {
         fpp = new FilterPostProcessor(assMan);
         initAmbientLight();
+        ui.update(0.1f);
         initSunLight();
+        ui.update(0.2f);
         initTerrain(assMan, bullet);
+        ui.update(0.5f);
         initWater(assMan, vp);
+        ui.update(0.65f);
         initSkyBox(assMan, cam);
+        ui.update(0.8f);
     }
     
     /**

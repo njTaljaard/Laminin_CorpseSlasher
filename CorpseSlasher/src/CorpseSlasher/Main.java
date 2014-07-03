@@ -2,27 +2,31 @@ package CorpseSlasher;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import GUI.LoadingScreen;
 import GUI.LoginScreen;
 import GUI.UserInterfaceManager;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.light.DirectionalLight;
-import com.jme3.math.Vector3f;
-import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.RenderManager;
-import com.jme3.water.WaterFilter;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.xml.xpp3.Attributes;
 
 import jme3utilities.TimeOfDay;
 
 import jme3utilities.sky.SkyControl;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Properties;
 
 /**
  * @author normenhansen
@@ -33,23 +37,25 @@ import jme3utilities.sky.SkyControl;
  * Main class to handle program start up until graphical main loop is reached.
  */
 public class Main extends SimpleApplication implements ScreenController {
-    static int                                byPass = 0;
-    UserInterfaceManager                      UI     = new UserInterfaceManager();
-    GameScene                                 gameScene;
-    BulletAppState                            bulletAppState;
-    TimeOfDay                                 timeOfDay;
-    LoginScreen                               login;
-    boolean                                   loggedIn;
-    TextField                                 usernameTxt;
-    TextField                                 passwordTxt;
-    TextField                                 accUser;
-    TextField                                 accEmail;
-    TextField                                 accSurname;
-    TextField                                 accName;
-    TextField                                 accPassword;
-    TextField                                 accPasswordRE;
-    private RadioButtonGroupStateChangedEvent selectedButton;
-    TextField                                 retUser;
+    static int                        byPass = 0;
+    UserInterfaceManager              UI     = new UserInterfaceManager();
+    GameScene                         gameScene;
+    BulletAppState                    bulletAppState;
+    TimeOfDay                         timeOfDay;
+    LoginScreen                       login;
+    boolean                           loggedIn;
+    TextField                         usernameTxt;
+    TextField                         passwordTxt;
+    TextField                         accUser;
+    TextField                         accEmail;
+    TextField                         accSurname;
+    TextField                         accName;
+    TextField                         accPassword;
+    TextField                         accPasswordRE;
+    RadioButtonGroupStateChangedEvent selectedButton;
+    TextField                         retUser;
+    TextRenderer                      textRenderer;
+    Element                           progressBarElement;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -68,10 +74,11 @@ public class Main extends SimpleApplication implements ScreenController {
         inputManager.setCursorVisible(true);
 
         // inputManager.deleteMapping(INPUT_MAPPING_EXIT);
-        //UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
-        //ClientConnection.StartClientConnection();
-        //UI.loginScreen();
-        loadGame();
+        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
+        ClientConnection.StartClientConnection();
+        UI.loginScreen();
+
+        // UI.loadingScreen();
     }
 
     @Override
@@ -97,7 +104,8 @@ public class Main extends SimpleApplication implements ScreenController {
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
-        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager);
+        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, 
+                inputManager, UI.getLoadingScreen());
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
 
         SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
@@ -107,6 +115,7 @@ public class Main extends SimpleApplication implements ScreenController {
         stateManager.attach(timeOfDay);
         timeOfDay.setRate(350f);
         loggedIn = true;
+        //guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());       
     }
 
     @Override
@@ -120,6 +129,13 @@ public class Main extends SimpleApplication implements ScreenController {
         accPassword   = screen.findNiftyControl("Password_Input_ID_2", TextField.class);
         accPasswordRE = screen.findNiftyControl("Password_Input_ID_2_2", TextField.class);
         retUser       = screen.findNiftyControl("Username_Input_ID_3", TextField.class);
+
+        if (nifty.getScreen("Loading") != null) {
+            progressBarElement = nifty.getScreen("Loading").findElementByName("Inner_Progress");
+            UI.getLoadingScreen().set(progressBarElement);
+            loadGame();
+            //UI.getLoadingScreen().update(0.5f);
+        }
     }
 
     @Override
@@ -141,26 +157,35 @@ public class Main extends SimpleApplication implements ScreenController {
 
         if (success) {
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+            //UI.loadingScreen();
             loadGame();
         } else {
             System.out.println("Username or password incorrect");
+              guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+            //UI.loadingScreen();
+            loadGame();
         }
     }
-    public void newAccount()
-    {
-       guiViewPort.getProcessors().remove(0);
-       UI.newAccount();
+
+    public void newAccount() {
+        guiViewPort.getProcessors().remove(0);
+        UI.newAccount();
     }
+
     public void createNewAccount() {
         if (accPassword.getRealText().equals(accPasswordRE.getRealText())) {
-            boolean success = ClientConnection.AddUser(accUser.getRealText(), accPassword.getRealText(), "Hello",
-                                  accName.getRealText(), accSurname.getRealText(),"1990/08/16", false, accEmail.getRealText());
+            if (ClientConnection.CheckUsernameAvailable(accUser.getRealText())) {
+                boolean success = ClientConnection.AddUser(accUser.getRealText(), accPassword.getRealText(),
+                                      accName.getRealText(), accSurname.getRealText(), accEmail.getRealText());
 
-            if (success) {
-                guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                loginScreen();
+                if (success) {
+                    guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+                    loginScreen();
+                } else {
+                    System.out.println("Failed adding user");
+                }
             } else {
-                System.out.println("Failed adding user");
+                System.out.println("Username already exists please try again");
             }
         } else {
             System.out.println("Missmatch password");
