@@ -76,7 +76,7 @@ public class Main extends SimpleApplication implements ScreenController {
         //inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
         ClientConnection.StartClientConnection();
-        //UI.loginScreen();
+        UI.loginScreen();
 
         // UI.loadingScreen();
     }
