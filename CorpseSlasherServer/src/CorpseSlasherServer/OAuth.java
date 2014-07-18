@@ -7,8 +7,6 @@ import java.net.ServerSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URI;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
@@ -17,6 +15,9 @@ import org.apache.oltu.oauth2.common.OAuthProviderType;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.PostMethod;
+
 
 
 
@@ -68,13 +69,11 @@ public class OAuth {
             }
             
             String code = acceptCode();
-            
-            Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
            
             request = OAuthClientRequest
             	.tokenProvider(OAuthProviderType.FACEBOOK)
                 .setGrantType(GrantType.AUTHORIZATION_CODE)
-                .setClientId("131804060198305")
+                .setClientId("131804060198305") 
                 .setClientSecret("3acb294b071c9aec86d60ae3daf32a93")
                 .setRedirectURI("http://localhost:8080/")
                 .setCode(code)
@@ -91,11 +90,67 @@ public class OAuth {
             System.out.println(
                 "Access Token: " + oAuthResponse.getAccessToken() + ", Expires in: " + oAuthResponse
                     .getExpiresIn());
+            Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
             return true;
         } catch (OAuthProblemException e) {
             System.out.println("OAuth error: " + e.getError());
             System.out.println("OAuth error description: " + e.getDescription());
             return false;
         }
+    }
+    
+    public static boolean googleLogin()throws OAuthSystemException, IOException {
+
+        
+            try {
+            URI domain = new URI("https://accounts.google.com/o/oauth2/auth?scope=email%20profile&redirect_uri=http://localhost:8080&response_type=code&client_id=505441356969-kqpsidp2kfv0udl5vopauroupumm7401.apps.googleusercontent.com");
+            java.awt.Desktop.getDesktop().browse(domain);
+            }
+            catch (Exception exc) {
+                System.out.println("URI error: " + exc.toString());
+                return false;
+            }
+            
+            String code = acceptCode();
+            
+            if (code.compareTo("access_denied") == 0)
+            {
+                Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
+                return false;
+            }
+            
+            Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
+           System.out.println(code);
+           
+           
+           String url = "https://accounts.google.com/o/oauth2/token";
+           String in = "";
+
+        try {
+            HttpClient client = new HttpClient();
+            PostMethod method = new PostMethod(url);
+
+            method.addParameter("code", code);
+            method.addParameter("client_id", "505441356969-kqpsidp2kfv0udl5vopauroupumm7401.apps.googleusercontent.com");
+            method.addParameter("client_secret", "WJHODsVIxt1-aqQpx_rHxf04");
+            method.addParameter("redirect_uri", "http://localhost:8080");
+            method.addParameter("grant_type", "authorization_code");
+
+            int statusCode = client.executeMethod(method);
+
+            if (statusCode != -1) {
+                
+                in = method.getResponseBodyAsString();
+                
+            }
+
+            System.out.println(in);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+           
+            return true;
     }
 }
