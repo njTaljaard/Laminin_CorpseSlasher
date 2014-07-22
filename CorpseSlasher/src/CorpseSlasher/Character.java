@@ -82,7 +82,7 @@ public class Character {
      * motion and forces control.
      */
     private void initControl() {
-        characterControl = new BetterCharacterControl(1.0f, 5, 1000);
+        characterControl = new BetterCharacterControl(1.0f, 5, 50);
         characterControl.setGravity(new Vector3f(0, -800, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);
