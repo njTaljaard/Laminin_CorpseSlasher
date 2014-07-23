@@ -80,7 +80,7 @@ public class MobCollisionControl implements PhysicsCollisionListener {
                     characterControl.setWalkDirection(new Vector3f(0, 0, 0));
                     //set animation channel to passive animation. */
                 }
-            }
+            } 
         }
     }
 }

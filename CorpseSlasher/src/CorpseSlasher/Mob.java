@@ -10,6 +10,9 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.scene.debug.SkeletonDebugger;
 
 /**
  * @author Laminin
@@ -51,7 +54,7 @@ public class Mob {
         initControl();
         initGhost();
         assembleMob(bullet);
-        //initAnim();
+        initAnim(assMan);
     }
     
     /**
@@ -60,7 +63,7 @@ public class Mob {
      * @param assMan - AssetManager required to load the model.
      */
     private void initMob(AssetManager assMan) {
-        mob = (Node) assMan.loadModel("Models/zom/zom.j3o");
+        mob = (Node) assMan.loadModel("Models/Zombie/bunnett.j3o");
         mob.setLocalTranslation(passivePosition);
         mob.setName(mobName);
     }
@@ -96,22 +99,28 @@ public class Mob {
         mob.addControl(characterControl);
         bullet.getPhysicsSpace().add(ghost);
         bullet.getPhysicsSpace().add(characterControl);
-        bullet.getPhysicsSpace().addAll(mob);        
+        bullet.getPhysicsSpace().addAll(mob);       
     }
     
     /**
      * 
      */
-    private void initAnim() {
-        control = mob.getChild("bennettzombie_body.001").getControl(AnimControl.class);
+    private void initAnim(AssetManager assMan) {
+        control = mob.getChild("bennettzombie_body.001-ogremesh").getControl(AnimControl.class);
         control.addListener(animControl.getAnimationListener());
         channel = control.createChannel();
-        for (String s : control.getAnimationNames())
-            System.out.println(s);
-        channel.setAnim("metarigAction");
+        channel.setAnim("Stand");
         channel.setLoopMode(LoopMode.Cycle); 
-    }
         
+        /*SkeletonDebugger skeletonDebug = new SkeletonDebugger("skeleton1", control.getSkeleton());
+        Material mat = new Material(assMan, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.getAdditionalRenderState().setWireframe(true);
+        mat.setColor("Color", ColorRGBA.Green);
+        mat.getAdditionalRenderState().setDepthTest(false);
+        skeletonDebug.setMaterial(mat);
+        mob.attachChild(skeletonDebug);*/
+    }
+      
     /**
      * updateMob will update the mobs phase according to if aggro was triggers 
      * and animations that is required for that phase.
@@ -120,7 +129,7 @@ public class Mob {
      */
     public void updateMob(Vector3f point) {
         collControl.updateMobPhase(point, mob, characterControl, passivePosition);
-        //animControl.updateMobAnimations(channel, collControl.attack, collControl.walk);
+        animControl.updateMobAnimations(channel, collControl.attack, collControl.passive);
     }
     
     /**

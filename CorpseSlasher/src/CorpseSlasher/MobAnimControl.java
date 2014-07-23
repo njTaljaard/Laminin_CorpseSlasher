@@ -29,7 +29,7 @@ public class MobAnimControl {
         animationListener = new AnimEventListener() {
             @Override
             public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
-                /*switch (animName) {
+                switch (animName) {
                     case "Walk":
                         if (channel.getLoopMode().equals(LoopMode.Loop)) {
                             channel.setAnim("Walk", 0.0f);
@@ -53,7 +53,7 @@ public class MobAnimControl {
                     case "Passive":
                         
                         break;
-                }*/
+                }
             }
 
             @Override
@@ -64,7 +64,7 @@ public class MobAnimControl {
     /**
      * updateCharacterAnimations updates animations where required.
      */
-    public boolean updateMobAnimations(AnimChannel channel, boolean attack, boolean walk) {        
+    public boolean updateMobAnimations(AnimChannel channel, boolean attack, boolean passive) {        
         if (attack) {
             if (channel.getAnimationName().equals("Stand")) {
                 channel.setAnim("Attack");
@@ -72,7 +72,7 @@ public class MobAnimControl {
                 channel.setSpeed(1.15f);
             } else {
                 if (!channel.getAnimationName().equals("Attack")) {
-                    channel.setAnim("Slash", 1.0f);
+                    channel.setAnim("Attack", 1.0f);
                     channel.setLoopMode(LoopMode.DontLoop);
                     channel.setSpeed(1.15f);
                 }
@@ -80,7 +80,7 @@ public class MobAnimControl {
             attack = false;
         }
         
-        if (walk) {
+        if (!passive) {
             if (channel.getAnimationName().equals("Stand")) {
                 channel.setAnim("Walk");
                 channel.setLoopMode(LoopMode.Loop);
