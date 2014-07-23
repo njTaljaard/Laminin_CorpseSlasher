@@ -60,8 +60,8 @@ public class Character {
         initControl();
         initSwordGhost();
         assemblePlayer(bullet);
-        setupCamera(cam);
-        setupAnim();
+        initCamera(cam);
+        initAnim();
         initKeys(inMan);
     }
     
@@ -82,14 +82,16 @@ public class Character {
      * motion and forces control.
      */
     private void initControl() {
-        characterControl = new BetterCharacterControl(1.0f, 5, 50);
+        characterControl = new BetterCharacterControl(1.0f, 4.85f, 50);
         characterControl.setGravity(new Vector3f(0, -800, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);
     }
     
     /**
-     * 
+     * initSwordGhost sets up the collision box that will be bound to the players
+     * sword in order to determine if any collision has occured with the sword
+     * and a mob.
      */
     private void initSwordGhost() {
         swordControl = new GhostControl(new BoxCollisionShape(new Vector3f(0.05f, 1.65f, 0.15f)));
@@ -111,17 +113,19 @@ public class Character {
     }
     
     /**
-     * setupCamera will attach the camera to the player for motion control.
+     * initCamera will attach the camera to the player for motion control.
      * @param cam - Camera to be attach to the player.
      */
-    private void setupCamera(Camera cam) {
+    private void initCamera(Camera cam) {
         cameraController = new CharacterCameraControl("3rdCam", cam, player, characterControl);
     }
     
     /**
-     * setupAnim
+     * initAnim creates the controller and animations channel required to
+     * access all available animations, set the current animation and the type
+     * of trigger at the end of a animations cycle.
      */
-    private void setupAnim() {
+    private void initAnim() {
         control = player.getChild("Cube-ogremesh").getControl(AnimControl.class);
         control.addListener(animController.getAnimationListener());
         channel = control.createChannel();

@@ -16,9 +16,11 @@ import com.jme3.animation.LoopMode;
 public class MobAnimControl {
     
     private AnimEventListener animationListener;
+    private boolean attack;
     
     public MobAnimControl() {
         initAnimEventListener();
+        attack = false;
     }
     
     /**
@@ -62,10 +64,10 @@ public class MobAnimControl {
     }
     
     /**
-     * updateCharacterAnimations updates animations where required.
+     * updateCharacterAnimations updates animations when required.
      */
-    public boolean updateMobAnimations(AnimChannel channel, boolean attack, boolean passive) {        
-        if (attack) {
+    public boolean updateMobAnimations(AnimChannel channel, boolean walk, boolean passive) {        
+        if (walk) {
             if (channel.getAnimationName().equals("Stand")) {
                 channel.setAnim("Attack");
                 channel.setLoopMode(LoopMode.DontLoop);
@@ -77,7 +79,6 @@ public class MobAnimControl {
                     channel.setSpeed(1.15f);
                 }
             }
-            attack = false;
         }
         
         if (!passive) {

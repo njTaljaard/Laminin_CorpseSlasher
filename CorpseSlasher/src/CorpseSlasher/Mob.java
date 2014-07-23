@@ -3,16 +3,15 @@ package CorpseSlasher;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
+import com.jme3.animation.SkeletonControl;
 import com.jme3.scene.Node;
 import com.jme3.math.Vector3f;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.scene.debug.SkeletonDebugger;
 
 /**
  * @author Laminin
@@ -26,6 +25,7 @@ public class Mob {
     private Node mob;
     private String mobName;
     private GhostControl ghost;
+    private GhostControl handGhost;
     private AnimChannel channel;
     private AnimControl control;
     private Vector3f passivePosition;
@@ -53,8 +53,10 @@ public class Mob {
         initMob(assMan);
         initControl();
         initGhost();
+        initHandGhost();
         assembleMob(bullet);
-        initAnim(assMan);
+        initAnim();
+        bullet.getPhysicsSpace().enableDebug(assMan);
     }
     
     /**
@@ -73,7 +75,7 @@ public class Mob {
      * motion and forces control.
      */
     private void initControl() {
-        characterControl = new BetterCharacterControl(1.0f, 4, 50);
+        characterControl = new BetterCharacterControl(0.6f, 5.0f, 1);
         characterControl.setGravity(new Vector3f(0, -800, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);
@@ -91,6 +93,17 @@ public class Mob {
     }
     
     /**
+     * initHandGhost sets up the collision box that will be bound to the mobs
+     * arm in order to determine if any collision has occured with the hand
+     * and the player.
+     */
+    private void initHandGhost() {
+        handGhost = new GhostControl(new BoxCollisionShape(new Vector3f(0.15f, 0.45f, 0.05f)));
+        handGhost.setCollisionGroup(7);
+        handGhost.setCollideWithGroups(6);
+    }
+    
+    /**
      * assembleMob add the controllers to the mob and to the physics handler.
      * @param bullet - BulletAppState physics controller. 
      */
@@ -98,27 +111,24 @@ public class Mob {
         mob.addControl(ghost);
         mob.addControl(characterControl);
         bullet.getPhysicsSpace().add(ghost);
+        bullet.getPhysicsSpace().add(handGhost);
         bullet.getPhysicsSpace().add(characterControl);
-        bullet.getPhysicsSpace().addAll(mob);       
+        bullet.getPhysicsSpace().addAll(mob);         
+        mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
+                .getAttachmentsNode("hand.R").addControl(handGhost);
     }
     
     /**
-     * 
+     * initAnim creates the controller and animations channel required to
+     * access all available animations, set the current animation and the type
+     * of trigger at the end of a animations cycle.
      */
-    private void initAnim(AssetManager assMan) {
+    private void initAnim() {
         control = mob.getChild("bennettzombie_body.001-ogremesh").getControl(AnimControl.class);
         control.addListener(animControl.getAnimationListener());
         channel = control.createChannel();
         channel.setAnim("Stand");
         channel.setLoopMode(LoopMode.Cycle); 
-        
-        /*SkeletonDebugger skeletonDebug = new SkeletonDebugger("skeleton1", control.getSkeleton());
-        Material mat = new Material(assMan, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.getAdditionalRenderState().setWireframe(true);
-        mat.setColor("Color", ColorRGBA.Green);
-        mat.getAdditionalRenderState().setDepthTest(false);
-        skeletonDebug.setMaterial(mat);
-        mob.attachChild(skeletonDebug);*/
     }
       
     /**
@@ -129,7 +139,7 @@ public class Mob {
      */
     public void updateMob(Vector3f point) {
         collControl.updateMobPhase(point, mob, characterControl, passivePosition);
-        animControl.updateMobAnimations(channel, collControl.attack, collControl.passive);
+        animControl.updateMobAnimations(channel, collControl.walk, collControl.passive);
     }
     
     /**

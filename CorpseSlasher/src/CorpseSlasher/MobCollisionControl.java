@@ -15,7 +15,7 @@ import com.jme3.scene.Spatial;
  */
 public class MobCollisionControl implements PhysicsCollisionListener {
     
-    protected boolean attack, walk, passive;
+    protected boolean walk, passive;
     private final float runSpeed = 8.0f;
     private final float walkSpeed = 6.0f;
     private Vector3f motionDirection;
@@ -23,6 +23,8 @@ public class MobCollisionControl implements PhysicsCollisionListener {
     
     public MobCollisionControl(String mob) {
         mobName = mob;
+        passive = true;
+        walk = false;
         motionDirection = new Vector3f();
     }
 
@@ -78,7 +80,7 @@ public class MobCollisionControl implements PhysicsCollisionListener {
                     passive = true;
                     characterControl.setViewDirection(new Vector3f(0, 0, 0));
                     characterControl.setWalkDirection(new Vector3f(0, 0, 0));
-                    //set animation channel to passive animation. */
+                    //set animation channel to passive animation.
                 }
             } 
         }
