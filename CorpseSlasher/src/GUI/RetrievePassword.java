@@ -84,13 +84,22 @@ public class RetrievePassword extends Screens {
                                 });
                                 control(new ButtonBuilder("Get_Password", "Retrieve Password") {
                                     {
-                                        visibleToMouse(false);
                                         alignCenter();
                                         valign(VAlign.Bottom);
                                         marginBottom("25%");
                                         height("5%");
                                         width("15%");
                                         interactOnClick("loginScreen()");
+                                    }
+                                });
+                                control(new ButtonBuilder("Back","Back"){
+                                    {
+                                        alignCenter();
+                                        valign(VAlign.Bottom);
+                                        marginBottom("15%");
+                                        height("5%");
+                                        width("15%");
+                                        interactOnClick("goBack()");
                                     }
                                 });
                             }});

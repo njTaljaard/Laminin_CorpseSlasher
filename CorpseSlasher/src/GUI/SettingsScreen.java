@@ -57,12 +57,22 @@ public class SettingsScreen extends Screens {
                 layer(new LayerBuilder("foreground") {
                     {
                         childLayoutOverlay();
+                        
                         panel(new PanelBuilder("Switch_Options") {
                             {
                                 childLayoutVertical();
+                                control(new ButtonBuilder("", "Display Settings") {
+                                    {
+                                        marginTop("48%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                    }
+                                });
                                 control(new ButtonBuilder("", "Difficulty Settings") {
                                     {
-                                        marginTop("70%");
+                                        marginTop("2%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -120,9 +130,19 @@ public class SettingsScreen extends Screens {
                         panel(new PanelBuilder("Settings") {
                             {
                                 childLayoutVertical();
+                                control(new ButtonBuilder("", "Display Settings") {
+                                    {
+                                        marginTop("48%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        interactOnClick("");
+                                    }
+                                });
                                 control(new ButtonBuilder("", "Difficulty Settings") {
                                     {
-                                        marginTop("70%");
+                                        marginTop("2%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -136,6 +156,7 @@ public class SettingsScreen extends Screens {
                                         height("50px");
                                         width("150px");
                                         align(Align.Left);
+                                        interactOnClick("graphicsScreen()");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Sound Settings") {
@@ -342,6 +363,75 @@ public class SettingsScreen extends Screens {
                                 control(new ButtonBuilder("Apply_Button", "Apply Settings"){
                                     {
                                         interactOnClick("applySettings()");
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        }.build(nifty));
+        nifty.addScreen("Display_Screen", new ScreenBuilder("Display_Extension",new SettingsController()){
+            {
+                controller(new SettingsController());
+                layer(new LayerBuilder("background") {
+                    {
+                        childLayoutCenter();;
+                        backgroundImage("Backgrounds/ZOMBIE1.jpg");
+                        visibleToMouse(true);
+                    }
+                });
+                layer(new LayerBuilder("foreground") {
+                    {
+                        childLayoutOverlay();
+                        panel(new PanelBuilder("Settings") {
+                            {
+                                childLayoutVertical();
+                                control(new ButtonBuilder("", "Display Settings") {
+                                    {
+                                        marginTop("48%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Difficulty Settings") {
+                                    {
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Graphics Settings") {
+                                    {
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        interactOnClick("graphicsScreen()");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Sound Settings") {
+                                    {
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Quit Game") {
+                                    {
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        interactOnClick("quitGame()");
                                     }
                                 });
                             }

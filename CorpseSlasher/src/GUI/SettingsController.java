@@ -5,7 +5,6 @@
 package GUI;
 
 import CorpseSlasher.GameSettings;
-import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
@@ -73,5 +72,8 @@ public class SettingsController implements ScreenController {
      public void applySettings(){
         settings = new GameSettings(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10);        
     }
+     public void quitGame(){
+         System.exit(1);
+     }
     
 }

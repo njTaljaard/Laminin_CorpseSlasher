@@ -117,7 +117,7 @@ public class LoginScreen extends Screens {
                                         visibleToMouse(true);
                                     }
                                 });
-                                control(new RadioGroupBuilder("Selections"));
+                                /*control(new RadioGroupBuilder("Selections"));
                                 panel(new PanelBuilder("Radio_Button_Panel") {
                                     {
                                         childLayoutHorizontal();
@@ -185,7 +185,7 @@ public class LoginScreen extends Screens {
                                             }
                                         });
                                     }
-                                });
+                                });*/
                                 control(new ButtonBuilder("Connect_ID", "Login") {
                                     {
                                         alignCenter();
@@ -231,18 +231,13 @@ public class LoginScreen extends Screens {
                                 paddingTop("4px");
                                 paddingBottom("4px");
                                 visibleToMouse(true);
-                                panel(new PanelBuilder() {
-                                    {
-                                        childLayoutHorizontal();
-                                        backgroundImage("Icons/zombie.jpg");
-                                        width("40px");
-                                    }
-                                });
+                     
                                 panel(new PanelBuilder() {
                                     {
                                         childLayoutHorizontal();
                                         backgroundImage("Icons/fb.jpg");
                                         width("40px");
+                                        interactOnClick("socialLogin(1)");
                                     }
                                 });
                                 panel(new PanelBuilder() {
@@ -250,6 +245,7 @@ public class LoginScreen extends Screens {
                                         childLayoutHorizontal();
                                         backgroundImage("Icons/twitter.jpg");
                                         width("40px");
+                                        interactOnClick("socialLogin(2)");
                                     }
                                 });
                                 panel(new PanelBuilder() {
@@ -257,6 +253,7 @@ public class LoginScreen extends Screens {
                                         childLayoutHorizontal();
                                         backgroundImage("Icons/google+.jpg");
                                         width("40px");
+                                        interactOnClick("socialLogin(3)");
                                     }
                                 });
                             }

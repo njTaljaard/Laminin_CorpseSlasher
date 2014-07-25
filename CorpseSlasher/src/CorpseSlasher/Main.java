@@ -2,24 +2,22 @@ package CorpseSlasher;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import GUI.LoadingScreen;
 import GUI.LoginScreen;
 import GUI.UserInterfaceManager;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
+import com.jme3.system.AppSettings;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.xml.xpp3.Attributes;
 
 import jme3utilities.TimeOfDay;
 
@@ -27,14 +25,10 @@ import jme3utilities.sky.SkyControl;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-import java.util.Properties;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author normenhansen
@@ -67,7 +61,13 @@ public class Main extends SimpleApplication implements ScreenController {
 
     public static void main(String[] args) {
         Main app = new Main();
-
+       /* app.setShowSettings(false);
+        app.setDisplayFps(false);
+        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+        AppSettings settings = new AppSettings(true);
+        settings.setResolution(1366, 768);
+        
+        app.setSettings(settings);*/
         app.start();
     }
 
@@ -85,8 +85,6 @@ public class Main extends SimpleApplication implements ScreenController {
         ClientConnection.StartClientConnection();
         UI.optionScreen();
         UI.loginScreen();
-
-        // UI.loadingScreen();
     }
 
     @Override
@@ -126,13 +124,11 @@ public class Main extends SimpleApplication implements ScreenController {
             ex.printStackTrace();
         }
 
-        System.out.println("here");
 
         return settings2;
     }
 
     public void loadGame() {
-        System.out.println("breakng");
 
         boolean[] settings2 = loadSettings();
 
@@ -253,6 +249,20 @@ public class Main extends SimpleApplication implements ScreenController {
 
     public void difficultyScreen() {
         UI.goTo("Difficulty_Settings");
+    }
+    public void goBack() {
+        UI.goTo("Login_Screen");
+    }
+    public void socialLogin(String type){
+        switch(type)
+        {
+            case "1":
+                break;
+            case "2":
+                break;
+            case "3":
+                break;
+        }
     }
 }
 

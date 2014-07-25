@@ -71,7 +71,7 @@ public class NewAccount extends Screens {
                                         align(Align.Left);
                                         valign(VAlign.Top);
                                         marginLeft("31%");
-                                        marginTop("30%");
+                                        marginTop("22%");
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
@@ -81,7 +81,7 @@ public class NewAccount extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
-                                        marginTop("30%");
+                                        marginTop("22%");
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
@@ -92,7 +92,7 @@ public class NewAccount extends Screens {
                                         align(Align.Left);
                                         valign(VAlign.Top);
                                         marginLeft("31%");
-                                        marginTop("38%");
+                                        marginTop("30%");
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
@@ -102,7 +102,7 @@ public class NewAccount extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
-                                        marginTop("38%");
+                                        marginTop("30%");
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
@@ -112,7 +112,7 @@ public class NewAccount extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
-                                        marginTop("46%");
+                                        marginTop("38%");
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
@@ -123,7 +123,7 @@ public class NewAccount extends Screens {
                                         align(Align.Left);
                                         valign(VAlign.Top);
                                         marginLeft("31%");
-                                        marginTop("46%");
+                                        marginTop("38%");
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
@@ -134,7 +134,7 @@ public class NewAccount extends Screens {
                                         align(Align.Left);
                                         valign(VAlign.Top);
                                         marginLeft("31%");
-                                        marginTop("54%");
+                                        marginTop("46%");
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
@@ -144,7 +144,7 @@ public class NewAccount extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
-                                        marginTop("54%");
+                                        marginTop("46%");
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
@@ -155,7 +155,7 @@ public class NewAccount extends Screens {
                                         align(Align.Left);
                                         valign(VAlign.Top);
                                         marginLeft("31%");
-                                        marginTop("62%");
+                                        marginTop("54%");
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
@@ -165,7 +165,7 @@ public class NewAccount extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
-                                        marginTop("62%");
+                                        marginTop("54%");
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
@@ -176,7 +176,7 @@ public class NewAccount extends Screens {
                                         align(Align.Left);
                                         valign(VAlign.Top);
                                         marginLeft("31%");
-                                        marginTop("70%");
+                                        marginTop("62%");
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
@@ -186,7 +186,7 @@ public class NewAccount extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
-                                        marginTop("70%");
+                                        marginTop("62%");
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
@@ -196,10 +196,20 @@ public class NewAccount extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Bottom);
-                                        marginBottom("5%");
+                                        marginBottom("25%");
                                         height("5%");
                                         width("15%");
                                         interactOnClick("createNewAccount()");
+                                    }
+                                });
+                                control(new ButtonBuilder("Back","Back"){
+                                    {
+                                        alignCenter();
+                                        valign(VAlign.Bottom);
+                                        marginBottom("15%");
+                                        height("5%");
+                                        width("15%");
+                                        interactOnClick("goBack()");
                                     }
                                 });
                             }
