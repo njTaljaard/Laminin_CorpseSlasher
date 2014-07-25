@@ -17,67 +17,63 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
-
-
-
+import org.apache.commons.codec.binary.Base64;
+import java.net.URLEncoder;
 
 /**
  *
  * @author Martin
  */
 public class OAuth {
-    
+
     private static BufferedReader in;
-    
-    private static String acceptCode()
-    {
+
+    private static String acceptCode() {
         try {
-        ServerSocket serverSocket = new ServerSocket(8080, 0, InetAddress.getByName("localhost"));
-        
-        //while (true) {
-                Socket socialSocket = serverSocket.accept();
-                in = new BufferedReader(new InputStreamReader(
+            ServerSocket serverSocket = new ServerSocket(8080, 0, InetAddress.getByName("localhost"));
+
+            //while (true) {
+            Socket socialSocket = serverSocket.accept();
+            in = new BufferedReader(new InputStreamReader(
                     socialSocket.getInputStream()));
-                String code = in.readLine();
-                return code.substring(code.indexOf("=")+1).split(" ")[0];
+            String code = in.readLine();
+            return code.substring(code.indexOf("=") + 1).split(" ")[0];
             //}
-        }
-        catch (Exception exc) {
+        } catch (Exception exc) {
             System.out.println("Internal OAuth server error: " + exc.toString());
             return "";
         }
     }
-    
-    public static boolean facebookLogin()throws OAuthSystemException, IOException {
+
+    public static boolean facebookLogin() throws OAuthSystemException, IOException {
 
         try {
             OAuthClientRequest request = OAuthClientRequest
-                .authorizationProvider(OAuthProviderType.FACEBOOK)
-                .setClientId("131804060198305")
-                .setRedirectURI("http://localhost:8080/")
-                .buildQueryMessage();
+                    .authorizationProvider(OAuthProviderType.FACEBOOK)
+                    .setClientId("131804060198305")
+                    .setRedirectURI("http://localhost:8080/")
+                    .buildQueryMessage();
 
             //in web application you make redirection to uri:
             //System.out.println("Visit: " + request.getLocationUri() + "\nand grant permission");
             try {
-            URI domain = new URI(request.getLocationUri());
-            java.awt.Desktop.getDesktop().browse(domain);
-            }
-            catch (Exception exc) {
+                URI domain = new URI(request.getLocationUri());
+                java.awt.Desktop.getDesktop().browse(domain);
+            } catch (Exception exc) {
                 System.out.println("URI error: " + exc.toString());
                 return false;
             }
-            
+
             String code = acceptCode();
-           
+
             request = OAuthClientRequest
-            	.tokenProvider(OAuthProviderType.FACEBOOK)
-                .setGrantType(GrantType.AUTHORIZATION_CODE)
-                .setClientId("131804060198305") 
-                .setClientSecret("3acb294b071c9aec86d60ae3daf32a93")
-                .setRedirectURI("http://localhost:8080/")
-                .setCode(code)
-                .buildBodyMessage();
+                    .tokenProvider(OAuthProviderType.FACEBOOK)
+                    .setGrantType(GrantType.AUTHORIZATION_CODE)
+                    .setClientId("131804060198305")
+                    .setClientSecret("3acb294b071c9aec86d60ae3daf32a93")
+                    .setRedirectURI("http://localhost:8080/")
+                    .setCode(code)
+                    .buildBodyMessage();
 
             OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
 
@@ -88,7 +84,7 @@ public class OAuth {
             GitHubTokenResponse oAuthResponse = oAuthClient.accessToken(request, GitHubTokenResponse.class);
 
             System.out.println(
-                "Access Token: " + oAuthResponse.getAccessToken() + ", Expires in: " + oAuthResponse
+                    "Access Token: " + oAuthResponse.getAccessToken() + ", Expires in: " + oAuthResponse
                     .getExpiresIn());
             Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
             return true;
@@ -98,33 +94,31 @@ public class OAuth {
             return false;
         }
     }
-    
-    public static boolean googleLogin()throws OAuthSystemException, IOException {
 
-        
-            try {
+    public static boolean googleLogin() throws OAuthSystemException, IOException {
+
+
+        try {
             URI domain = new URI("https://accounts.google.com/o/oauth2/auth?scope=email%20profile&redirect_uri=http://localhost:8080&response_type=code&client_id=505441356969-kqpsidp2kfv0udl5vopauroupumm7401.apps.googleusercontent.com");
             java.awt.Desktop.getDesktop().browse(domain);
-            }
-            catch (Exception exc) {
-                System.out.println("URI error: " + exc.toString());
-                return false;
-            }
-            
-            String code = acceptCode();
-            
-            if (code.compareTo("access_denied") == 0)
-            {
-                Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
-                return false;
-            }
-            
+        } catch (Exception exc) {
+            System.out.println("URI error: " + exc.toString());
+            return false;
+        }
+
+        String code = acceptCode();
+
+        if (code.compareTo("access_denied") == 0) {
             Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
-           System.out.println(code);
-           
-           
-           String url = "https://accounts.google.com/o/oauth2/token";
-           String in = "";
+            return false;
+        }
+
+        Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
+        System.out.println(code);
+
+
+        String url = "https://accounts.google.com/o/oauth2/token";
+        String in = "";
 
         try {
             HttpClient client = new HttpClient();
@@ -139,9 +133,9 @@ public class OAuth {
             int statusCode = client.executeMethod(method);
 
             if (statusCode != -1) {
-                
+
                 in = method.getResponseBodyAsString();
-                
+
             }
 
             System.out.println(in);
@@ -150,7 +144,7 @@ public class OAuth {
             e.printStackTrace();
             return false;
         }
-           
-            return true;
+
+        return true;
     }
 }
