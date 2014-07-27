@@ -15,7 +15,7 @@ import com.jme3.scene.Spatial;
  */
 public class MobCollisionControl implements PhysicsCollisionListener {
     
-    protected boolean walk, passive;
+    protected boolean aggro, walkAttack, attack, passive;
     private final float runSpeed = 8.0f;
     private final float walkSpeed = 6.0f;
     private Vector3f motionDirection;
@@ -24,7 +24,9 @@ public class MobCollisionControl implements PhysicsCollisionListener {
     public MobCollisionControl(String mob) {
         mobName = mob;
         passive = true;
-        walk = false;
+        aggro = false;
+        walkAttack = false;
+        attack = false;
         motionDirection = new Vector3f();
     }
 
@@ -39,12 +41,12 @@ public class MobCollisionControl implements PhysicsCollisionListener {
     public void collision(PhysicsCollisionEvent event) {
         if (event.getNodeA().getName().equals("Player") & event.getNodeB().getName().equals(mobName)) {
             if (passive) {
-                walk = true;
+                aggro = true;
                 passive = false;
             }
         } else if (event.getNodeB().getName().equals("Player") & event.getNodeA().getName().equals(mobName)) {
             if (passive) {
-                walk = true;
+                aggro = true;
                 passive = false;
             }
         }
@@ -53,20 +55,35 @@ public class MobCollisionControl implements PhysicsCollisionListener {
     /**
      * updateMobPhase will determine in which phase the mob is: attack, return, passive.
      * Update the mobs actions to its position and animation.
-     * @param attackDirection - Vector3f the direction of the player required in 
+     * @param point - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
+     * @param  mob - Mob physical object.
+     * @param  characterControl - BetterCharacterControl, model controller of mob.
+     * @param  passivePosition - Vector3f postion where mob spawn point is.
      */
     protected void updateMobPhase(Vector3f point, Spatial mob, BetterCharacterControl
             characterControl, Vector3f passivePosition) {
-        if (walk) {
+        if (aggro) {
             point.subtract(mob.getLocalTranslation(), motionDirection);
             motionDirection.y = 0.0f;
             
-            characterControl.setViewDirection(motionDirection.normalize().multLocal(runSpeed));
-            characterControl.setWalkDirection(motionDirection.normalize().multLocal(runSpeed)); 
+            if (mob.getLocalTranslation().distance(point) > 4.0f) {
+                characterControl.setViewDirection(motionDirection.normalize().multLocal(runSpeed));
+                characterControl.setWalkDirection(motionDirection.normalize().multLocal(runSpeed)); 
+            }
             
-            if (passivePosition.distance(mob.getLocalTranslation()) > 25.0f) {
-                walk = false;
+            if (mob.getLocalTranslation().distance(point) < 4.0f) {
+                attack = true;
+                walkAttack = false;
+            } else if (mob.getLocalTranslation().distance(point) < 8.0f) {
+                walkAttack = true;
+            } else if (passivePosition.distance(mob.getLocalTranslation()) > 25.0f) {
+                aggro = false;
+                attack = false;
+                walkAttack = false;
+            } else {
+                attack = false;
+                walkAttack = false;
             }
         } else { 
             if (!passive) {

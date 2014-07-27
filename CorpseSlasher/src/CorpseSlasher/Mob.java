@@ -56,7 +56,6 @@ public class Mob {
         initHandGhost();
         assembleMob(bullet);
         initAnim();
-        bullet.getPhysicsSpace().enableDebug(assMan);
     }
     
     /**
@@ -139,7 +138,8 @@ public class Mob {
      */
     public void updateMob(Vector3f point) {
         collControl.updateMobPhase(point, mob, characterControl, passivePosition);
-        animControl.updateMobAnimations(channel, collControl.walk, collControl.passive);
+        animControl.updateMobAnimations(channel, collControl.aggro,
+                collControl.walkAttack, collControl.attack, collControl.passive);
     }
     
     /**
