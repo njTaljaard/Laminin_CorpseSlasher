@@ -133,7 +133,7 @@ public class Mob {
     /**
      * updateMob will update the mobs phase according to if aggro was triggers 
      * and animations that is required for that phase.
-     * @param attackDirection - Vector3f the direction of the player required in 
+     * @param point - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
      */
     public void updateMob(Vector3f point) {

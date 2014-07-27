@@ -7,7 +7,6 @@ import com.jme3.input.InputManager;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import jme3utilities.TimeOfDay;
 
@@ -29,17 +28,15 @@ public class GameScene {
      * GameScene will combine all the entities of the entire game into a node 
      * for a reverance point for the game engine.
      * @param selectedMap - the desired map to load.
-     * @param Assetmanager - Assetmanager passed through from main game.
-     * @param ViewPort - ViewPort required for water, contains position of camara.
+     * @param assetManager - Assetmanager passed through from main game.
+     * @param viewPort - ViewPort required for water, contains position of camara.
      */
     public GameScene(int selectedMap, AssetManager assestManager, ViewPort viewPort, 
             Camera cam, BulletAppState bullet, InputManager inMan, LoadingScreen ui) {
         sceneNode = new Node("GameScene");
-        //bullet.getPhysicsSpace().enableDebug(assestManager);
         initCameraPosition(cam, selectedMap);
         initScene(assestManager, viewPort, cam, bullet, selectedMap, ui);
         initMainCharacter(assestManager, inMan, bullet, cam);
-        //ui.update(0.9f);
         initMobs(bullet, assestManager);
     }
     
