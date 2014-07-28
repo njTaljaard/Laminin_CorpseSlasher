@@ -5,8 +5,6 @@
 \usepackage{lipsum}
 \usepackage{hyperref}
 \usepackage{tocloft}
-\usepackage{graphicx}
-\usepackage{float}
 
 \usepackage{setspace, amsmath}
 
@@ -16,7 +14,7 @@
 
 \renewcommand\epigraphflush{flushright}
 \renewcommand\epigraphsize{\normalsize}
-\setlength\epigraphwidth{0.3\textwidth}
+\setlength\epigraphwidth{0.6\textwidth}
 
 \definecolor{titlepagecolor}{cmyk}{1,.60,0,.40}
 
@@ -86,7 +84,7 @@
 
 \noindent
 \titlefont Laminin \par
-\epigraph{XGame - Derivco \\ Corpse Slasher \\  Vision \& Scope.}%
+\epigraph{ XGame - Derivco \\ Corspe Slasher \\ Software Architecture Specification.}%
 {\textit{ 01/08/2014 }\\ \textsc{ }}
 \null\vfill
 \vspace*{4cm}
@@ -115,15 +113,9 @@
 		
 		\begin{tabbing}
 			\hspace*{2.5cm}\=\hspace*{2.5cm}\=\hspace*{8cm}\=\hspace*{3cm} \kill
-			17/05/2014	\> Version 1.0	\> Document Created 							\> Nico Taljaard \\
-			19/05/2014  \> Version 1.0  \> Added Vision									\> Martin Schoeman \\
-			21/05/2014  \> Version 1.0  \> Added High Level Use Case Diagram			\> Martin Schoeman\\
-			22/05/2014  \> Version 1.0  \> Added Sub Level Use Case Diagram				\> Martin Schoeman\\
-			23/05/2014  \> Version 1.0  \> Corrected Page Format						\> Martin Schoeman \\
-			23/05/2014  \> Version 1.0  \> Added Title Page Information					\> Martin Schoeman \\
-			23/05/2014  \> Version 1.0  \> Added Limitations \& Exclusions				\> Martin Schoeman \\
+			28/07/2014	\> Version 1.0	\> Document Created 							\> Nico Taljaard \\
 		\end{tabbing}
-
+		
 	\newpage
 		\renewcommand\contentsname{TABLE OF CONTENTS}
 		\newcommand\contentsnameLC{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Table of Contents}}}
@@ -136,63 +128,59 @@
 			\LARGE\href{https://github.com/njTaljaard/Laminin_CorpseSlasher/}{Git repository: Laminin - Corpse Slasher}
 		\end{flushleft}
 		
-		\newpage
+	\newpage
 		
-		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Vision }}} \addcontentsline{toc}{section}{Vision}
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Functional Requirements }}} \addcontentsline{toc}{section}{Functional Requirements}
+		\vspace{0.1in}
+		
+			\subsection*{Introduction:}
+			\addcontentsline{toc}{subsection}{Introduction}
+			\vspace{0.1in}
+			
+			
+			
+			\vspace{0.2in}
+			\subsection*{Required Functionality:}
+			\addcontentsline{toc}{subsection}{Required Functionality}
+			\vspace{0.1in}
+			
+			
+			
+			\vspace{0.2in}
+			\subsection*{Use Case prioritization / services contracts:}
+			\addcontentsline{toc}{subsection}{Use Case prioritization / services contracts}
+			\vspace{0.1in}
+			
+			
+			
+			\vspace{0.2in}
+			\subsection*{Process specifications:}
+			\addcontentsline{toc}{subsection}{Process specifications}
+			\vspace{0.1in}
+			
+			
+			
+			\vspace{0.2in}
+			\subsection*{Domain Objects:}
+			\addcontentsline{toc}{subsection}{Domain Objects}
+			\vspace{0.1in}
+			
+			
+			
 		\vspace{0.2in}
 		
-		The vision of this project is to create a game that supports multiple platforms, for example android devices and windows computers. The game should be connected to a server where game data can be saved and retrieved real time. The user should be able to log in using a custom log in or an OAuth log in that uses social media like Facebook and Twitter. There must also be a live leader board and achievements. It must be able to develop the game in three months. The project must be developed using only open source and freeware technologies.
-					
-		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Scope}}} \addcontentsline{toc}{section}{Scope}
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Application Design }}} \addcontentsline{toc}{section}{Application Design}
+		\vspace{0.1in}
+		
+		
 		
 		\vspace{0.2in}
 		
-		\begin{figure}[ht!]
-		\centering
-		\includegraphics[width=180mm]{high_level_use_case_diagram}
-		\caption{High level use case diagram}
-		\label{overflow}
-		\end{figure}
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Code Documentation }}} \addcontentsline{toc}{section}{Code Documentation}
+		\vspace{0.1in}
+		
+		
 		
 		\vspace{0.2in}
-		
-		\newpage
-		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Sub-level use case diagrams}}} \addcontentsline{toc}{section}{Sub-level use case diagrams}
-		
-		\vspace{0.2in}
-		
-		\begin{figure}[H]
-		\centering
-		\includegraphics[width=180mm]{login}
-		\caption{Login use case diagram}
-		\label{overflow}
-		\end{figure}
-		
-		\vspace{0.2in}
-		
-		\begin{figure}[H]
-		\centering
-		\includegraphics[width=180mm]{signup}
-		\caption{Sign up use case diagram}
-		\label{overflow}
-		\end{figure}
-		
-		\vspace{0.2in}
-		
-		\begin{figure}[H]
-		\centering
-		\includegraphics[width=180mm]{game_menu}
-		\caption{Game menu use case diagram}
-		\label{overflow}
-		\end{figure}
-		
-		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Limitations \& Exclusions}}} \addcontentsline{toc}{section}{Limitations \& Exclusions}
-		\vspace{0.2in}
-		
-		\begin{itemize}
-  		\item Download, we only have to develop the game. We have no responsibility of distribution.
-  		\item Install, we are not responsible for the development of an installer.
-  		\item Compatibility, the game will not necessarily work with all hardware.
-		\end{itemize}		
 		
 \end{document}
