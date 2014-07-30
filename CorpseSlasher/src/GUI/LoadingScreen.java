@@ -24,6 +24,7 @@ import de.lessvoid.nifty.tools.SizeValue;
 /**
  *
  * @author Gerhard
+ * An extension of the screen class that creates a loading screen for the game
  */
 public class LoadingScreen extends Screens {
     private Nifty nifty;
@@ -33,17 +34,24 @@ public class LoadingScreen extends Screens {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
         build(0.0f);
     }
-
+    /**
+     * 
+     * @param value starting value of progress bar
+     * Just instantiates the builing of the GUI 
+     */
     private void build(float value) {
         nifty = screen.getNifty();
         guiViewPort.addProcessor(screen);
         buildGui(nifty, value);
         nifty.gotoScreen("Loading");
     }
-
+    /**
+     * 
+     * @param nifty the nifty object that has to be designed
+     * @param value the starting value of the progress bar
+     * Helper function to build, adding buttons and labels
+     */
     private void buildGui(Nifty nifty, float value) {
-
-        // System.out.println("attempting");
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
         nifty.addScreen("Loading", new ScreenBuilder("Loading_Screen") {
@@ -95,7 +103,11 @@ public class LoadingScreen extends Screens {
             }
         }.build(nifty));
     }
-
+    /**
+     * 
+     * @param value updates the the loading bar to the value
+     * Updates the loading bar as the graphics and game is being loaded into memory
+     */
     public void update(float value) {
         Element progressBarElement = nifty.getScreen("Loading").findElementByName("Inner_Progress");
         int     MIN_WIDTH          = 32;

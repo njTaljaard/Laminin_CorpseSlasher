@@ -16,21 +16,18 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
-import de.lessvoid.nifty.controls.radiobutton.builder.RadioButtonBuilder;
-import de.lessvoid.nifty.controls.radiobutton.builder.RadioGroupBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
-
+/**
+ * 
+ * @author gerhard
+ * An extension of the screen class to create a Login Screen where the user has to enter a 
+ * Username and password, or chose which social media it wants to login with or create a 
+ * new custom account or retrieve his password
+ */
 public class LoginScreen extends Screens {
 
-    /**
-     *
-     * @param assetManager
-     * @param inputManager
-     * @param audioRenderer
-     * @param guiViewPort
-     */
     public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
                        ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
@@ -51,8 +48,9 @@ public class LoginScreen extends Screens {
     }
 
     /**
-     * helper function for build
-     * @param nifty display object from which the panels and buttons are created
+     * 
+     * @param nifty the nifty object that has to be designed
+     * Helper function to build, adding buttons and labels
      */
     private void buildGui(Nifty nifty) {
         nifty.loadStyleFile("nifty-default-styles.xml");
@@ -116,76 +114,7 @@ public class LoginScreen extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                     }
-                                });
-                                /*control(new RadioGroupBuilder("Selections"));
-                                panel(new PanelBuilder("Radio_Button_Panel") {
-                                    {
-                                        childLayoutHorizontal();
-                                        align(Align.Left);
-                                        valign(VAlign.Top);
-                                        marginLeft("44.4%");
-                                        marginTop("70%");
-                                        height("5%");
-                                        width("15%");
-                                        paddingLeft("7px");
-                                        paddingRight("7px");
-                                        paddingTop("4px");
-                                        paddingBottom("4px");
-                                        visibleToMouse(true);
-                                        panel(new PanelBuilder() {
-                                            {
-                                                childLayoutHorizontal();
-                                                control(new RadioButtonBuilder("Custom_ID") {
-                                                    {
-                                                        width("40px");
-
-                                                        // backgroundImage("Icons/google+.jpg");
-                                                        group("Selections");
-                                                    }
-                                                });
-                                            }
-                                        });
-                                        panel(new PanelBuilder() {
-                                            {
-                                                childLayoutHorizontal();
-                                                control(new RadioButtonBuilder("Facebook_ID") {
-                                                    {
-                                                        width("40px");
-
-                                                        // backgroundImage("Icons/fb.jpg");
-                                                        group("Selections");
-                                                    }
-                                                });
-                                            }
-                                        });
-                                        panel(new PanelBuilder() {
-                                            {
-                                                childLayoutHorizontal();
-                                                control(new RadioButtonBuilder("Twitter_ID") {
-                                                    {
-                                                        width("40px");
-
-                                                        // backgroundImage("Icons/twitter.jpg");
-                                                        group("Selections");
-                                                    }
-                                                });
-                                            }
-                                        });
-                                        panel(new PanelBuilder() {
-                                            {
-                                                childLayoutHorizontal();
-                                                control(new RadioButtonBuilder("Google+_ID") {
-                                                    {
-                                                        width("40px");
-
-                                                        // backgroundImage("Icons/google+.jpg");
-                                                        group("Selections");
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });*/
+                                });                                
                                 control(new ButtonBuilder("Connect_ID", "Login") {
                                     {
                                         alignCenter();

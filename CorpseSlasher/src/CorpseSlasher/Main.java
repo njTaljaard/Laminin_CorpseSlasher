@@ -8,7 +8,6 @@ import GUI.UserInterfaceManager;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
-import com.jme3.system.AppSettings;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
@@ -99,7 +98,11 @@ public class Main extends SimpleApplication implements ScreenController {
 
         // TODO: add render code
     }
-
+    /**
+     * 
+     * @return an array of booleans checking which settings to activate.
+     * Loading the settings based on the .txt file 
+     */
     public boolean[] loadSettings() {
         boolean[] settings2 = new boolean[10];
         int       pos       = 0;
@@ -154,7 +157,13 @@ public class Main extends SimpleApplication implements ScreenController {
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.changeState();
     }
-
+    /**
+     * 
+     * @param nifty the object containing all the components of the GUI
+     * @param screen the actual screen panel of the nifty GUI
+     * at the binding of the create account screen all the appropriate text field's data are 
+     * collected and checked
+     */
     @Override
     public void bind(Nifty nifty, Screen screen) {
         usernameTxt   = screen.findNiftyControl("Username_Input_ID", TextField.class);
@@ -173,13 +182,19 @@ public class Main extends SimpleApplication implements ScreenController {
 
     @Override
     public void onEndScreen() {}
-
+    /**
+     * 
+     * @param id the ID of radio button selected
+     * @param event the state of the selected radio button
+     * on a state change the button event is updated
+     */
     @NiftyEventSubscriber(id = "Selections")
     public void radioButtons(final String id, final RadioButtonGroupStateChangedEvent event) {
         selectedButton = event;
-        System.out.println(selectedButton.getSelectedId() + " was chosen");
     }
-
+    /**
+     * After a successful login the loading screen is loaded and the game starts to load
+     */
     public void loadingScreen() {
 
         // System.out.println(selectedButton.getSelectedId() + " was chosen");
@@ -198,12 +213,16 @@ public class Main extends SimpleApplication implements ScreenController {
             loadGame();
         }
     }
-
+    /**
+     * Changes the screen to the new account screen
+     */
     public void newAccount() {
         guiViewPort.getProcessors().remove(0);
         UI.newAccount();
     }
-
+    /**
+     * Checks all the appropriate fields whther they are valid and then adds the data to the database and logins in
+     */
     public void createNewAccount() {
         if (accPassword.getRealText().equals(accPasswordRE.getRealText())) {
             if (ClientConnection.CheckUsernameAvailable(accUser.getRealText())) {
@@ -223,36 +242,56 @@ public class Main extends SimpleApplication implements ScreenController {
             System.out.println("Missmatch password");
         }
     }
-
+    /**
+     * Goes to the retrieve password screen
+     */
     public void retrievePassword() {
         guiViewPort.getProcessors().remove(0);
         UI.retrievePassword();
     }
-
+    /**
+     * Goes to the login screen
+     */
     public void loginScreen() {
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         ClientConnection.RetrievePassword(retUser.getRealText());
         UI.loginScreen();
     }
-
+    /**
+     * Quits the game
+     */
     public void quitGame() {
         System.exit(0);
     }
-
+    /**
+     * Goes to the graphics settings from the option screen
+     */
     public void graphicsScreen() {
         UI.goTo("Graphics_Settings");
     }
+    /**
+     * Goes to the audio settings from the option screen
+     */
 
     public void audioScreen() {
         UI.goTo("Audio_Settings");
     }
+    /**
+     * Goes to the difficulty settings from the option screen
+     */
 
     public void difficultyScreen() {
         UI.goTo("Difficulty_Settings");
     }
+    /**
+     * Goes back to the login screen
+     */
     public void goBack() {
         UI.goTo("Login_Screen");
     }
+    /**
+     * Logins in via the selected social media
+     */
     public void socialLogin(String type){
         switch(type)
         {
