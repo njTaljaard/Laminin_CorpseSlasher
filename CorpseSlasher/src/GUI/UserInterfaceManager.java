@@ -31,6 +31,9 @@ public final class UserInterfaceManager {
     private ActionListener  action;
     private Screens   loading;
     private Screens  settings;
+    private Screens login;
+    private Screens newAcc;
+    private Screens password;
     /**
      * 
      * @param assetManager
@@ -56,22 +59,25 @@ public final class UserInterfaceManager {
      * Creates the login screen
      */
     public void loginScreen() {
-        LoginScreen login = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
+        login = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                 Screen);
+        login.build();
     }
     /**
      * Creates the new account account screen
      */
     public void newAccount() {
-        NewAccount newAcc = new NewAccount(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
+         newAcc = new NewAccount(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                            Screen);
+        newAcc.build();
     }
     /**
      * Creates the retrieve password screen
      */
     public void retrievePassword() {
-        RetrievePassword password = new RetrievePassword(assetManager, inputManager, audioRenderer, guiViewPort,
+        password = new RetrievePassword(assetManager, inputManager, audioRenderer, guiViewPort,
                                         appState, app, Screen);
+        password.build();
     }
     /**
      * Updates the state of the game so that settings menu can be called after login only

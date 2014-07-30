@@ -35,12 +35,11 @@ public class NewAccount extends Screens {
     NewAccount(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort,
                AppStateManager appState, Application app,NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);     
-        build();
     }
     /**
      * builds the new account screen
      */
-    private void build() {
+    public void build() {
         Nifty nifty = screen.getNifty();
         
         guiViewPort.addProcessor(screen);

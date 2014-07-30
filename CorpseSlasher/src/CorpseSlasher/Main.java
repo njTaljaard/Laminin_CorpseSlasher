@@ -2,6 +2,7 @@ package CorpseSlasher;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import GUI.LoadingScreen;
 import GUI.LoginScreen;
 import GUI.UserInterfaceManager;
 
@@ -132,7 +133,7 @@ public class Main extends SimpleApplication implements ScreenController {
     }
 
     public void loadGame() {
-
+        System.out.println("here");
         boolean[] settings2 = loadSettings();
 
         // Settings file loaded and now must be used in program
@@ -143,6 +144,7 @@ public class Main extends SimpleApplication implements ScreenController {
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
+        System.out.println("boer");
         gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager, UI.getLoadingScreen(),
                                   settingsF);
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
@@ -156,6 +158,7 @@ public class Main extends SimpleApplication implements ScreenController {
         loggedIn = true;
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.changeState();
+        System.out.println("over here");
     }
     /**
      * 
@@ -217,7 +220,7 @@ public class Main extends SimpleApplication implements ScreenController {
      * Changes the screen to the new account screen
      */
     public void newAccount() {
-        guiViewPort.getProcessors().remove(0);
+        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.newAccount();
     }
     /**
@@ -246,7 +249,7 @@ public class Main extends SimpleApplication implements ScreenController {
      * Goes to the retrieve password screen
      */
     public void retrievePassword() {
-        guiViewPort.getProcessors().remove(0);
+        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.retrievePassword();
     }
     /**
@@ -287,6 +290,7 @@ public class Main extends SimpleApplication implements ScreenController {
      * Goes back to the login screen
      */
     public void goBack() {
+        System.out.println("hello");
         UI.goTo("Login_Screen");
     }
     /**

@@ -446,7 +446,7 @@ public class SettingsScreen extends Screens {
      * @param _screen the ID of the settings screen to be changed to
      * Changes to the appropriate screen based on the selection, in the options screen
      */
-    public void gotTo(String _screen) {
+    public void goTo(String _screen) {
         nifty = screen.getNifty();
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         guiViewPort.addProcessor(screen);

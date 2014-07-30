@@ -30,13 +30,12 @@ import de.lessvoid.nifty.tools.Color;
 public class RetrievePassword extends Screens {
 
     RetrievePassword(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
-             super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);     
-        build();   
+             super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);       
     }
     /**
      * Builds the retrieve password screen
      */
-    private void build() {
+    public void build() {
         Nifty nifty = screen.getNifty();
 
         guiViewPort.addProcessor(screen);

@@ -32,14 +32,12 @@ public class LoginScreen extends Screens {
                        ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
 
-        // loginScreen        = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
-        build();
     }
 
     /**
      * Buiilds the NiftyGui
      */
-    private void build() {
+    public void build() {
         Nifty nifty = screen.getNifty();
 
         guiViewPort.addProcessor(screen);

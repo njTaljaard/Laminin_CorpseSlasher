@@ -17,7 +17,7 @@ import com.jme3.renderer.ViewPort;
  * @author Gerhard
  * The super class of all screens
  */
-public class Screens 
+abstract class Screens 
 {
     protected AssetManager    assetManager;
     protected InputManager    inputManager;
@@ -51,6 +51,7 @@ public class Screens
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         screen.getNifty().gotoScreen(_screen);
     }
+    void build(){};
 
 
 }
