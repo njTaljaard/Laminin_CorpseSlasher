@@ -24,15 +24,15 @@ import de.lessvoid.nifty.tools.Color;
 
 public class LoginScreen extends Screens {
 
-/**
- *
- * @param assetManager
- * @param inputManager
- * @param audioRenderer
- * @param guiViewPort
- */
-public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
-                   ViewPort guiViewPort, AppStateManager appState, Application app,NiftyJmeDisplay screen) {
+    /**
+     *
+     * @param assetManager
+     * @param inputManager
+     * @param audioRenderer
+     * @param guiViewPort
+     */
+    public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
+                       ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
 
         // loginScreen        = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
@@ -117,7 +117,7 @@ public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRe
                                         visibleToMouse(true);
                                     }
                                 });
-                                control(new RadioGroupBuilder("Selections"));
+                                /*control(new RadioGroupBuilder("Selections"));
                                 panel(new PanelBuilder("Radio_Button_Panel") {
                                     {
                                         childLayoutHorizontal();
@@ -185,7 +185,7 @@ public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRe
                                             }
                                         });
                                     }
-                                });
+                                });*/
                                 control(new ButtonBuilder("Connect_ID", "Login") {
                                     {
                                         alignCenter();
@@ -231,18 +231,13 @@ public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRe
                                 paddingTop("4px");
                                 paddingBottom("4px");
                                 visibleToMouse(true);
-                                panel(new PanelBuilder() {
-                                    {
-                                        childLayoutHorizontal();
-                                        backgroundImage("Icons/zombie.jpg");
-                                        width("40px");
-                                    }
-                                });
+                     
                                 panel(new PanelBuilder() {
                                     {
                                         childLayoutHorizontal();
                                         backgroundImage("Icons/fb.jpg");
                                         width("40px");
+                                        interactOnClick("socialLogin(1)");
                                     }
                                 });
                                 panel(new PanelBuilder() {
@@ -250,6 +245,7 @@ public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRe
                                         childLayoutHorizontal();
                                         backgroundImage("Icons/twitter.jpg");
                                         width("40px");
+                                        interactOnClick("socialLogin(2)");
                                     }
                                 });
                                 panel(new PanelBuilder() {
@@ -257,6 +253,7 @@ public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRe
                                         childLayoutHorizontal();
                                         backgroundImage("Icons/google+.jpg");
                                         width("40px");
+                                        interactOnClick("socialLogin(3)");
                                     }
                                 });
                             }
