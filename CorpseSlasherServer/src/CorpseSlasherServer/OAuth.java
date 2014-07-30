@@ -22,13 +22,25 @@ import java.net.URLEncoder;
 import java.util.Random;
 
 /**
+ * @author Laminin
+ * @param Derivco
+ * @param University of Pretoria
+ * @param COS301
  *
- * @author Martin
+ * OAuth - Handles the social login of facebook and google+ using OAuth
+ * Authentication.
  */
 public class OAuth {
 
     private static BufferedReader in;
 
+    /**
+     *
+     * acceptCode receive a string that is sent to localhost:8080
+     *
+     * @return returns the code that was received from facebook or google+, for
+     * example the access token(which consist of a code)
+     */
     private static String acceptCode() {
         try {
             ServerSocket serverSocket = new ServerSocket(8080, 0, InetAddress.getByName("localhost"));
@@ -46,6 +58,18 @@ public class OAuth {
         }
     }
 
+    /**
+     *
+     * facebookLogin opens the user default browser at the facebook login
+     * screen, so that the user can login and accept the games access
+     * permission.
+     *
+     * @return return true if the user logs in and accept the games access
+     * permission.
+     * @throws OAuthSystemException throws an exception if there is an OAuth
+     * error.
+     * @throws IOException throws an exception if there is and IO error.
+     */
     public static boolean facebookLogin() throws OAuthSystemException, IOException {
 
         try {
@@ -55,8 +79,6 @@ public class OAuth {
                     .setRedirectURI("http://localhost:8080/")
                     .buildQueryMessage();
 
-            //in web application you make redirection to uri:
-            //System.out.println("Visit: " + request.getLocationUri() + "\nand grant permission");
             try {
                 URI domain = new URI(request.getLocationUri());
                 java.awt.Desktop.getDesktop().browse(domain);
@@ -87,7 +109,7 @@ public class OAuth {
             System.out.println(
                     "Access Token: " + oAuthResponse.getAccessToken() + ", Expires in: " + oAuthResponse
                     .getExpiresIn());
-            Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
+            //Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
             return true;
         } catch (OAuthProblemException e) {
             System.out.println("OAuth error: " + e.getError());
@@ -96,6 +118,17 @@ public class OAuth {
         }
     }
 
+    /**
+     *
+     * googleLogin opens the user default browser at the google+ login screen,
+     * so that the user can login and accept the games access permission.
+     *
+     * @return return true if the user logs in and accept the games access
+     * permission.
+     * @throws OAuthSystemException throws an exception if there is an OAuth
+     * error.
+     * @throws IOException throws an exception if there is and IO error.
+     */
     public static boolean googleLogin() throws OAuthSystemException, IOException {
 
 
@@ -110,11 +143,11 @@ public class OAuth {
         String code = acceptCode();
 
         if (code.compareTo("access_denied") == 0) {
-            Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
+            //Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
             return false;
         }
 
-        Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
+        //Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
         System.out.println(code);
 
 
@@ -148,56 +181,55 @@ public class OAuth {
 
         return true;
     }
-    
     //Could not get Twitter Oauth working
     /*public static boolean twitterLogin() throws OAuthSystemException, IOException {
 
-        String url = "https://api.twitter.com/oauth/request_token";
-        String in = "";
-        String timeStamp = Long.toString(System.currentTimeMillis()/1000);
+     String url = "https://api.twitter.com/oauth/request_token";
+     String in = "";
+     String timeStamp = Long.toString(System.currentTimeMillis()/1000);
         
-        //create a nonce for twitter by random 32 characters string, convert string to UTF8 and base64 encode the UTF8
-        //generate random key. need to add check for duplicate keys, by storing each key.
-        char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 32; i++) {
-            char c = chars[random.nextInt(chars.length)];
-            sb.append(c);
-        }
-        String output = sb.toString();
-        byte utfText[] = output.getBytes("UTF8");
-        byte[] encoded = Base64.encodeBase64(utfText);
+     //create a nonce for twitter by random 32 characters string, convert string to UTF8 and base64 encode the UTF8
+     //generate random key. need to add check for duplicate keys, by storing each key.
+     char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+     StringBuilder sb = new StringBuilder();
+     Random random = new Random();
+     for (int i = 0; i < 32; i++) {
+     char c = chars[random.nextInt(chars.length)];
+     sb.append(c);
+     }
+     String output = sb.toString();
+     byte utfText[] = output.getBytes("UTF8");
+     byte[] encoded = Base64.encodeBase64(utfText);
 
-        try {
-            HttpClient client = new HttpClient();
-            PostMethod method = new PostMethod(url);
+     try {
+     HttpClient client = new HttpClient();
+     PostMethod method = new PostMethod(url);
             
 
-            //method.addParameter("OAuth oauth_nonce", new String(encoded));
-            //method.addParameter("oauth_callback", "http://localhost:8080");
-            //method.addParameter("client_secret", "Y9FtcLtelh1XVaJfFsfFhQayUJd37Kv9QL2UDtjwl0DiWx5584");
-            //method.addParameter("oauth_signature_method", "HMAC-SHA1");
-            //method.addParameter("oauth_timestamp", timeStamp);
-            //method.addParameter("oauth_consumer_key", "44u5xy95Dpet3iYfxX7hcrlf2");
-            method.addParameter("oauth_signature", "");
-            //method.addParameter("oauth_version", "1.0");
+     //method.addParameter("OAuth oauth_nonce", new String(encoded));
+     //method.addParameter("oauth_callback", "http://localhost:8080");
+     //method.addParameter("client_secret", "Y9FtcLtelh1XVaJfFsfFhQayUJd37Kv9QL2UDtjwl0DiWx5584");
+     //method.addParameter("oauth_signature_method", "HMAC-SHA1");
+     //method.addParameter("oauth_timestamp", timeStamp);
+     //method.addParameter("oauth_consumer_key", "44u5xy95Dpet3iYfxX7hcrlf2");
+     method.addParameter("oauth_signature", "");
+     //method.addParameter("oauth_version", "1.0");
             
-            int statusCode = client.executeMethod(method);
+     int statusCode = client.executeMethod(method);
 
-            if (statusCode != -1) {
+     if (statusCode != -1) {
 
-                in = method.getResponseBodyAsString();
+     in = method.getResponseBodyAsString();
 
-            }
+     }
 
-            System.out.println(in);
+     System.out.println(in);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+     } catch (Exception e) {
+     e.printStackTrace();
+     return false;
+     }
 
-        return true;
-    }*/
+     return true;
+     }*/
 }
