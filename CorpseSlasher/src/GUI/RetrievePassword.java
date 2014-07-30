@@ -24,6 +24,8 @@ import de.lessvoid.nifty.tools.Color;
 /**
  *
  * @author Gerhard
+ * An extension of the screens class, allowing the user to retrieve lost or forgotten passwords
+ * via the use of his account username.
  */
 public class RetrievePassword extends Screens {
 
@@ -31,7 +33,9 @@ public class RetrievePassword extends Screens {
              super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);     
         build();   
     }
-
+    /**
+     * Builds the retrieve password screen
+     */
     private void build() {
         Nifty nifty = screen.getNifty();
 
@@ -39,7 +43,11 @@ public class RetrievePassword extends Screens {
         buildGui(nifty);
         nifty.gotoScreen("Retrieve_Password");
     }
-
+    /**
+     * 
+     * @param nifty the nifty object that has to be designed
+     * Helper function to build, adding buttons and labels
+     */
     private void buildGui(Nifty nifty) {
        nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");

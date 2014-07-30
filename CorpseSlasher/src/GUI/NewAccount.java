@@ -28,6 +28,7 @@ import de.lessvoid.nifty.tools.Color;
 /**
  *
  * @author Gerhard
+ * An extension of the screen class allowing the creatation of new custom accounts
  */
 public class NewAccount extends Screens {
 
@@ -36,7 +37,9 @@ public class NewAccount extends Screens {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);     
         build();
     }
-
+    /**
+     * builds the new account screen
+     */
     private void build() {
         Nifty nifty = screen.getNifty();
         
@@ -44,7 +47,11 @@ public class NewAccount extends Screens {
         buildGui(nifty);
         nifty.gotoScreen("New_Account_Screen");
     }
-
+    /**
+     * 
+     * @param nifty the nifty object that has to be designed
+     * Helper function to build, adding buttons and labels
+     */
     private void buildGui(Nifty nifty) {
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");

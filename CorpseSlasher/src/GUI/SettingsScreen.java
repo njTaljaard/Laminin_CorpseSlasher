@@ -16,20 +16,18 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
-import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.checkbox.builder.CheckboxBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
-import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 /**
  *
  * @author Gerhard
+ * An extension of the screens class building a colelction of different setting screens
  */
 public class SettingsScreen extends Screens {
     private Nifty nifty;
@@ -39,7 +37,9 @@ public class SettingsScreen extends Screens {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
         buildGui();
     }
-
+    /**
+     * Builds all the different screens related to any settings such as auido, graphics and difficulty
+     */
     private void buildGui() {
         nifty = screen.getNifty();
         nifty.loadStyleFile("nifty-default-styles.xml");
@@ -441,7 +441,11 @@ public class SettingsScreen extends Screens {
             }
         }.build(nifty));
     }
-
+    /**
+     * 
+     * @param _screen the ID of the settings screen to be changed to
+     * Changes to the appropriate screen based on the selection, in the options screen
+     */
     public void gotTo(String _screen) {
         nifty = screen.getNifty();
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
