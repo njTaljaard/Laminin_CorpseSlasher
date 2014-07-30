@@ -46,4 +46,11 @@ public class Screens
         this.app           = app;  
         this.screen        = screen;
     }
+
+    void goTo(String _screen) {
+        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+        screen.getNifty().gotoScreen(_screen);
+    }
+
+
 }

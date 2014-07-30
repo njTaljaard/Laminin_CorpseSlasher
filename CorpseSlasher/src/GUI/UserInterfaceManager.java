@@ -29,8 +29,8 @@ public final class UserInterfaceManager {
     private Application     app;
     private NiftyJmeDisplay Screen;
     private ActionListener  action;
-    private LoadingScreen   loading;
-    private SettingsScreen  settings;
+    private Screens   loading;
+    private Screens  settings;
     /**
      * 
      * @param assetManager
@@ -94,7 +94,7 @@ public final class UserInterfaceManager {
 
                     if (menuOpen) {
                         inputManager.setCursorVisible(true);
-                        settings.gotTo("Option_Screen");
+                        settings.goTo("Option_Screen");
                     } else {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
                         inputManager.setCursorVisible(false);
@@ -125,7 +125,7 @@ public final class UserInterfaceManager {
      * Returns the loading screen object to be updated as the game is being loaded
      */
     public LoadingScreen getLoadingScreen() {
-        return loading;
+        return (LoadingScreen)loading;
     }
     /**
      * 
@@ -133,7 +133,7 @@ public final class UserInterfaceManager {
      * Changes to the screen ID coming in
      */
     public void goTo(String _screen) {
-        settings.gotTo(_screen);
+        settings.goTo(_screen);
     }
 }
 
