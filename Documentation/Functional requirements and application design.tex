@@ -120,6 +120,9 @@
 			29/07/2014	\> Version 1.0	\> Added game use case diagram					\> Nico Taljaard \\
 			30/07/2014	\> Version 1.1	\> Change document structure					\> Nico Taljaard \\
 			30/07/2014	\> Version 1.1	\> Added introduction							\> Nico Taljaard \\
+			30/07/2014  \> Version 1.1  \> Added Server use case diagram				\> Martin Schoeman\\
+			30/07/2014  \> Version 1.1  \> Added OAuth use case diagram					\> Martin Schoeman\\
+			30/07/2014  \> Version 1.1  \> Added server class diagram					\> Martin Schoeman\\
 		\end{tabbing}
 		
 	\newpage
@@ -181,14 +184,28 @@
 				\addcontentsline{toc}{subsubsection}{User-interface Diagrams}
 				\vspace{0.2in}
 				
-				
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=140mm]{UML_Diagram/Use_Case/OAuth.jpg}
+					\caption{Login using social media(OAuth)}
+					\end{figure}
 				
 				\vspace{0.2in}
 				\subsubsection*{Server Diagrams:}
 				\addcontentsline{toc}{subsubsection}{Server Diagrams}
 				\vspace{0.2in}
 				
-				
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=140mm]{UML_Diagram/Use_Case/Server.jpg}
+					\caption{Server Functionality}
+					\end{figure}
+					
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=140mm]{UML_Diagram/Use_Case/Client.jpg}
+					\caption{User Interaction With Server}
+					\end{figure}
 				
 			\vspace{0.2in}
 			\subsection*{Use Case prioritization:}
@@ -202,6 +219,8 @@
 					\begin{itemize}
 						\item Update process between frames.
 						\item Update of scene elements.
+						\item Server Functionality.
+						\item User Interaction With Server.
 					\end{itemize}	
 					
 				\vspace{0.2in}
@@ -210,8 +229,9 @@
 				\vspace{0.2in}
 				
 					\begin{itemize}
-						\item Actions available to player
-						\item Actions available to mobs
+						\item Actions available to player.
+						\item Actions available to mobs.
+						\item Login using social media(OAuth).
 					\end{itemize}
 				
 				\vspace{0.2in}
@@ -299,12 +319,53 @@
 				\addcontentsline{toc}{subsubsection}{User-interface Diagrams}
 				\vspace{0.2in}
 				
-				
+				\vspace{0.1in}
+					\hspace{5mm}Login using social media(OAuth)
+					\begin{itemize}
+						\item Pre-Condition: \\
+							User must have a google or facebook account. \\
+							User must login with his facebook or google profile. \\
+							User must grant permission for the game to access social information.
+						\item Post-Condition: \\
+							User must be logged in the game. \\
+							Server must have an access token of the social media used to log in.			
+						\item Request and Results Data Structures \\
+						
+					\end{itemize}
 				
 				\vspace{0.2in}
 				\subsubsection*{Server Diagrams:}
 				\addcontentsline{toc}{subsubsection}{Server Diagrams}
 				\vspace{0.2in}
+				
+				\vspace{0.1in}
+					\hspace{5mm}Server Functionality
+					\begin{itemize}
+						\item Pre-Condition: \\
+							Server socket needs to be created. \\
+							Connection from server to database needs to be established. \\
+							Server needs to listen for incoming connection.
+						\item Post-Condition: \\
+							Server needs to accept all incoming connection from the game. \\
+							Server must handle all functions requested from user(game).\\
+							Server needs to store and retrieve data from the database.			
+						\item Request and Results Data Structures \\
+						
+					\end{itemize}
+					
+					\vspace{0.1in}
+					User Interaction With Server
+					\begin{itemize}
+						\item Pre-Condition: \\
+							Client socket needs to be created. \\
+							Client socket must connect with server. \\
+							Client needs to send data to the server. 
+						\item Post-Condition: \\
+							Client must be connected to server. \\
+							Client needs to receive data from server.			
+						\item Request and Results Data Structures \\
+						
+					\end{itemize}
 					
 			\vspace{0.2in}
 			\subsection*{Process specifications:}
@@ -327,6 +388,13 @@
 					\centering
 					\includegraphics[width=180mm]{UML_Diagram/Class/Game_Classes.jpg}
 					\caption{Game level class diagram}
+					\label{overflow}
+					\end{figure}
+					
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=180mm]{UML_Diagram/Class/Server_Classes.jpg}
+					\caption{Server level class diagram}
 					\label{overflow}
 					\end{figure}
 					
