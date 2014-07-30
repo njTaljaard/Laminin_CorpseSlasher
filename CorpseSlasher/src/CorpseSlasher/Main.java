@@ -2,13 +2,13 @@ package CorpseSlasher;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import GUI.LoadingScreen;
 import GUI.LoginScreen;
 import GUI.UserInterfaceManager;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
+import com.jme3.system.AppSettings;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
@@ -18,7 +18,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.xml.xpp3.Attributes;
 
 import jme3utilities.TimeOfDay;
 
@@ -26,7 +25,10 @@ import jme3utilities.sky.SkyControl;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Properties;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+import java.util.Scanner;
 
 /**
  * @author normenhansen
@@ -59,7 +61,13 @@ public class Main extends SimpleApplication implements ScreenController {
 
     public static void main(String[] args) {
         Main app = new Main();
-
+       /* app.setShowSettings(false);
+        app.setDisplayFps(false);
+        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+        AppSettings settings = new AppSettings(true);
+        settings.setResolution(1366, 768);
+        
+        app.setSettings(settings);*/
         app.start();
     }
 
@@ -72,13 +80,11 @@ public class Main extends SimpleApplication implements ScreenController {
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
-
-        //inputManager.deleteMapping(INPUT_MAPPING_EXIT);
+        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
         ClientConnection.StartClientConnection();
+        UI.optionScreen();
         UI.loginScreen();
-
-        // UI.loadingScreen();
     }
 
     @Override
@@ -94,18 +100,48 @@ public class Main extends SimpleApplication implements ScreenController {
         // TODO: add render code
     }
 
+    public boolean[] loadSettings() {
+        boolean[] settings2 = new boolean[10];
+        int       pos       = 0;
+
+        try {
+            Scanner in = new Scanner(new FileReader("GameSettings.txt")).useDelimiter("=");
+
+            while (in.hasNext()) {
+                String next = in.next();
+
+                System.out.println(next);
+
+                if (next.equals("true")) {
+                    settings2[pos++] = true;
+                }
+
+                if (next.equals("false")) {
+                    settings2[pos++] = false;
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+
+
+        return settings2;
+    }
+
     public void loadGame() {
 
-        /**
-         * @TODO load settings here.
-         */
+        boolean[] settings2 = loadSettings();
+
+        // Settings file loaded and now must be used in program
+        GameSettings settingsF = new GameSettings(settings2);
+
         inputManager.setCursorVisible(false);
         flyCam.setEnabled(true);
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
-        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, 
-                inputManager, UI.getLoadingScreen());
+        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager, UI.getLoadingScreen(),
+                                  settingsF);
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
 
         SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
@@ -115,7 +151,8 @@ public class Main extends SimpleApplication implements ScreenController {
         stateManager.attach(timeOfDay);
         timeOfDay.setRate(350f);
         loggedIn = true;
-        //guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());       
+        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+        UI.changeState();
     }
 
     @Override
@@ -129,13 +166,6 @@ public class Main extends SimpleApplication implements ScreenController {
         accPassword   = screen.findNiftyControl("Password_Input_ID_2", TextField.class);
         accPasswordRE = screen.findNiftyControl("Password_Input_ID_2_2", TextField.class);
         retUser       = screen.findNiftyControl("Username_Input_ID_3", TextField.class);
-
-        if (nifty.getScreen("Loading") != null) {
-            progressBarElement = nifty.getScreen("Loading").findElementByName("Inner_Progress");
-            UI.getLoadingScreen().set(progressBarElement);
-            loadGame();
-            //UI.getLoadingScreen().update(0.5f);
-        }
     }
 
     @Override
@@ -157,12 +187,14 @@ public class Main extends SimpleApplication implements ScreenController {
 
         if (success) {
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-            //UI.loadingScreen();
+
+            // UI.loadingScreen();
             loadGame();
         } else {
             System.out.println("Username or password incorrect");
-              guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-            //UI.loadingScreen();
+            guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+
+            // UI.loadingScreen();
             loadGame();
         }
     }
@@ -201,6 +233,36 @@ public class Main extends SimpleApplication implements ScreenController {
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         ClientConnection.RetrievePassword(retUser.getRealText());
         UI.loginScreen();
+    }
+
+    public void quitGame() {
+        System.exit(0);
+    }
+
+    public void graphicsScreen() {
+        UI.goTo("Graphics_Settings");
+    }
+
+    public void audioScreen() {
+        UI.goTo("Audio_Settings");
+    }
+
+    public void difficultyScreen() {
+        UI.goTo("Difficulty_Settings");
+    }
+    public void goBack() {
+        UI.goTo("Login_Screen");
+    }
+    public void socialLogin(String type){
+        switch(type)
+        {
+            case "1":
+                break;
+            case "2":
+                break;
+            case "3":
+                break;
+        }
     }
 }
 
