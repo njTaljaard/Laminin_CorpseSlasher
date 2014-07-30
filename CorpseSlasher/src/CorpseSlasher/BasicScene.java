@@ -53,9 +53,6 @@ public class BasicScene {
     /**
      * BasicScene will create the scene attached to sceneNode.
      * @param mapName - Map that you desire to load.
-     * @param assMan - Assetmanager passed through from main game.
-     * @param vp - ViewPort required for water, contains position of camara.
-     * @param cam - Camera required to create a day night skybox system.
      */
     public BasicScene(String mapName) {
         sceneName = mapName;
@@ -71,7 +68,7 @@ public class BasicScene {
      * @param vp - ViewPort required for water, contains position of camara.
      * @param cam - Camera required to create a day night skybox system.
      * @param bullet - BulletAppState which controls the physics of the scene.
-     * @param  app - SimpleApplication to retrieve camera positions.
+     * @param ui - SimpleApplication to retrieve camera positions.
      */
     public void createScene(AssetManager assMan, ViewPort vp, Camera cam, 
             BulletAppState bullet, LoadingScreen ui,GameSettings settings) {
@@ -118,7 +115,6 @@ public class BasicScene {
      * initTerrain will load the Scene j3o for the appropriate scene and attach
      * it to the basic scene node. Add collision detection to the terrain.
      * @param assMan - Assetmanager passed through from main game.
-     * @param cam - Camera required to create a day night skybox system.
      * @param bullet - BulletAppState which controls the physics of the scene.
      */
     private void initTerrain(AssetManager assMan, BulletAppState bullet) {

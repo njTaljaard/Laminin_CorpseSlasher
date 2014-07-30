@@ -16,11 +16,9 @@ import com.jme3.animation.LoopMode;
 public class MobAnimControl {
     
     private AnimEventListener animationListener;
-    private boolean attack;
     
     public MobAnimControl() {
         initAnimEventListener();
-        attack = false;
     }
     
     /**
@@ -33,14 +31,9 @@ public class MobAnimControl {
             public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
                 switch (animName) {
                     case "Walk":
-                        if (channel.getLoopMode().equals(LoopMode.Loop)) {
-                            channel.setAnim("Walk", 0.0f);
-                            channel.setLoopMode(LoopMode.Loop);
-                            channel.setSpeed(1.0f);
-                        } else {
-                            channel.setAnim("Stand", 0.0f);
-                            channel.setLoopMode(LoopMode.Loop);
-                        }
+                        channel.setAnim("Walk", 1.5f);
+                        channel.setLoopMode(LoopMode.Loop);
+                        channel.setSpeed(1.5f);
                         break;                    
                     case "Stand":
                         channel.setAnim("Stand", 0.0f);
@@ -48,9 +41,9 @@ public class MobAnimControl {
                         channel.setSpeed(1.0f);
                         break;                        
                     case "Attack":
-                        channel.setAnim("Stand", 0.0f);
+                        channel.setAnim("Walk", 0.0f);
                         channel.setLoopMode(LoopMode.Loop);
-                        channel.setSpeed(1.0f);
+                        channel.setSpeed(1.5f);
                         break;
                     case "Passive":
                         
@@ -65,36 +58,46 @@ public class MobAnimControl {
     
     /**
      * updateCharacterAnimations updates animations when required.
+     * @param channel - AnimChannel to change and read current animations.
+     * @param aggro - Boolean if mob has been aggroed by the player.
+     * @param walkAttack - Boolean if mob should attack while walking.
+     * @param attack - Boolean if mob can be stationary and attack.
+     * @param passive - Boolean if mob is not aggroed and at spawn position.
      */
-    public boolean updateMobAnimations(AnimChannel channel, boolean walk, boolean passive) {        
-        if (walk) {
-            if (channel.getAnimationName().equals("Stand")) {
-                channel.setAnim("Attack");
-                channel.setLoopMode(LoopMode.DontLoop);
-                channel.setSpeed(1.15f);
-            } else {
+    public void updateMobAnimations(AnimChannel channel, boolean aggro, 
+            boolean walkAttack, boolean attack, boolean passive) {
+        if (aggro) {                
+            if (walkAttack) {
                 if (!channel.getAnimationName().equals("Attack")) {
-                    channel.setAnim("Attack", 1.0f);
+                    channel.setAnim("WalkAttack", 0.05f);
                     channel.setLoopMode(LoopMode.DontLoop);
-                    channel.setSpeed(1.15f);
+                    channel.setSpeed(1.0f);
+                }
+            } else if (attack) {
+                if (!channel.getAnimationName().equals("Attack")) {
+                    channel.setAnim("Attack", 0.05f);
+                    channel.setLoopMode(LoopMode.DontLoop);
+                    channel.setSpeed(1.0f);
+                }
+            } else {
+                if (!channel.getAnimationName().equals("Walk")){
+                    channel.setAnim("Walk");
+                    channel.setLoopMode(LoopMode.Loop);
+                    channel.setSpeed(1.5f);
                 }
             }
-        }
-        
-        if (!passive) {
-            if (channel.getAnimationName().equals("Stand")) {
-                channel.setAnim("Walk");
-                channel.setLoopMode(LoopMode.Loop);
-                channel.setSpeed(1.5f);
-            }
         } else {
-            if (!channel.getAnimationName().equals("Attack")) {
-                channel.setAnim("Stand");
+            if (!passive) {
+                if (!channel.getAnimationName().equals("Walk")){
+                    channel.setAnim("Walk");
+                    channel.setLoopMode(LoopMode.Loop);
+                    channel.setSpeed(1.5f);
+                }
+            } else {
+                channel.setAnim("Stand"); /** @TODO: Create passive anim and set*/
                 channel.setLoopMode(LoopMode.Cycle);                    
             }
         }
-        
-        return attack;
     }
     
     /**

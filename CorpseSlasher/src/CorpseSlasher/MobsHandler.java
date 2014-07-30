@@ -23,9 +23,9 @@ public class MobsHandler {
     
     /**
      * MobHandler will be in control of create mobs at the predefined positions.
-     * @param inMan
-     * @param bullet
-     * @param assMan 
+     * @param bullet - BulletAppState so be able to add model and collision to 
+     * the physics domain.
+     * @param assMan - AssetManager to load model into engine.
      */
     public MobsHandler(BulletAppState bullet, AssetManager assMan) {
         mobNode = new Node("Mobs");
@@ -45,9 +45,9 @@ public class MobsHandler {
     /**
      * createMobs creates each mob and adds it to the list of mobs as well as the
      * scene node.
-     * @param inMan
-     * @param bullet
-     * @param assMan 
+     * @param bullet - BulletAppState so be able to add model and collision to 
+     * the physics domain.
+     * @param assMan - AssetManager to load model into engine.
      */
     private void createMobs(BulletAppState bullet, AssetManager assMan) {    
         int size = positions.size();
@@ -60,7 +60,7 @@ public class MobsHandler {
     
     /**
      * updateMobs will update each of the mobs individually.
-     * @param attackDirection - Vector3f with is the direction towards the player.
+     * @param point - Vector3f with is the direction towards the player.
      */
     public void updateMobs(Vector3f point) {
         for (Mob mob : mobs) {
