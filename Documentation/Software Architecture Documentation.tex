@@ -118,6 +118,7 @@
 			28/07/2014	\> Version 1.0	\> Document Created 							\> Nico Taljaard \\
 			29/07/2014	\> Version 1.0	\> Added game class diagram						\> Nico Taljaard \\
 			29/07/2014	\> Version 1.0	\> Added game use case diagram					\> Nico Taljaard \\
+			30/07/2014	\> Version 1.1	\> Change document structure					\> Nico Taljaard \\
 		\end{tabbing}
 		
 	\newpage
@@ -148,14 +149,6 @@
 			\addcontentsline{toc}{subsection}{Required Functionality}
 			\vspace{0.1in}
 			
-			
-			
-			\vspace{0.2in}
-			\subsection*{Use Case prioritization / services contracts:}
-			\addcontentsline{toc}{subsection}{Use Case prioritization / services contracts}
-			\vspace{0.1in}
-			
-				\vspace{0.2in}
 				\subsubsection*{Game Diagrams:}
 				\addcontentsline{toc}{subsubsection}{Game Diagrams}
 				\vspace{0.2in}
@@ -166,77 +159,140 @@
 					\caption{Update process between frames}
 					\end{figure}
 					
-					\begin{itemize}
-					\item Pre-Conditions: \\
-						Game is still running. \\
-						Update time is provided. \\
-						Player character is accessible. \\
-						Mob characters are accessible.
-					\item Post-Conditions: \\
-						Game scene has updated. \\
-						Character action updated. \\
-						Mobs actions updated.
-					\end{itemize}
-					
-					\vspace{0.2in}
 					\begin{figure}[H]
 					\centering
 					\includegraphics[width=140mm]{UML_Diagram/Use_Case/Player_Actions.jpg}
 					\caption{Actions available to player}
 					\end{figure}
 					
-					\begin{itemize}
-						\item Pre-Condition: \\
-							Character handler is accessible. \\
-							Character repositioning direction available. \\
-							Player animations channel is accessible. \\
-							Player attack registered.
-						\item Post-Condition: \\
-							Character position has been updated. \\
-							Player animation has be set successfully. \\
-							Player attack action has occurred and processed.
-					\end{itemize}
-					
-					\vspace{0.2in}
 					\begin{figure}[H]
 					\centering
 					\includegraphics[width=140mm]{UML_Diagram/Use_Case/Mob_Actions.jpg}
 					\caption{Actions available to mobs}
 					\end{figure}
 					
-					\begin{itemize}
-						\item Pre-Condition: \\
-							Character handler is accessible. \\
-							Character repositioning direction available. \\
-							Mob aggro detection available. \\
-							Mob aggro obtained flagged. \\
-							Mob aggro loss flagged. \\
-							Mob animation channel is accessible. \\
-							Mob attack registered.
-						\item Post-Condition: \\
-							Character position updated. \\
-							Mob aggro process and state updated. \\
-							Mob animation has be set successfully. \\
-							Mob attack action has occurred and processed.
-					\end{itemize}
-					
-					\vspace{0.2in}
 					\begin{figure}[H]
 					\centering
 					\includegraphics[width=140mm, height=100mm]{UML_Diagram/Use_Case/Update_Scene.jpg}
 					\caption{Update of scene elements}
 					\end{figure}
 					
+				\vspace{0.2in}
+				\subsubsection*{User-interface Diagrams:}
+				\addcontentsline{toc}{subsubsection}{User-interface Diagrams}
+				\vspace{0.2in}
+				
+				
+				
+				\vspace{0.2in}
+				\subsubsection*{Server Diagrams:}
+				\addcontentsline{toc}{subsubsection}{Server Diagrams}
+				\vspace{0.2in}
+				
+				
+				
+			\vspace{0.2in}
+			\subsection*{Use Case prioritization:}
+			\addcontentsline{toc}{subsection}{Use Case prioritization / services contracts}
+			\vspace{0.1in}
+					
+				\subsubsection*{Critical:}
+				\addcontentsline{toc}{subsubsection}{Critical}
+				\vspace{0.1in}
+					
+					\begin{itemize}
+						\item Update process between frames.
+						\item Update of scene elements.
+					\end{itemize}	
+					
+				\vspace{0.2in}
+				\subsubsection*{Important:}
+				\addcontentsline{toc}{subsubsection}{Important}
+				\vspace{0.2in}
+				
+					\begin{itemize}
+						\item Actions available to player
+						\item Actions available to mobs
+					\end{itemize}
+				
+				\vspace{0.2in}
+				\subsubsection*{Nice-To-Have:}
+				\addcontentsline{toc}{subsubsection}{Nice-To-Have}
+				\vspace{0.2in}
+					
+			\vspace{0.2in}
+			\subsection*{Use Case services contracts:}
+			\addcontentsline{toc}{subsection}{Use Case prioritization / services contracts}
+			\vspace{0.1in}
+				
+				\subsubsection*{Game Diagrams:}
+				\addcontentsline{toc}{subsubsection}{Game Diagrams}
+				\vspace{0.1in}
+					
+					\hspace{5mm}Update process between frames
+					\begin{itemize}
+						\item Pre-Conditions: \\
+							Game is still running within the main game loop. \\
+							Update time is provided from game engine defining the uptime of game. \\
+							Player character is not null and initialized to be update. \\
+							Mob characters is not null and initialized to be update.
+						\item Post-Conditions: \\
+							Game scene has updated as defined in update scene elements. \\
+							Character action updated as defined in actions of player. \\
+							Mobs actions updated as defined in actions of mob.
+						\item Request and Results Data Structures \\
+							
+					\end{itemize}
+					
+					\vspace{0.1in}
+					Actions available to player
 					\begin{itemize}
 						\item Pre-Condition: \\
-							Sky control available. \\
-							Update value provided.
+							Character handler is not null and initialized. \\
+							Character repositioning direction available from the directional keys pressed. \\
+							Player animations channel is retrieved from model and can be updated. \\
+							Player attack registered for process.
 						\item Post-Condition: \\
-							Sun \& Stars updated. \\
-							Sun direction updated. \\
-							Sun on the water updated. \\
-							Time of day updated. 
+							Character position has been updated according to direction of movement and movement speed. \\
+							Player animation has been set successfully to animations channel with define loop state and play speed. \\
+							Player attack action has occurred and processed between player and attacked mob.
+						\item Request and Results Data Structures \\
 							
+					\end{itemize}
+					
+					\vspace{0.1in}
+					Actions available to mobs
+					\begin{itemize}
+						\item Pre-Condition: \\
+							Character handler is not null and initialized. \\
+							Character repositioning direction is given from players position. \\
+							Mob aggro detection is not null and attach to physics space. \\
+							Mob aggro obtained flagged. \\
+							Mob aggro loss flagged. \\
+							Mob animation channel is retrieved from model and can be updated. \\
+							Mob attack registered for process.
+						\item Post-Condition: \\
+							Character position updated to the direction of player and a distance of the movement speed. \\
+							Mob aggro process and state updated for motion and animation loop. \\
+							Mob animation has been set successfully to animations channel with define loop state and play speed. \\
+							Mob attack action has occurred and processed between mob and player.
+						\item Request and Results Data Structures \\
+						
+					\end{itemize}
+					
+					\vspace{0.1in}
+					Update of scene elements
+					\begin{itemize}
+						\item Pre-Condition: \\
+							Sky control not null and initialized. \\
+							Update value provided from game engine of frame time.
+						\item Post-Condition: \\
+							Sun \& Stars updated by sky control. \\
+							Sun direction updated retrieved from sky control and assigned to the light. \\
+							Sun on the water updated from the new set light direction. \\
+							Time of day updated through sky control.
+						\item Request and Results Data Structures \\
+						
 					\end{itemize}
 					
 				\vspace{0.2in}
