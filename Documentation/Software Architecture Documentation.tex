@@ -1,0 +1,201 @@
+\documentclass[letterpaper]{article}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{epigraph}
+\usepackage{lipsum}
+\usepackage{hyperref}
+\usepackage{tocloft}
+\usepackage{graphicx}
+\usepackage{float}
+
+\usepackage{setspace, amsmath}
+
+\usepackage[centering,includeheadfoot,margin=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{calc,blindtext}
+
+\renewcommand\epigraphflush{flushright}
+\renewcommand\epigraphsize{\normalsize}
+\setlength\epigraphwidth{0.6\textwidth}
+
+\definecolor{titlepagecolor}{cmyk}{1,.60,0,.40}
+
+\DeclareFixedFont{\titlefont}{T1}{ppl}{b}{it}{1.0in}
+
+\makeatletter
+\def\printauthor{%
+    {\large \@author}}
+\makeatother
+\author{%
+    Nico Taljaard \\
+    10153285 \vspace{20pt} \\
+    Gerhard Smit \\
+    12282945 \vspace{20pt} \\
+    Martin Schoeman \\
+    10651994 \\
+}
+
+% The following code is borrowed from: http://tex.stackexchange.com/a/86310/10898
+
+\newcommand\titlepagedecoration{%
+	\begin{tikzpicture}[remember picture,overlay,shorten >= -10pt]
+	
+		\coordinate (aux1) at ([yshift=-15pt]current page.north east);
+		\coordinate (aux2) at ([yshift=-410pt]current page.north east);
+		\coordinate (aux3) at ([xshift=-4.5cm]current page.north east);
+		\coordinate (aux4) at ([yshift=-150pt]current page.north east);
+		
+		\begin{scope}[titlepagecolor!40,line width=12pt,rounded corners=12pt]
+			\draw
+			  (aux1) -- coordinate (a)
+			  ++(225:5) --
+			  ++(-45:5.1) coordinate (b);
+			\draw[shorten <= -10pt]
+			  (aux3) --
+			  (a) --
+			  (aux1);
+			\draw[opacity=0.6,titlepagecolor,shorten <= -10pt]
+			  (b) --
+			  ++(225:2.2) --
+			  ++(-45:2.2);
+		\end{scope}
+			\draw[titlepagecolor,line width=8pt,rounded corners=8pt,shorten <= -10pt]
+			  (aux4) --
+			  ++(225:0.8) --
+			  ++(-45:0.8);
+		\begin{scope}[titlepagecolor!70,line width=6pt,rounded corners=8pt]
+			\draw[shorten <= -10pt]
+			  (aux2) --
+			  ++(225:3) coordinate[pos=0.45] (c) --
+			  ++(-45:3.1);
+			\draw
+			  (aux2) --
+			  (c) --
+			  ++(135:2.5) --
+			  ++(45:2.5) --
+			  ++(-45:2.5) coordinate[pos=0.3] (d);   
+			\draw 
+			  (d) -- +(45:1);
+		\end{scope}
+	\end{tikzpicture}
+}
+
+\begin{document}
+
+\begin{titlepage}
+
+\noindent
+\titlefont Laminin \par
+\epigraph{ XGame - Derivco \\ Corspe Slasher \\ Software Architecture Specification}%
+{\textit{ 01/08/2014 }\\ \textsc{ }}
+\null\vfill
+\vspace*{4cm}
+\noindent
+\hfill
+\begin{minipage}{0.35\linewidth}
+    \begin{flushright}
+        \printauthor
+    \end{flushright}
+\end{minipage}
+%
+\begin{minipage}{0.02\linewidth}
+    \rule{1pt}{125pt}
+\end{minipage}
+\titlepagedecoration
+\end{titlepage}
+
+% % % % % % % % % % % % % % %
+% 							%
+%	Remainder of document	%
+% 							%
+% % % % % % % % % % % % % % % 
+
+	\newpage
+		{\LARGE \bf Change Log}\\[2em]
+		
+		\begin{tabbing}
+			\hspace*{2.5cm}\=\hspace*{2.5cm}\=\hspace*{8cm}\=\hspace*{3cm} \kill
+			30/07/2014	\> Version 1.0	\> Document Created 							\> Nico Taljaard \\
+		\end{tabbing}
+		
+	\newpage
+		\renewcommand\contentsname{TABLE OF CONTENTS}
+		\newcommand\contentsnameLC{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Table of Contents}}}
+		
+		\renewcommand{\cftdot}{}
+		\hypersetup{linktocpage}
+		\tableofcontents
+		
+		\begin{flushleft}
+			\LARGE\href{https://github.com/njTaljaard/Laminin_CorpseSlasher/}{Git repository: Laminin - Corpse Slasher}
+		\end{flushleft}
+		
+	\newpage
+		
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Architectural requirements }}} \addcontentsline{toc}{section}{Architectural requirements}
+		\vspace{0.1in}
+			
+			\subsection*{ Architectural scope }
+			\addcontentsline{toc}{subsection}{Architectural scope}
+			\vspace{0.1in}
+				
+				
+				
+			\vspace{0.2in}
+			\subsection*{ Quality requirements }
+			\addcontentsline{toc}{subsection}{Quality requirements}
+			\vspace{0.1in}
+				
+				
+				
+			\vspace{0.2in}
+			\subsection*{ Integration and access channel requirements }
+			\addcontentsline{toc}{subsection}{Integration and access channel requirements}
+			\vspace{0.1in}
+				
+				
+				
+			\vspace{0.2in}
+			\subsection*{ Architectural constraints }
+			\addcontentsline{toc}{subsection}{Architectural constraints}
+			\vspace{0.1in}
+			
+			
+			
+		\vspace{0.2in}
+		\section*{ Architectural patterns or styles }
+		\addcontentsline{toc}{section}{Architectural patterns or styles}
+		\vspace{0.1in}
+			
+			
+			
+		\vspace{0.2in}
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Architectural tactics or strategies }}}
+		\addcontentsline{toc}{section}{Architectural tactics or strategies}
+		\vspace{0.1in}
+			
+			
+			
+		\vspace{0.2in}
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Use of reference architectures and frameworks }}}
+		\addcontentsline{toc}{section}{Use of reference architectures and frameworks}
+		\vspace{0.1in}
+			
+			
+			
+		\vspace{0.2in}
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Access and integration channels }}}
+		\addcontentsline{toc}{section}{Access and integration channels}
+		\vspace{0.1in}
+			
+			
+			
+		\vspace{0.2in}
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Technologies }}}
+		\addcontentsline{toc}{section}{Technologies}
+		\vspace{0.1in}
+			
+			
+			
+		\vspace{0.2in}
+\end{document}
