@@ -1552,6 +1552,55 @@
 											JSONObj - - has all the new user's details \\ \\
 											Returns: \\
 											- returns true if user details was sent to the Database class or returns false if failed.
+									\item	checkLogin \\
+											public boolean checkLogin(org.json.JSONObject JSONObj) \\ \\
+											checkLogin sends the client username and password to the Database class. \\ \\
+											Parameters: \\
+											JSONObj - - JSON object containing client username and password. \\ \\
+											Returns: \\
+											- return true if login succeeded and false if failed.
+									\item	checkUsernameAvailable \\
+											public boolean checkUsernameAvailable(org.json.JSONObject JSONObj) \\ \\
+											checkUsernameAvailable - sends to username to the database in a JSON object to check for availability. \\ \\
+											Parameters: \\
+											JSONObj - - JSON object containing the client's username. \\ \\
+											Returns: \\
+											- returns true is username is available and false if not.
+									\item	getKills \\
+											public int getKills(org.json.JSONObject JSONObj) \\ \\
+											getKills returns the zombie kills of the client by receiving it from the Database class. \\ \\
+											Parameters: \\
+											JSONObj - - JSON object containing the client username. \\ \\
+											Returns: \\
+											- return the client zombie kills.
+									\item	setKills \\
+											public boolean setKills(org.json.JSONObject JSONObj) \\ \\
+											setZombies sends the zombie kills of a client to the Database class. \\ \\
+											Parameters: \\
+											JSONObj - - JSON object containing the client username and zombie kills. \\ \\
+											Returns: \\
+											- return true if the zombie kills where sent to the Database class or false if it failed.
+									\item	increaseKillsByOne \\
+											public boolean increaseKillsByOne(org.json.JSONObject JSONObj) \\ \\
+											increaseKillsByOne sends the client username to the Database class. \\ \\
+											Parameters: \\
+											JSONObj - - JSON object containing the client username. \\ \\
+											Returns: \\
+											returns true if client username was sent successfully to the Database class or false if it failed.
+									\item	setPassword \\
+											public boolean setPassword(org.json.JSONObject JSONObj) \\ \\
+											setPassword sends the client username and password to the Database class. \\ \\
+											Parameters: \\
+											JSONObj - - JSON object containing the client username and password. \\ \\
+											Returns: \\
+											returns true if the client username and password sent to the Database class successfully or false if it failed.
+									\item	retrievePassword \\
+											public boolean retrievePassword(org.json.JSONObject JSONObj) \\ \\
+											retrievePassword sends an email the the client containing his or her password. \\ \\
+											Parameters: \\
+											JSONObj - - JSON object containing the client's username. \\ \\
+											Returns: \\
+											- returns true if email is sent or false if the sent email false.
 								\end{itemize}
 					\end{itemize}
 					
