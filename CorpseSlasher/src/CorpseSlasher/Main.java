@@ -1,9 +1,6 @@
 package CorpseSlasher;
 
 //~--- non-JDK imports --------------------------------------------------------
-
-import GUI.LoadingScreen;
-import GUI.LoginScreen;
 import GUI.UserInterfaceManager;
 
 import com.jme3.app.SimpleApplication;
@@ -44,7 +41,6 @@ public class Main extends SimpleApplication implements ScreenController {
     GameScene                         gameScene;
     BulletAppState                    bulletAppState;
     TimeOfDay                         timeOfDay;
-    LoginScreen                       login;
     boolean                           loggedIn;
     TextField                         usernameTxt;
     TextField                         passwordTxt;
