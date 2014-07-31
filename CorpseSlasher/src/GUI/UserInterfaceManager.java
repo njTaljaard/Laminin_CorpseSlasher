@@ -29,11 +29,7 @@ public final class UserInterfaceManager {
     private Application     app;
     private NiftyJmeDisplay Screen;
     private ActionListener  action;
-    private Screens   loading;
-    private Screens  settings;
-    private Screens login;
-    private Screens newAcc;
-    private Screens password;
+    private Screens[] guiScreens;
     /**
      * 
      * @param assetManager
@@ -54,30 +50,31 @@ public final class UserInterfaceManager {
         this.appState      = appState;
         settingsScreen();
         Screen = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
+        guiScreens = new Screens[5];
     }
     /**
      * Creates the login screen
      */
     public void loginScreen() {
-        login = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
+        guiScreens[0] = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                 Screen);
-        login.build();
+        guiScreens[0].build();
     }
     /**
      * Creates the new account account screen
      */
     public void newAccount() {
-         newAcc = new NewAccount(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
+         guiScreens[1] = new NewAccount(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                            Screen);
-        newAcc.build();
+        guiScreens[1].build();
     }
     /**
      * Creates the retrieve password screen
      */
     public void retrievePassword() {
-        password = new RetrievePassword(assetManager, inputManager, audioRenderer, guiViewPort,
+        guiScreens[2] = new RetrievePassword(assetManager, inputManager, audioRenderer, guiViewPort,
                                         appState, app, Screen);
-        password.build();
+        guiScreens[2].build();
     }
     /**
      * Updates the state of the game so that settings menu can be called after login only
@@ -100,7 +97,7 @@ public final class UserInterfaceManager {
 
                     if (menuOpen) {
                         inputManager.setCursorVisible(true);
-                        settings.goTo("Option_Screen");
+                        guiScreens[3].goTo("Option_Screen");
                     } else {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
                         inputManager.setCursorVisible(false);
@@ -115,7 +112,7 @@ public final class UserInterfaceManager {
      * Creates a new settings screen
      */
     public void optionScreen() {
-        settings = new SettingsScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
+        guiScreens[3] = new SettingsScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
     }
 
     public void settings(String selection) {}
@@ -123,7 +120,7 @@ public final class UserInterfaceManager {
      * Creates a new loading screen object
      */
     public void loadingScreen() {
-        loading = new LoadingScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
+        guiScreens[4] = new LoadingScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
     }
     /**
      * 
@@ -131,7 +128,7 @@ public final class UserInterfaceManager {
      * Returns the loading screen object to be updated as the game is being loaded
      */
     public LoadingScreen getLoadingScreen() {
-        return (LoadingScreen)loading;
+        return (LoadingScreen)guiScreens[4];
     }
     /**
      * 
@@ -139,7 +136,7 @@ public final class UserInterfaceManager {
      * Changes to the screen ID coming in
      */
     public void goTo(String _screen) {
-        settings.goTo(_screen);
+        guiScreens[3].goTo(_screen);
     }
 }
 
