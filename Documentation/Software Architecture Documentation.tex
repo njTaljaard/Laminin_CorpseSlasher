@@ -116,6 +116,9 @@
 		\begin{tabbing}
 			\hspace*{2.5cm}\=\hspace*{2.5cm}\=\hspace*{8cm}\=\hspace*{3cm} \kill
 			30/07/2014	\> Version 1.0	\> Document Created 							\> Nico Taljaard \\
+			01/08/2014	\> Version 1.0	\> Added quality requirements					\> Nico Taljaard \\
+			01/08/2014	\> Version 1.0	\> Added technologies							\> Nico Taljaard \\
+			01/08/2014	\> Version 1.0	\> Added tactics and strategies					\> Nico Taljaard \\
 		\end{tabbing}
 		
 	\newpage
@@ -145,14 +148,139 @@
 			\addcontentsline{toc}{subsection}{Quality requirements}
 			\vspace{0.1in}
 				
+				The quality requirements are the requirements around the quality attributes of the systems and the
+				services it provides.
 				
+				\subsubsection*{Performance}
+				\addcontentsline{toc}{subsubsection}{Performance}
+				\vspace{0.1in}
+				
+					\begin{itemize}
+						\item Desktop \& Mobile application:
+							\begin{itemize}
+								\item Should not go under a playable frames rate of 60.
+								\item Should not require a high speed internet connection more then 2Mbit/sec.
+								\item Should not send more then 100Kb/min.
+								\item Should not require more the 4 logical processing cores.
+							\end{itemize}
+							
+						\item Desktop application:
+							\begin{itemize}
+								\item Should not use more the 3GB of system memory.
+								\item Should not require more then 1GB of VRAM.
+								\item Should not require higher then 2.0 GHz system processor.
+								\item Should not require higher then 500 MHz gpu processor.
+								\item Requires OpenGL 3.3 or higher.
+							\end{itemize}
+							
+						\item Mobile application:
+							\begin{itemize}
+								\item Should not use more the 2GB of system memory.
+								\item Should not use access battery usage.
+								\item Should not require higher then a 1.0 GHz system.
+								\item Requires OpenGL ES 2.0 or higher.
+							\end{itemize}
+							
+						\item Backend server:
+							\begin{itemize}
+								\item Should be able to handle at least 100 connections.
+								\item Should not use more then 10GB of system memory to handle connections.
+								\item Database updates should be complete within a 0.1 second time frame.
+								\item Database requests should be complete within 0.5 second time frame.
+							\end{itemize}
+					\end{itemize}
+				
+				\subsubsection*{Reliability}
+				\addcontentsline{toc}{subsubsection}{Reliability}
+				\vspace{0.1in}
+				
+					\begin{itemize}
+						\item Desktop \& Mobile:
+							\begin{itemize}
+								\item Client should be able to recover from a crash within 30 seconds.
+								\item Retry opening connection within 5 seconds if connection loss.
+								\item Reload assets if data is lost.
+							\end{itemize}
+						\item Backend Server:
+							\begin{itemize}
+								\item Should provide 99\% connection availability.
+								\item Should provide 99\% OAuth login availability through SocialAuth.
+								\item Should not crash due to over welling client connections.
+								\item Should not crash due to undefined incoming data.
+								\item Should not drop connections due to inactivity or data loss.
+							\end{itemize}
+					\end{itemize}
+					
+				\subsubsection*{Scalability}
+				\addcontentsline{toc}{subsubsection}{Scalability}
+				\vspace{0.1in}
+					
+					\begin{itemize}
+						\item Game
+							\begin{itemize}
+								\item Adding multiple maps for game play as a nice to have.
+								\item Adding a variety of enemy players as a nice to have.
+								\item Adding further environmental features as a nice to have.
+							\end{itemize}
+						\item Backend Server:
+							\begin{itemize}
+								\item The server should be able to add multiple servers to handle clients as a nice to have.
+								\item The server should scale to any amount of client connections, with an improved system performance.
+							\end{itemize}
+					\end{itemize}
+				
+				\subsubsection*{Security}
+				\addcontentsline{toc}{subsubsection}{Security}
+				\vspace{0.1in}
+				
+					General security conditions.
+					\begin{itemize}
+						\item Use OAuth LDAP for connection to social media e.g. Facebook, Google+.
+						\item Password encryption on database side as well as when signing in through custom loggin.
+						\item Password retrieval only to an know uses with a verified email address.
+						\item Clean up all incoming data on client and server for incorrect formats, data types \& lengths.
+						\item Test if the incoming data comes from authenticated user.
+					\end{itemize}
+				
+				\subsubsection*{Maintainability}
+				\addcontentsline{toc}{subsubsection}{Maintainability}
+				\vspace{0.1in}
+				
+					\begin{itemize}
+						\item Database off site backups should be creatable as a nice to have.
+						\item Update look and feel of user interface as nice to have.
+						\item Update versions of libraries as nice to have, social media security access updates need to be changed within is code.
+						\item Change models to higher resolution textures.
+					\end{itemize}
 				
 			\vspace{0.2in}
 			\subsection*{ Integration and access channel requirements }
 			\addcontentsline{toc}{subsection}{Integration and access channel requirements}
 			\vspace{0.1in}
+			
+				\hspace{5mm}Integration channels:
+					\begin{itemize}
+						\item Server needs to connect to MySQL database.
+						\item We use SMTP to send out mails.
+						\item We use HTTP to do the OAuth authorization.
+						\item We use TCP/IP to connect client to server and exchange data between client and server.
+						\item We use Nifty GUI to display GUI's in the game.
+					\end{itemize}
 				
+				\vspace{0.1in}				
 				
+				The system will be accessible by human users through the following channels:
+				\begin{itemize}
+					\item From a desktop application running on any Windows/Linux operating system.
+					\item From a mobile device running Android application clients.
+					\item From social media like Facebook and Google+.
+				\end{itemize}
+				
+				The system will be accessible by other systems through the following channels:
+				\begin{itemize}
+					\item OAuth authorization with Facebook and Google+.
+					\item Gmail, sending out emails.
+				\end{itemize}
 				
 			\vspace{0.2in}
 			\subsection*{ Architectural constraints }
@@ -216,14 +344,35 @@
 		\addcontentsline{toc}{section}{Architectural tactics or strategies}
 		\vspace{0.1in}
 			
-			
+			\begin{itemize}
+				\item Game:
+					\begin{itemize}
+						\item Low poly models are used to reduce the gpu processing to calculate each points position and colour and display it and vram space required to store each points data.
+						\item Low amount of enemies to reduces processing requirements.
+						\item Adding hills on the terrain to simplify graphic calculation to shorten distance rendering.
+						\item Simplify collision boxes to ease the calculations done by Bullet Physics.
+						\item Designing a single map, due to having multiples are repeating completed work. Adding more are nice to have.
+						\item Using a single enemy model due to time constraint for creating multiple models and animating them.
+						\item Single user-interface display which multiple screens can couple to.
+					\end{itemize}
+				\item Server:
+					\begin{itemize}
+						\item Thread pooling is implemented by Java thread pool executor for all incoming connections so that each thread has sufficient time for CPU access and no dead lock can occur because each thread runs on each own instance of the server.
+						\item Reopening JDBC for each request to free up memory space and cpu cycles.
+					\end{itemize}
+			\end{itemize}
 			
 		\vspace{0.2in}
 		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Use of reference architectures and frameworks }}}
 		\addcontentsline{toc}{section}{Use of reference architectures and frameworks}
 		\vspace{0.1in}
 			
-			
+			\begin{itemize}
+				\item jMonkeyEngine is a Java SDK framework that is used as our game engine. The engine is in control of communications to OpenGL for rendering, frame updates, loading required assets, accessing model animations to be ran through programming.
+				\item BulletPhysics used for game physics, it will control the world gravity, world collision, custom collision defined for each model, ghost collision for proximity detection, attack collision for player sword and model hand to be able to detect when an attack has successfully landed, rag doll physics for death scene.
+				\item OAuth as a standard for connection to social media. It insurers a secure connection to login using your social login to obtain data and post data on behalf of the user. This is needed to add the users to the database who wish to login via social media to keep track of their experience.
+				\item NiftyGUI is an easy library for creating and updating the user-interface aspect of the game. It has built in functionality for creating the interfaces and action listeners for user interaction.
+			\end{itemize}
 			
 		\vspace{0.2in}
 		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Access and integration channels }}}
@@ -237,7 +386,24 @@
 		\addcontentsline{toc}{section}{Technologies}
 		\vspace{0.1in}
 			
-			
+			\begin{itemize}
+				\item Game:
+					\begin{itemize}
+						\item Java for all programming purposes.
+						\item OpenGL \& ES for graphics rendering.
+						\item OpenAL for audio.
+						\item Blender for model creation, texturing, rigging and animations.
+					\end{itemize}
+				\item Server:
+					\begin{itemize}
+						\item Java for all programming purposes.
+						\item JSON for data transfer objects.
+						\item HTTP connection between server and desktop \& mobile game.
+						\item STMP for password recovery.
+					\end{itemize}
+				\item Operating system: \\
+					  Windows 7 \& 8, Andriod 2.2+
+			\end{itemize}
 			
 		\vspace{0.2in}
 \end{document}
