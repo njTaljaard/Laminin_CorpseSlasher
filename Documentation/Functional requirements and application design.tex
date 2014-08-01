@@ -125,6 +125,9 @@
 			30/07/2014  \> Version 1.1  \> Added server class diagram					\> Martin Schoeman\\
 			31/07/2014  \> Version 1.1  \> Added code documentation						\> Nico Taljaard\\
 			31/07/2014  \> Version 1.1  \> Added mob state diagram						\> Nico Taljaard\\
+			31/07/2014  \> Version 1.2  \> Added user-interface case diagrams			\> Gerhard Smit\\
+			01/08/2014  \> Version 1.2  \> Added user-interface class diagrams			\> Gerhard Smit\\
+			01/08/2014  \> Version 1.2  \> Added services contracts for user-interface 			\> Gerhard Smit\\
 		\end{tabbing}
 		
 	\newpage
@@ -186,6 +189,30 @@
 				\addcontentsline{toc}{subsubsection}{User-interface Diagrams}
 				\vspace{0.2in}
 				
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=140mm]{UML_Diagram/Use_Case/User_Login.jpg}
+					\caption{User Login Screen}
+					\end{figure}
+				
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=140mm]{UML_Diagram/Use_Case/CreatAccount_UseCase.jpg}
+					\caption{Create New Account Screen}
+					\end{figure}
+				
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=140mm]{UML_Diagram/Use_Case/RetrievePassword_UseCase.jpg}
+					\caption{Retrieve Password Screen}
+					\end{figure}
+				
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=140mm]{UML_Diagram/Use_Case/OptionsScreen_UseCase.jpg}
+					\caption{Options Screen}
+					\end{figure}
+				
 				\begin{figure}[H]
 					\centering
 					\includegraphics[width=140mm]{UML_Diagram/Use_Case/OAuth.jpg}
@@ -223,6 +250,9 @@
 						\item Update of scene elements.
 						\item Server Functionality.
 						\item User Interaction With Server.
+						\item Login using custom login.
+						\item Create a new custom account.	
+						\item Leaderboard of best all players and scores.					
 					\end{itemize}	
 					
 				\vspace{0.2in}
@@ -234,12 +264,22 @@
 						\item Actions available to player.
 						\item Actions available to mobs.
 						\item Login using social media(OAuth).
+						\item Retrieval of password.
+						\item Can change the graphical settings of the game.
+						\item Can change audio settings.
 					\end{itemize}
 				
 				\vspace{0.2in}
 				\subsubsection*{Nice-To-Have:}
 				\addcontentsline{toc}{subsubsection}{Nice-To-Have}
 				\vspace{0.2in}
+					\begin{itemize}
+						\item Update the grpahics while game running.
+						\item Change of difficulty settings.
+						\item Modibility of the game from external sources.
+						\item Addition of more maps.
+						\item Multiple types of zombies.
+					\end{itemize}
 					
 			\vspace{0.2in}
 			\subsection*{Use Case services contracts:}
@@ -322,7 +362,100 @@
 				\vspace{0.2in}
 				
 				\vspace{0.1in}
-					\hspace{5mm}Login using social media(OAuth)
+					\hspace{5mm}Creating a custom account
+					\begin{itemize}
+						\item Pre-Condition: \\
+							Client connection to server must be created. \\
+							User must not have an existing account registered to the email address he wants to use. \\
+							 The username must not be taken by any other player. \\
+						\item Post-Condition: \\				
+							User must be logged into the game. \\
+							User's details must be stored to the database. \\
+							User's username and score must be displayed on the leaderboard. 
+						\item Request and Results Data Structures \\
+						
+					\end{itemize}
+					
+				\vspace{0.1in}Login using a custom account
+					\begin{itemize}
+						\item Pre-Condition: \\
+							Client connection to server must be created. \\				
+							User must have a registered custom account. \\
+						\item Post-Condition: \\
+							User must be logged in and game must be running. \\
+							Username must be displayed on the leaderboard. \\			
+						\item Request and Results Data Structures \\
+						
+					\end{itemize}
+
+				\vspace{0.1in}Retrieval of custom account password
+					\begin{itemize}
+						\item Pre-Condition: \\
+							Client connection to server must be created. \\
+							User must have a registerd username and email linked to their custom account. \\ 
+						\item Post-Condition: \\
+							Email is sent to registered email address. \\
+							User is taken back to the login screen. \\
+						\item Request and Results Data Structures \\
+						
+					\end{itemize}
+									
+				\vspace{0.1in}Leaderboard updates
+					\begin{itemize}
+						\item Pre-Condition: \\
+							User must be logged in. \\ 
+							User must kill a zombie. \\
+						\item Post-Condition: \\
+							Score updated on leaderboard screen. \\						
+						\item Request and Results Data Structures \\
+						
+					\end{itemize}					
+														
+				\vspace{0.1in}Loading Screen
+					\begin{itemize}
+						\item Pre-Condition: \\
+							User must have a successful login. \\
+						\item Post-Condition: \\
+						 	Game is loaded and user can play. \\
+						\item Request and Results Data Structures \\
+						
+					\end{itemize}	
+								
+				\vspace{0.1in}Options Menu
+					\begin{itemize}
+						\item Pre-Condition: \\
+							User must be logged into the game. \\
+							User must hit the ESC_KEY. \\
+						\item Post-Condition: \\
+							Options menu screen must appear. \\
+							Mouse must be visible. \\
+							Selections must be selectable. \\
+						\item Request and Results Data Structures \\
+						
+					\end{itemize}	
+									
+				\vspace{0.1in}Graphics Settings tab
+					\begin{itemize}
+						\item Pre-Condition: \\
+							Options Menu must be open. \\
+							Graphics settings must be selected. \\
+						\item Post-Condition: \\
+							Graphics settings are displayed. \\
+							Previous choices must be already ticked. \\
+						\item Request and Results Data Structures \\
+						
+					\end{itemize}									
+									
+				\vspace{0.1in}Quiting the game
+					\begin{itemize}
+						\item Pre-Condition: \\
+						\item Post-Condition: \\
+						\item Request and Results Data Structures \\
+						
+					\end{itemize}
+														
+				
+				\vspace{0.1in}Login using social media(OAuth)
 					\begin{itemize}
 						\item Pre-Condition: \\
 							User must have a google or facebook account. \\
@@ -397,6 +530,13 @@
 					\centering
 					\includegraphics[width=180mm]{UML_Diagram/Class/Server_Classes.jpg}
 					\caption{Server level class diagram}
+					\label{overflow}
+					\end{figure}
+					
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=180mm]{UML_Diagram/Class/GUI_Classes.jpg}
+					\caption{User-Interface class diagram}
 					\label{overflow}
 					\end{figure}
 					
