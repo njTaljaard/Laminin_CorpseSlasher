@@ -125,9 +125,12 @@
 			30/07/2014  \> Version 1.1  \> Added server class diagram					\> Martin Schoeman\\
 			31/07/2014  \> Version 1.1  \> Added code documentation						\> Nico Taljaard\\
 			31/07/2014  \> Version 1.1  \> Added mob state diagram						\> Nico Taljaard\\
+			31/07/2014  \> Version 1.1  \> Added server state diagram					\> Martin Schoeman\\
 			31/07/2014  \> Version 1.2  \> Added user-interface case diagrams			\> Gerhard Smit\\
 			01/08/2014  \> Version 1.2  \> Added user-interface class diagrams			\> Gerhard Smit\\
 			01/08/2014  \> Version 1.2  \> Added services contracts for user-interface 			\> Gerhard Smit\\
+			01/08/2014  \> Version 1.2  \> Finished off services contracts and added state diagram for User-Interface	
+			01/08/2014  \> Version 1.2  \> Added GUI screen shots		\> Gerhard Smit\\
 		\end{tabbing}
 		
 	\newpage
@@ -425,7 +428,7 @@
 					\begin{itemize}
 						\item Pre-Condition: \\
 							User must be logged into the game. \\
-							User must hit the ESC_KEY. \\
+							User must hit the escape key. \\
 						\item Post-Condition: \\
 							Options menu screen must appear. \\
 							Mouse must be visible. \\
@@ -449,7 +452,10 @@
 				\vspace{0.1in}Quiting the game
 					\begin{itemize}
 						\item Pre-Condition: \\
+							User must be in the options menu or login screen. \\
+							User must select quit game. \\ 
 						\item Post-Condition: \\
+							Game must close and user returned to previous position on desktop. \\
 						\item Request and Results Data Structures \\
 						
 					\end{itemize}
@@ -554,6 +560,20 @@
 					
 					Enemy aggression cycle depicts the phases an enemy player goes through to decide in which state it is in and how to react regarding that state.
 					
+						\begin{figure}[H]
+					\centering
+					\includegraphics[width=180mm]{UML_Diagram/State/Server_State_Diagram.jpg}
+					\caption{Server cycle}
+					\label{overflow}
+					\end{figure}
+					
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=180mm]{UML_Diagram/State/GUI_State.jpg}
+					\caption{User-Interface cycle}
+					\label{overflow}
+					\end{figure}
+					
 				\vspace{0.2in}
 				\subsubsection*{Activity Diagrams:}
 				\addcontentsline{toc}{subsubsection}{Activity Diagrams}
@@ -572,6 +592,41 @@
 		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Application Design }}} \addcontentsline{toc}{section}{Application Design}
 		\vspace{0.1in}
 		
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=130mm]		{GUI_ScreenShots/LoginScreen.jpg}
+		\caption{Login Screen}
+		\end{figure}
+		
+
+		
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=130mm]{GUI_ScreenShots/CreateAccount.jpg}
+		\caption{Create Account Screen}
+		\end{figure}
+		
+
+			
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=130mm]{GUI_ScreenShots/RetrievePassword.jpg}
+		\caption{Retrieve Password Screen}
+		\end{figure}
+		
+			
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=130mm]{GUI_ScreenShots/OptionsScreen.jpg}
+		\caption{Options Screen}
+		\end{figure}
+		
+			
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=130mm]{GUI_ScreenShots/GraphicsSettings.jpg}
+		\caption{Graphics Settings tab}
+		\end{figure}
 		
 		
 		\vspace{0.2in}
