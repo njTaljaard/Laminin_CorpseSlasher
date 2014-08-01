@@ -117,6 +117,7 @@
 			\hspace*{2.5cm}\=\hspace*{2.5cm}\=\hspace*{8cm}\=\hspace*{3cm} \kill
 			30/07/2014	\> Version 1.0	\> Document Created 							\> Nico Taljaard \\
 			01/08/2014	\> Version 1.0	\> Added quality requirements					\> Nico Taljaard \\
+			01/08/2014	\> Version 1.0	\> Added technologies							\> Nico Taljaard \\
 		\end{tabbing}
 		
 	\newpage
@@ -234,7 +235,7 @@
 				
 					General security conditions.
 					\begin{itemize}
-						\item Use OAuth LDAP through SocialAuth for connection through social media e.g. Facebook, Google+.
+						\item Use OAuth LDAP for connection to social media e.g. Facebook, Google+.
 						\item Password encryption on database side as well as when signing in through custom loggin.
 						\item Password retrieval only to an know uses with a verified email address.
 						\item Clean up all incoming data on client and server for incorrect formats, data types \& lengths.
@@ -307,7 +308,12 @@
 		\addcontentsline{toc}{section}{Use of reference architectures and frameworks}
 		\vspace{0.1in}
 			
-			
+			\begin{itemize}
+				\item jMonkeyEngine is a Java SDK framework that is used as our game engine. The engine is in control of communications to OpenGL for rendering, frame updates, loading required assets, accessing model animations to be ran through programming.
+				\item BulletPhysics used for game physics, it will control the world gravity, world collision, custom collision defined for each model, ghost collision for proximity detection, attack collision for player sword and model hand to be able to detect when an attack has successfully landed, rag doll physics for death scene.
+				\item OAuth as a standard for connection to social media. It insurers a secure connection to login using your social login to obtain data and post data on behalf of the user. This is needed to add the users to the database who wish to login via social media to keep track of their experience.
+				\item NiftyGUI is an easy library for creating and updating the user-interface aspect of the game. It has built in functionality for creating the interfaces and action listeners for user interaction.
+			\end{itemize}
 			
 		\vspace{0.2in}
 		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Access and integration channels }}}
@@ -321,7 +327,24 @@
 		\addcontentsline{toc}{section}{Technologies}
 		\vspace{0.1in}
 			
-			
+			\begin{itemize}
+				\item Game:
+					\begin{itemize}
+						\item Java for all programming purposes.
+						\item OpenGL \& ES for graphics rendering.
+						\item OpenAL for audio.
+						\item Blender for model creation, texturing, rigging and animations.
+					\end{itemize}
+				\item Server:
+					\begin{itemize}
+						\item Java for all programming purposes.
+						\item JSON for data transfer objects.
+						\item HTTP connection between server and desktop \& mobile game.
+						\item STMP for password recovery.
+					\end{itemize}
+				\item Operating system: \\
+					  Windows 7 \& 8, Andriod 2.2+
+			\end{itemize}
 			
 		\vspace{0.2in}
 \end{document}
