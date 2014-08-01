@@ -126,11 +126,13 @@
 			31/07/2014  \> Version 1.1  \> Added code documentation						\> Nico Taljaard\\
 			31/07/2014  \> Version 1.1  \> Added mob state diagram						\> Nico Taljaard\\
 			31/07/2014  \> Version 1.1  \> Added server state diagram					\> Martin Schoeman\\
-			31/07/2014  \> Version 1.2  \> Added user-interface case diagrams			\> Gerhard Smit\\
-			01/08/2014  \> Version 1.2  \> Added user-interface class diagrams			\> Gerhard Smit\\
-			01/08/2014  \> Version 1.2  \> Added services contracts for user-interface 			\> Gerhard Smit\\
-			01/08/2014  \> Version 1.2  \> Finished off services contracts and added state diagram for User-Interface	
-			01/08/2014  \> Version 1.2  \> Added GUI screen shots		\> Gerhard Smit\\
+			31/07/2014  \> Version 1.1  \> Added user-interface case diagrams			\> Gerhard Smit\\
+			01/08/2014  \> Version 1.1  \> Added user-interface class diagrams			\> Gerhard Smit\\
+			01/08/2014  \> Version 1.1  \> Added services contracts for user-interface 			\> Gerhard Smit\\
+			01/08/2014  \> Version 1.1  \> Finished off services contracts and added \> \\
+			\> \>  state diagram for User-Interface \> Gerhard Smit\\
+			01/08/2014  \> Version 1.1  \> Added GUI screen shots						\> Gerhard Smit\\
+			01/08/2014  \> Version 1.1  \> Added database ERD diagram.						\> Martin Schoeman\\
 		\end{tabbing}
 		
 	\newpage
@@ -491,6 +493,7 @@
 							Server must handle all functions requested from user(game).\\
 							Server needs to store and retrieve data from the database.			
 						\item Request and Results Data Structures \\
+							All function request from the user(game) are JSON strings. 
 						
 					\end{itemize}
 					
@@ -505,6 +508,7 @@
 							Client must be connected to server. \\
 							Client needs to receive data from server.			
 						\item Request and Results Data Structures \\
+							All data sent and received between server and client are JSON strings.
 						
 					\end{itemize}
 					
@@ -585,6 +589,13 @@
 				\subsubsection*{ERD Diagrams:}
 				\addcontentsline{toc}{subsubsection}{ERD Diagrams}
 				\vspace{0.1in}
+				
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=40mm]{UML_Diagram/ERD/Database.png}
+					\caption{Game level class diagram}
+					\label{overflow}
+					\end{figure}
 					
 					
 		\vspace{0.2in}
