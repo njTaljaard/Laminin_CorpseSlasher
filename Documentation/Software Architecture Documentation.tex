@@ -116,6 +116,7 @@
 		\begin{tabbing}
 			\hspace*{2.5cm}\=\hspace*{2.5cm}\=\hspace*{8cm}\=\hspace*{3cm} \kill
 			30/07/2014	\> Version 1.0	\> Document Created 							\> Nico Taljaard \\
+			01/08/2014	\> Version 1.0	\> Added quality requirements					\> Nico Taljaard \\
 		\end{tabbing}
 		
 	\newpage
@@ -146,7 +147,110 @@
 			\addcontentsline{toc}{subsection}{Quality requirements}
 			\vspace{0.1in}
 				
+				The quality requirements are the requirements around the quality attributes of the systems and the
+				services it provides.
 				
+				\subsubsection*{Performance}
+				\addcontentsline{toc}{subsubsection}{Performance}
+				\vspace{0.1in}
+				
+					\begin{itemize}
+						\item Desktop \& Mobile application:
+							\begin{itemize}
+								\item Should not go under a playable frames rate of 60.
+								\item Should not require a high speed internet connection more then 2Mbit/sec.
+								\item Should not send more then 100Kb/min.
+								\item Should not require more the 4 logical processing cores.
+							\end{itemize}
+							
+						\item Desktop application:
+							\begin{itemize}
+								\item Should not use more the 3GB of system memory.
+								\item Should not require more then 1GB of VRAM.
+								\item Should not require higher then 2.0 GHz system processor.
+								\item Should not require higher then 500 MHz gpu processor.
+								\item Requires OpenGL 3.3 or higher.
+							\end{itemize}
+							
+						\item Mobile application:
+							\begin{itemize}
+								\item Should not use more the 2GB of system memory.
+								\item Should not use access battery usage.
+								\item Should not require higher then a 1.0 GHz system.
+								\item Requires OpenGL ES 2.0 or higher.
+							\end{itemize}
+							
+						\item Backend server:
+							\begin{itemize}
+								\item Should be able to handle at least 100 connections.
+								\item Should not use more then 10GB of system memory to handle connections.
+								\item Database updates should be complete within a 0.1 second time frame.
+								\item Database requests should be complete within 0.5 second time frame.
+							\end{itemize}
+					\end{itemize}
+				
+				\subsubsection*{Reliability}
+				\addcontentsline{toc}{subsubsection}{Reliability}
+				\vspace{0.1in}
+				
+					\begin{itemize}
+						\item Desktop \& Mobile:
+							\begin{itemize}
+								\item Client should be able to recover from a crash within 30 seconds.
+								\item Retry opening connection within 5 seconds if connection loss.
+								\item Reload assets if data is lost.
+							\end{itemize}
+						\item Backend Server:
+							\begin{itemize}
+								\item Should provide 99\% connection availability.
+								\item Should provide 99\% OAuth login availability through SocialAuth.
+								\item Should not crash due to over welling client connections.
+								\item Should not crash due to undefined incoming data.
+								\item Should not drop connections due to inactivity or data loss.
+							\end{itemize}
+					\end{itemize}
+					
+				\subsubsection*{Scalability}
+				\addcontentsline{toc}{subsubsection}{Scalability}
+				\vspace{0.1in}
+					
+					\begin{itemize}
+						\item Game
+							\begin{itemize}
+								\item Adding multiple maps for game play as a nice to have.
+								\item Adding a variety of enemy players as a nice to have.
+								\item Adding further environmental features as a nice to have.
+							\end{itemize}
+						\item Backend Server:
+							\begin{itemize}
+								\item The server should be able to add multiple servers to handle clients as a nice to have.
+								\item The server should scale to any amount of client connections, with an improved system performance.
+							\end{itemize}
+					\end{itemize}
+				
+				\subsubsection*{Security}
+				\addcontentsline{toc}{subsubsection}{Security}
+				\vspace{0.1in}
+				
+					General security conditions.
+					\begin{itemize}
+						\item Use OAuth LDAP through SocialAuth for connection through social media e.g. Facebook, Google+.
+						\item Password encryption on database side as well as when signing in through custom loggin.
+						\item Password retrieval only to an know uses with a verified email address.
+						\item Clean up all incoming data on client and server for incorrect formats, data types \& lengths.
+						\item Test if the incoming data comes from authenticated user.
+					\end{itemize}
+				
+				\subsubsection*{Maintainability}
+				\addcontentsline{toc}{subsubsection}{Maintainability}
+				\vspace{0.1in}
+				
+					\begin{itemize}
+						\item Database off site backups should be creatable as a nice to have.
+						\item Update look and feel of user interface as nice to have.
+						\item Update versions of libraries as nice to have, social media security access updates need to be changed within is code.
+						\item Change models to higher resolution textures.
+					\end{itemize}
 				
 			\vspace{0.2in}
 			\subsection*{ Integration and access channel requirements }
