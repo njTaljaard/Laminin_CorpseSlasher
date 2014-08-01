@@ -137,9 +137,8 @@
 			
 			\subsection*{ Architectural scope }
 			\addcontentsline{toc}{subsection}{Architectural scope}
-			\vspace{0.1in}
-				
-				
+			\vspace{0.1in}	
+			We will be providing a persistance infrastructure in the form of a database which will allow us to store user information such as email addresses, usernames, passwords and game information i.e. Character location, Health and Experience. There will be a reporting infrastructure between the client and the server for updating the leaderboard, to display the progress of multiple users. As a nice to have we would like to add another reporting infrastructure on the server side to allow for printing of graphs related to client logging and more. There is an infrustracture in place for process execution which controls the frame updates, user-interfaces being called at the appropriate times also there are server side process execution infrastructures handled purely by the server, which sends and receives data from the client also sending through an email to the user with password details. There is a login infrastructure in place using social media (OAuth) to login or a custom login where an account is required. 
 				
 			\vspace{0.2in}
 			\subsection*{ Quality requirements }
@@ -159,16 +158,59 @@
 			\subsection*{ Architectural constraints }
 			\addcontentsline{toc}{subsection}{Architectural constraints}
 			\vspace{0.1in}
+					\vspace{0.1in}
+		
+			\subsubsection*{Technologies}
+			\addcontentsline{toc}{subsubsection}{Technologies}
+			\vspace{0.1in}
+			
+				\begin{enumerate}					
+					\item \textbf{Graphics}
+					\\OpenGL 2.0 - 4.4 will be used as the rendering language within the game engine, it is an open source graphical language allowing for rendering.
+					
+					\item \textbf{Audio}
+					\\OpenAL 1.0 will be used for audio within the game, it is an open source audio language allowing for audio rendering.
+					
+					\item \textbf{Development language}
+					\\The desktop \& mobile application as well as the server will be implemented using JavaSE as it is a widely supported language and has a powerful API with a huge support community, Java is also compatiable with the Android platform and it is easy to integrate between Android and Java as Android is based on Java.
+					
+					\item \textbf{LDAP integration}
+					\\SocialAuth is a Java implemented OAuth(version 1.0) library that will be the used to communicate with external LDAP servers. LDAP is a safe and secure database service that will prevent access to unwanted users. SocialAuth is easy to use and widely supported and very simple to understand.
+					
+					\item \textbf{Networking}
+					\\jSpiderMonkey will be used to handle client side networking within the jMonkeyEngine framework as a nice to have for later purposes of multiplayer functionality.
+					
+					\item \textbf{Persistence}
+					\\MySQL will be used to store all data which is accessible through a JDBC. MySQL is easy to use and very powerful as it allows for over 100000 concurrent connections at a time, it has a huge support community, it is also very easy to intergrate with Java.
+				\end{enumerate}
+				
+			\subsubsection*{Architectural patterns/frameworks}
+			\addcontentsline{toc}{subsubsection}{Architectural patterns/frameworks}
+			\vspace{0.1in}
+			
+				\begin{enumerate}
+					\item \textbf{Game Engine}
+					\\jMonkeyEngine 3.0 is a Java Framework that will be used to implement the game, it is an open source game engine as well as freeware, with a huge library that allows for interactive and graphical games, also having a nice support community, jMonkey is very easy to use and allows for easy port to Android and iOS making it an optimal choice for developing open source games.
+					
+					\item \textbf{Client Server}
+					\\A client server pattern should be used between the external application and the backend server, as this allows the seperation of what has to be done purely server side and purely client side, as it can become expensive when the server has to process commands that can be processed on the client side and is only used on the client's side.
+					
+					\item \textbf{Layering}
+					\\The backend server should implement layering from connections to clients down to the LDAP and MySQL server connections, allowing us to have multiple handlers for each indivual layer, so that each layer stays independant from the other.
+				\end{enumerate}
+			
+		\vspace{0.2in}
 			
 			
 			
 		\vspace{0.2in}
-		\section*{ Architectural patterns or styles }
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Architectural patterns or styles }}}
 		\addcontentsline{toc}{section}{Architectural patterns or styles}
 		\vspace{0.1in}
-			
-			
-			
+		There is a Client Server pattern in place	which allows us to have both a server running in a central place, while having the client running on different nodes such as desktops, laptops or mobile devices and then creating a unique connection to the server. This pattern allows the storage of all data in only one place and to keep every single node connected, a nice to have is to add the functionality of a version checker to each individual client. There are two elements in this pattern a client and a server, the client handles all client side functionality, such as the update of frames and the calling of a screen to change or graphics to change etc. The server only handles updates to the leaderboard, the creation of accounts and the storing of data and the sending and receiving of data between the client and the server, this is achieved through the use of the TCP/IP protocol which allows the server and the client to communicate, the data that is captured by the server is then sent to the database through the use of JDBC. \\
+		\vspace{0.1in}
+		\\
+		Layering was also used as an Architectural pattern, which allows to have independant layers, each layer is handled seperately with its own handler so in the case of a layer failing the entire application does not fail and the service can continue. There are three high layers being, the application, the server and the database layer, inside the application layer there are a series of sub lower level layers, being the user-interface layer, the game control layer, the game constructor layer, the player layer and the enemy layer, these layers are all handled on the client side and they communicate with each other through different channels. The character and the enemy layer interact through the use of bullet collision detection, each time the character enter the enemys collision box the two communicate and allows the character and enemy to interact, the user-interface is accesed through the use of key bindings and a seperate controller, the two game layers communicate through the use of constructing and updating after each frame and after an event takes place such as an enemy dying or the character moving. The Network layer consists a thread pool executor, which handles all the incoming connections on a seperate thread allowing multiple conenctions to the server, the application and server communicate through the above mentioned protocol. The final layer is the database layer which only communicates with the server through the use of JDBC storing all the data that server captured from the client and using it for updates to the leaderboard.
 		\vspace{0.2in}
 		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Architectural tactics or strategies }}}
 		\addcontentsline{toc}{section}{Architectural tactics or strategies}
