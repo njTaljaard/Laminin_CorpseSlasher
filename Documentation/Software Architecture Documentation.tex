@@ -118,6 +118,7 @@
 			30/07/2014	\> Version 1.0	\> Document Created 							\> Nico Taljaard \\
 			01/08/2014	\> Version 1.0	\> Added quality requirements					\> Nico Taljaard \\
 			01/08/2014	\> Version 1.0	\> Added technologies							\> Nico Taljaard \\
+			01/08/2014	\> Version 1.0	\> Added tactics and strategies					\> Nico Taljaard \\
 		\end{tabbing}
 		
 	\newpage
@@ -263,7 +264,7 @@
 						\item Server needs to connect to MySQL database.
 						\item We use SMTP to send out mails.
 						\item We use HTTP to do the OAuth authorization.
-						\item We use HTTP to connect client to server and exchange data between client and server.
+						\item We use TCP/IP to connect client to server and exchange data between client and server.
 						\item We use Nifty GUI to display GUI's in the game.
 					\end{itemize}
 				
@@ -301,7 +302,23 @@
 		\addcontentsline{toc}{section}{Architectural tactics or strategies}
 		\vspace{0.1in}
 			
-			
+			\begin{itemize}
+				\item Game:
+					\begin{itemize}
+						\item Low poly models are used to reduce the gpu processing to calculate each points position and colour and display it and vram space required to store each points data.
+						\item Low amount of enemies to reduces processing requirements.
+						\item Adding hills on the terrain to simplify graphic calculation to shorten distance rendering.
+						\item Simplify collision boxes to ease the calculations done by Bullet Physics.
+						\item Designing a single map, due to having multiples are repeating completed work. Adding more are nice to have.
+						\item Using a single enemy model due to time constraint for creating multiple models and animating them.
+						\item Single user-interface display which multiple screens can couple to.
+					\end{itemize}
+				\item Server:
+					\begin{itemize}
+						\item Thread pooling is implemented by Java thread pool executor for all incoming connections so that each thread has sufficient time for CPU access and no dead lock can occur because each thread runs on each own instance of the server.
+						\item Reopening JDBC for each request to free up memory space and cpu cycles.
+					\end{itemize}
+			\end{itemize}
 			
 		\vspace{0.2in}
 		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Use of reference architectures and frameworks }}}

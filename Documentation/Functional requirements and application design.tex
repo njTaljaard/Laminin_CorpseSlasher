@@ -133,6 +133,7 @@
 			\> \>  state diagram for User-Interface \> Gerhard Smit\\
 			01/08/2014  \> Version 1.1  \> Added GUI screen shots						\> Gerhard Smit\\
 			01/08/2014  \> Version 1.1  \> Added database ERD diagram.						\> Martin Schoeman\\
+			01/08/2014  \> Version 1.1  \> Document finalization.						\> Nico Taljaard\\
 		\end{tabbing}
 		
 	\newpage
@@ -476,7 +477,7 @@
 						
 					\end{itemize}
 				
-				\vspace{0.2in}
+				\newpage
 				\subsubsection*{Server Diagrams:}
 				\addcontentsline{toc}{subsubsection}{Server Diagrams}
 				\vspace{0.2in}
@@ -508,8 +509,7 @@
 							Client must be connected to server. \\
 							Client needs to receive data from server.			
 						\item Request and Results Data Structures \\
-							All data sent and received between server and client are JSON strings.
-						
+							All data sent and received between server and client are JSON strings.						
 					\end{itemize}
 					
 			\vspace{0.2in}
@@ -517,7 +517,28 @@
 			\addcontentsline{toc}{subsection}{Process specifications}
 			\vspace{0.1in}
 			
+			\begin{figure}[H]
+			\centering
+			\includegraphics[width=180mm]{UML_Diagram/State/Mob_Aggro.jpg}
+			\caption{Enemy aggression cycle}
+			\label{overflow}
+			\end{figure}
 			
+			Enemy aggression cycle depicts the phases an enemy player goes through to decide in which state it is in and how to react regarding that state.
+			
+				\begin{figure}[H]
+			\centering
+			\includegraphics[width=180mm]{UML_Diagram/State/Server_State_Diagram.jpg}
+			\caption{Server cycle}
+			\label{overflow}
+			\end{figure}
+			
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=180mm]{UML_Diagram/State/GUI_State.jpg}
+			\caption{User-Interface cycle}
+			\label{overflow}
+			\end{figure}
 			
 			\vspace{0.2in}
 			\subsection*{Domain Objects:}
@@ -550,42 +571,7 @@
 					\label{overflow}
 					\end{figure}
 					
-				\vspace{0.2in}
-				\subsubsection*{State Diagrams:}
-				\addcontentsline{toc}{subsubsection}{State Diagrams}
-				\vspace{0.1in}
-					
-					\begin{figure}[H]
-					\centering
-					\includegraphics[width=180mm]{UML_Diagram/State/Mob_Aggro.jpg}
-					\caption{Enemy aggression cycle}
-					\label{overflow}
-					\end{figure}
-					
-					Enemy aggression cycle depicts the phases an enemy player goes through to decide in which state it is in and how to react regarding that state.
-					
-						\begin{figure}[H]
-					\centering
-					\includegraphics[width=180mm]{UML_Diagram/State/Server_State_Diagram.jpg}
-					\caption{Server cycle}
-					\label{overflow}
-					\end{figure}
-					
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=180mm]{UML_Diagram/State/GUI_State.jpg}
-					\caption{User-Interface cycle}
-					\label{overflow}
-					\end{figure}
-					
-				\vspace{0.2in}
-				\subsubsection*{Activity Diagrams:}
-				\addcontentsline{toc}{subsubsection}{Activity Diagrams}
-				\vspace{0.1in}
-					
-					
-					
-				\vspace{0.2in}
+				\vspace{0.2in}	
 				\subsubsection*{ERD Diagrams:}
 				\addcontentsline{toc}{subsubsection}{ERD Diagrams}
 				\vspace{0.1in}
@@ -1240,7 +1226,7 @@
 									\item	private com.jme3.animation.AnimEventListener	animationListener	
 								\end{itemize}
 						\item	Constructor Detail \\
-								public MobAnimControl()
+								public MobAnimControl() \\ \\
 						\item	Method Detail
 								\begin{itemize}
 									\item	initAnimEventListener
@@ -1284,7 +1270,7 @@
 									\item	private float	walkSpeed 
 								\end{itemize}
 						\item	Constructor Detail \\
-								public MobCollisionControl(java.lang.String mob)
+								public MobCollisionControl(java.lang.String mob) \\ \\ \\
 						\item	Method Detail
 								\begin{itemize}
 									\item	collision \\
@@ -1520,7 +1506,7 @@
 											nifty - the nifty object that has to be designed Helper function to build, adding buttons and labels
 								\end{itemize}
 					\end{itemize}
-					
+				\newpage
 				\subsubsection*{RetrievePassword:}
 				\addcontentsline{toc}{subsubsection}{RetrievePassword}
 				\vspace{0.1in}	
@@ -1698,7 +1684,7 @@
 				\vspace{0.1in}	
 					\begin{itemize}
 						\item	Constructor Detail \\
-								public Main()
+								public Main() \\ \\ \\
 						\item	Method Detail
 								\begin{itemize}
 									\item	main \\
@@ -1899,7 +1885,7 @@
 											public java.lang.String getMail(java.lang.String username) \\ \\
 											getMail retrieves the client's email address. \\ \\
 											Parameters: \\
-											username - - client's username. \\ \\
+											username - - client's username. \\ \\ \\
 											Returns: \\
 											returns the client's email.
 									\item	availableUsername \\
