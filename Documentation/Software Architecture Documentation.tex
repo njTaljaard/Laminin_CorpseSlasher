@@ -256,8 +256,30 @@
 			\subsection*{ Integration and access channel requirements }
 			\addcontentsline{toc}{subsection}{Integration and access channel requirements}
 			\vspace{0.1in}
+			
+				\hspace{5mm}Integration channels:
+					\begin{itemize}
+						\item Server needs to connect to MySQL database.
+						\item We use SMTP to send out mails.
+						\item We use HTTP to do the OAuth authorization.
+						\item We use HTTP to connect client to server and exchange data between client and server.
+						\item We use Nifty GUI to display GUI's in the game.
+					\end{itemize}
 				
+				\vspace{0.1in}				
 				
+				The system will be accessible by human users through the following channels:
+				\begin{itemize}
+					\item From a desktop application running on any Windows/Linux operating system.
+					\item From a mobile device running Android application clients.
+					\item From social media like Facebook and Google+.
+				\end{itemize}
+				
+				The system will be accessible by other systems through the following channels:
+				\begin{itemize}
+					\item OAuth authorization with Facebook and Google+.
+					\item Gmail, sending out emails.
+				\end{itemize}
 				
 			\vspace{0.2in}
 			\subsection*{ Architectural constraints }
