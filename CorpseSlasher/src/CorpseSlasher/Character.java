@@ -95,7 +95,7 @@ public class Character {
      */
     private void initSwordGhost() {
         swordControl = new GhostControl(new BoxCollisionShape(new Vector3f(0.05f, 1.65f, 0.15f)));
-        swordControl.setCollisionGroup(7);
+        swordControl.setCollisionGroup(8);
         swordControl.setCollideWithGroups(6);
     }
     

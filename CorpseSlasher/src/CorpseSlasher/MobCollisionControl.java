@@ -2,7 +2,11 @@ package CorpseSlasher;
 
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.control.GhostControl;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
@@ -20,6 +24,8 @@ public class MobCollisionControl implements PhysicsCollisionListener {
     private final float walkSpeed = 6.0f;
     private Vector3f motionDirection;
     private String mobName;
+    private GhostControl aggroGhost;
+    private GhostControl attackGhost;
     
     public MobCollisionControl(String mob) {
         mobName = mob;
@@ -28,6 +34,31 @@ public class MobCollisionControl implements PhysicsCollisionListener {
         walkAttack = false;
         attack = false;
         motionDirection = new Vector3f();
+        
+        initAggroGhost();
+        initAttackGhost();
+    }
+    
+    /**
+     * initGhost creates the GhostControl collision sphere that will double as
+     * the player detection bounds for changing to attack phase. Also sets the
+     * collision group and the group it does collid with.
+     */
+    private void initAggroGhost() {
+        aggroGhost = new GhostControl(new SphereCollisionShape(15f));
+        aggroGhost.setCollisionGroup(6);
+        aggroGhost.setCollideWithGroups(8);
+    }
+    
+    /**
+     * initHandGhost sets up the collision box that will be bound to the mobs
+     * arm in order to determine if any collision has occured with the hand
+     * and the player.
+     */
+    private void initAttackGhost() {
+        attackGhost = new GhostControl(new BoxCollisionShape(new Vector3f(0.15f, 0.45f, 0.05f)));
+        attackGhost.setCollisionGroup(7);
+        attackGhost.setCollideWithGroups(8);
     }
 
     /**
@@ -86,13 +117,20 @@ public class MobCollisionControl implements PhysicsCollisionListener {
                 walkAttack = false;
             }
         } else { 
+            for (int i = 0; i < aggroGhost.getOverlappingObjects().size(); i++) {
+                if (aggroGhost.getOverlappingObjects().get(i).getCollisionGroup() == 8 &&
+                        passivePosition.distance(mob.getLocalTranslation()) > 20.0f) {
+                    
+                }
+            }
+            
             if (!passive) {
                 if (passivePosition.distance(mob.getLocalTranslation()) > 3.0f) {
-                    passivePosition.subtract(mob.getLocalTranslation(), motionDirection);
-                    motionDirection.y = 0.0f;
-                    
-                    characterControl.setViewDirection(motionDirection.normalize().multLocal(walkSpeed));
-                    characterControl.setWalkDirection(motionDirection.normalize().multLocal(walkSpeed));
+                  passivePosition.subtract(mob.getLocalTranslation(), motionDirection);
+                  motionDirection.y = 0.0f;
+
+                  characterControl.setViewDirection(motionDirection.normalize().multLocal(walkSpeed));
+                  characterControl.setWalkDirection(motionDirection.normalize().multLocal(walkSpeed));
                 } else {
                     passive = true;
                     characterControl.setViewDirection(new Vector3f(0, 0, 0));
@@ -101,5 +139,13 @@ public class MobCollisionControl implements PhysicsCollisionListener {
                 }
             } 
         }
+    }
+    
+    public GhostControl getAggroGhost() {
+        return aggroGhost;
+    }
+    
+    public GhostControl getAttackGhost() {
+        return attackGhost;
     }
 }

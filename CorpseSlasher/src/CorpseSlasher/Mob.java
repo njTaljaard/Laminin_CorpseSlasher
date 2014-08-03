@@ -24,8 +24,6 @@ public class Mob {
     
     private Node mob;
     private String mobName;
-    private GhostControl ghost;
-    private GhostControl handGhost;
     private AnimChannel channel;
     private AnimControl control;
     private Vector3f passivePosition;
@@ -52,8 +50,6 @@ public class Mob {
         
         initMob(assMan);
         initControl();
-        initGhost();
-        initHandGhost();
         assembleMob(bullet);
         initAnim();
     }
@@ -81,40 +77,18 @@ public class Mob {
     }
     
     /**
-     * initGhost creates the GhostControl collision sphere that will double as
-     * the player detection bounds for changing to attack phase. Also sets the
-     * collision group and the group it does collid with.
-     */
-    private void initGhost() {
-        ghost = new GhostControl(new SphereCollisionShape(15f));
-        ghost.setCollisionGroup(6);
-        ghost.setCollideWithGroups(5);        
-    }
-    
-    /**
-     * initHandGhost sets up the collision box that will be bound to the mobs
-     * arm in order to determine if any collision has occured with the hand
-     * and the player.
-     */
-    private void initHandGhost() {
-        handGhost = new GhostControl(new BoxCollisionShape(new Vector3f(0.15f, 0.45f, 0.05f)));
-        handGhost.setCollisionGroup(7);
-        handGhost.setCollideWithGroups(6);
-    }
-    
-    /**
      * assembleMob add the controllers to the mob and to the physics handler.
      * @param bullet - BulletAppState physics controller. 
      */
     private void assembleMob(BulletAppState bullet) {
-        mob.addControl(ghost);
+        mob.addControl(collControl.getAggroGhost());
         mob.addControl(characterControl);
-        bullet.getPhysicsSpace().add(ghost);
-        bullet.getPhysicsSpace().add(handGhost);
+        bullet.getPhysicsSpace().add(collControl.getAggroGhost());
+        bullet.getPhysicsSpace().add(collControl.getAttackGhost());
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().addAll(mob);         
         mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
-                .getAttachmentsNode("hand.R").addControl(handGhost);
+                .getAttachmentsNode("hand.R").addControl(collControl.getAttackGhost());
     }
     
     /**

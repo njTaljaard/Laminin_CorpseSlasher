@@ -38,6 +38,7 @@ public class GameScene {
         initScene(assestManager, viewPort, cam, bullet, selectedMap, ui, settings);
         initMainCharacter(assestManager, inMan, bullet, cam);
         initMobs(bullet, assestManager);
+        bullet.getPhysicsSpace().enableDebug(assestManager);
 
     }
     

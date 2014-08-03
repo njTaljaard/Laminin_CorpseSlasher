@@ -17,9 +17,6 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.codec.binary.Base64;
-import java.net.URLEncoder;
-import java.util.Random;
 
 /**
  * @author Laminin
