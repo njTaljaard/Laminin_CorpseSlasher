@@ -16,6 +16,7 @@ import com.jme3.animation.LoopMode;
 public class CharacterAnimControl {
     
     private AnimEventListener animationListener;
+    protected boolean attacking;
     
     /**
      * CharacterAnimControl will initailize the animation event listener.
@@ -52,6 +53,7 @@ public class CharacterAnimControl {
                         channel.setAnim("Stand", 0.0f);
                         channel.setLoopMode(LoopMode.Loop);
                         channel.setSpeed(1f);
+                        attacking = false;
                         break;
                 }
             }
@@ -73,6 +75,7 @@ public class CharacterAnimControl {
                 channel.setAnim("Slash");
                 channel.setLoopMode(LoopMode.DontLoop);
                 channel.setSpeed(1.15f);
+                attacking = true;
             } else {
                 if (!channel.getAnimationName().equals("Slash")) {
                     channel.setAnim("Slash", 1.0f);

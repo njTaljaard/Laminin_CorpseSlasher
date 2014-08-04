@@ -8,10 +8,7 @@ import com.jme3.scene.Node;
 import com.jme3.math.Vector3f;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
-import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 
 /**
  * @author Laminin
@@ -22,8 +19,8 @@ import com.jme3.bullet.collision.shapes.SphereCollisionShape;
  */
 public class Mob {
     
+    protected String mobName;
     private Node mob;
-    private String mobName;
     private AnimChannel channel;
     private AnimControl control;
     private Vector3f passivePosition;
@@ -45,7 +42,7 @@ public class Mob {
         passivePosition = position;
         
         animControl = new MobAnimControl();
-        collControl = new MobCollisionControl(mName);
+        collControl = new MobCollisionControl();
         bullet.getPhysicsSpace().addCollisionListener(collControl);
         
         initMob(assMan);
@@ -110,10 +107,14 @@ public class Mob {
      * @param point - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
      */
-    public void updateMob(Vector3f point) {
+    public void updateMob(Vector3f point, boolean hit) {
         collControl.updateMobPhase(point, mob, characterControl, passivePosition);
         animControl.updateMobAnimations(channel, collControl.aggro,
                 collControl.walkAttack, collControl.attack, collControl.passive);
+        
+        if (hit) {
+            System.out.println(mobName + " i have been hit!!!!");
+        }
     }
     
     /**

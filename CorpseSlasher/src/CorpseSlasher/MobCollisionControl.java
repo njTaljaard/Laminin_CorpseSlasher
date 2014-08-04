@@ -6,7 +6,6 @@ import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
@@ -23,12 +22,10 @@ public class MobCollisionControl implements PhysicsCollisionListener {
     private final float runSpeed = 8.0f;
     private final float walkSpeed = 6.0f;
     private Vector3f motionDirection;
-    private String mobName;
     private GhostControl aggroGhost;
     private GhostControl attackGhost;
     
-    public MobCollisionControl(String mob) {
-        mobName = mob;
+    public MobCollisionControl() {
         passive = true;
         aggro = false;
         walkAttack = false;
@@ -70,7 +67,7 @@ public class MobCollisionControl implements PhysicsCollisionListener {
      */
     @Override
     public void collision(PhysicsCollisionEvent event) {
-        if (event.getNodeA().getName().equals("Player") & event.getNodeB().getName().equals(mobName)) {
+        /*if (event.getNodeA().getName().equals("Player") & event.getNodeB().getName().equals(mobName)) {
             if (passive) {
                 aggro = true;
                 passive = false;
@@ -80,7 +77,7 @@ public class MobCollisionControl implements PhysicsCollisionListener {
                 aggro = true;
                 passive = false;
             }
-        }
+        }*/
     }
     
     /**
@@ -98,7 +95,7 @@ public class MobCollisionControl implements PhysicsCollisionListener {
             point.subtract(mob.getLocalTranslation(), motionDirection);
             motionDirection.y = 0.0f;
             
-            if (mob.getLocalTranslation().distance(point) > 4.0f) {
+            if (mob.getLocalTranslation().distance(point) > 4.5f) {
                 characterControl.setViewDirection(motionDirection.normalize().multLocal(runSpeed));
                 characterControl.setWalkDirection(motionDirection.normalize().multLocal(runSpeed)); 
             }
@@ -117,14 +114,15 @@ public class MobCollisionControl implements PhysicsCollisionListener {
                 walkAttack = false;
             }
         } else { 
-            for (int i = 0; i < aggroGhost.getOverlappingObjects().size(); i++) {
-                if (aggroGhost.getOverlappingObjects().get(i).getCollisionGroup() == 8 &&
-                        passivePosition.distance(mob.getLocalTranslation()) > 20.0f) {
-                    
-                }
-            }
-            
             if (!passive) {
+                for (int i = 0; i < aggroGhost.getOverlappingObjects().size(); i++) {
+                    if (aggroGhost.getOverlappingObjects().get(i).getCollisionGroup() == 8 &&
+                            passivePosition.distance(mob.getLocalTranslation()) > 15.0f) {
+                        aggro = true;
+                        passive = false;
+                    }
+                }
+                
                 if (passivePosition.distance(mob.getLocalTranslation()) > 3.0f) {
                   passivePosition.subtract(mob.getLocalTranslation(), motionDirection);
                   motionDirection.y = 0.0f;
@@ -136,6 +134,13 @@ public class MobCollisionControl implements PhysicsCollisionListener {
                     characterControl.setViewDirection(new Vector3f(0, 0, 0));
                     characterControl.setWalkDirection(new Vector3f(0, 0, 0));
                     //set animation channel to passive animation.
+                }
+            } else {
+                for (int i = 0; i < aggroGhost.getOverlappingObjects().size(); i++) {
+                    if (aggroGhost.getOverlappingObjects().get(i).getCollisionGroup() == 8) {
+                        aggro = true;
+                        passive = false;
+                    }
                 }
             } 
         }

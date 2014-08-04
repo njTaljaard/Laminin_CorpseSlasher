@@ -18,6 +18,7 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import java.util.ArrayList;
 
 /**
  * @author Laminin
@@ -39,6 +40,7 @@ public class Character {
     private CharacterAnimControl animController;
     private CharacterCameraControl cameraController;
     private CharacterMotionControl motionController;
+    private CharacterAttackControl attackController;
     private final float walkSpeed = 15.0f;
     private Vector3f walkDirection;
     
@@ -54,6 +56,7 @@ public class Character {
         playerNode = new Node("Player");
         animController = new CharacterAnimControl();
         motionController = new CharacterMotionControl();
+        attackController = new CharacterAttackControl();
         walkDirection = new Vector3f();
         
         initModel(assMan, cam);
@@ -86,6 +89,7 @@ public class Character {
         characterControl.setGravity(new Vector3f(0, -800, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);
+        characterControl.setJumpForce(new Vector3f(0,0,0));
     }
     
     /**
@@ -104,6 +108,7 @@ public class Character {
      * @param bullet - BulletAppState physics controller.
      */
     private void assemblePlayer(BulletAppState bullet) {
+        bullet.getPhysicsSpace().addCollisionListener(attackController);
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().add(swordControl);
         bullet.getPhysicsSpace().addAll(player);
@@ -140,12 +145,34 @@ public class Character {
      * @param cam - Camera to retrieve the directional vectors required to calculate
      * the direction to move the camera and model in.
      */
-    public void updateCharacterPostion(Camera cam) {
+    public ArrayList<String> updateCharacterPostion(Camera cam) {
         walkDirection = motionController.updateCharacterMotion(cam);
         characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
         
         motionController.slash = animController.updateCharacterAnimations(channel, 
                 motionController.slash, motionController.walk);
+        return testLandedAttack();
+    }
+    
+    /**
+     * 
+     */
+    private ArrayList<String> testLandedAttack() {
+        if (animController.attacking) {
+            for (int i = 0; i < swordControl.getOverlappingObjects().size(); i++) {
+                if (swordControl.getOverlapping(i).getCollisionGroup() == 6) {
+                    animController.attacking = false;
+                    
+                    ArrayList<String> hits = attackController.mobsHit();
+                    attackController.attacksProcessed();
+                    System.out.println(hits.size());
+                    return hits;
+                }
+            }
+        }
+        
+        attackController.attacksProcessed();
+        return new ArrayList<>();
     }
     
     /**
