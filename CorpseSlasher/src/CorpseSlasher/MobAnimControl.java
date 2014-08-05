@@ -16,9 +16,11 @@ import com.jme3.animation.LoopMode;
 public class MobAnimControl {
     
     private AnimEventListener animationListener;
+    public boolean attacking;
     
     public MobAnimControl() {
         initAnimEventListener();
+        attacking = false;
     }
     
     /**
@@ -41,9 +43,16 @@ public class MobAnimControl {
                         channel.setSpeed(1.0f);
                         break;                        
                     case "Attack":
+                        channel.setAnim("Stand", 0.0f);
+                        channel.setLoopMode(LoopMode.Loop);
+                        channel.setSpeed(1.5f);
+                        attacking = false;
+                        break;                        
+                    case "WalkAttack":
                         channel.setAnim("Walk", 0.0f);
                         channel.setLoopMode(LoopMode.Loop);
                         channel.setSpeed(1.5f);
+                        attacking = false;
                         break;
                     case "Passive":
                         
@@ -68,16 +77,18 @@ public class MobAnimControl {
             boolean walkAttack, boolean attack, boolean passive) {
         if (aggro) {                
             if (walkAttack) {
-                if (!channel.getAnimationName().equals("Attack")) {
+                if (!channel.getAnimationName().equals("WalkAttack")) {
                     channel.setAnim("WalkAttack", 0.05f);
                     channel.setLoopMode(LoopMode.DontLoop);
                     channel.setSpeed(1.0f);
+                    attacking = true;
                 }
             } else if (attack) {
                 if (!channel.getAnimationName().equals("Attack")) {
                     channel.setAnim("Attack", 0.05f);
                     channel.setLoopMode(LoopMode.DontLoop);
                     channel.setSpeed(1.0f);
+                    attacking = true;
                 }
             } else {
                 if (!channel.getAnimationName().equals("Walk")){

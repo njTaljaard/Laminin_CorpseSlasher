@@ -85,7 +85,7 @@ public class Character {
      * motion and forces control.
      */
     private void initControl() {
-        characterControl = new BetterCharacterControl(1.0f, 4.85f, 50);
+        characterControl = new BetterCharacterControl(0.8f, 4.85f, 50);
         characterControl.setGravity(new Vector3f(0, -800, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);
@@ -152,6 +152,16 @@ public class Character {
         motionController.slash = animController.updateCharacterAnimations(channel, 
                 motionController.slash, motionController.walk);
         return testLandedAttack();
+    }
+    
+    /**
+     * 
+     * @param knocks 
+     */
+    public void processKnocks(ArrayList<String> knocks) {
+        for (int i = 0; i < knocks.size(); i++) {
+            System.out.println("Player : ive been slapped by " + knocks.get(i));
+        }
     }
     
     /**

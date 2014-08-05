@@ -1,5 +1,7 @@
 package CorpseSlasher;
 
+import com.jme3.bullet.collision.PhysicsCollisionEvent;
+import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
@@ -14,7 +16,7 @@ import com.jme3.scene.Spatial;
  * @param  COS301
  * MobMotionControl the control of motion for the mods character control.
  */
-public class MobCollisionControl {
+public class MobCollisionControl  implements PhysicsCollisionListener {
     
     protected boolean aggro, walkAttack, attack, passive;
     private final float runSpeed = 8.0f;
@@ -22,13 +24,14 @@ public class MobCollisionControl {
     private Vector3f motionDirection;
     private GhostControl aggroGhost;
     private GhostControl attackGhost;
-    private boolean attackLanded;
+    protected boolean attackLanded;
     
     public MobCollisionControl() {
         passive = true;
         aggro = false;
         walkAttack = false;
         attack = false;
+        attackLanded = false;
         motionDirection = new Vector3f();
         
         initAggroGhost();
@@ -55,6 +58,14 @@ public class MobCollisionControl {
         attackGhost = new GhostControl(new BoxCollisionShape(new Vector3f(0.15f, 0.45f, 0.05f)));
         attackGhost.setCollisionGroup(7);
         attackGhost.setCollideWithGroups(8);
+    }
+
+    @Override
+    public void collision(PhysicsCollisionEvent event) {
+        if (event.getNodeA().getName().equals("Player") && 
+                event.getNodeB().getName().contains("hand.R")) {
+            attackLanded = true;
+        }
     }
     
     /**
@@ -123,11 +134,7 @@ public class MobCollisionControl {
             } 
         }
     }
-    
-    public boolean attackLanded() {
-        return attackLanded;
-    }
-    
+        
     public GhostControl getAggroGhost() {
         return aggroGhost;
     }

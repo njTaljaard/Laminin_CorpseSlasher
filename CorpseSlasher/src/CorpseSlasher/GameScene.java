@@ -120,7 +120,8 @@ public class GameScene {
     public void update(Camera cam, TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
         ArrayList<String> hitMobs = character.updateCharacterPostion(cam);
-        mobHandler.updateMobs(character.getPosition(), hitMobs);
+        ArrayList<String> landed = mobHandler.updateMobs(character.getPosition(), hitMobs);
+        character.processKnocks(landed);
     }
     
     /**

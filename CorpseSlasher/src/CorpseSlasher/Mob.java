@@ -79,6 +79,7 @@ public class Mob {
     private void assembleMob(BulletAppState bullet) {
         mob.addControl(collControl.getAggroGhost());
         mob.addControl(characterControl);
+        bullet.getPhysicsSpace().addCollisionListener(collControl);
         bullet.getPhysicsSpace().add(collControl.getAggroGhost());
         bullet.getPhysicsSpace().add(collControl.getAttackGhost());
         bullet.getPhysicsSpace().add(characterControl);
@@ -106,13 +107,20 @@ public class Mob {
      * @param point - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
      */
-    public void updateMob(Vector3f point, boolean hit) {
+    public String updateMob(Vector3f point, boolean hit) {
         collControl.updateMobPhase(point, mob, characterControl, passivePosition);
         animControl.updateMobAnimations(channel, collControl.aggro,
                 collControl.walkAttack, collControl.attack, collControl.passive);
         
         if (hit) {
             System.out.println(mobName + " i have been hit!!!!");
+        }
+        
+        if (animControl.attacking && collControl.attackLanded) {
+            animControl.attacking = collControl.attackLanded = false;
+            return mobName;
+        } else {
+            return "";
         }
     }
     
