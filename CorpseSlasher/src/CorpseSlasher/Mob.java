@@ -43,7 +43,6 @@ public class Mob {
         
         animControl = new MobAnimControl();
         collControl = new MobCollisionControl();
-        bullet.getPhysicsSpace().addCollisionListener(collControl);
         
         initMob(assMan);
         initControl();
@@ -67,7 +66,7 @@ public class Mob {
      * motion and forces control.
      */
     private void initControl() {
-        characterControl = new BetterCharacterControl(0.6f, 5.0f, 1);
+        characterControl = new BetterCharacterControl(0.45f, 5.0f, 1);
         characterControl.setGravity(new Vector3f(0, -800, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);

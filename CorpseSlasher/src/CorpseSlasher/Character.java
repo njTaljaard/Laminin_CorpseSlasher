@@ -158,21 +158,19 @@ public class Character {
      * 
      */
     private ArrayList<String> testLandedAttack() {
-        if (animController.attacking) {
-            for (int i = 0; i < swordControl.getOverlappingObjects().size(); i++) {
-                if (swordControl.getOverlapping(i).getCollisionGroup() == 6) {
-                    animController.attacking = false;
-                    
-                    ArrayList<String> hits = attackController.mobsHit();
-                    attackController.attacksProcessed();
-                    System.out.println(hits.size());
-                    return hits;
-                }
-            }
+        if (animController.attacking && attackController.mobsHit().size() > 0) {
+            animController.attacking = false;
+
+            ArrayList<String> hits = new ArrayList<>();
+            for (int i = 0; i < attackController.getHitsSize(); i++)
+                hits.add(attackController.mobsHit().get(i));
+            attackController.attacksProcessed();
+            
+            return hits;
+        } else {
+            attackController.attacksProcessed();
+            return attackController.mobsHit();
         }
-        
-        attackController.attacksProcessed();
-        return new ArrayList<>();
     }
     
     /**

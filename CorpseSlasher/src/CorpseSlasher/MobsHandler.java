@@ -63,10 +63,7 @@ public class MobsHandler {
      * @param point - Vector3f with is the direction towards the player.
      */
     public void updateMobs(Vector3f point, ArrayList<String> hitMobs) {
-        for (Mob mob : mobs) {
-            for (int i = 0; i < hitMobs.size(); i++)
-                System.out.println(hitMobs.get(i) + " " + mob.mobName);
-            
+        for (Mob mob : mobs) {            
             if (hitMobs.contains(mob.mobName)) {
                 mob.updateMob(point, true);
             } else {

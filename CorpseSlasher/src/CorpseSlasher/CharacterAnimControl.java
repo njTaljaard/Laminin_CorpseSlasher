@@ -23,6 +23,7 @@ public class CharacterAnimControl {
      */
     public CharacterAnimControl() {
         initAnimEventListener();
+        attacking = false;
     }
     
     /**

@@ -1,7 +1,5 @@
 package CorpseSlasher;
 
-import com.jme3.bullet.collision.PhysicsCollisionEvent;
-import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
@@ -16,7 +14,7 @@ import com.jme3.scene.Spatial;
  * @param  COS301
  * MobMotionControl the control of motion for the mods character control.
  */
-public class MobCollisionControl implements PhysicsCollisionListener {
+public class MobCollisionControl {
     
     protected boolean aggro, walkAttack, attack, passive;
     private final float runSpeed = 8.0f;
@@ -24,6 +22,7 @@ public class MobCollisionControl implements PhysicsCollisionListener {
     private Vector3f motionDirection;
     private GhostControl aggroGhost;
     private GhostControl attackGhost;
+    private boolean attackLanded;
     
     public MobCollisionControl() {
         passive = true;
@@ -56,28 +55,6 @@ public class MobCollisionControl implements PhysicsCollisionListener {
         attackGhost = new GhostControl(new BoxCollisionShape(new Vector3f(0.15f, 0.45f, 0.05f)));
         attackGhost.setCollisionGroup(7);
         attackGhost.setCollideWithGroups(8);
-    }
-
-    /**
-     * collision handles when a collision occurs between the ghost controller and
-     * another collidable object in the scene. It will determine if the player
-     * was detected and trigger to approach and attack the player.
-     * @param event - PhysicsCollisionEvent containing all the data in relation
-     * to the collision that has occured.
-     */
-    @Override
-    public void collision(PhysicsCollisionEvent event) {
-        /*if (event.getNodeA().getName().equals("Player") & event.getNodeB().getName().equals(mobName)) {
-            if (passive) {
-                aggro = true;
-                passive = false;
-            }
-        } else if (event.getNodeB().getName().equals("Player") & event.getNodeA().getName().equals(mobName)) {
-            if (passive) {
-                aggro = true;
-                passive = false;
-            }
-        }*/
     }
     
     /**
@@ -116,10 +93,11 @@ public class MobCollisionControl implements PhysicsCollisionListener {
         } else { 
             if (!passive) {
                 for (int i = 0; i < aggroGhost.getOverlappingObjects().size(); i++) {
-                    if (aggroGhost.getOverlappingObjects().get(i).getCollisionGroup() == 8 &&
-                            passivePosition.distance(mob.getLocalTranslation()) > 15.0f) {
+                    if (aggroGhost.getOverlapping(i).getCollisionGroup() == 8 &&
+                            passivePosition.distance(mob.getLocalTranslation()) < 20.0f) {
                         aggro = true;
                         passive = false;
+                        return;
                     }
                 }
                 
@@ -144,6 +122,10 @@ public class MobCollisionControl implements PhysicsCollisionListener {
                 }
             } 
         }
+    }
+    
+    public boolean attackLanded() {
+        return attackLanded;
     }
     
     public GhostControl getAggroGhost() {

@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class CharacterAttackControl implements PhysicsCollisionListener {
     
-    protected ArrayList<String> hitMobs;
+    private ArrayList<String> hitMobs;
 
     public CharacterAttackControl() {
         hitMobs = new ArrayList<>();
@@ -22,12 +22,19 @@ public class CharacterAttackControl implements PhysicsCollisionListener {
     
     @Override
     public void collision(PhysicsCollisionEvent event) {
-        System.out.println("bow chicky brown cow");
-        if (event.getNodeA().getName().contains("mob")) {
+        /*if (event.getNodeA().getName().contains("mob") && 
+                event.getNodeB().getName().contains("Sword")) {
+            System.out.println("colA " + event.getNodeA().getName());
             hitMobs.add(event.getNodeA().getName());
-        } else if (event.getNodeB().getName().contains("mob")) {
+        } else */ 
+        if (event.getNodeB().getName().contains("mob") && 
+                event.getNodeA().getName().contains("Sword")) {
             hitMobs.add(event.getNodeB().getName());
         }
+    }
+    
+    public int getHitsSize() {
+        return hitMobs.size();
     }
     
     public void attacksProcessed() {
