@@ -118,9 +118,10 @@ public class GameScene {
      */
     public void update(Camera cam, TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
-        ArrayList<String> hitMobs = character.updateCharacterPostion(cam);
-        ArrayList<String> landed = mobHandler.updateMobs(character.getPosition(), hitMobs);
-        character.processKnocks(landed);
+        ArrayList<String> hitMobs = character.updateCharacterPostion(cam, tpf);
+        ArrayList<String> playerHits = mobHandler.updateMobs(character.getPosition(), 
+                hitMobs, tpf);
+        character.processKnocks(playerHits);
     }
     
     /**

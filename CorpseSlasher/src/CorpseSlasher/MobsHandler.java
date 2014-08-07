@@ -62,14 +62,15 @@ public class MobsHandler {
      * updateMobs will update each of the mobs individually.
      * @param point - Vector3f with is the direction towards the player.
      */
-    public ArrayList<String> updateMobs(Vector3f point, ArrayList<String> hitMobs) {
+    public ArrayList<String> updateMobs(Vector3f point, ArrayList<String> hitMobs,
+            float tpf) {
         ArrayList<String> landedAttacks = new ArrayList<>();
         String name;
         for (Mob mob : mobs) {            
             if (hitMobs.contains(mob.mobName)) {
-                name = mob.updateMob(point, true);
+                name = mob.updateMob(point, true, tpf);
             } else {
-                name = mob.updateMob(point, false);
+                name = mob.updateMob(point, false, tpf);
             }
             
             if (!name.equals("")) 

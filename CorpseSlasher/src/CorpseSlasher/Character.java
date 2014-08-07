@@ -9,6 +9,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
+import com.jme3.bullet.control.KinematicRagdollControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -41,6 +42,7 @@ public class Character {
     private CharacterCameraControl cameraController;
     private CharacterMotionControl motionController;
     private CharacterAttackControl attackController;
+    private KinematicRagdollControl ragdoll;
     private final float walkSpeed = 15.0f;
     private Vector3f walkDirection;
     private float health;
@@ -94,6 +96,8 @@ public class Character {
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);
         characterControl.setJumpForce(new Vector3f(0,0,0));
+        ragdoll = new KinematicRagdollControl(0.5f);
+        ragdoll.setEnabled(false);
     }
     
     /**
@@ -116,6 +120,7 @@ public class Character {
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().add(swordControl);
         bullet.getPhysicsSpace().addAll(player);
+        bullet.getPhysicsSpace().add(ragdoll);
         player.addControl(characterControl);
         playerNode.attachChild(player); 
         player.getChild("Cube-ogremesh").getControl(SkeletonControl.class).getAttachmentsNode("Sword").addControl(swordControl);
@@ -149,7 +154,7 @@ public class Character {
      * @param cam - Camera to retrieve the directional vectors required to calculate
      * the direction to move the camera and model in.
      */
-    public ArrayList<String> updateCharacterPostion(Camera cam) {
+    public ArrayList<String> updateCharacterPostion(Camera cam, float tpf) {
         if (alive) {
             walkDirection = motionController.updateCharacterMotion(cam);
             characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
@@ -158,6 +163,7 @@ public class Character {
                     motionController.slash, motionController.walk, alive);
             return testLandedAttack();
         } else {
+            ragdoll.update(tpf);
             return new ArrayList<>();
         }
     }
@@ -172,9 +178,12 @@ public class Character {
             System.out.println("Player : ive been slapped by " + knocks.get(i));
             if (health <= 0) {
                 alive = false;
+                System.out.println("YOUR DEAD!!!!");
+                //swapControllers();
             }
         }
     }
+    
     
     /**
      * 
@@ -192,6 +201,24 @@ public class Character {
         } else {
             attackController.attacksProcessed();
             return attackController.mobsHit();
+        }
+    }
+    
+    /**
+     * 
+     */
+    private void swapControllers() {
+        if (ragdoll.isEnabled()) {
+            ragdoll.setEnabled(false);
+            player.removeControl(KinematicRagdollControl.class);
+            player.addControl(characterControl);
+            characterControl.setEnabled(true);
+        } else {
+            characterControl.setEnabled(false);
+            player.removeControl(BetterCharacterControl.class);
+            player.addControl(ragdoll);
+            ragdoll.setEnabled(true);
+            ragdoll.setRagdollMode();
         }
     }
     

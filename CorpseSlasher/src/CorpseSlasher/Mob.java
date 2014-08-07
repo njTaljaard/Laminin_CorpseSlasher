@@ -117,7 +117,7 @@ public class Mob {
      * @param point - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
      */
-    public String updateMob(Vector3f point, boolean hit) {
+    public String updateMob(Vector3f point, boolean hit, float tpf) {
         if (alive) {
             collControl.updateMobPhase(point, mob, characterControl, passivePosition);
             animControl.updateMobAnimations(channel, collControl.aggro,
@@ -130,6 +130,7 @@ public class Mob {
                     health = 0;
                     alive = false;
                     collControl.death(characterControl);
+                    System.out.println("YOU KILLED : " + mobName);
                     //swapControllers();
                     return "";
                 }
@@ -142,6 +143,7 @@ public class Mob {
                 return "";
             }
         } else {
+            ragdoll.update(tpf);
             return "";
         }
     }
