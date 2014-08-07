@@ -130,7 +130,7 @@ public class Mob {
                     health = 0;
                     alive = false;
                     collControl.death(characterControl);
-                    swapControllers();
+                    //swapControllers();
                     return "";
                 }
             }
