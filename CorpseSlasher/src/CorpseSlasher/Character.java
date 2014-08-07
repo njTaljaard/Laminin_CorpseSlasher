@@ -43,6 +43,8 @@ public class Character {
     private CharacterAttackControl attackController;
     private final float walkSpeed = 15.0f;
     private Vector3f walkDirection;
+    private float health;
+    private boolean alive;
     
     /**
      * Character will consist of loading the model with its materials and rigging,
@@ -58,6 +60,8 @@ public class Character {
         motionController = new CharacterMotionControl();
         attackController = new CharacterAttackControl();
         walkDirection = new Vector3f();
+        health = 100;
+        alive = true;
         
         initModel(assMan, cam);
         initControl();
@@ -146,12 +150,16 @@ public class Character {
      * the direction to move the camera and model in.
      */
     public ArrayList<String> updateCharacterPostion(Camera cam) {
-        walkDirection = motionController.updateCharacterMotion(cam);
-        characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
-        
-        motionController.slash = animController.updateCharacterAnimations(channel, 
-                motionController.slash, motionController.walk);
-        return testLandedAttack();
+        if (alive) {
+            walkDirection = motionController.updateCharacterMotion(cam);
+            characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
+
+            motionController.slash = animController.updateCharacterAnimations(channel, 
+                    motionController.slash, motionController.walk, alive);
+            return testLandedAttack();
+        } else {
+            return new ArrayList<>();
+        }
     }
     
     /**
@@ -160,7 +168,11 @@ public class Character {
      */
     public void processKnocks(ArrayList<String> knocks) {
         for (int i = 0; i < knocks.size(); i++) {
+            health -= 10;
             System.out.println("Player : ive been slapped by " + knocks.get(i));
+            if (health <= 0) {
+                alive = false;
+            }
         }
     }
     

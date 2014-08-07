@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.control.KinematicRagdollControl;
 
 /**
  * @author Laminin
@@ -27,6 +28,9 @@ public class Mob {
     private MobAnimControl animControl;
     private MobCollisionControl collControl;
     private BetterCharacterControl characterControl;
+    private KinematicRagdollControl ragdoll;
+    private float health;
+    private boolean alive;
     
     /**
      * Mob creates a basic mob the required functionality.
@@ -40,6 +44,8 @@ public class Mob {
             String mName) {
         mobName = mName;
         passivePosition = position;
+        alive = true;
+        health = 100;
         
         animControl = new MobAnimControl();
         collControl = new MobCollisionControl();
@@ -70,6 +76,9 @@ public class Mob {
         characterControl.setGravity(new Vector3f(0, -800, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);
+        characterControl.setEnabled(true);
+        ragdoll = new KinematicRagdollControl(0.5f);
+        ragdoll.setEnabled(false);
     }
     
     /**
@@ -79,13 +88,14 @@ public class Mob {
     private void assembleMob(BulletAppState bullet) {
         mob.addControl(collControl.getAggroGhost());
         mob.addControl(characterControl);
+        mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
+                .getAttachmentsNode("hand.R").addControl(collControl.getAttackGhost());
         bullet.getPhysicsSpace().addCollisionListener(collControl);
         bullet.getPhysicsSpace().add(collControl.getAggroGhost());
         bullet.getPhysicsSpace().add(collControl.getAttackGhost());
         bullet.getPhysicsSpace().add(characterControl);
+        bullet.getPhysicsSpace().add(ragdoll);
         bullet.getPhysicsSpace().addAll(mob);         
-        mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
-                .getAttachmentsNode("hand.R").addControl(collControl.getAttackGhost());
     }
     
     /**
@@ -108,19 +118,46 @@ public class Mob {
      * the attack phase to move the mobs towards the player.
      */
     public String updateMob(Vector3f point, boolean hit) {
-        collControl.updateMobPhase(point, mob, characterControl, passivePosition);
-        animControl.updateMobAnimations(channel, collControl.aggro,
-                collControl.walkAttack, collControl.attack, collControl.passive);
-        
-        if (hit) {
-            System.out.println(mobName + " i have been hit!!!!");
-        }
-        
-        if (animControl.attacking && collControl.attackLanded) {
-            animControl.attacking = collControl.attackLanded = false;
-            return mobName;
+        if (alive) {
+            collControl.updateMobPhase(point, mob, characterControl, passivePosition);
+            animControl.updateMobAnimations(channel, collControl.aggro,
+                    collControl.walkAttack, collControl.attack, collControl.passive);
+
+            if (hit) {
+                health -= 10;
+                System.out.println(mobName + " hit!!!! Health : " + health);
+                if (health <= 0) {
+                    health = 0;
+                    alive = false;
+                    collControl.death(characterControl);
+                    swapControllers();
+                    return "";
+                }
+            }
+
+            if (animControl.attacking && collControl.attackLanded) {
+                animControl.attacking = collControl.attackLanded = false;
+                return mobName;
+            } else {
+                return "";
+            }
         } else {
             return "";
+        }
+    }
+    
+    private void swapControllers() {
+        if (ragdoll.isEnabled()) {
+            ragdoll.setEnabled(false);
+            mob.removeControl(KinematicRagdollControl.class);
+            mob.addControl(characterControl);
+            characterControl.setEnabled(true);
+        } else {
+            characterControl.setEnabled(false);
+            mob.removeControl(BetterCharacterControl.class);
+            mob.addControl(ragdoll);
+            ragdoll.setEnabled(true);
+            ragdoll.setRagdollMode();
         }
     }
     
