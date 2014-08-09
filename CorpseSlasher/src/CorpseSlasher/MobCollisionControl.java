@@ -141,7 +141,7 @@ public class MobCollisionControl  implements PhysicsCollisionListener {
     public void death(BetterCharacterControl characterControl) {
         characterControl.setWalkDirection(new Vector3f(0,0,0));
         aggro = false;
-        passive = true;
+        passive = false;
     }
         
     public GhostControl getAggroGhost() {

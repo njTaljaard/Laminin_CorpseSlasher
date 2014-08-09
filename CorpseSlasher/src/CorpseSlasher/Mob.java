@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.control.KinematicRagdollControl;
 
 /**
  * @author Laminin
@@ -28,8 +29,8 @@ public class Mob {
     private MobCollisionControl collControl;
     private BetterCharacterControl characterControl;
     private ModelRagdoll ragdoll;
-    private float health = 100;
-    private boolean alive = true;
+    private float health;
+    private boolean alive;
     
     /**
      * Mob creates a basic mob the required functionality.
@@ -43,6 +44,8 @@ public class Mob {
             String mName) {
         mobName = mName;
         passivePosition = position;
+        alive = true;
+        health = 100;
         
         animControl = new MobAnimControl();
         collControl = new MobCollisionControl();
@@ -74,6 +77,7 @@ public class Mob {
         characterControl.setGravity(new Vector3f(0, -800, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);
+        characterControl.setEnabled(true);
     }
     
     private void initRagdoll() {
@@ -95,7 +99,7 @@ public class Mob {
         bullet.getPhysicsSpace().add(collControl.getAttackGhost());
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().add(ragdoll);
-        bullet.getPhysicsSpace().addAll(mob);  
+        bullet.getPhysicsSpace().addAll(mob);   
     }
     
     /**

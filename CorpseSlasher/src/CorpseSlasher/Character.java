@@ -9,6 +9,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
+import com.jme3.bullet.control.KinematicRagdollControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -44,8 +45,8 @@ public class Character {
     private ModelRagdoll ragdoll;
     private final float walkSpeed = 15.0f;
     private Vector3f walkDirection;
-    private float health = 100;
-    private boolean alive = true;
+    private float health;
+    private boolean alive;
     
     /**
      * Character will consist of loading the model with its materials and rigging,
@@ -61,6 +62,8 @@ public class Character {
         motionController = new CharacterMotionControl();
         attackController = new CharacterAttackControl();
         walkDirection = new Vector3f();
+        health = 100;
+        alive = true;
         
         initModel(assMan, cam);
         initControl();
@@ -161,8 +164,7 @@ public class Character {
             characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
 
             motionController.slash = animController.updateCharacterAnimations(channel, 
-                    motionController.slash, motionController.walk);
-            
+                    motionController.slash, motionController.walk, alive);
             return testLandedAttack();
         } else {
             ragdoll.update(tpf);
@@ -191,6 +193,7 @@ public class Character {
         }
     }
     
+    
     /**
      * 
      */
@@ -209,11 +212,14 @@ public class Character {
             return attackController.mobsHit();
         }
     }
-    
+        
+    /**
+     * 
+     */
     private void swapControllers() {
         if (ragdoll.isEnabled()) {
             ragdoll.setEnabled(false);
-            player.removeControl(ModelRagdoll.class);
+            player.removeControl(KinematicRagdollControl.class);
             player.addControl(characterControl);
             characterControl.setEnabled(true);
         } else {

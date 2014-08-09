@@ -70,34 +70,40 @@ public class CharacterAnimControl {
      * @param slash - If player is attacking.
      * @param walk - If player is currently walking.
      */
-    public boolean updateCharacterAnimations(AnimChannel channel, boolean slash, boolean walk) {        
-        if (slash) {
-            if (channel.getAnimationName().equals("Stand")) {
-                channel.setAnim("Slash");
-                channel.setLoopMode(LoopMode.DontLoop);
-                channel.setSpeed(1.15f);
-                attacking = true;
-            } else {
-                if (!channel.getAnimationName().equals("Slash")) {
-                    channel.setAnim("Slash", 1.0f);
+    public boolean updateCharacterAnimations(AnimChannel channel, boolean slash, 
+            boolean walk, boolean alive) {        
+        if (alive) {
+            if (slash) {
+                if (channel.getAnimationName().equals("Stand")) {
+                    channel.setAnim("Slash");
                     channel.setLoopMode(LoopMode.DontLoop);
                     channel.setSpeed(1.15f);
+                    attacking = true;
+                } else {
+                    if (!channel.getAnimationName().equals("Slash")) {
+                        channel.setAnim("Slash", 1.0f);
+                        channel.setLoopMode(LoopMode.DontLoop);
+                        channel.setSpeed(1.15f);
+                    }
+                }
+                slash = false;
+            }
+
+            if (walk) {
+                if (channel.getAnimationName().equals("Stand")) {
+                    channel.setAnim("Walk");
+                    channel.setLoopMode(LoopMode.Loop);
+                    channel.setSpeed(1.5f);
+                }
+            } else {
+                if (!channel.getAnimationName().equals("Slash")) {
+                    channel.setAnim("Stand");
+                    channel.setLoopMode(LoopMode.Cycle);                    
                 }
             }
-            slash = false;
-        }
-        
-        if (walk) {
-            if (channel.getAnimationName().equals("Stand")) {
-                channel.setAnim("Walk");
-                channel.setLoopMode(LoopMode.Loop);
-                channel.setSpeed(1.5f);
-            }
         } else {
-            if (!channel.getAnimationName().equals("Slash")) {
-                channel.setAnim("Stand");
-                channel.setLoopMode(LoopMode.Cycle);                    
-            }
+            channel.setAnim("Stand");
+            channel.setLoopMode(LoopMode.Loop);
         }
         
         return slash;
