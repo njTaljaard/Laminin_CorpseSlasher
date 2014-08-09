@@ -25,6 +25,7 @@ public class MobCollisionControl  implements PhysicsCollisionListener {
     private GhostControl aggroGhost;
     private GhostControl attackGhost;
     protected boolean attackLanded;
+    protected boolean alive = true;
     
     public MobCollisionControl() {
         passive = true;
@@ -62,9 +63,11 @@ public class MobCollisionControl  implements PhysicsCollisionListener {
 
     @Override
     public void collision(PhysicsCollisionEvent event) {
-        if (event.getNodeA().getName().equals("Player") && 
-                event.getNodeB().getName().contains("hand.R")) {
-            attackLanded = true;
+        if (event.getNodeA() != null && event.getNodeB() != null) {
+            if (event.getNodeA().getName().equals("Player") && 
+                    event.getNodeB().getName().contains("hand.R")) {
+                attackLanded = true;
+            }
         }
     }
     
@@ -82,12 +85,12 @@ public class MobCollisionControl  implements PhysicsCollisionListener {
         if (aggro) {
             point.subtract(mob.getLocalTranslation(), motionDirection);
             motionDirection.y = 0.0f;
-            
+
             if (mob.getLocalTranslation().distance(point) > 4.5f) {
                 characterControl.setViewDirection(motionDirection.normalize().multLocal(runSpeed));
                 characterControl.setWalkDirection(motionDirection.normalize().multLocal(runSpeed)); 
             }
-            
+
             if (mob.getLocalTranslation().distance(point) < 4.0f) {
                 attack = true;
                 walkAttack = false;
@@ -111,7 +114,7 @@ public class MobCollisionControl  implements PhysicsCollisionListener {
                         return;
                     }
                 }
-                
+
                 if (passivePosition.distance(mob.getLocalTranslation()) > 3.0f) {
                   passivePosition.subtract(mob.getLocalTranslation(), motionDirection);
                   motionDirection.y = 0.0f;
@@ -133,6 +136,12 @@ public class MobCollisionControl  implements PhysicsCollisionListener {
                 }
             } 
         }
+    }
+    
+    public void death(BetterCharacterControl characterControl) {
+        characterControl.setWalkDirection(new Vector3f(0,0,0));
+        aggro = false;
+        passive = true;
     }
         
     public GhostControl getAggroGhost() {

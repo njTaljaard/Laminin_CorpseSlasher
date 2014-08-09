@@ -41,8 +41,11 @@ public class Character {
     private CharacterCameraControl cameraController;
     private CharacterMotionControl motionController;
     private CharacterAttackControl attackController;
+    private ModelRagdoll ragdoll;
     private final float walkSpeed = 15.0f;
     private Vector3f walkDirection;
+    private float health = 100;
+    private boolean alive = true;
     
     /**
      * Character will consist of loading the model with its materials and rigging,
@@ -62,6 +65,7 @@ public class Character {
         initModel(assMan, cam);
         initControl();
         initSwordGhost();
+        initRagdoll();
         assemblePlayer(bullet);
         initCamera(cam);
         initAnim();
@@ -92,6 +96,11 @@ public class Character {
         characterControl.setJumpForce(new Vector3f(0,0,0));
     }
     
+    private void initRagdoll() {
+        ragdoll = new ModelRagdoll(0.5f, "Cube-ogremesh");
+        ragdoll.setEnabled(false);
+    }
+    
     /**
      * initSwordGhost sets up the collision box that will be bound to the players
      * sword in order to determine if any collision has occured with the sword
@@ -112,6 +121,7 @@ public class Character {
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().add(swordControl);
         bullet.getPhysicsSpace().addAll(player);
+        bullet.getPhysicsSpace().add(ragdoll);
         player.addControl(characterControl);
         playerNode.attachChild(player); 
         player.getChild("Cube-ogremesh").getControl(SkeletonControl.class).getAttachmentsNode("Sword").addControl(swordControl);
@@ -145,13 +155,19 @@ public class Character {
      * @param cam - Camera to retrieve the directional vectors required to calculate
      * the direction to move the camera and model in.
      */
-    public ArrayList<String> updateCharacterPostion(Camera cam) {
-        walkDirection = motionController.updateCharacterMotion(cam);
-        characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
-        
-        motionController.slash = animController.updateCharacterAnimations(channel, 
-                motionController.slash, motionController.walk);
-        return testLandedAttack();
+    public ArrayList<String> updateCharacterPostion(Camera cam, float tpf) {
+        if (alive) {
+            walkDirection = motionController.updateCharacterMotion(cam);
+            characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
+
+            motionController.slash = animController.updateCharacterAnimations(channel, 
+                    motionController.slash, motionController.walk);
+            
+            return testLandedAttack();
+        } else {
+            ragdoll.update(tpf);
+            return new ArrayList<>();
+        }
     }
     
     /**
@@ -159,8 +175,19 @@ public class Character {
      * @param knocks 
      */
     public void processKnocks(ArrayList<String> knocks) {
-        for (int i = 0; i < knocks.size(); i++) {
-            System.out.println("Player : ive been slapped by " + knocks.get(i));
+        if (alive) {
+            for (int i = 0; i < knocks.size(); i++) {
+                health -= 10;
+                System.out.println("Player : ive been slapped by " + knocks.get(i) 
+                        + ". Health is " + health);
+                
+                if (health <= 0) {
+                    health = 0;
+                    alive = false;
+                    System.out.println("You were killed by : " + knocks.get(i));
+                    swapControllers();
+                }
+            }
         }
     }
     
@@ -180,6 +207,21 @@ public class Character {
         } else {
             attackController.attacksProcessed();
             return attackController.mobsHit();
+        }
+    }
+    
+    private void swapControllers() {
+        if (ragdoll.isEnabled()) {
+            ragdoll.setEnabled(false);
+            player.removeControl(ModelRagdoll.class);
+            player.addControl(characterControl);
+            characterControl.setEnabled(true);
+        } else {
+            characterControl.setEnabled(false);
+            player.removeControl(BetterCharacterControl.class);
+            player.addControl(ragdoll);
+            ragdoll.setEnabled(true);
+            ragdoll.setRagdollMode();
         }
     }
     

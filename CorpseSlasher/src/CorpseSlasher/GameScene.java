@@ -39,6 +39,7 @@ public class GameScene {
         initScene(assestManager, viewPort, cam, bullet, selectedMap, ui, settings);
         initMainCharacter(assestManager, inMan, bullet, cam);
         initMobs(bullet, assestManager);
+        bullet.getPhysicsSpace().enableDebug(assestManager);
     }
     
     /**
@@ -118,8 +119,9 @@ public class GameScene {
      */
     public void update(Camera cam, TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
-        ArrayList<String> hitMobs = character.updateCharacterPostion(cam);
-        ArrayList<String> landed = mobHandler.updateMobs(character.getPosition(), hitMobs);
+        ArrayList<String> hitMobs = character.updateCharacterPostion(cam, tpf);
+        ArrayList<String> landed = mobHandler.updateMobs(character.getPosition(), 
+                hitMobs, tpf);
         character.processKnocks(landed);
     }
     

@@ -27,6 +27,9 @@ public class Mob {
     private MobAnimControl animControl;
     private MobCollisionControl collControl;
     private BetterCharacterControl characterControl;
+    private ModelRagdoll ragdoll;
+    private float health = 100;
+    private boolean alive = true;
     
     /**
      * Mob creates a basic mob the required functionality.
@@ -46,6 +49,7 @@ public class Mob {
         
         initMob(assMan);
         initControl();
+        initRagdoll();
         assembleMob(bullet);
         initAnim();
     }
@@ -72,6 +76,11 @@ public class Mob {
         characterControl.setApplyPhysicsLocal(true);
     }
     
+    private void initRagdoll() {
+        ragdoll = new ModelRagdoll(0.5f, "bennettzombie_body.001-ogremesh");
+        ragdoll.setEnabled(false);
+    }
+    
     /**
      * assembleMob add the controllers to the mob and to the physics handler.
      * @param bullet - BulletAppState physics controller. 
@@ -79,13 +88,14 @@ public class Mob {
     private void assembleMob(BulletAppState bullet) {
         mob.addControl(collControl.getAggroGhost());
         mob.addControl(characterControl);
+        mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
+                .getAttachmentsNode("hand.R").addControl(collControl.getAttackGhost());
         bullet.getPhysicsSpace().addCollisionListener(collControl);
         bullet.getPhysicsSpace().add(collControl.getAggroGhost());
         bullet.getPhysicsSpace().add(collControl.getAttackGhost());
         bullet.getPhysicsSpace().add(characterControl);
-        bullet.getPhysicsSpace().addAll(mob);         
-        mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
-                .getAttachmentsNode("hand.R").addControl(collControl.getAttackGhost());
+        bullet.getPhysicsSpace().add(ragdoll);
+        bullet.getPhysicsSpace().addAll(mob);  
     }
     
     /**
@@ -107,20 +117,49 @@ public class Mob {
      * @param point - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
      */
-    public String updateMob(Vector3f point, boolean hit) {
-        collControl.updateMobPhase(point, mob, characterControl, passivePosition);
-        animControl.updateMobAnimations(channel, collControl.aggro,
-                collControl.walkAttack, collControl.attack, collControl.passive);
-        
-        if (hit) {
-            System.out.println(mobName + " i have been hit!!!!");
-        }
-        
-        if (animControl.attacking && collControl.attackLanded) {
-            animControl.attacking = collControl.attackLanded = false;
-            return mobName;
+    public String updateMob(Vector3f point, boolean hit, float tpf) {
+        if (alive) {
+            collControl.updateMobPhase(point, mob, characterControl, passivePosition);
+            animControl.updateMobAnimations(channel, collControl.aggro,
+                    collControl.walkAttack, collControl.attack, collControl.passive);
+
+            if (hit) {
+                health -= 10;
+                System.out.println(mobName + " i have been hit!!!! My health is " + health);
+                if (health <= 0) {
+                    health = 0;
+                    alive = false;
+                    collControl.death(characterControl);
+                    System.out.println("You killed : " + mobName);
+                    swapControllers();
+                    return "";
+                }
+            }
+
+            if (animControl.attacking && collControl.attackLanded) {
+                animControl.attacking = collControl.attackLanded = false;
+                return mobName;
+            } else {
+                return "";
+            }
         } else {
+            ragdoll.update(tpf);
             return "";
+        }
+    }
+    
+    private void swapControllers() {
+        if (ragdoll.isEnabled()) {
+            ragdoll.setEnabled(false);
+            mob.removeControl(ModelRagdoll.class);
+            mob.addControl(characterControl);
+            characterControl.setEnabled(true);
+        } else {
+            characterControl.setEnabled(false);
+            mob.removeControl(BetterCharacterControl.class);
+            mob.addControl(ragdoll);
+            ragdoll.setEnabled(true);
+            ragdoll.setRagdollMode();
         }
     }
     

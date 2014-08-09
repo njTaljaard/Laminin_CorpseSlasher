@@ -22,9 +22,11 @@ public class CharacterAttackControl implements PhysicsCollisionListener {
     
     @Override
     public void collision(PhysicsCollisionEvent event) {
-        if (event.getNodeB().getName().contains("mob") && 
-                event.getNodeA().getName().contains("Sword")) {
-            hitMobs.add(event.getNodeB().getName());
+        if (event.getNodeA() != null && event.getNodeB() != null) {
+            if (event.getNodeB().getName().contains("mob") && 
+                    event.getNodeA().getName().contains("Sword")) {
+                hitMobs.add(event.getNodeB().getName());
+            }
         }
     }
     
