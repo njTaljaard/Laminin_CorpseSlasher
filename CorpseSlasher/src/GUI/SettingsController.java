@@ -4,8 +4,11 @@ import CorpseSlasher.GameSettings;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
+import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.SizeValue;
+import java.util.List;
 
 /**
  *
@@ -15,8 +18,17 @@ import de.lessvoid.nifty.screen.ScreenController;
 public class SettingsController implements ScreenController {
     private GameSettings settings;
     private boolean x1,x2,x3,x4,x5,x6,x7,x8,x9,x10;
+    private Nifty nifty;
     @Override
     public void bind(Nifty nifty, Screen screen) {
+        this.nifty = nifty;
+        ListBox listBox = screen.findNiftyControl("Resolution_Opts", ListBox.class);
+        listBox.addItem("1920 X 1080");
+        listBox.addItem("1600 X 900");
+        listBox.addItem("1280 X 720");
+        listBox.addItem("1024 X 768");
+        listBox.addItem("800 X 600");
+        listBox.setHeight(new SizeValue("50"));
     }
 
     @Override
@@ -138,5 +150,7 @@ public class SettingsController implements ScreenController {
      public void quitGame(){
          System.exit(1);
      }
-    
+     public void goTo(String _screen){
+         nifty.gotoScreen(_screen);
+     }
 }

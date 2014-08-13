@@ -19,10 +19,14 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
+import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.checkbox.builder.CheckboxBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
+import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
+import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import java.awt.Toolkit;
 
 /**
  *
@@ -31,10 +35,20 @@ import de.lessvoid.nifty.screen.ScreenController;
  */
 public class SettingsScreen extends Screens {
     private Nifty nifty;
-
+    private int sHeight;
+    private int sWidth;
+    private boolean isWide;
     SettingsScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
                    ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay Screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
+        Toolkit toolkit=Toolkit.getDefaultToolkit();
+        sHeight = (int) toolkit.getScreenSize().getHeight();
+        sWidth = (int) toolkit.getScreenSize().getWidth();
+        if ((sWidth/sHeight)==(16/9)){
+            isWide = true;
+        } else {
+            isWide = false;
+        }
         buildGui();
     }
     /**
@@ -68,6 +82,7 @@ public class SettingsScreen extends Screens {
                                         height("50px");
                                         width("150px");
                                         align(Align.Left);
+                                        interactOnClick("goTo(Display_Settings)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Difficulty Settings") {
@@ -86,7 +101,7 @@ public class SettingsScreen extends Screens {
                                         height("50px");
                                         width("150px");
                                         align(Align.Left);
-                                        interactOnClick("graphicsScreen()");
+                                        interactOnClick("goTo(Graphics_Extension)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Sound Settings") {
@@ -117,6 +132,7 @@ public class SettingsScreen extends Screens {
         nifty.addScreen("Graphics_Settings", new ScreenBuilder("Graphics_Extension") {
             {
                 controller(new SettingsController());
+                controller((ScreenController)app);
                 layer(new LayerBuilder("background") {
                     {
                         childLayoutCenter();;
@@ -137,7 +153,7 @@ public class SettingsScreen extends Screens {
                                         height("50px");
                                         width("150px");
                                         align(Align.Left);
-                                        interactOnClick("");
+                                        interactOnClick("goTo(Display_Settings)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Difficulty Settings") {
@@ -156,7 +172,6 @@ public class SettingsScreen extends Screens {
                                         height("50px");
                                         width("150px");
                                         align(Align.Left);
-                                        interactOnClick("graphicsScreen()");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Sound Settings") {
@@ -371,7 +386,7 @@ public class SettingsScreen extends Screens {
                 });
             }
         }.build(nifty));
-        nifty.addScreen("Display_Screen", new ScreenBuilder("Display_Extension",new SettingsController()){
+        nifty.addScreen("Display_Screen", new ScreenBuilder("Display_Settings"){
             {
                 controller(new SettingsController());
                 layer(new LayerBuilder("background") {
@@ -412,7 +427,7 @@ public class SettingsScreen extends Screens {
                                         height("50px");
                                         width("150px");
                                         align(Align.Left);
-                                        interactOnClick("graphicsScreen()");
+                                        interactOnClick("goTo(Graphics_Extension)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Sound Settings") {
@@ -432,6 +447,35 @@ public class SettingsScreen extends Screens {
                                         width("150px");
                                         align(Align.Left);
                                         interactOnClick("quitGame()");
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+                layer(new LayerBuilder("Settings"){
+                    {
+                        childLayoutVertical();
+                        panel(new PanelBuilder("Resolution_Panel") {
+                            {
+                                childLayoutHorizontal();
+                                marginLeft("40%");
+                                marginTop("15%");
+                                control(new LabelBuilder("", "Set Resolution") {
+                                    {
+                                        color("881188");
+                                    }
+                                });
+                                control(new ListBoxBuilder("Resolution_Opts") {
+                                    {  
+                                        marginLeft("5%");
+                                        marginBottom("10%");
+                                        displayItems(5);
+                                        optionalVerticalScrollbar();
+                                        hideHorizontalScrollbar();
+                                        selectionModeSingle();
+                                        width("8%");
+                                        
                                     }
                                 });
                             }

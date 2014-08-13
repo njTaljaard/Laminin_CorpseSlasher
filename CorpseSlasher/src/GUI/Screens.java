@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package GUI;
 
 import com.jme3.app.Application;
@@ -11,6 +7,7 @@ import com.jme3.audio.AudioRenderer;
 import com.jme3.input.InputManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
+import com.jme3.system.AppSettings;
 
 /**
  *
@@ -52,6 +49,13 @@ abstract class Screens
         screen.getNifty().gotoScreen(_screen);
     }
     void build(){};
+
+
+    public void updateRes(int width, int height){
+        AppSettings settings = new AppSettings(true);
+        settings.setResolution(width, height);
+        screen.reshape(guiViewPort, width, height);
+    }
 
 
 }

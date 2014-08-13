@@ -6,6 +6,7 @@ import GUI.UserInterfaceManager;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
+import com.jme3.system.AppSettings;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
@@ -35,6 +36,7 @@ import java.util.Scanner;
  * @param  COS301
  * Main class to handle program start up until graphical main loop is reached.
  */
+@SuppressWarnings("*")
 public class Main extends SimpleApplication implements ScreenController {
     static int                        byPass = 0;
     UserInterfaceManager              UI     = new UserInterfaceManager();
@@ -54,16 +56,13 @@ public class Main extends SimpleApplication implements ScreenController {
     TextField                         retUser;
     TextRenderer                      textRenderer;
     Element                           progressBarElement;
-
+    AppSettings                       gSettings;
     public static void main(String[] args) {
         Main app = new Main();
-       /* app.setShowSettings(false);
+        app.setShowSettings(false);
         app.setDisplayFps(false);
+        app.setDisplayStatView(false);
         System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
-        AppSettings settings = new AppSettings(true);
-        settings.setResolution(1366, 768);
-        
-        app.setSettings(settings);*/
         app.start();
     }
 
@@ -73,14 +72,16 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
+        gSettings = new AppSettings(true);
+        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
+        loadSettings();
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
-        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
         ClientConnection.StartClientConnection();
         UI.optionScreen();
-        UI.loginScreen();
+        UI.loginScreen();     
     }
 
     @Override
@@ -103,33 +104,48 @@ public class Main extends SimpleApplication implements ScreenController {
     public boolean[] loadSettings() {
         boolean[] settings2 = new boolean[10];
         int       pos       = 0;
-
+        int       height    = 640;
+        int       width     = 800;
         try {
-            Scanner in = new Scanner(new FileReader("GameSettings.txt")).useDelimiter("=");
+            try (Scanner in = new Scanner(new FileReader("GameSettings.txt")).useDelimiter("=")) {
+                while (in.hasNext()) {
+                    String next = in.next().replace("\n", "");
+                    
 
-            while (in.hasNext()) {
-                String next = in.next();
+                    if (next.equals("true")) {
+                        settings2[pos++] = true;
+                    }
 
-                System.out.println(next);
-
-                if (next.equals("true")) {
-                    settings2[pos++] = true;
-                }
-
-                if (next.equals("false")) {
-                    settings2[pos++] = false;
+                    if (next.equals("false")) {
+                        settings2[pos++] = false;
+                    }
+                    if (next.equals("width")){
+                        width = in.nextInt();
+                    }
+                    if (next.equals("height")){
+                        height = in.nextInt();
+                    }
                 }
             }
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
 
+        } catch (FileNotFoundException | NumberFormatException ex) {
+            if(ex instanceof NumberFormatException){
+                width = 800;
+                height = 640;
+            }
+            else {
+                ex.printStackTrace();
+            }
+        }  
+        UI.updateRes(width, height);
+        gSettings.setResolution(width,height);      
+        this.setSettings(gSettings);
+        restart();
 
         return settings2;
     }
 
     public void loadGame() {
-        System.out.println("here");
         boolean[] settings2 = loadSettings();
 
         // Settings file loaded and now must be used in program
@@ -140,7 +156,6 @@ public class Main extends SimpleApplication implements ScreenController {
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
-        System.out.println("boer");
         gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager, UI.getLoadingScreen(),
                                   settingsF);
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
@@ -154,7 +169,6 @@ public class Main extends SimpleApplication implements ScreenController {
         loggedIn = true;
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.changeState();
-        System.out.println("over here");
     }
     /**
      * 
@@ -174,6 +188,7 @@ public class Main extends SimpleApplication implements ScreenController {
         accPassword   = screen.findNiftyControl("Password_Input_ID_2", TextField.class);
         accPasswordRE = screen.findNiftyControl("Password_Input_ID_2_2", TextField.class);
         retUser       = screen.findNiftyControl("Username_Input_ID_3", TextField.class);
+
     }
 
     @Override
@@ -263,30 +278,15 @@ public class Main extends SimpleApplication implements ScreenController {
         System.exit(0);
     }
     /**
-     * Goes to the graphics settings from the option screen
+     * Goes to screen selected
      */
-    public void graphicsScreen() {
-        UI.goTo("Graphics_Settings");
-    }
-    /**
-     * Goes to the audio settings from the option screen
-     */
-
-    public void audioScreen() {
-        UI.goTo("Audio_Settings");
-    }
-    /**
-     * Goes to the difficulty settings from the option screen
-     */
-
-    public void difficultyScreen() {
-        UI.goTo("Difficulty_Settings");
+    public void goTo(String screen){
+        UI.goTo(screen);    
     }
     /**
      * Goes back to the login screen
      */
     public void goBack() {
-        System.out.println("hello");
         UI.goTo("Login_Screen");
     }
     /**

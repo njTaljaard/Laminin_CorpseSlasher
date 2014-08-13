@@ -9,6 +9,7 @@ import com.jme3.audio.AudioRenderer;
 import com.jme3.input.InputManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
+import com.jme3.system.AppSettings;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.LayerBuilder;
@@ -27,7 +28,7 @@ import de.lessvoid.nifty.tools.Color;
  * new custom account or retrieve his password
  */
 public class LoginScreen extends Screens {
-
+    private Nifty nifty;
     public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
                        ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
@@ -38,7 +39,7 @@ public class LoginScreen extends Screens {
      * Buiilds the NiftyGui
      */
     public void build() {
-        Nifty nifty = screen.getNifty();
+        nifty = screen.getNifty();
 
         guiViewPort.addProcessor(screen);
         buildGui(nifty);
@@ -191,6 +192,7 @@ public class LoginScreen extends Screens {
         }.build(nifty));
     }
 }
+
 
 
 //~ Formatted by Jindent --- http://www.jindent.com

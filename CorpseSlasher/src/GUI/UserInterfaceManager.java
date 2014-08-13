@@ -12,6 +12,7 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
+import de.lessvoid.nifty.controls.ListBox;
 
 /**
  * 
@@ -30,6 +31,9 @@ public final class UserInterfaceManager {
     private NiftyJmeDisplay Screen;
     private ActionListener  action;
     private Screens[] guiScreens;
+    private int       height;
+    private int       width;
+
     /**
      * 
      * @param assetManager
@@ -52,6 +56,14 @@ public final class UserInterfaceManager {
         Screen = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
         guiScreens = new Screens[5];
     }
+    public void updateRes(int width, int height){
+        this.width = width;
+        this.height = height;
+        for(Screens screen_1 : guiScreens){
+            if(screen_1 != null)
+            screen_1.updateRes(width,height);
+        }
+    }
     /**
      * Creates the login screen
      */
@@ -59,6 +71,7 @@ public final class UserInterfaceManager {
         guiScreens[0] = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                 Screen);
         guiScreens[0].build();
+        guiScreens[0].updateRes(width, height);
     }
     /**
      * Creates the new account account screen
@@ -67,6 +80,7 @@ public final class UserInterfaceManager {
          guiScreens[1] = new NewAccount(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                            Screen);
         guiScreens[1].build();
+        guiScreens[1].updateRes(width, height);
     }
     /**
      * Creates the retrieve password screen
@@ -75,6 +89,7 @@ public final class UserInterfaceManager {
         guiScreens[2] = new RetrievePassword(assetManager, inputManager, audioRenderer, guiViewPort,
                                         appState, app, Screen);
         guiScreens[2].build();
+        guiScreens[2].updateRes(width, height);
     }
     /**
      * Updates the state of the game so that settings menu can be called after login only
@@ -98,6 +113,7 @@ public final class UserInterfaceManager {
                     if (menuOpen) {
                         inputManager.setCursorVisible(true);
                         guiScreens[3].goTo("Option_Screen");
+                        guiScreens[3].updateRes(width, height);
                     } else {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
                         inputManager.setCursorVisible(false);
@@ -113,6 +129,7 @@ public final class UserInterfaceManager {
      */
     public void optionScreen() {
         guiScreens[3] = new SettingsScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
+        ListBox listBox;
     }
 
     public void settings(String selection) {}
@@ -121,6 +138,7 @@ public final class UserInterfaceManager {
      */
     public void loadingScreen() {
         guiScreens[4] = new LoadingScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
+        guiScreens[4].updateRes(width, height);
     }
     /**
      * 
