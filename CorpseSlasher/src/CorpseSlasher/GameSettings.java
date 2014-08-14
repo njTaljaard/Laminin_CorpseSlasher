@@ -1,8 +1,8 @@
 package CorpseSlasher;
 
 //~--- non-JDK imports --------------------------------------------------------
+import GUI.UserInterfaceManager;
 import com.jme3.system.AppSettings;
-import java.io.BufferedReader;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -13,8 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Laminin
@@ -42,25 +40,24 @@ public class GameSettings {
     public GameSettings() {
         Scanner contents = null;
         try {
-             contents = new Scanner(new FileReader("GameSettings.txt"));
-             while(contents.hasNextLine()){
-                 String line = contents.nextLine();
-                 setting.add(line);
-             }
+            contents = new Scanner(new FileReader("GameSettings.txt"));
+            while (contents.hasNextLine()) {
+                String line = contents.nextLine();
+                setting.add(line);
+            }
         } catch (FileNotFoundException ex) {
         } finally {
-                contents.close();
+            contents.close();
         }
     }
 
     public GameSettings(boolean[] settings) {
         int x = 0;
-
         postWater = settings[x++];
         waterReflections = settings[x++];
         waterRippels = settings[x++];
         waterSpecular = settings[x++];
-        waterFoam = settings[x++]; 
+        waterFoam = settings[x++];
         skyDome = settings[x++];
         starMotion = settings[x++];
         cloudMotion = settings[x++];
@@ -80,25 +77,16 @@ public class GameSettings {
         cloudMotion = x8;
         bloomLight = x9;
         lightScatter = x10;
-
-        try {
-            FileWriter savedGame = new FileWriter("GameSettings.txt");
-            savedGame.append("PostWater=" + x1 + "=\n");
-            savedGame.append("WaterReflections=" + x2 + "=\n");
-            savedGame.append("WaterRipples=" + x3 + "=\n");
-            savedGame.append("WaterSpecular=" + x4 + "=\n");
-            savedGame.append("WaterFoam=" + x5 + "=\n");
-            savedGame.append("SkyDome=" + x6 + "=\n");
-            savedGame.append("StarMotion=" + x7 + "=\n");
-            savedGame.append("CloudMotion=" + x8 + "=\n");
-            savedGame.append("BloomLight=" + x9 + "=\n");
-            savedGame.append("LightScatter=" + x10 + "=\n");
-            savedGame.append("width=1920=\n");
-            savedGame.append("height=1080=\n");
-            savedGame.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        updateSettings("PostWater", "" + x1);
+        updateSettings("WaterReflections", "" + x2);
+        updateSettings("WaterRipples", "" + x3);
+        updateSettings("WaterSpecular", "" + x4);
+        updateSettings("WaterFoam", "" + x5);
+        updateSettings("SkyDome", "" + x6);
+        updateSettings("StarMotion", "" + x7);
+        updateSettings("CloudMotion", "" + x8);
+        updateSettings("BloomLight", "" + x9);
+        updateSettings("LightScatter", "" + x10);
     }
 
     public boolean isPostWater() {
@@ -150,24 +138,24 @@ public class GameSettings {
         File savedSettings = new File("GameSettings.txt");
         return storedSettings;
     }
+
     public void apply() {
-        
-            FileWriter savedGame = null;
-        try { savedGame = new FileWriter("GameSettings.txt");
-            for(Object line : setting){
-                savedGame.append(line.toString()+"\n");
+
+        FileWriter savedGame = null;
+        try {
+            savedGame = new FileWriter("GameSettings.txt");
+            for (Object line : setting) {
+                savedGame.append(line.toString() + "\n");
             }
         } catch (IOException ex) {
-
-        }
-        finally {
-                try {
-                    savedGame.close();
-                } catch (IOException ex) {
-                    
-                }
+        } finally {
+            try {
+                savedGame.close();
+            } catch (IOException ex) {
+            }
         }
     }
+
     /**
      * Store settings will store the current game settings to be used later.
      *
@@ -182,6 +170,10 @@ public class GameSettings {
             setting.remove(name + "=" + settings + "=");
         }
         setting.add(name + "=" + settings + "=");
+    }
+    public void updateRes(int width, int height){
+        UserInterfaceManager UI = new UserInterfaceManager();
+        UI.init(null, null, null, null, null, null);
     }
 }
 

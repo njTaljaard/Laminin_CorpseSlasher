@@ -42,6 +42,7 @@ public class LoadingScreen extends Screens {
      */
     private void build(float value) {
         nifty = screen.getNifty();
+        nifty.setIgnoreKeyboardEvents(true);
         guiViewPort.addProcessor(screen);
         buildGui(nifty, value);
         nifty.gotoScreen("Loading");

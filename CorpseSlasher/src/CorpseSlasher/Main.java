@@ -58,11 +58,13 @@ public class Main extends SimpleApplication implements ScreenController {
     TextRenderer textRenderer;
     Element progressBarElement;
     AppSettings gSettings;
-
+    Nifty nifty;
+    GameSettings settingsF;
+    
     public static void main(String[] args) {
         Main app = new Main();
         app.setShowSettings(false);
-        app.setDisplayFps(false);
+        app.setDisplayFps(true);
         app.setDisplayStatView(false);
         System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
         app.start();
@@ -77,7 +79,7 @@ public class Main extends SimpleApplication implements ScreenController {
     public void simpleInitApp() {
         gSettings = new AppSettings(true);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
-        loadSettings();
+        settingsF = loadSettings();
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
@@ -107,7 +109,6 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public GameSettings loadSettings() {
         GameSettings _settings = new GameSettings();
-        int pos = 0;
         int height = 600;
         int width = 800;
         String previous = "";
@@ -145,18 +146,19 @@ public class Main extends SimpleApplication implements ScreenController {
                 ex.printStackTrace();
             }
         }
-        AppSettings setting = new AppSettings(false);
+        System.out.println(width+" "+height);
+        //AppSettings setting = new AppSettings(true);
         UI.updateRes(width, height);
         gSettings.setResolution(width, height);
+        gSettings.setFullscreen(true);
+        //setting.setFullscreen(true);
+        //setting.setResolution(width, height);
         this.setSettings(gSettings);
-        setting.setFullscreen(true);
         restart();
         return _settings;
     }
 
     public void loadGame() {
-       GameSettings settingsF = loadSettings();
-
         // Settings file loaded and now must be used in program
 
         inputManager.setCursorVisible(false);
@@ -188,6 +190,7 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void bind(Nifty nifty, Screen screen) {
+        this.nifty = nifty;
         usernameTxt = screen.findNiftyControl("Username_Input_ID", TextField.class);
         passwordTxt = screen.findNiftyControl("Password_Input_ID", TextField.class);
         accUser = screen.findNiftyControl("Username_Input_ID_2", TextField.class);
@@ -202,10 +205,12 @@ public class Main extends SimpleApplication implements ScreenController {
 
     @Override
     public void onStartScreen() {
+       nifty.setIgnoreKeyboardEvents(false);
     }
 
     @Override
     public void onEndScreen() {
+       nifty.setIgnoreKeyboardEvents(true);
     }
 
     /**

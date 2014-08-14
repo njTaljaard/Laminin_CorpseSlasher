@@ -37,6 +37,7 @@ public class RetrievePassword extends Screens {
      */
     public void build() {
         Nifty nifty = screen.getNifty();
+        nifty.setIgnoreKeyboardEvents(true);
 
         guiViewPort.addProcessor(screen);
         buildGui(nifty);

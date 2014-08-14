@@ -6,6 +6,7 @@
 package GUI;
 
 //~--- non-JDK imports --------------------------------------------------------
+import CorpseSlasher.GameSettings;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -36,10 +37,12 @@ public class SettingsScreen extends Screens {
     private int sHeight;
     private int sWidth;
     private boolean isWide;
+    private UserInterfaceManager UI;
 
     SettingsScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
-            ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay Screen) {
+            ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay Screen, UserInterfaceManager UI) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
+        this.UI = UI;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         sHeight = (int) toolkit.getScreenSize().getHeight();
         sWidth = (int) toolkit.getScreenSize().getWidth();
@@ -57,6 +60,7 @@ public class SettingsScreen extends Screens {
      */
     private void buildGui() {
         nifty = screen.getNifty();
+        nifty.setIgnoreKeyboardEvents(true);
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
         nifty.addScreen("Option_Screen", new ScreenBuilder("Options_Screen") {
@@ -150,12 +154,12 @@ public class SettingsScreen extends Screens {
         }.build(nifty));
         nifty.addScreen("Graphics_Settings", new ScreenBuilder("Graphics_Extension") {
             {
-                controller(new SettingsController());
+                controller(new SettingsController(UI));
                 controller((ScreenController) app);
                 layer(new LayerBuilder("background") {
                     {
                         font("Interface/Fonts/zombie.fnt");
-                        childLayoutCenter();;
+                        childLayoutCenter();
                         backgroundImage("Backgrounds/ZOMBIE1.jpg");
                         visibleToMouse(true);
                     }
@@ -420,7 +424,7 @@ public class SettingsScreen extends Screens {
                         });
                         panel(new PanelBuilder("Apply_Panel") {
                             {
-                                        font("Interface/Fonts/zombie.fnt");
+                                font("Interface/Fonts/zombie.fnt");
                                 childLayoutHorizontal();
                                 marginLeft("43%");
                                 marginTop("5%");
@@ -438,7 +442,7 @@ public class SettingsScreen extends Screens {
         }.build(nifty));
         nifty.addScreen("Display_Screen", new ScreenBuilder("Display_Settings") {
             {
-                controller(new SettingsController());
+                controller(new SettingsController(UI));
                 layer(new LayerBuilder("background") {
                     {
                         font("Interface/Fonts/zombie.fnt");
@@ -453,7 +457,7 @@ public class SettingsScreen extends Screens {
                         childLayoutOverlay();
                         panel(new PanelBuilder("Settings") {
                             {
-                                        font("Interface/Fonts/zombie.fnt");
+                                font("Interface/Fonts/zombie.fnt");
                                 childLayoutVertical();
                                 control(new ButtonBuilder("", "Display Settings") {
                                     {

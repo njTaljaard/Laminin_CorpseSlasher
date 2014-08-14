@@ -12,7 +12,6 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
-import de.lessvoid.nifty.controls.ListBox;
 
 /**
  * 
@@ -63,6 +62,8 @@ public final class UserInterfaceManager {
             if(screen_1 != null)
             screen_1.updateRes(width,height);
         }
+        //app.update();
+            //app.restart();
     }
     /**
      * Creates the login screen
@@ -94,7 +95,7 @@ public final class UserInterfaceManager {
     public void leaderBoard() {
         guiScreens[5] = new Leaderboard(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
         guiScreens[5].build();
-        guiScreens[5].updateRes(width, height);
+       guiScreens[5].updateRes(width, height);
     }
     /**
      * Updates the state of the game so that settings menu can be called after login only
@@ -133,7 +134,7 @@ public final class UserInterfaceManager {
      * Creates a new settings screen
      */
     public void optionScreen() {
-        guiScreens[3] = new SettingsScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
+        guiScreens[3] = new SettingsScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen,this);
     }
 
     public void settings(String selection) {}

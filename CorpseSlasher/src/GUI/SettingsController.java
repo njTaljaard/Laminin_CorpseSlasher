@@ -15,11 +15,17 @@ import de.lessvoid.nifty.tools.SizeValue;
  * The controller for the graphics settings screen
  */
 public class SettingsController implements ScreenController {
-    private GameSettings settings = new GameSettings();;
+    private GameSettings settings = new GameSettings();
+    private UserInterfaceManager UI;
     private boolean x1,x2,x3,x4,x5,x6,x7,x8,x9,x10;
     private Nifty nifty;
     private Screen screen;
-    @Override
+    
+    public SettingsController(UserInterfaceManager UI){
+        this.UI = UI;
+    }
+    
+            @Override
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
         this.screen = screen;
@@ -29,16 +35,16 @@ public class SettingsController implements ScreenController {
         listBox.addItem("1280 X 720");
         listBox.addItem("1024 X 768");
         listBox.addItem("800 X 600");
-        listBox.setHeight(new SizeValue("50"));
-        listBox.setStyle("Interface/Fonts/zombie.fnt");
     }
 
     @Override
     public void onStartScreen() {
+       nifty.setIgnoreKeyboardEvents(false);
     }
 
     @Override
-    public void onEndScreen() {
+    public void onEndScreen() { 
+       nifty.setIgnoreKeyboardEvents(true);      
     }
     /**
      * 
@@ -151,6 +157,9 @@ public class SettingsController implements ScreenController {
          String res[] = listBox.getFocusItem().toString().split(" X ");
          String width = res[0];
          String height = res[1];
+         settings.updateSettings("width", width);         
+         settings.updateSettings("height", height);
+         //UI.updateRes(Integer.parseInt(width),Integer.parseInt(height));
      }
      /**
       * Quits the game
