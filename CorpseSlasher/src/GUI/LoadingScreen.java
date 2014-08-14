@@ -9,6 +9,7 @@ import com.jme3.audio.AudioRenderer;
 import com.jme3.input.InputManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
+import com.jme3.system.AppSettings;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
@@ -41,6 +42,7 @@ public class LoadingScreen extends Screens {
      */
     private void build(float value) {
         nifty = screen.getNifty();
+        nifty.setIgnoreKeyboardEvents(true);
         guiViewPort.addProcessor(screen);
         buildGui(nifty, value);
         nifty.gotoScreen("Loading");
@@ -118,6 +120,13 @@ public class LoadingScreen extends Screens {
         progressBarElement.getParent().layoutElements();
         System.out.println(pixelWidth + "px");
         nifty.gotoScreen("Loading");
+    }
+    @Override
+    public void updateRes(int width, int height){
+        AppSettings settings = new AppSettings(true);
+        settings.setResolution(width, height);
+        nifty.render(true);
+        screen.reshape(guiViewPort, width, width);
     }
 }
 

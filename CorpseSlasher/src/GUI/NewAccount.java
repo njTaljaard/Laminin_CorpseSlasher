@@ -1,12 +1,11 @@
 
 /*
-* To change this template, choose Tools | Templates
-* and open the template in the editor.
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package GUI;
 
 //~--- non-JDK imports --------------------------------------------------------
-
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -27,29 +26,32 @@ import de.lessvoid.nifty.tools.Color;
 
 /**
  *
- * @author Gerhard
- * An extension of the screen class allowing the creatation of new custom accounts
+ * @author Gerhard An extension of the screen class allowing the creatation of
+ * new custom accounts
  */
 public class NewAccount extends Screens {
 
     NewAccount(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort,
-               AppStateManager appState, Application app,NiftyJmeDisplay screen) {
-        super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);     
+            AppStateManager appState, Application app, NiftyJmeDisplay screen) {
+        super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
     }
+
     /**
      * builds the new account screen
      */
     public void build() {
         Nifty nifty = screen.getNifty();
-        
+        nifty.setIgnoreKeyboardEvents(true);
+
         guiViewPort.addProcessor(screen);
         buildGui(nifty);
         nifty.gotoScreen("New_Account_Screen");
     }
+
     /**
-     * 
-     * @param nifty the nifty object that has to be designed
-     * Helper function to build, adding buttons and labels
+     *
+     * @param nifty the nifty object that has to be designed Helper function to
+     * build, adding buttons and labels
      */
     private void buildGui(Nifty nifty) {
         nifty.loadStyleFile("nifty-default-styles.xml");
@@ -59,6 +61,7 @@ public class NewAccount extends Screens {
                 controller((ScreenController) app);
                 layer(new LayerBuilder("background") {
                     {
+                        font("Interface/Fonts/zombie.fnt");
                         childLayoutCenter();
                         backgroundImage("Backgrounds/ZOMBIE1.jpg");
                         visibleToMouse(true);
@@ -66,6 +69,7 @@ public class NewAccount extends Screens {
                 });
                 layer(new LayerBuilder("foreground") {
                     {
+                        font("Interface/Fonts/zombie.fnt");
                         visibleToMouse(true);
                         childLayoutVertical();
                         backgroundColor(new Color(.3f, .3f, .3f, .5f));
@@ -81,6 +85,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new TextFieldBuilder("Email_Input_ID", "Enter Email") {
@@ -91,6 +96,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new LabelBuilder("Name", "Name :") {
@@ -102,6 +108,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new TextFieldBuilder("Name_Input_ID", "Enter Name") {
@@ -112,6 +119,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new TextFieldBuilder("Surname_Input_ID", "Enter Surname") {
@@ -122,6 +130,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new LabelBuilder("Surname", "Surname :") {
@@ -133,6 +142,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new LabelBuilder("Username_ID_2", "Username :") {
@@ -144,6 +154,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new TextFieldBuilder("Username_Input_ID_2", "Enter Username") {
@@ -154,6 +165,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new LabelBuilder("Password_ID_2", "Password :") {
@@ -165,6 +177,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new TextFieldBuilder("Password_Input_ID_2", "Enter Password") {
@@ -175,6 +188,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new LabelBuilder("Password_ID_2_2", "RE-Password :") {
@@ -186,6 +200,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new TextFieldBuilder("Password_Input_ID_2_2", "RE-Enter Password") {
@@ -196,6 +211,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new ButtonBuilder("Create_Account", "Create Account") {
@@ -206,9 +222,10 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         interactOnClick("createNewAccount()");
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new ButtonBuilder("Back","Back"){
+                                control(new ButtonBuilder("Back", "Back") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Bottom);
@@ -216,6 +233,7 @@ public class NewAccount extends Screens {
                                         height("5%");
                                         width("15%");
                                         interactOnClick("goBack()");
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                             }

@@ -4,8 +4,10 @@ import CorpseSlasher.GameSettings;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
+import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.SizeValue;
 
 /**
  *
@@ -13,18 +15,36 @@ import de.lessvoid.nifty.screen.ScreenController;
  * The controller for the graphics settings screen
  */
 public class SettingsController implements ScreenController {
-    private GameSettings settings;
+    private GameSettings settings = new GameSettings();
+    private UserInterfaceManager UI;
     private boolean x1,x2,x3,x4,x5,x6,x7,x8,x9,x10;
-    @Override
+    private Nifty nifty;
+    private Screen screen;
+    
+    public SettingsController(UserInterfaceManager UI){
+        this.UI = UI;
+    }
+    
+            @Override
     public void bind(Nifty nifty, Screen screen) {
+        this.nifty = nifty;
+        this.screen = screen;
+        ListBox listBox = screen.findNiftyControl("Resolution_Opts", ListBox.class);
+        listBox.addItem("1920 X 1080");
+        listBox.addItem("1600 X 900");
+        listBox.addItem("1280 X 720");
+        listBox.addItem("1024 X 768");
+        listBox.addItem("800 X 600");
     }
 
     @Override
     public void onStartScreen() {
+       nifty.setIgnoreKeyboardEvents(false);
     }
 
     @Override
-    public void onEndScreen() {
+    public void onEndScreen() { 
+       nifty.setIgnoreKeyboardEvents(true);      
     }
     /**
      * 
@@ -131,12 +151,23 @@ public class SettingsController implements ScreenController {
       */
      public void applySettings(){
         settings = new GameSettings(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10);        
-    }
+     }
+     public void displayApply(){
+         ListBox listBox = screen.findNiftyControl("Resolution_Opts", ListBox.class);
+         String res[] = listBox.getFocusItem().toString().split(" X ");
+         String width = res[0];
+         String height = res[1];
+         settings.updateSettings("width", width);         
+         settings.updateSettings("height", height);
+         //UI.updateRes(Integer.parseInt(width),Integer.parseInt(height));
+     }
      /**
       * Quits the game
       */
      public void quitGame(){
          System.exit(1);
      }
-    
+     public void goTo(String _screen){
+         nifty.gotoScreen(_screen);
+     }
 }

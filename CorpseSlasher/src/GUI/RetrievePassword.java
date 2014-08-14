@@ -23,38 +23,41 @@ import de.lessvoid.nifty.tools.Color;
 
 /**
  *
- * @author Gerhard
- * An extension of the screens class, allowing the user to retrieve lost or forgotten passwords
- * via the use of his account username.
+ * @author Gerhard An extension of the screens class, allowing the user to
+ * retrieve lost or forgotten passwords via the use of his account username.
  */
 public class RetrievePassword extends Screens {
 
     RetrievePassword(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
-             super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);       
+        super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
     }
+
     /**
      * Builds the retrieve password screen
      */
     public void build() {
         Nifty nifty = screen.getNifty();
+        nifty.setIgnoreKeyboardEvents(true);
 
         guiViewPort.addProcessor(screen);
         buildGui(nifty);
         nifty.gotoScreen("Retrieve_Password");
     }
+
     /**
-     * 
-     * @param nifty the nifty object that has to be designed
-     * Helper function to build, adding buttons and labels
+     *
+     * @param nifty the nifty object that has to be designed Helper function to
+     * build, adding buttons and labels
      */
     private void buildGui(Nifty nifty) {
-       nifty.loadStyleFile("nifty-default-styles.xml");
+        nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
         nifty.addScreen("Retrieve_Password", new ScreenBuilder("Retrieve Password") {
             {
                 controller((ScreenController) app);
                 layer(new LayerBuilder("background") {
                     {
+                        font("Interface/Fonts/zombie.fnt");
                         childLayoutCenter();
                         backgroundImage("Backgrounds/ZOMBIE1.jpg");
                         visibleToMouse(true);
@@ -62,10 +65,11 @@ public class RetrievePassword extends Screens {
                 });
                 layer(new LayerBuilder("foreground") {
                     {
+                        font("Interface/Fonts/zombie.fnt");
                         visibleToMouse(true);
                         childLayoutVertical();
                         backgroundColor(new Color(.3f, .3f, .3f, .5f));
-                        panel(new PanelBuilder("Main_Retrieve_Password"){
+                        panel(new PanelBuilder("Main_Retrieve_Password") {
                             {
                                 childLayoutCenter();
                                 control(new LabelBuilder("Username", "Username :") {
@@ -77,6 +81,7 @@ public class RetrievePassword extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new TextFieldBuilder("Username_Input_ID_3", "Enter Username") {
@@ -87,6 +92,7 @@ public class RetrievePassword extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new ButtonBuilder("Get_Password", "Retrieve Password") {
@@ -97,9 +103,10 @@ public class RetrievePassword extends Screens {
                                         height("5%");
                                         width("15%");
                                         interactOnClick("loginScreen()");
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new ButtonBuilder("Back","Back"){
+                                control(new ButtonBuilder("Back", "Back") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Bottom);
@@ -107,11 +114,14 @@ public class RetrievePassword extends Screens {
                                         height("5%");
                                         width("15%");
                                         interactOnClick("goBack()");
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                            }});
-                    }});
-            }}.build(nifty));
+                            }
+                        });
+                    }
+                });
+            }
+        }.build(nifty));
     }
-    
 }
