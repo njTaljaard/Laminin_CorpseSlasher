@@ -24,6 +24,7 @@ public class GameScene {
     private BasicScene basicScene;
     private Character character;
     private MobsHandler mobHandler;
+    private CollisionController collController;
     
     /**
      * GameScene will combine all the entities of the entire game into a node 
@@ -35,10 +36,14 @@ public class GameScene {
     public GameScene(int selectedMap, AssetManager assestManager, ViewPort viewPort, 
             Camera cam, BulletAppState bullet, InputManager inMan, LoadingScreen ui, GameSettings settings) {
         sceneNode = new Node("GameScene");
+        
         initCameraPosition(cam, selectedMap);
         initScene(assestManager, viewPort, cam, bullet, selectedMap, ui, settings);
         initMainCharacter(assestManager, inMan, bullet, cam);
         initMobs(bullet, assestManager);
+        
+        collController = new CollisionController();
+        bullet.getPhysicsSpace().addCollisionListener(collController);
     }
     
     /**
@@ -118,10 +123,19 @@ public class GameScene {
      */
     public void update(BulletAppState bullet, Camera cam, TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
-        ArrayList<String> hitMobs = character.updateCharacterPostion(cam, tpf);
-        ArrayList<String> playerHits = mobHandler.updateMobs(bullet, character.getPosition(), 
-                hitMobs, tpf);
-        character.processKnocks(playerHits);
+        boolean playerAttacking = character.updateCharacterPostion(cam, 
+                collController.getPlayerHitSize(), tpf);
+        ArrayList<String> mobHits;
+        
+        if (playerAttacking) {
+            mobHits= mobHandler.updateMobs(bullet, character.getPosition(), 
+                    collController.getPlayerHits(), collController.getMobHits(), tpf);
+        } else {
+            mobHits = mobHandler.updateMobs(bullet, character.getPosition(), 
+                    new ArrayList<String>(), collController.getMobHits(), tpf);
+        }
+        character.processKnocks(mobHits);
+        collController.attacksProcessed();
     }
     
     /**

@@ -53,7 +53,7 @@ public class MobsHandler {
         int size = positions.size();
         
         for (int i = 0; i < size; i++) {
-            mobs.add(new Mob(positions.get(i), bullet, assMan, "mob"+i));
+            mobs.add(new Mob(positions.get(i), bullet, assMan, "mob"+(i+10)));
             mobNode.attachChild(mobs.get(i).retrieveMob());
         }
     }
@@ -63,16 +63,26 @@ public class MobsHandler {
      * @param point - Vector3f with is the direction towards the player.
      */
     public ArrayList<String> updateMobs(BulletAppState bullet, Vector3f point, 
-            ArrayList<String> hitMobs, float tpf) {
+            ArrayList<String> playerHits, ArrayList<Integer> mobHits, float tpf) {
         ArrayList<String> landedAttacks = new ArrayList<>();
         String name;
+        boolean playerHit, mobHit = false;
+        
         for (Mob mob : mobs) {            
-            if (hitMobs.contains(mob.mobName)) {
-                name = mob.updateMob(bullet, point, true, tpf);
+            if (playerHits.contains(mob.mobName)) {
+                playerHit = true;
             } else {
-                name = mob.updateMob(bullet, point, false, tpf);
+                playerHit = false;
             }
             
+            if (mobHits.contains(mob.handColliosionGroup)) {
+                mobHit = true;
+            } else {
+                mobHit = false;
+            }
+            
+            name = mob.updateMob(bullet, point, playerHit, mobHit, tpf);
+                
             if (!name.equals("")) 
                 landedAttacks.add(name);
         }

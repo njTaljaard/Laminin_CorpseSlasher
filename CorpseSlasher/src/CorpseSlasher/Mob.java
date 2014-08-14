@@ -8,6 +8,7 @@ import com.jme3.scene.Node;
 import com.jme3.math.Vector3f;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.math.FastMath;
@@ -22,14 +23,16 @@ import com.jme3.math.FastMath;
 public class Mob {
     
     protected String mobName;
+    protected int handColliosionGroup;
     private Node mob;
     private AnimChannel channel;
     private AnimControl control;
     private Vector3f passivePosition;
     private MobAnimControl animControl;
-    private MobCollisionControl collControl;
+    private MobMotionControl collControl;
     private BetterCharacterControl characterControl;
     private ModelRagdoll ragdoll;
+    private GhostControl attackGhost;
     private float health;
     private boolean alive;
     private long deathTime, spawnTime;
@@ -45,17 +48,19 @@ public class Mob {
     public Mob(Vector3f position, BulletAppState bullet, AssetManager assMan, 
             String mName) {
         mobName = mName;
+        handColliosionGroup = Integer.parseInt(mobName.substring(3));
         passivePosition = position;
         alive = true;
         health = 100;
         spawnTime = new Long("10000000000");
         
         animControl = new MobAnimControl();
-        collControl = new MobCollisionControl();
+        collControl = new MobMotionControl();
         
         initMob(assMan);
         initControl();
         initRagdoll();
+        initAttackGhost();
         assembleMob(bullet);
         initAnim();
     }
@@ -115,6 +120,17 @@ public class Mob {
     }
     
     /**
+     * initHandGhost sets up the collision box that will be bound to the mobs
+     * arm in order to determine if any collision has occured with the hand
+     * and the player.
+     */
+    private void initAttackGhost() {
+        attackGhost = new GhostControl(new BoxCollisionShape(new Vector3f(0.15f, 0.45f, 0.05f)));
+        attackGhost.setCollisionGroup(handColliosionGroup);
+        attackGhost.setCollideWithGroups(1);
+    }
+
+    /**
      * assembleMob add the controllers to the mob and to the physics handler.
      * @param bullet - BulletAppState physics controller. 
      */
@@ -122,8 +138,7 @@ public class Mob {
         mob.addControl(collControl.getAggroGhost());
         mob.addControl(characterControl);
         mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
-                .getAttachmentsNode("hand.R").addControl(collControl.getAttackGhost());
-        bullet.getPhysicsSpace().addCollisionListener(collControl);
+                .getAttachmentsNode("hand.R").addControl(attackGhost);
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().addAll(mob);   
     }
@@ -147,15 +162,15 @@ public class Mob {
      * @param point - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
      */
-    public String updateMob(BulletAppState bullet, Vector3f point, boolean hit, 
-            float tpf) {
+    public String updateMob(BulletAppState bullet, Vector3f point, boolean playerHit,
+            boolean mobHit, float tpf) {
         if (alive) {
             characterControl.update(tpf);
             collControl.updateMobPhase(point, mob, characterControl, passivePosition);
             animControl.updateMobAnimations(channel, collControl.aggro,
                     collControl.walkAttack, collControl.attack, collControl.passive);
 
-            if (hit) {
+            if (playerHit) {
                 health -= 10;
                 System.out.println(mobName + " i have been hit!!!! My health is " + health);
                 if (health <= 0) {
@@ -169,8 +184,8 @@ public class Mob {
                 }
             }
 
-            if (animControl.attacking && collControl.attackLanded) {
-                animControl.attacking = collControl.attackLanded = false;
+            if (animControl.attacking && mobHit) {
+                animControl.attacking = false;
                 return mobName;
             } else {
                 return "";
@@ -189,27 +204,25 @@ public class Mob {
             ragdoll.setEnabled(false);
             characterControl.setEnabled(true);
             collControl.getAggroGhost().setEnabled(true);
-            collControl.getAttackGhost().setEnabled(true);
+            attackGhost.setEnabled(true);
             mob.removeControl(ModelRagdoll.class);
             bullet.getPhysicsSpace().remove(ragdoll);
             mob.addControl(collControl.getAggroGhost());
             mob.addControl(characterControl);
             mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
-                    .getAttachmentsNode("hand.R").addControl(collControl.getAttackGhost());
+                    .getAttachmentsNode("hand.R").addControl(attackGhost);
             bullet.getPhysicsSpace().add(characterControl);
-            bullet.getPhysicsSpace().add(collControl.getAttackGhost());
+            bullet.getPhysicsSpace().add(attackGhost);
             bullet.getPhysicsSpace().add(collControl.getAggroGhost());
-            bullet.getPhysicsSpace().addCollisionListener(collControl);
         } else { //Swap to ragdoll control
             characterControl.setEnabled(false);
             collControl.getAggroGhost().setEnabled(false);
-            collControl.getAttackGhost().setEnabled(false);
+            attackGhost.setEnabled(false);
             ragdoll.setEnabled(true);
             mob.removeControl(BetterCharacterControl.class);
             mob.removeControl(GhostControl.class);
-            bullet.getPhysicsSpace().removeCollisionListener(collControl);
             bullet.getPhysicsSpace().remove(characterControl);
-            bullet.getPhysicsSpace().remove(collControl.getAttackGhost());
+            bullet.getPhysicsSpace().remove(attackGhost);
             bullet.getPhysicsSpace().remove(collControl.getAggroGhost());
             mob.addControl(ragdoll);
             bullet.getPhysicsSpace().add(ragdoll);

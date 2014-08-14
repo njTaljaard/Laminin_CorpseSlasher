@@ -41,7 +41,6 @@ public class Character {
     private CharacterAnimControl animController;
     private CharacterCameraControl cameraController;
     private CharacterMotionControl motionController;
-    private CharacterAttackControl attackController;
     private ModelRagdoll ragdoll;
     private final float walkSpeed = 15.0f;
     private Vector3f walkDirection;
@@ -60,7 +59,6 @@ public class Character {
         playerNode = new Node("Player");
         animController = new CharacterAnimControl();
         motionController = new CharacterMotionControl();
-        attackController = new CharacterAttackControl();
         walkDirection = new Vector3f();
         health = 100;
         alive = true;
@@ -120,7 +118,6 @@ public class Character {
      * @param bullet - BulletAppState physics controller.
      */
     private void assemblePlayer(BulletAppState bullet) {
-        bullet.getPhysicsSpace().addCollisionListener(attackController);
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().add(swordControl);
         bullet.getPhysicsSpace().addAll(player);
@@ -158,17 +155,22 @@ public class Character {
      * @param cam - Camera to retrieve the directional vectors required to calculate
      * the direction to move the camera and model in.
      */
-    public ArrayList<String> updateCharacterPostion(Camera cam, float tpf) {
+    public boolean updateCharacterPostion(Camera cam, int playerHits, float tpf) {
         if (alive) {
             walkDirection = motionController.updateCharacterMotion(cam);
             characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
 
             motionController.slash = animController.updateCharacterAnimations(channel, 
                     motionController.slash, motionController.walk, alive);
-            return testLandedAttack();
+            if (animController.attacking && playerHits > 0) {
+                animController.attacking = false;
+                return true;
+            } else {
+                return false;
+            }                
         } else {
             ragdoll.update(tpf);
-            return new ArrayList<>();
+            return false;
         }
     }
     
@@ -190,26 +192,6 @@ public class Character {
                     //swapControllers();
                 }*/
             }
-        }
-    }
-    
-    
-    /**
-     * 
-     */
-    private ArrayList<String> testLandedAttack() {
-        if (animController.attacking && attackController.mobsHit().size() > 0) {
-            animController.attacking = false;
-
-            ArrayList<String> hits = new ArrayList<>();
-            for (int i = 0; i < attackController.getHitsSize(); i++)
-                hits.add(attackController.mobsHit().get(i));
-            attackController.attacksProcessed();
-            
-            return hits;
-        } else {
-            attackController.attacksProcessed();
-            return attackController.mobsHit();
         }
     }
         
