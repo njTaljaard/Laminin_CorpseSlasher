@@ -41,6 +41,7 @@ import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.RagdollCollisionListener;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.HullCollisionShape;
+import com.jme3.bullet.control.AbstractPhysicsControl;
 import com.jme3.bullet.control.PhysicsControl;
 import com.jme3.bullet.control.ragdoll.HumanoidRagdollPreset;
 import com.jme3.bullet.control.ragdoll.RagdollPreset;
@@ -325,8 +326,6 @@ public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener {
         //HACK ALERT change this
         //I remove the skeletonControl and readd it to the spatial to make sure it's after the ragdollControl in the stack
         //Find a proper way to order the controls.
-        
-        //----
 
         removeFromPhysicsSpace();
         clearData();
@@ -334,11 +333,10 @@ public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener {
         // maybe dont reset to ragdoll out of animations?
         scanSpatial(model);
 
-
         if (parent != null) {
             parent.attachChild(model);
-
         }
+        
         model.setLocalTranslation(initPosition);
         model.setLocalRotation(initRotation);
         model.setLocalScale(initScale);
@@ -370,6 +368,7 @@ public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener {
                 logger.log(Level.INFO, "Found root bone in skeleton {0}", skeleton);
                 baseRigidBody = new PhysicsRigidBody(new BoxCollisionShape(Vector3f.UNIT_XYZ.mult(0.1f)), 1);
                 baseRigidBody.setKinematic(mode == Mode.Kinematic);
+                baseRigidBody.setCollideWithGroups(1);
                 boneRecursion(model, childBone, baseRigidBody, 1, pointsMap);
             }
         }
@@ -381,20 +380,26 @@ public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener {
 
             PhysicsBoneLink link = new PhysicsBoneLink();
             link.bone = bone;
-
+            
             //creating the collision shape
             HullCollisionShape shape = null;
             if (pointsMap != null) {
                 //build a shape for the bone, using the vertices that are most influenced by this bone
-                shape = RagdollUtils.makeShapeFromPointMap(pointsMap, RagdollUtils.getBoneIndices(link.bone, skeleton, boneList), initScale, link.bone.getModelSpacePosition());
+                shape = RagdollUtils.makeShapeFromPointMap(pointsMap, RagdollUtils
+                        .getBoneIndices(link.bone, skeleton, boneList), initScale, link.bone.getModelSpacePosition());
             } else {
                 //build a shape for the bone, using the vertices associated with this bone with a weight above the threshold
-                shape = RagdollUtils.makeShapeFromVerticeWeights(model, RagdollUtils.getBoneIndices(link.bone, skeleton, boneList), initScale, link.bone.getModelSpacePosition(), weightThreshold);
+                shape = RagdollUtils.makeShapeFromVerticeWeights(model, RagdollUtils
+                        .getBoneIndices(link.bone, skeleton, boneList), initScale, link.bone.getModelSpacePosition(), weightThreshold);
             }
-
+            
             PhysicsRigidBody shapeNode = new PhysicsRigidBody(shape, rootMass / (float) reccount);
-
-            shapeNode.setKinematic(mode == Mode.Kinematic);
+            shapeNode.setCollideWithGroups(1);
+            shapeNode.getCollisionShape().setScale(new Vector3f(30.0f, 30.0f, 30.0f));
+            shapeNode.setCcdMotionThreshold(0.1f);
+            shapeNode.setCcdSweptSphereRadius(0.1f);
+            shapeNode.setKinematic(true);
+            shapeNode.setMass(1.0f);
             totalMass += rootMass / (float) reccount;
 
             link.rigidBody = shapeNode;
@@ -538,9 +543,9 @@ public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener {
             physicsBoneLink.rigidBody.createDebugShape(manager);
         }
         debug = true;
-    }*/
+    }
 
-    /*protected void detachDebugShape() {
+    protected void detachDebugShape() {
         for (Iterator<PhysicsBoneLink> it = boneLinks.values().iterator(); it.hasNext();) {
             PhysicsBoneLink physicsBoneLink = it.next();
             physicsBoneLink.rigidBody.detachDebugShape();
@@ -556,21 +561,21 @@ public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener {
      */
     @Override
     public void render(RenderManager rm, ViewPort vp) {
-        if (enabled && space != null && space.getDebugManager() != null) {
-            /*if (!debug) {
+        /*if (enabled && space != null && space.getDebugManager() != null) {
+            if (!debug) {
                 attachDebugShape(space.getDebugManager());
-            }*/
+            }
             for (Iterator<PhysicsBoneLink> it = boneLinks.values().iterator(); it.hasNext();) {
                 PhysicsBoneLink physicsBoneLink = it.next();
-                /*Spatial debugShape = physicsBoneLink.rigidBody.debugShape();
+                Spatial debugShape = physicsBoneLink.rigidBody.debugShape();
                 if (debugShape != null) {
                     debugShape.setLocalTranslation(physicsBoneLink.rigidBody.getMotionState().getWorldLocation());
                     debugShape.setLocalRotation(physicsBoneLink.rigidBody.getMotionState().getWorldRotationQuat());
                     debugShape.updateGeometricState();
                     rm.renderScene(debugShape, vp);
-                }*/
+                }
             }
-        }
+        }*/
     }
 
     /**
@@ -616,6 +621,7 @@ public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener {
      * @param im
      * @throws IOException
      */
+    @Override
     public void read(JmeImporter im) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -629,7 +635,7 @@ public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener {
     public void collision(PhysicsCollisionEvent event) {
         PhysicsCollisionObject objA = event.getObjectA();
         PhysicsCollisionObject objB = event.getObjectB();
-
+        
         //excluding collisions that involve 2 parts of the ragdoll
         if (event.getNodeA() == null && event.getNodeB() == null) {
             return;

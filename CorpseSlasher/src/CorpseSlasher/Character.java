@@ -183,12 +183,12 @@ public class Character {
                 System.out.println("Player : ive been slapped by " + knocks.get(i) 
                         + ". Health is " + health);
                 
-                if (health <= 0) {
+                /*if (health <= 0) {
                     health = 0;
                     alive = false;
                     System.out.println("You were killed by : " + knocks.get(i));
-                    swapControllers();
-                }
+                    //swapControllers();
+                }*/
             }
         }
     }

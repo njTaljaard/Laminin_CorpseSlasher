@@ -9,7 +9,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.bullet.control.KinematicRagdollControl;
+import com.jme3.bullet.control.GhostControl;
+import com.jme3.math.FastMath;
 
 /**
  * @author Laminin
@@ -31,6 +32,7 @@ public class Mob {
     private ModelRagdoll ragdoll;
     private float health;
     private boolean alive;
+    private long deathTime, spawnTime;
     
     /**
      * Mob creates a basic mob the required functionality.
@@ -46,6 +48,7 @@ public class Mob {
         passivePosition = position;
         alive = true;
         health = 100;
+        spawnTime = new Long("10000000000");
         
         animControl = new MobAnimControl();
         collControl = new MobCollisionControl();
@@ -81,7 +84,33 @@ public class Mob {
     }
     
     private void initRagdoll() {
+        float eighth_pi = FastMath.PI * 0.125f;
         ragdoll = new ModelRagdoll(0.5f, "bennettzombie_body.001-ogremesh");
+        ragdoll.addBoneName("hips");
+        ragdoll.addBoneName("spine");
+        ragdoll.addBoneName("chest");
+        ragdoll.addBoneName("neck");
+        ragdoll.addBoneName("head");
+        ragdoll.addBoneName("shoulder.L");
+        ragdoll.addBoneName("shoulder.R");
+        ragdoll.addBoneName("upper_arm.L");
+        ragdoll.addBoneName("upper_arm.R");
+        ragdoll.addBoneName("forearm.L");
+        ragdoll.addBoneName("forearm.R");
+        ragdoll.addBoneName("hand.L");
+        ragdoll.addBoneName("hand.R");
+        ragdoll.addBoneName("thigh.L");
+        ragdoll.addBoneName("thigh.R");
+        ragdoll.addBoneName("shin.L");
+        ragdoll.addBoneName("shin.R");
+        ragdoll.addBoneName("foot.L");
+        ragdoll.addBoneName("foot.R");
+        ragdoll.addBoneName("toe.L");
+        ragdoll.addBoneName("toe.R"); 
+        ragdoll.setJointLimit("hips", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
+        ragdoll.setJointLimit("chest", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
+        ragdoll.setCcdMotionThreshold(1.0f);
+        ragdoll.setCcdSweptSphereRadius(1.0f);
         ragdoll.setEnabled(false);
     }
     
@@ -95,10 +124,7 @@ public class Mob {
         mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
                 .getAttachmentsNode("hand.R").addControl(collControl.getAttackGhost());
         bullet.getPhysicsSpace().addCollisionListener(collControl);
-        bullet.getPhysicsSpace().add(collControl.getAggroGhost());
-        bullet.getPhysicsSpace().add(collControl.getAttackGhost());
         bullet.getPhysicsSpace().add(characterControl);
-        bullet.getPhysicsSpace().add(ragdoll);
         bullet.getPhysicsSpace().addAll(mob);   
     }
     
@@ -121,8 +147,10 @@ public class Mob {
      * @param point - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
      */
-    public String updateMob(Vector3f point, boolean hit, float tpf) {
+    public String updateMob(BulletAppState bullet, Vector3f point, boolean hit, 
+            float tpf) {
         if (alive) {
+            characterControl.update(tpf);
             collControl.updateMobPhase(point, mob, characterControl, passivePosition);
             animControl.updateMobAnimations(channel, collControl.aggro,
                     collControl.walkAttack, collControl.attack, collControl.passive);
@@ -133,9 +161,10 @@ public class Mob {
                 if (health <= 0) {
                     health = 0;
                     alive = false;
+                    deathTime = System.nanoTime();
                     collControl.death(characterControl);
                     System.out.println("You killed : " + mobName);
-                    swapControllers();
+                    swapControllers(bullet);
                     return "";
                 }
             }
@@ -148,23 +177,53 @@ public class Mob {
             }
         } else {
             ragdoll.update(tpf);
+            if (System.nanoTime() - deathTime > spawnTime) {
+                respawn(bullet);
+            }
             return "";
         }
     }
     
-    private void swapControllers() {
-        if (ragdoll.isEnabled()) {
+    private void swapControllers(BulletAppState bullet) {
+        if (alive) { //Swap to character control
             ragdoll.setEnabled(false);
-            mob.removeControl(ModelRagdoll.class);
-            mob.addControl(characterControl);
             characterControl.setEnabled(true);
-        } else {
+            collControl.getAggroGhost().setEnabled(true);
+            collControl.getAttackGhost().setEnabled(true);
+            mob.removeControl(ModelRagdoll.class);
+            bullet.getPhysicsSpace().remove(ragdoll);
+            mob.addControl(collControl.getAggroGhost());
+            mob.addControl(characterControl);
+            mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
+                    .getAttachmentsNode("hand.R").addControl(collControl.getAttackGhost());
+            bullet.getPhysicsSpace().add(characterControl);
+            bullet.getPhysicsSpace().add(collControl.getAttackGhost());
+            bullet.getPhysicsSpace().add(collControl.getAggroGhost());
+            bullet.getPhysicsSpace().addCollisionListener(collControl);
+        } else { //Swap to ragdoll control
             characterControl.setEnabled(false);
-            mob.removeControl(BetterCharacterControl.class);
-            mob.addControl(ragdoll);
+            collControl.getAggroGhost().setEnabled(false);
+            collControl.getAttackGhost().setEnabled(false);
             ragdoll.setEnabled(true);
+            mob.removeControl(BetterCharacterControl.class);
+            mob.removeControl(GhostControl.class);
+            bullet.getPhysicsSpace().removeCollisionListener(collControl);
+            bullet.getPhysicsSpace().remove(characterControl);
+            bullet.getPhysicsSpace().remove(collControl.getAttackGhost());
+            bullet.getPhysicsSpace().remove(collControl.getAggroGhost());
+            mob.addControl(ragdoll);
+            bullet.getPhysicsSpace().add(ragdoll);
             ragdoll.setRagdollMode();
         }
+    }
+    
+    private void respawn(BulletAppState bullet) {
+        alive = true;
+        health = 100;
+        collControl.passive = true;
+        collControl.aggro = false;
+        mob.setLocalTranslation(passivePosition);
+        swapControllers(bullet);
     }
     
     /**

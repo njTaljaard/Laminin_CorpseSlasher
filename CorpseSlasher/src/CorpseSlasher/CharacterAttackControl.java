@@ -9,8 +9,11 @@ import com.jme3.bullet.collision.PhysicsCollisionListener;
 import java.util.ArrayList;
 
 /**
- *
- * @author Nico
+ * @author Laminin
+ * @param  Derivco
+ * @param  University of Pretoria
+ * @param  COS301
+ * CollisionControl 
  */
 public class CharacterAttackControl implements PhysicsCollisionListener {
     

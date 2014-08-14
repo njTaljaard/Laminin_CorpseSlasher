@@ -39,7 +39,6 @@ public class GameScene {
         initScene(assestManager, viewPort, cam, bullet, selectedMap, ui, settings);
         initMainCharacter(assestManager, inMan, bullet, cam);
         initMobs(bullet, assestManager);
-        bullet.getPhysicsSpace().enableDebug(assestManager);
     }
     
     /**
@@ -117,10 +116,10 @@ public class GameScene {
      * @param tod - TimeOfDay to update the skycontrol time of day.
      * @param tpf - Update value of time between frames.
      */
-    public void update(Camera cam, TimeOfDay tod, float tpf) {
+    public void update(BulletAppState bullet, Camera cam, TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
         ArrayList<String> hitMobs = character.updateCharacterPostion(cam, tpf);
-        ArrayList<String> playerHits = mobHandler.updateMobs(character.getPosition(), 
+        ArrayList<String> playerHits = mobHandler.updateMobs(bullet, character.getPosition(), 
                 hitMobs, tpf);
         character.processKnocks(playerHits);
     }

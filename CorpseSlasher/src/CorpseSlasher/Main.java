@@ -86,7 +86,7 @@ public class Main extends SimpleApplication implements ScreenController {
     @Override
     public void simpleUpdate(float tpf) {
         if (loggedIn) {
-            gameScene.update(cam, timeOfDay, tpf);
+            gameScene.update(bulletAppState, cam, timeOfDay, tpf);
         }
     }
 

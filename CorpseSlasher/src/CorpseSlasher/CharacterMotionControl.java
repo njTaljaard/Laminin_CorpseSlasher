@@ -73,11 +73,6 @@ public class CharacterMotionControl {
                         }
                         break;
                     case "Jump":
-                        /*if (value) {
-                            jump = true;
-                        } else {
-                            jump = false;
-                        }*/
                         break;
                 }
             }
