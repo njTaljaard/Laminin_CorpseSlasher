@@ -54,7 +54,7 @@ public final class UserInterfaceManager {
         this.appState      = appState;
         settingsScreen();
         Screen = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
-        guiScreens = new Screens[5];
+        guiScreens = new Screens[6];
     }
     public void updateRes(int width, int height){
         this.width = width;
@@ -90,6 +90,11 @@ public final class UserInterfaceManager {
                                         appState, app, Screen);
         guiScreens[2].build();
         guiScreens[2].updateRes(width, height);
+    }
+    public void leaderBoard() {
+        guiScreens[5] = new Leaderboard(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
+        guiScreens[5].build();
+        guiScreens[5].updateRes(width, height);
     }
     /**
      * Updates the state of the game so that settings menu can be called after login only
@@ -129,7 +134,6 @@ public final class UserInterfaceManager {
      */
     public void optionScreen() {
         guiScreens[3] = new SettingsScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
-        ListBox listBox;
     }
 
     public void settings(String selection) {}

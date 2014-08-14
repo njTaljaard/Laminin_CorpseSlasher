@@ -59,6 +59,7 @@ public class LoginScreen extends Screens {
                 controller((ScreenController) app);
                 layer(new LayerBuilder("background") {
                     {
+                                        font("Interface/Fonts/zombie.fnt");
                         childLayoutCenter();
                         backgroundImage("Backgrounds/ZOMBIE1.jpg");
                         visibleToMouse(true);
@@ -66,12 +67,14 @@ public class LoginScreen extends Screens {
                 });
                 layer(new LayerBuilder("foreground") {
                     {
+                                        font("Interface/Fonts/zombie.fnt");
                         visibleToMouse(true);
                         childLayoutVertical();
                         backgroundColor(new Color(.3f, .3f, .3f, .5f));
                         panel(new PanelBuilder("Main_Login_Panel") {
                             {
                                 childLayoutCenter();
+                                        font("Interface/Fonts/zombie.fnt");
                                 control(new LabelBuilder("Username_ID", "Username :") {
                                     {
                                         align(Align.Left);
@@ -81,6 +84,7 @@ public class LoginScreen extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new TextFieldBuilder("Username_Input_ID", "Enter Username") {
@@ -91,6 +95,7 @@ public class LoginScreen extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new LabelBuilder("Password_ID", "Password :") {
@@ -102,6 +107,7 @@ public class LoginScreen extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new TextFieldBuilder("Password_Input_ID", "Enter Password") {
@@ -112,6 +118,7 @@ public class LoginScreen extends Screens {
                                         height("5%");
                                         width("15%");
                                         visibleToMouse(true);
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });                                
                                 control(new ButtonBuilder("Connect_ID", "Login") {
@@ -122,6 +129,7 @@ public class LoginScreen extends Screens {
                                         height("5%");
                                         width("15%");
                                         interactOnClick("loadingScreen()");
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new LabelBuilder("New_Account_ID", "Create New Account") {
@@ -131,6 +139,7 @@ public class LoginScreen extends Screens {
                                         height("5%");
                                         width("15%");
                                         interactOnClick("newAccount()");
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new LabelBuilder("Retrieve_Password_ID", "Retrieve Password") {
@@ -140,6 +149,7 @@ public class LoginScreen extends Screens {
                                         height("5%");
                                         width("15%");
                                         interactOnClick("retrievePassword()");
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                             }
@@ -160,12 +170,14 @@ public class LoginScreen extends Screens {
                                 paddingBottom("4px");
                                 visibleToMouse(true);
                      
+                                        font("Interface/Fonts/zombie.fnt");
                                 panel(new PanelBuilder() {
                                     {
                                         childLayoutHorizontal();
                                         backgroundImage("Icons/fb.jpg");
                                         width("40px");
                                         interactOnClick("socialLogin(1)");
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 panel(new PanelBuilder() {
@@ -174,6 +186,7 @@ public class LoginScreen extends Screens {
                                         backgroundImage("Icons/twitter.jpg");
                                         width("40px");
                                         interactOnClick("socialLogin(2)");
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 panel(new PanelBuilder() {
@@ -182,6 +195,7 @@ public class LoginScreen extends Screens {
                                         backgroundImage("Icons/google+.jpg");
                                         width("40px");
                                         interactOnClick("socialLogin(3)");
+                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                             }
