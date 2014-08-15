@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package GUI;
 
 import de.lessvoid.nifty.Nifty;
@@ -28,23 +24,20 @@ public class LeaderBoardController implements ScreenController {
         this.screen = screen;
         if(init)
         {
-       content.add("Zombie King # 1500 # 50000");
-       content.add("Zombie Noob # 15 # 500");
-       init = false;
+            content.add("Zombie King # 1500 # 50000");
+            content.add("Zombie Noob # 15 # 500");
+            init = false;
         }
     }
-
     @Override
-    public void onStartScreen() {        
+    public void onStartScreen() { 
        nifty.setIgnoreKeyboardEvents(false);
         ListBox listBox = screen.findNiftyControl("#scorebar", ListBox.class);
-       // TextField text = screen.findNiftyControl("", TextField.class);
+        String format = "%1$-120s %2$-80s %3$-1s";
        for(Object details : content){
            StringTokenizer tokens = new StringTokenizer(details.toString(),"#");
-           String name = tokens.nextToken();
-           String kills = tokens.nextToken();
-           String exp = tokens.nextToken();
-           listBox.addItem(name+"\t\t\t\t\t"+kills+"\t\t\t"+exp);
+           String line = String.format(format,tokens.nextToken(),tokens.nextToken(),tokens.nextToken());
+           listBox.addItem(line);
        }
     }
 

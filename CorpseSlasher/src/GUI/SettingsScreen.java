@@ -6,7 +6,7 @@
 package GUI;
 
 //~--- non-JDK imports --------------------------------------------------------
-import CorpseSlasher.GameSettings;
+import CorpseSlasher.GameScene;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -38,11 +38,13 @@ public class SettingsScreen extends Screens {
     private int sWidth;
     private boolean isWide;
     private UserInterfaceManager UI;
+    private GameScene scene;
 
     SettingsScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
-            ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay Screen, UserInterfaceManager UI) {
+            ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay Screen, UserInterfaceManager UI,GameScene scene) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
         this.UI = UI;
+        this.scene = scene;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         sHeight = (int) toolkit.getScreenSize().getHeight();
         sWidth = (int) toolkit.getScreenSize().getWidth();
@@ -154,8 +156,7 @@ public class SettingsScreen extends Screens {
         }.build(nifty));
         nifty.addScreen("Graphics_Settings", new ScreenBuilder("Graphics_Extension") {
             {
-                controller(new SettingsController(UI));
-                controller((ScreenController) app);
+                controller(new SettingsController(UI,scene));
                 layer(new LayerBuilder("background") {
                     {
                         font("Interface/Fonts/zombie.fnt");
@@ -249,8 +250,8 @@ public class SettingsScreen extends Screens {
                                 marginTop("15%");
                                 control(new LabelBuilder("", "Post Water") {
                                     {
-                                        color("881188");
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new CheckboxBuilder("Post_Water_Button") {
@@ -267,8 +268,8 @@ public class SettingsScreen extends Screens {
                                 marginTop("5%");
                                 control(new LabelBuilder("", "Water Reflections") {
                                     {
-                                        color("881188");
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new CheckboxBuilder("Water_Reflections_Button") {
@@ -285,8 +286,8 @@ public class SettingsScreen extends Screens {
                                 marginTop("5%");
                                 control(new LabelBuilder("", "Water Ripples") {
                                     {
-                                        color("881188");
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new CheckboxBuilder("Water_Ripples_Button") {
@@ -303,8 +304,8 @@ public class SettingsScreen extends Screens {
                                 marginTop("5%");
                                 control(new LabelBuilder("", "Water Specular") {
                                     {
-                                        color("881188");
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new CheckboxBuilder("Water_Specular_Button") {
@@ -321,8 +322,8 @@ public class SettingsScreen extends Screens {
                                 marginTop("5%");
                                 control(new LabelBuilder("", "Water Foam") {
                                     {
-                                        color("881188");
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new CheckboxBuilder("Water_Foam_Button") {
@@ -339,8 +340,8 @@ public class SettingsScreen extends Screens {
                                 marginTop("5%");
                                 control(new LabelBuilder("", "Sky Dome") {
                                     {
-                                        color("881188");
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new CheckboxBuilder("Sky_Dome_Button") {
@@ -357,8 +358,8 @@ public class SettingsScreen extends Screens {
                                 marginTop("5%");
                                 control(new LabelBuilder("", "Star Motion") {
                                     {
-                                        color("881188");
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new CheckboxBuilder("Star_Motion_Button") {
@@ -375,8 +376,8 @@ public class SettingsScreen extends Screens {
                                 marginTop("5%");
                                 control(new LabelBuilder("", "Cloud Motion") {
                                     {
-                                        color("881188");
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new CheckboxBuilder("Cloud_Motion_Button") {
@@ -393,7 +394,7 @@ public class SettingsScreen extends Screens {
                                 marginTop("5%");
                                 control(new LabelBuilder("", "Bloom Lighting") {
                                     {
-                                        color("881188");
+                                        color("#ff0000");
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
@@ -411,7 +412,7 @@ public class SettingsScreen extends Screens {
                                 marginTop("5%");
                                 control(new LabelBuilder("", "Light Scatter") {
                                     {
-                                        color("881188");
+                                        color("#ff0000");
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
@@ -442,7 +443,7 @@ public class SettingsScreen extends Screens {
         }.build(nifty));
         nifty.addScreen("Display_Screen", new ScreenBuilder("Display_Settings") {
             {
-                controller(new SettingsController(UI));
+                controller(new SettingsController(UI,scene));
                 layer(new LayerBuilder("background") {
                     {
                         font("Interface/Fonts/zombie.fnt");
@@ -536,7 +537,7 @@ public class SettingsScreen extends Screens {
                                 marginTop("15%");
                                 control(new LabelBuilder("", "Set Resolution") {
                                     {
-                                        color("881188");
+                                        color("#ff0000");
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });

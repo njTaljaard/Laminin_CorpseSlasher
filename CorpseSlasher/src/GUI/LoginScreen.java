@@ -86,6 +86,7 @@ public class LoginScreen extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new TextFieldBuilder("Username_Input_ID", "Enter Username") {
@@ -97,6 +98,7 @@ public class LoginScreen extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new LabelBuilder("Password_ID", "Password :") {
@@ -109,6 +111,7 @@ public class LoginScreen extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new TextFieldBuilder("Password_Input_ID", "Enter Password") {
@@ -120,6 +123,7 @@ public class LoginScreen extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new ButtonBuilder("Connect_ID", "Login") {
@@ -141,6 +145,7 @@ public class LoginScreen extends Screens {
                                         width("15%");
                                         interactOnClick("newAccount()");
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new LabelBuilder("Retrieve_Password_ID", "Retrieve Password") {
@@ -151,6 +156,7 @@ public class LoginScreen extends Screens {
                                         width("15%");
                                         interactOnClick("retrievePassword()");
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                             }
@@ -179,6 +185,7 @@ public class LoginScreen extends Screens {
                                         width("40px");
                                         interactOnClick("socialLogin(1)");
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 panel(new PanelBuilder() {
@@ -189,6 +196,7 @@ public class LoginScreen extends Screens {
                                         width("40px");
                                         interactOnClick("socialLogin(2)");
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                             }

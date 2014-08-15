@@ -1,13 +1,17 @@
 package GUI;
 
+import CorpseSlasher.GameScene;
 import CorpseSlasher.GameSettings;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.SizeValue;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Scanner;
 
 /**
  *
@@ -20,12 +24,14 @@ public class SettingsController implements ScreenController {
     private boolean x1,x2,x3,x4,x5,x6,x7,x8,x9,x10;
     private Nifty nifty;
     private Screen screen;
+    private GameScene scene;
     
-    public SettingsController(UserInterfaceManager UI){
+    public SettingsController(UserInterfaceManager UI,GameScene scene){
         this.UI = UI;
+        this.scene = scene;
     }
     
-            @Override
+    @Override
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
         this.screen = screen;
@@ -35,6 +41,61 @@ public class SettingsController implements ScreenController {
         listBox.addItem("1280 X 720");
         listBox.addItem("1024 X 768");
         listBox.addItem("800 X 600");
+        
+            CheckBox checkbox = null; 
+        try {
+            Scanner scFile = new Scanner(new FileReader("GameSettings.txt"));
+            while(scFile.hasNextLine()){
+            String line = scFile.nextLine();
+            String[] parts = line.split("=");
+            switch(parts[0]){
+                case "PostWater":
+                    checkbox = screen.findNiftyControl("Post_Water_Button", CheckBox.class); 
+                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    break;
+                case "WaterReflections":
+                    checkbox = screen.findNiftyControl("Water_Reflections_Button", CheckBox.class); 
+                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    break;
+                case "WaterRipples":
+                    checkbox = screen.findNiftyControl("Water_Ripples_Button", CheckBox.class); 
+                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    break;
+                case "WaterSpecular":
+                    checkbox = screen.findNiftyControl("Water_Specular_Button", CheckBox.class); 
+                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    break;
+                case "WaterFoam":
+                    checkbox = screen.findNiftyControl("Water_Foam_Button", CheckBox.class); 
+                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    break;
+                case "SkyDome":
+                    checkbox = screen.findNiftyControl("Sky_Dome_Button", CheckBox.class); 
+                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    break;
+                case "StarMotion":
+                    checkbox = screen.findNiftyControl("Star_Motion_Button", CheckBox.class); 
+                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    break;
+                case "CloudMotion":
+                    checkbox = screen.findNiftyControl("Cloud_Motion_Button", CheckBox.class); 
+                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    break;
+                case "BloomLight":
+                    checkbox = screen.findNiftyControl("Bloom_Light_Button", CheckBox.class); 
+                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    break;
+                case "LightScatter":
+                    checkbox = screen.findNiftyControl("Light_Scatter_Button", CheckBox.class); 
+                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    break;
+            }
+            }
+            scFile.close();
+        } catch (FileNotFoundException ex) {
+        }
+        
+    
     }
 
     @Override
@@ -150,7 +211,11 @@ public class SettingsController implements ScreenController {
       * Applys the settings according to the selected and deselected check boxes
       */
      public void applySettings(){
-        settings = new GameSettings(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10);        
+        settings = new GameSettings();        
+        settings.updateSettings(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10);
+        settings.apply();
+        //Still needs to be added
+        //scene.reload();
      }
      public void displayApply(){
          ListBox listBox = screen.findNiftyControl("Resolution_Opts", ListBox.class);

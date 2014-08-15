@@ -24,12 +24,12 @@ import java.util.Scanner;
  */
 public class GameSettings {
 
-    protected boolean postWater = false;
+    protected boolean postWater = true;
     protected boolean waterReflections = true;
     protected boolean waterRippels = true;
     protected boolean waterSpecular = true;
     protected boolean waterFoam = true;
-    protected boolean skyDome = true;
+    protected boolean skyDome  = true;
     protected boolean starMotion = true;
     protected boolean cloudMotion = true;
     protected boolean bloomLight = true;
@@ -44,6 +44,40 @@ public class GameSettings {
             while (contents.hasNextLine()) {
                 String line = contents.nextLine();
                 setting.add(line);
+                String parts[] = line.split("=");
+                switch (parts[0]) {
+                    case "PostWater":
+                        postWater = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "WaterReflections":
+                        waterReflections = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "WaterRipples":
+                        waterRippels = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "WaterSpecular":
+                        waterSpecular = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "WaterFoam":
+                        waterFoam = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "SkyDome":
+                        skyDome = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "StarMotion":
+                        starMotion = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "CloudMotion":
+                        cloudMotion = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "BloomLight":
+                        bloomLight = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "LightScatter":
+                        lightScatter = Boolean.parseBoolean(parts[1]);
+                        break;
+                }
+
             }
         } catch (FileNotFoundException ex) {
         } finally {
@@ -65,7 +99,7 @@ public class GameSettings {
         lightScatter = settings[x++];
     }
 
-    public GameSettings(boolean x1, boolean x2, boolean x3, boolean x4, boolean x5, boolean x6, boolean x7, boolean x8,
+    public void updateSettings(boolean x1, boolean x2, boolean x3, boolean x4, boolean x5, boolean x6, boolean x7, boolean x8,
             boolean x9, boolean x10) {
         postWater = x1;
         waterReflections = x2;
@@ -166,14 +200,14 @@ public class GameSettings {
     }
 
     public void updateSettings(String name, String settings) {
-        if (setting.contains(name + "=" + settings + "=")) {
-            setting.remove(name + "=" + settings + "=");
+        for (int x = 0; x < setting.size(); x++) {
+            String set = setting.get(x).toString();
+            if (set.contains(name)) {
+                setting.remove(x);
+                break;
+            }
         }
-        setting.add(name + "=" + settings + "=");
-    }
-    public void updateRes(int width, int height){
-        UserInterfaceManager UI = new UserInterfaceManager();
-        UI.init(null, null, null, null, null, null);
+        setting.add(name + "=" + settings);
     }
 }
 

@@ -1,9 +1,11 @@
 package CorpseSlasher;
 
 //~--- non-JDK imports --------------------------------------------------------
+import GUI.OAuth.OAuth;
 import GUI.UserInterfaceManager;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.AppState;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
@@ -25,8 +27,13 @@ import jme3utilities.sky.SkyControl;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 
 /**
  * @author normenhansen
@@ -36,7 +43,6 @@ import java.util.Scanner;
  * @param COS301 Main class to handle program start up until graphical main loop
  * is reached.
  */
-@SuppressWarnings("*")
 public class Main extends SimpleApplication implements ScreenController {
 
     static int byPass = 0;
@@ -60,10 +66,11 @@ public class Main extends SimpleApplication implements ScreenController {
     AppSettings gSettings;
     Nifty nifty;
     GameSettings settingsF;
-    
+    State state;
+
     public static void main(String[] args) {
         Main app = new Main();
-        app.setShowSettings(false);
+        app.setShowSettings(true);
         app.setDisplayFps(true);
         app.setDisplayStatView(false);
         System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
@@ -78,7 +85,9 @@ public class Main extends SimpleApplication implements ScreenController {
     @Override
     public void simpleInitApp() {
         gSettings = new AppSettings(true);
-        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this);
+        state = new State();
+        state.initialize(stateManager, this);
+        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, state, gameScene);
         settingsF = loadSettings();
         loggedIn = false;
         flyCam.setEnabled(false);
@@ -113,26 +122,25 @@ public class Main extends SimpleApplication implements ScreenController {
         int width = 800;
         String previous = "";
         try {
-            try (Scanner in = new Scanner(new FileReader("GameSettings.txt")).useDelimiter("=")) {
-                while (in.hasNext()) {
-                    String next = in.next().replace("\n", "");
-                    next = next.replace("\r", "");
-                    if (next.equals("true")) {
-                        _settings.updateSettings(previous, next);
+            try (Scanner in = new Scanner(new FileReader("GameSettings.txt"))) {
+                while (in.hasNextLine()) {
+                    String nextLine = in.nextLine();
+                    String parts[] = nextLine.split("=");
+                    String set = parts[0];
+                    String value = parts[1];
+                    if (value.equals("true")) {
+                        _settings.updateSettings(set, value);
                     }
 
-                    if (next.equals("false")) {
-                        _settings.updateSettings(previous, next);
+                    if (value.equals("false")) {
+                        _settings.updateSettings(set, value);
                     }
-                    if (next.equals("width")) {
-                        width = in.nextInt();
-                        _settings.updateSettings(next, "" + width);
+                    if (set.equals("width")) {
+                        _settings.updateSettings(set, "" + width);
                     }
-                    if (next.equals("height")) {
-                        height = in.nextInt();
-                        _settings.updateSettings(next, "" + height);
+                    if (set.equals("height")) {
+                        _settings.updateSettings(set, "" + height);
                     }
-                    previous = next;
                 }
             }
 
@@ -146,13 +154,12 @@ public class Main extends SimpleApplication implements ScreenController {
                 ex.printStackTrace();
             }
         }
-        System.out.println(width+" "+height);
         //AppSettings setting = new AppSettings(true);
         UI.updateRes(width, height);
-        gSettings.setResolution(width, height);
+        //gSettings.setResolution(width, height);
+        //gSettings.setFullscreen(true);
         gSettings.setFullscreen(true);
-        //setting.setFullscreen(true);
-        //setting.setResolution(width, height);
+        gSettings.setResolution(width, height);
         this.setSettings(gSettings);
         restart();
         return _settings;
@@ -205,23 +212,12 @@ public class Main extends SimpleApplication implements ScreenController {
 
     @Override
     public void onStartScreen() {
-       nifty.setIgnoreKeyboardEvents(false);
+        nifty.setIgnoreKeyboardEvents(false);
     }
 
     @Override
     public void onEndScreen() {
-       nifty.setIgnoreKeyboardEvents(true);
-    }
-
-    /**
-     *
-     * @param id the ID of radio button selected
-     * @param event the state of the selected radio button on a state change the
-     * button event is updated
-     */
-    @NiftyEventSubscriber(id = "Selections")
-    public void radioButtons(final String id, final RadioButtonGroupStateChangedEvent event) {
-        selectedButton = event;
+        nifty.setIgnoreKeyboardEvents(true);
     }
 
     /**
@@ -239,7 +235,7 @@ public class Main extends SimpleApplication implements ScreenController {
             // UI.loadingScreen();
             loadGame();
         } else {
-            System.out.println("Username or password incorrect");
+            JOptionPane.showMessageDialog(null,"Username or password incorrect");
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
 
             // UI.loadingScreen();
@@ -260,22 +256,27 @@ public class Main extends SimpleApplication implements ScreenController {
      * data to the database and logins in
      */
     public void createNewAccount() {
+        String username = accUser.getRealText();
         if (accPassword.getRealText().equals(accPasswordRE.getRealText())) {
-            if (ClientConnection.CheckUsernameAvailable(accUser.getRealText())) {
-                boolean success = ClientConnection.AddUser(accUser.getRealText(), accPassword.getRealText(),
-                        accName.getRealText(), accSurname.getRealText(), accEmail.getRealText());
+            if (!username.contains("@") && !username.contains("!") && !username.contains("#") && !username.contains("$") && !username.contains("%") && !username.contains("^") && !username.contains("&") && !username.contains("*")) {
+                if (ClientConnection.CheckUsernameAvailable(accUser.getRealText())) {
+                    boolean success = ClientConnection.AddUser(accUser.getRealText(), accPassword.getRealText(),
+                            accName.getRealText(), accSurname.getRealText(), accEmail.getRealText());
 
-                if (success) {
-                    guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                    loginScreen();
+                    if (success) {
+                        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+                        loginScreen();
+                    } else {
+                        JOptionPane.showMessageDialog(null,"Failed adding user");
+                    }
                 } else {
-                    System.out.println("Failed adding user");
+                    JOptionPane.showMessageDialog(null,"Username already exists please try again");
                 }
             } else {
-                System.out.println("Username already exists please try again");
+                JOptionPane.showMessageDialog(null,"Usernames may only contain Alphanumeric values and _ - ( )");
             }
         } else {
-            System.out.println("Missmatch password");
+            JOptionPane.showMessageDialog(null,"Missmatch password");
         }
     }
 
@@ -292,7 +293,11 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public void loginScreen() {
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-        ClientConnection.RetrievePassword(retUser.getRealText());
+        if (retUser.getRealText().contains("@")) {
+            //ClientConnection.RetrievePasswordInputEmail(retUser.getRealText());
+        } else {
+            ClientConnection.RetrievePassword(retUser.getRealText());
+        }
         UI.loginScreen();
     }
 
@@ -323,10 +328,32 @@ public class Main extends SimpleApplication implements ScreenController {
     public void socialLogin(String type) {
         switch (type) {
             case "1":
+                try {
+                    boolean success = OAuth.facebookLogin();
+                    if (success) {
+                        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+                        // UI.loadingScreen();
+                        loadGame();
+                    } else {
+                        JOptionPane.showMessageDialog(null,"Incorrect details");
+                    }
+                } catch (OAuthSystemException | IOException ex) {
+                    JOptionPane.showMessageDialog(null,"Error occurred (1FB)");
+                }
                 break;
             case "2":
-                break;
-            case "3":
+                try {
+                    boolean success = OAuth.googleLogin();
+                    if (success) {
+                        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+                        // UI.loadingScreen();
+                        loadGame();
+                    } else {
+                        JOptionPane.showMessageDialog(null,"Incorrect details");
+                    }
+                } catch (OAuthSystemException | IOException ex) {
+                    JOptionPane.showMessageDialog(null,"Error occurred (2G+)");
+                }
                 break;
         }
     }

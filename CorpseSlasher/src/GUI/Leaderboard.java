@@ -12,18 +12,12 @@ import com.jme3.input.InputManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.ControlBuilder;
-import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
-import de.lessvoid.nifty.controls.scrollbar.ScrollbarControl;
-import de.lessvoid.nifty.controls.scrollbar.builder.ScrollbarBuilder;
-import de.lessvoid.nifty.effects.impl.Border;
-import de.lessvoid.nifty.tools.Color;
 
 /**
  *
@@ -154,7 +148,7 @@ public class Leaderboard extends Screens {
                                         marginTop("10%");
                                         marginLeft("25%");
                                         font("Interface/Fonts/zombie.fnt");
-                                        color("#ff6000");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new LabelBuilder("#killsLabel", "Zombie Kills") {
@@ -162,7 +156,7 @@ public class Leaderboard extends Screens {
                                         marginTop("10%");
                                         marginLeft("10%");
                                         font("Interface/Fonts/zombie.fnt");
-                                        color("#ff6000");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new LabelBuilder("#expLabel", "Current Experience") {
@@ -170,7 +164,7 @@ public class Leaderboard extends Screens {
                                         marginTop("10%");
                                         marginLeft("5%");
                                         font("Interface/Fonts/zombie.fnt");
-                                        color("#ff6000");
+                                        color("#ff0000");
                                     }
                                 });
                             }

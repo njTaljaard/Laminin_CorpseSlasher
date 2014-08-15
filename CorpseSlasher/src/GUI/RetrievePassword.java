@@ -72,7 +72,7 @@ public class RetrievePassword extends Screens {
                         panel(new PanelBuilder("Main_Retrieve_Password") {
                             {
                                 childLayoutCenter();
-                                control(new LabelBuilder("Username", "Username :") {
+                                control(new LabelBuilder("Username", "Username/Email :") {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
@@ -82,9 +82,10 @@ public class RetrievePassword extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
-                                control(new TextFieldBuilder("Username_Input_ID_3", "Enter Username") {
+                                control(new TextFieldBuilder("Username_Input_ID_3", "Enter Username/Email") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -93,6 +94,7 @@ public class RetrievePassword extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new ButtonBuilder("Get_Password", "Retrieve Password") {

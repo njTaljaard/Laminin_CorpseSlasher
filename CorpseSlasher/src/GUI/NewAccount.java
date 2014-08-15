@@ -86,6 +86,7 @@ public class NewAccount extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new TextFieldBuilder("Email_Input_ID", "Enter Email") {
@@ -97,6 +98,7 @@ public class NewAccount extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new LabelBuilder("Name", "Name :") {
@@ -109,6 +111,7 @@ public class NewAccount extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new TextFieldBuilder("Name_Input_ID", "Enter Name") {
@@ -120,6 +123,7 @@ public class NewAccount extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new TextFieldBuilder("Surname_Input_ID", "Enter Surname") {
@@ -131,6 +135,7 @@ public class NewAccount extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new LabelBuilder("Surname", "Surname :") {
@@ -143,6 +148,7 @@ public class NewAccount extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new LabelBuilder("Username_ID_2", "Username :") {
@@ -155,6 +161,7 @@ public class NewAccount extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new TextFieldBuilder("Username_Input_ID_2", "Enter Username") {
@@ -166,6 +173,7 @@ public class NewAccount extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new LabelBuilder("Password_ID_2", "Password :") {
@@ -178,6 +186,7 @@ public class NewAccount extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new TextFieldBuilder("Password_Input_ID_2", "Enter Password") {
@@ -189,6 +198,7 @@ public class NewAccount extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new LabelBuilder("Password_ID_2_2", "RE-Password :") {
@@ -201,6 +211,7 @@ public class NewAccount extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new TextFieldBuilder("Password_Input_ID_2_2", "RE-Enter Password") {
@@ -212,6 +223,7 @@ public class NewAccount extends Screens {
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
+                                        color("#ff0000");
                                     }
                                 });
                                 control(new ButtonBuilder("Create_Account", "Create Account") {
