@@ -123,6 +123,29 @@ public final class ClientConnection {
         }
         return false;
     }
+    
+    /**
+     * RetrievePasswordInputEmail - sends the client's email in a JSON object to the
+     * server, so that the client's password can be sent to hin via email.
+     *
+     * @param email - client's email
+     *
+     * @return - returns true or false, depending on if the email was sent to
+     * the client, containing his/hers password.
+     */
+    public static boolean RetrievePasswordInputEmail(String email) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("type", "retrievePasswordInputEmail");
+            obj.put("email", email);
+            outWriter.println(obj);
+            return Boolean.parseBoolean(inReader.readLine().toString());
+        } catch (Exception exc) {
+            //TODO: Raise exceptions through the ExceptionHandler class.
+            System.out.println("Connection retrieve password input email error: " + exc.toString());
+        }
+        return false;
+    }
 
     /**
      * SetPassword - sends a JSON object to the server, containing the client's
@@ -259,10 +282,22 @@ public final class ClientConnection {
      * Retrieves the leader board from the server through the existing session
      * connection.
      *
-     * @return an array list containing the information of all players and
+     * @return an comma separated string containing the information of all players and
      * scores.
      */
-    public static ArrayList<Object> retrieveLeaderBoard() {
-        return null;
+    public static String retrieveLeaderBoard() {
+        JSONObject obj = new JSONObject();
+        try
+        {
+            obj.put("type", "retrieveLeaderBoard");
+            outWriter.println(obj);
+            return inReader.readLine().toString();
+        }
+        catch (Exception exc)
+        {
+            //TODO: Raise exceptions through the ExceptionHandler class.
+            System.out.println("Connection check username available error: " + exc.toString());
+            return "";
+        }
     }
 }
