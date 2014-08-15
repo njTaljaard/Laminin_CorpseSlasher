@@ -3,7 +3,6 @@ package GUI;
 //~--- non-JDK imports --------------------------------------------------------
 
 import CorpseSlasher.GameScene;
-import CorpseSlasher.State;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -46,7 +45,7 @@ public final class UserInterfaceManager {
      * initializes the user interface manager so it can interchange between different screens
      */
     public void init(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
-                     ViewPort guiViewPort, AppStateManager appState, Application app,State state,GameScene scene) {
+                     ViewPort guiViewPort, AppStateManager appState, Application app,GameScene scene) {
         this.assetManager  = assetManager;
         this.inputManager  = inputManager;
         this.audioRenderer = audioRenderer;

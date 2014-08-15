@@ -66,7 +66,6 @@ public class Main extends SimpleApplication implements ScreenController {
     AppSettings gSettings;
     Nifty nifty;
     GameSettings settingsF;
-    State state;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -85,9 +84,7 @@ public class Main extends SimpleApplication implements ScreenController {
     @Override
     public void simpleInitApp() {
         gSettings = new AppSettings(true);
-        state = new State();
-        state.initialize(stateManager, this);
-        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, state, gameScene);
+        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene);
         settingsF = loadSettings();
         loggedIn = false;
         flyCam.setEnabled(false);
