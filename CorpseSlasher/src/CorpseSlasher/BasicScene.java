@@ -20,8 +20,15 @@ import com.jme3.texture.Texture2D;
 import jme3utilities.sky.SkyControl;
 import com.jme3.water.WaterFilter;
 import com.jme3.math.FastMath;
+import com.jme3.math.Plane;
+import com.jme3.math.Quaternion;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.shape.Quad;
+import com.jme3.util.SkyFactory;
+import com.jme3.water.SimpleWaterProcessor;
 import java.util.List;
 import jme3utilities.Misc;
 import jme3utilities.TimeOfDay;
@@ -46,7 +53,8 @@ public class BasicScene {
     private FilterPostProcessor fpp;
     private AmbientLight ambient;
     private DirectionalLight sun;
-    private WaterFilter water;
+    private WaterFilter postWater;
+    private SimpleWaterProcessor simpleWater;
     private GameSettings settings;
         
     /**
@@ -83,6 +91,11 @@ public class BasicScene {
         //ui.update(0.6f);
         initTerrain(assMan, bullet);
         //ui.update(0.85f);
+    }
+    
+    public void reloadScene(AssetManager assMan, ViewPort vp, Camera cam) {
+        initWater(assMan, vp);
+        initSkyBox(assMan, cam);
     }
     
     /**
@@ -154,27 +167,68 @@ public class BasicScene {
      * @param vp - ViewPort required for water, contains position of camara.
      */
     private void initWater(AssetManager assMan, ViewPort vp) {
-        water = new WaterFilter(sceneNode, lightDir); 
-        //water.setUseHQShoreline(true); //to high resource usage. //see setting if high end build running.
-        water.setWaveScale(0.003f);
-        water.setMaxAmplitude(3.0f);
-        water.setDeepWaterColor(new ColorRGBA(0.064f,0.329f,0.398f,0.8f));
-        water.setUseRefraction(true);
-        water.setUseRipples(true);
-        water.setUseSpecular(true);
-        water.setShoreHardness(0.005f);
-        water.setUnderWaterFogDistance(20);
-        water.setWindDirection(new Vector2f(0.35f, 0.35f));
-        water.setCenter(Vector3f.ZERO); 
-        water.setRadius(2600); 
-        water.setWaveScale(0.005f); 
-        water.setFoamExistence(new Vector3f(2.5f, 2.0f, 3.0f)); 
-        water.setFoamTexture((Texture2D) assMan.loadTexture("Common/MatDefs/Water/Textures/foam2.jpg")); 
-        water.setRefractionStrength(0.2f); 
-        water.setWaterHeight(10.0f); 
+        if (settings.postWater) {
+             initPostProcessWater(assMan, vp);
+         } else {
+             initBasicWater(assMan, vp);
+         }
+    }
+    
+    private void initBasicWater(AssetManager assMan, ViewPort vp) {
+        simpleWater = new SimpleWaterProcessor(assMan);
+        simpleWater.setReflectionScene(sceneNode);
+        simpleWater.setWaterDepth(80);         // transparency of water
+        simpleWater.setDistortionScale(0.05f); // strength of waves
+        simpleWater.setWaveSpeed(0.05f);       // speed of waves
+ 
+        // we set the water plane
+        Vector3f waterLocation=new Vector3f(0,20,0);
+        simpleWater.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation.dot(Vector3f.UNIT_Y)));
+        vp.addProcessor(simpleWater);
         
-        fpp.addFilter(water); 
-        vp.addProcessor(fpp); 
+        // we define the wave size by setting the size of the texture coordinates
+        Quad quad = new Quad(2000,2000);
+        quad.scaleTextureCoordinates(new Vector2f(10f,10f));
+        
+        // we create the water geometry from the quad
+        Geometry waterPlane = new Geometry("water", quad);
+        waterPlane.setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X));
+        waterPlane.setLocalTranslation(-1000, 20, 1000);
+        waterPlane.setShadowMode(ShadowMode.Receive);
+        waterPlane.setMaterial(simpleWater.getMaterial());
+        /*Geometry waterPlane = simpleWater.createWaterGeometry(10, 10);
+        waterPlane.setLocalTranslation(-5, 0, 5);
+        waterPlane.setMaterial(simpleWater.getMaterial());*/
+        
+        sceneNode.attachChild(waterPlane);
+    }
+    
+    private void initPostProcessWater(AssetManager assMan, ViewPort vp) {
+        postWater = new WaterFilter(sceneNode, lightDir); 
+        //water.setUseHQShoreline(true); //to high resource usage. //see setting if high end build running.
+        postWater.setWaveScale(0.003f);
+        postWater.setMaxAmplitude(3.0f);
+        postWater.setDeepWaterColor(new ColorRGBA(0.064f,0.329f,0.398f,0.8f));
+        if (settings.waterReflections) {
+            postWater.setUseRefraction(true);
+            postWater.setRefractionStrength(0.2f);
+        }
+        postWater.setUseRipples(settings.waterRippels);
+        postWater.setUseSpecular(settings.waterSpecular);
+        postWater.setShoreHardness(0.005f);
+        postWater.setUnderWaterFogDistance(20);
+        postWater.setWindDirection(new Vector2f(0.35f, 0.35f));
+        postWater.setCenter(Vector3f.ZERO); 
+        postWater.setRadius(2600); 
+        postWater.setWaveScale(0.005f); 
+        if (settings.waterFoam) {
+            postWater.setFoamExistence(new Vector3f(2.5f, 2.0f, 3.0f)); 
+            postWater.setFoamTexture((Texture2D) assMan.loadTexture("Common/MatDefs/Water/Textures/foam2.jpg"));  
+        }
+        postWater.setWaterHeight(10.0f); 
+        
+        fpp.addFilter(postWater); 
+        vp.addProcessor(fpp);
     }
     
     /**
@@ -184,11 +238,23 @@ public class BasicScene {
      * @param cam - Camera required to create a day night skybox system.
      */
     private void initSkyBox(AssetManager assMan, Camera cam) {
-        /**
-         * @param AssetManager, Camera, Cloud Flattening, Star motion, Bottom dome
+        if (settings.skyDome) {
+            initSkyControl(assMan, cam);
+        } else {
+            initBasicSky(assMan);
+        }
+    }
+     
+    private void initBasicSky(AssetManager assMan) {
+        sceneNode.attachChild(SkyFactory.createSky(assMan, "Textures/Sky/Bright/BrightSky.dds", false));
+    }
+
+    private void initSkyControl(AssetManager assMan, Camera cam) {
+        /*
+         *  AssetManager, Camera, Cloud Flattening, Star motion, Bottom dome
          */
-        skyControl = new SkyControl(assMan, cam, 0.7f, true, true);
-        skyControl.setCloudModulation(true);
+        skyControl = new SkyControl(assMan, cam, 0.7f, settings.starMotion, true);
+        skyControl.setCloudModulation(settings.cloudMotion);
         skyControl.setCloudiness(0.6f);
         skyControl.setCloudYOffset(0.5f);
         skyControl.setTopVerticalAngle(1.65f);
@@ -239,10 +305,16 @@ public class BasicScene {
     }
     
     public void update(TimeOfDay tod, float tpf) {
-        skyControl.update(tpf);
-        skyControl.getSunAndStars().setHour(tod.getHour());
-        sun.setDirection(skyControl.getUpdater().getDirection());
-        water.setLightDirection(skyControl.getUpdater().getDirection());
+        if (settings.skyDome) {
+            skyControl.update(tpf);
+            skyControl.getSunAndStars().setHour(tod.getHour());
+            sun.setDirection(skyControl.getUpdater().getDirection());
+            if (settings.postWater) {
+                postWater.setLightDirection(sun.getDirection());
+            } else {
+                simpleWater.setLightPosition(sun.getDirection());
+            }
+        }
     }
     
     /**

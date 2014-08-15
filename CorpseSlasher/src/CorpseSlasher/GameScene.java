@@ -46,6 +46,10 @@ public class GameScene {
         bullet.getPhysicsSpace().addCollisionListener(collController);
     }
     
+    public void reloadScene(AssetManager assMan, ViewPort vp, Camera cam) {
+        basicScene.reloadScene(assMan, vp, cam);
+    }
+    
     /**
      * initScene will retrieve and combine all the variase assets that will
      * make up the entire scene.

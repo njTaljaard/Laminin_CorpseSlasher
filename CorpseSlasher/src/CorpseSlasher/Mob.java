@@ -34,6 +34,7 @@ public class Mob {
     private ModelRagdoll ragdoll;
     private GhostControl attackGhost;
     private float health;
+    private float eighth_pi;
     private boolean alive;
     private long deathTime, spawnTime;
     
@@ -52,6 +53,7 @@ public class Mob {
         passivePosition = position;
         alive = true;
         health = 100;
+        eighth_pi = FastMath.PI * 0.125f;
         spawnTime = new Long("10000000000");
         
         animControl = new MobAnimControl();
@@ -89,7 +91,6 @@ public class Mob {
     }
     
     private void initRagdoll() {
-        float eighth_pi = FastMath.PI * 0.125f;
         ragdoll = new ModelRagdoll(0.5f, "bennettzombie_body.001-ogremesh");
         ragdoll.addBoneName("hips");
         ragdoll.addBoneName("spine");
@@ -112,8 +113,6 @@ public class Mob {
         ragdoll.addBoneName("foot.R");
         ragdoll.addBoneName("toe.L");
         ragdoll.addBoneName("toe.R"); 
-        ragdoll.setJointLimit("hips", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
-        ragdoll.setJointLimit("chest", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
         ragdoll.setCcdMotionThreshold(1.0f);
         ragdoll.setCcdSweptSphereRadius(1.0f);
         ragdoll.setEnabled(false);
@@ -225,6 +224,8 @@ public class Mob {
             bullet.getPhysicsSpace().remove(attackGhost);
             bullet.getPhysicsSpace().remove(collControl.getAggroGhost());
             mob.addControl(ragdoll);
+            ragdoll.setJointLimit("hips", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
+            ragdoll.setJointLimit("chest", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
             bullet.getPhysicsSpace().add(ragdoll);
             ragdoll.setRagdollMode();
         }
