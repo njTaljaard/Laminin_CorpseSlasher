@@ -87,6 +87,15 @@ public class Input {
                         return "false";
                     }
                 }
+                    case "retrievePasswordInputEmail": {
+                    obj.put("email", clientObj.get("email").toString());
+
+                    if (dbu.retrievePasswordInputEmail(obj)) {
+                        return "true";
+                    } else {
+                        return "false";
+                    }
+                }
                 case "checkUsernameAvailable": {
                     obj.put("username", clientObj.get("username").toString());
 
@@ -95,6 +104,9 @@ public class Input {
                     } else {
                         return "false";
                     }
+                }  
+                    case "retrieveLeaderBoard": {
+                    return dbu.retriveLeaderBoard();
                 }  
                 default:
                     return "";

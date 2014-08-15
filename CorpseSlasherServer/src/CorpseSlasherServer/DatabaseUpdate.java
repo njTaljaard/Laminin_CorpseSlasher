@@ -12,6 +12,8 @@ import org.json.*;
  * request the data from the Database class.
  */
 public class DatabaseUpdate {
+    
+    public Database db = new Database();
 
     /**
      * setNewUser sends a new user's details to the database class.
@@ -22,7 +24,6 @@ public class DatabaseUpdate {
      */
     public boolean setNewUser(JSONObject JSONObj) {
         try {
-            Database db = new Database();
             db.connect();
             db.addUser(JSONObj.get("username").toString(), JSONObj.get("password").toString(), JSONObj.get("name").toString(), JSONObj.get("surname").toString(), JSONObj.get("email").toString());
             return true;
@@ -41,7 +42,6 @@ public class DatabaseUpdate {
      */
     public boolean checkLogin(JSONObject JSONObj) {
         try {
-            Database db = new Database();
             db.connect();
             if (db.login(JSONObj.get("username").toString(), JSONObj.get("password").toString())) {
                 return true;
@@ -64,7 +64,6 @@ public class DatabaseUpdate {
      */
     public boolean checkUsernameAvailable(JSONObject JSONObj) {
         try {
-            Database db = new Database();
             db.connect();
             if (db.availableUsername(JSONObj.get("username").toString())) {
                 return true;
@@ -86,7 +85,6 @@ public class DatabaseUpdate {
      */
     public int getKills(JSONObject JSONObj) {
         try {
-            Database db = new Database();
             db.connect();
             return db.getZombieKills(JSONObj.get("username").toString());
         } catch (Exception exc) {
@@ -105,7 +103,6 @@ public class DatabaseUpdate {
      */
     public boolean setKills(JSONObject JSONObj) {
         try {
-            Database db = new Database();
             db.connect();
             if (db.setZombieKills(JSONObj.get("username").toString(), Integer.parseInt(JSONObj.get("zombieKills").toString()))) {
                 return true;
@@ -128,7 +125,6 @@ public class DatabaseUpdate {
      */
     public boolean increaseKillsByOne(JSONObject JSONObj) {
         try {
-            Database db = new Database();
             db.connect();
             if (db.increaseZombieKillsByOne(JSONObj.get("username").toString())) {
                 return true;
@@ -151,7 +147,6 @@ public class DatabaseUpdate {
      */
     public boolean setPassword(JSONObject JSONObj) {
         try {
-            Database db = new Database();
             db.connect();
             if (db.changePassword(JSONObj.get("username").toString(), JSONObj.get("password").toString())) {
                 return true;
@@ -173,7 +168,6 @@ public class DatabaseUpdate {
      */
     public boolean retrievePassword(JSONObject JSONObj) {
         try {
-            Database db = new Database();
             db.connect();
             String username = JSONObj.get("username").toString();
             Email mail = new Email();
@@ -183,4 +177,52 @@ public class DatabaseUpdate {
             return false;
         }
     }
+    
+    /**
+     *
+     * retrievePasswordInputEmail sends an email the the client containing his or her
+     * password.
+     *
+     * @param JSONObj - JSON object containing the client's email address.
+     * @return - returns true if email is sent or false if the sent email false.
+     */
+    public boolean retrievePasswordInputEmail(JSONObject JSONObj) {
+        try {
+            db.connect();
+            String email = JSONObj.get("email").toString();
+            String username = db.getUsername(email);
+            Email mail = new Email();
+            mail.sendMail(email, "Corpse Slasher Password", "Your Corpse Slasher Password: " + db.getPassword(username));
+            return true;
+        } catch (Exception exc) {
+            return false;
+        }
+    }
+    
+    /**
+     * retriveLeaderBoard - converts the two dimensional string array representation
+     * of the board, to a comma separated string.
+     * 
+     * @return - returns a comma separated string representation of the leader board.
+     */
+    
+    public String retriveLeaderBoard()
+    {
+        try
+        {
+            String leaderBoard = "";
+            db.connect();
+            String[][] tmp = db.getLeaderBoard();
+            for (int i = 0; i < tmp[0].length; i++)
+            {
+                leaderBoard += tmp[0][i] + "," + tmp[1][i] + "," + tmp[2][i] + ",";
+            }
+            return leaderBoard.substring(0, leaderBoard.length() - 1);
+        }
+        catch (Exception exc)
+        {
+            return "";
+        }
+    }
+    
 }

@@ -1,6 +1,9 @@
 package CorpseSlasherServer;
 
+//import com.sun.istack.internal.logging.Logger;
 import java.sql.*;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 
 /**
  * @author Laminin
@@ -50,7 +53,7 @@ public class Database {
     public boolean addUser(String username, String password, String name, String surname, String email) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "INSERT INTO user (username,password,name,surname,email,zombieKills) VALUES ('" + username + "','" + password + "','" + name + "','" + surname + "','" + email + "',0)";
+            String query = "INSERT INTO user (username,password,name,surname,email,zombieKills) VALUES ('" + username + "',AES_ENCRYPT('" + password + "', SHA1('9876543210')),'" + name + "','" + surname + "','" + email + "',0)";
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
@@ -74,7 +77,7 @@ public class Database {
     public boolean login(String username, String password) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "SELECT username FROM user WHERE password = '" + password + "'";
+            String query = "SELECT username FROM user WHERE password = AES_DECRYPT('" + password + "', SHA1('9876543210'))";
             ResultSet rs = stmt.executeQuery(query);
             rs.next();
             String result = rs.getString("username");
@@ -170,7 +173,7 @@ public class Database {
     public boolean changePassword(String username, String password) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "UPDATE user SET password = '" + password + "' WHERE username = '" + username + "'";
+            String query = "UPDATE user SET password = AES_ENCRYPT('" + password + "'SHA1('9876543210')) WHERE username = '" + username + "'";
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
@@ -190,13 +193,36 @@ public class Database {
     public String getPassword(String username) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "SELECT password FROM user WHERE username = '" + username + "'";
+            String query = "SELECT AES_DECRYPT(password, SHA1('9876543210')) FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
             rs.next();
             String result = rs.getString("password");
             return result;
         } catch (Exception exc) {
             System.out.println("Get password error:" + exc);
+            return "";
+            //TODO: Send exception to exception handler class to process. 
+        }
+
+    }
+    
+    /**
+     *
+     * getUsername retrieves the client's username from the database.
+     *
+     * @param email - client's email.
+     * @return returns the client's username.
+     */
+    public String getUsername(String email) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT username FROM user WHERE email = '" + email + "'";
+            ResultSet rs = stmt.executeQuery(query);
+            rs.next();
+            String result = rs.getString("username");
+            return result;
+        } catch (Exception exc) {
+            System.out.println("Get username error:" + exc);
             return "";
             //TODO: Send exception to exception handler class to process. 
         }
@@ -251,5 +277,104 @@ public class Database {
             return true;
             //TODO: Send exception to exception handler class to process. 
         }
+    }
+    
+    /**
+     * getLeaderBoard - Retrieves the needed data from tables user and oauth_user
+     * and converts it to a two dimensional array representation of the leader board.
+     * 
+     * @return - returns a two dimensional string array, containing the leader board.
+     */
+    
+    public String[][] getLeaderBoard()
+    {
+        try
+        {
+            Statement stmt = conn.createStatement();
+            
+            String queryNumUsers = "SELECT COUNT(*) FROM user";
+            ResultSet rsNumUsers = stmt.executeQuery(queryNumUsers);
+            rsNumUsers.next();
+            int numRowsUser = Integer.parseInt(rsNumUsers.getString("COUNT(*)"));
+            String[][] arrUser = new String[3][numRowsUser];
+            
+            String query = "SELECT * FROM user ORDER BY zombieKills DESC";
+            ResultSet rs = stmt.executeQuery(query);
+            rs.next();
+            for (int i = 0; i < numRowsUser; i++)
+            {
+                arrUser[0][i] = rs.getString("name") + " " + rs.getString("surname");
+                arrUser[1][i] = rs.getString("zombieKills");
+                arrUser[2][i] = rs.getString("experiencePoints");
+                rs.next();
+            }
+            
+            String queryNumOAuthUsers = "SELECT COUNT(*) FROM oauth_user";
+            ResultSet rsNumOAuthUsers = stmt.executeQuery(queryNumOAuthUsers);
+            rsNumOAuthUsers.next();
+            int numRowsOAuthUser = Integer.parseInt(rsNumOAuthUsers.getString("COUNT(*)"));
+            String[][] arrOAuthUser = new String[3][numRowsOAuthUser];
+            
+            String query1 = "SELECT * FROM oauth_user ORDER BY zombieKills DESC";
+            ResultSet rs1 = stmt.executeQuery(query1);
+            rs1.next();
+            for (int i = 0; i < numRowsOAuthUser; i++)
+            {
+                arrOAuthUser[0][i] = rs1.getString("name");
+                arrOAuthUser[1][i] = rs1.getString("zombieKills");
+                arrOAuthUser[2][i] = rs1.getString("experiencePoints");
+                rs1.next();
+            }
+            
+            int arrFinalLength = arrUser[0].length + arrOAuthUser[0].length;
+            
+            String[][] arrFinal = new String[3][arrFinalLength];
+            int user = 0;
+            int oauth = 0;
+            for (int i = 0; i < arrFinalLength; i++)
+            {
+                
+                if (user == numRowsUser)
+                {
+                    arrFinal[0][i] = arrOAuthUser[0][oauth];
+                    arrFinal[1][i] = arrOAuthUser[1][oauth];
+                    arrFinal[2][i] = arrOAuthUser[2][oauth];
+                    oauth++;
+                    
+                }
+                else if (oauth == numRowsOAuthUser)
+                {
+                    arrFinal[0][i] = arrUser[0][user];
+                    arrFinal[1][i] = arrUser[1][user];
+                    arrFinal[2][i] = arrUser[2][user];
+                    user++;
+                }
+                else if (Integer.parseInt(arrUser[2][user]) > Integer.parseInt(arrOAuthUser[2][oauth]))
+                {
+                    arrFinal[0][i] = arrUser[0][user];
+                    arrFinal[1][i] = arrUser[1][user];
+                    arrFinal[2][i] = arrUser[2][user];
+                    user++;
+                }
+                else
+                {
+                    arrFinal[0][i] = arrOAuthUser[0][oauth];
+                    arrFinal[1][i] = arrOAuthUser[1][oauth];
+                    arrFinal[2][i] = arrOAuthUser[2][oauth];
+                    oauth++;
+                }
+                
+            }
+            
+            return arrFinal;
+        }
+        catch (Exception exc)
+        {
+            System.out.println("Leader board error:" + exc);
+            //Logger.getLogger(Database.class).log(Level.SEVERE, null,exc);
+            return null;
+            //TODO: Send exception to exception handler class to process. 
+        }
+        
     }
 }
