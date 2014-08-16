@@ -133,9 +133,11 @@ public class Main extends SimpleApplication implements ScreenController {
                         _settings.updateSettings(set, value);
                     }
                     if (set.equals("width")) {
+                        width = Integer.parseInt(parts[1]);
                         _settings.updateSettings(set, "" + width);
                     }
                     if (set.equals("height")) {
+                        height = Integer.parseInt(parts[1]);
                         _settings.updateSettings(set, "" + height);
                     }
                 }
@@ -232,7 +234,7 @@ public class Main extends SimpleApplication implements ScreenController {
             // UI.loadingScreen();
             loadGame();
         } else {
-            JOptionPane.showMessageDialog(null,"Username or password incorrect");
+            System.out.println("Username or password incorrect");
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
 
             // UI.loadingScreen();
@@ -264,16 +266,16 @@ public class Main extends SimpleApplication implements ScreenController {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
                         loginScreen();
                     } else {
-                        JOptionPane.showMessageDialog(null,"Failed adding user");
+                        System.out.println("Failed adding user");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null,"Username already exists please try again");
+                    System.out.println("Username already exists please try again");
                 }
             } else {
-                JOptionPane.showMessageDialog(null,"Usernames may only contain Alphanumeric values and _ - ( )");
+                System.out.println("Usernames may only contain Alphanumeric values and _ - ( )");
             }
         } else {
-            JOptionPane.showMessageDialog(null,"Missmatch password");
+            System.out.println("Missmatch password");
         }
     }
 
@@ -332,10 +334,10 @@ public class Main extends SimpleApplication implements ScreenController {
                         // UI.loadingScreen();
                         loadGame();
                     } else {
-                        JOptionPane.showMessageDialog(null,"Incorrect details");
+                        System.out.println("Incorrect details");
                     }
                 } catch (OAuthSystemException | IOException ex) {
-                    JOptionPane.showMessageDialog(null,"Error occurred (1FB)");
+                    System.out.println("Error occurred (1FB)");
                 }
                 break;
             case "2":
@@ -346,10 +348,10 @@ public class Main extends SimpleApplication implements ScreenController {
                         // UI.loadingScreen();
                         loadGame();
                     } else {
-                        JOptionPane.showMessageDialog(null,"Incorrect details");
+                        System.out.println("Incorrect details");
                     }
                 } catch (OAuthSystemException | IOException ex) {
-                    JOptionPane.showMessageDialog(null,"Error occurred (2G+)");
+                    System.out.println("Error occurred (2G+)");
                 }
                 break;
         }
