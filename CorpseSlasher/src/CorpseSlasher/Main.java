@@ -99,7 +99,7 @@ public class Main extends SimpleApplication implements ScreenController {
     @Override
     public void simpleUpdate(float tpf) {
         if (loggedIn) {
-            gameScene.update(bulletAppState, cam, timeOfDay, tpf);
+            gameScene.update(timeOfDay, tpf);
         }
     }
 
@@ -157,7 +157,7 @@ public class Main extends SimpleApplication implements ScreenController {
         UI.updateRes(width, height);
         //gSettings.setResolution(width, height);
         //gSettings.setFullscreen(true);
-        gSettings.setFullscreen(true);
+        gSettings.setFullscreen(false);
         gSettings.setResolution(width, height);
         this.setSettings(gSettings);
         restart();

@@ -25,6 +25,8 @@ public class Mob {
     protected String mobName;
     protected int handColliosionGroup;
     private Node mob;
+    private AssetManager assetManager;
+    private BulletAppState bullet;
     private AnimChannel channel;
     private AnimControl control;
     private Vector3f passivePosition;
@@ -32,10 +34,12 @@ public class Mob {
     private MobMotionControl collControl;
     private BetterCharacterControl characterControl;
     private ModelRagdoll ragdoll;
+    //private Ragdoll ragdoll;
     private GhostControl attackGhost;
     private float health;
     private float eighth_pi;
     private boolean alive;
+    private boolean respawn;
     private long deathTime, spawnTime;
     
     /**
@@ -46,24 +50,31 @@ public class Mob {
      * @param mName - String that defines the name assosiated to this mob required
      * for collision detection.
      */
-    public Mob(Vector3f position, BulletAppState bullet, AssetManager assMan, 
+    public Mob(Vector3f position, BulletAppState bullet, AssetManager assetManager, 
             String mName) {
         mobName = mName;
+        this.assetManager = assetManager;
+        this.bullet = bullet;
         handColliosionGroup = Integer.parseInt(mobName.substring(3));
         passivePosition = position;
         alive = true;
+        respawn = false;
         health = 100;
         eighth_pi = FastMath.PI * 0.125f;
         spawnTime = new Long("10000000000");
         
+        createMob();
+    }
+    
+    private void createMob() {
         animControl = new MobAnimControl();
         collControl = new MobMotionControl();
         
-        initMob(assMan);
+        initMob();
         initControl();
         initRagdoll();
         initAttackGhost();
-        assembleMob(bullet);
+        assembleMob();
         initAnim();
     }
     
@@ -72,8 +83,8 @@ public class Mob {
      * name it acordingly.
      * @param assMan - AssetManager required to load the model.
      */
-    private void initMob(AssetManager assMan) {
-        mob = (Node) assMan.loadModel("Models/Zombie/bunnett.j3o");
+    private void initMob() {
+        mob = (Node) assetManager.loadModel("Models/Zombie/bunnett.j3o");
         mob.setLocalTranslation(passivePosition);
         mob.setName(mobName);
     }
@@ -133,7 +144,7 @@ public class Mob {
      * assembleMob add the controllers to the mob and to the physics handler.
      * @param bullet - BulletAppState physics controller. 
      */
-    private void assembleMob(BulletAppState bullet) {
+    private void assembleMob() {
         mob.addControl(collControl.getAggroGhost());
         mob.addControl(characterControl);
         mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
@@ -161,8 +172,7 @@ public class Mob {
      * @param point - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
      */
-    public String updateMob(BulletAppState bullet, Vector3f point, boolean playerHit,
-            boolean mobHit, float tpf) {
+    public String updateMob(Vector3f point, boolean playerHit, boolean mobHit, float tpf) {
         if (alive) {
             characterControl.update(tpf);
             collControl.updateMobPhase(point, mob, characterControl, passivePosition);
@@ -178,7 +188,7 @@ public class Mob {
                     deathTime = System.nanoTime();
                     collControl.death(characterControl);
                     System.out.println("You killed : " + mobName);
-                    swapControllers(bullet);
+                    swapControllers();
                     return "";
                 }
             }
@@ -192,14 +202,19 @@ public class Mob {
         } else {
             ragdoll.update(tpf);
             if (System.nanoTime() - deathTime > spawnTime) {
-                respawn(bullet);
+                //respawn();
+                //respawn = true;
+                alive = true;
+                swapControllers();
             }
             return "";
         }
     }
     
-    private void swapControllers(BulletAppState bullet) {
+    private void swapControllers() {
         if (alive) { //Swap to character control
+            mob.setLocalTranslation(passivePosition);
+            ragdoll.setKinematicMode();
             ragdoll.setEnabled(false);
             characterControl.setEnabled(true);
             collControl.getAggroGhost().setEnabled(true);
@@ -231,13 +246,8 @@ public class Mob {
         }
     }
     
-    private void respawn(BulletAppState bullet) {
-        alive = true;
-        health = 100;
-        collControl.passive = true;
-        collControl.aggro = false;
-        mob.setLocalTranslation(passivePosition);
-        swapControllers(bullet);
+    public boolean isAlive() {
+        return alive;
     }
     
     /**

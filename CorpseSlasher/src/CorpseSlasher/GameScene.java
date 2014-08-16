@@ -25,6 +25,8 @@ public class GameScene {
     private Character character;
     private MobsHandler mobHandler;
     private CollisionController collController;
+    private ArrayList<String> mobHits;
+    private boolean playerAttacking;
     
     /**
      * GameScene will combine all the entities of the entire game into a node 
@@ -44,6 +46,7 @@ public class GameScene {
         
         collController = new CollisionController();
         bullet.getPhysicsSpace().addCollisionListener(collController);
+        bullet.getPhysicsSpace().enableDebug(assestManager);
     }
     
     public void reloadScene(AssetManager assMan, ViewPort vp, Camera cam) {
@@ -125,17 +128,15 @@ public class GameScene {
      * @param tod - TimeOfDay to update the skycontrol time of day.
      * @param tpf - Update value of time between frames.
      */
-    public void update(BulletAppState bullet, Camera cam, TimeOfDay tod, float tpf) {
+    public void update(TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
-        boolean playerAttacking = character.updateCharacterPostion(cam, 
-                collController.getPlayerHitSize(), tpf);
-        ArrayList<String> mobHits;
+        playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), tpf);
         
         if (playerAttacking) {
-            mobHits= mobHandler.updateMobs(bullet, character.getPosition(), 
+            mobHits= mobHandler.updateMobs(character.getPosition(), 
                     collController.getPlayerHits(), collController.getMobHits(), tpf);
         } else {
-            mobHits = mobHandler.updateMobs(bullet, character.getPosition(), 
+            mobHits = mobHandler.updateMobs(character.getPosition(), 
                     new ArrayList<String>(), collController.getMobHits(), tpf);
         }
         character.processKnocks(mobHits);

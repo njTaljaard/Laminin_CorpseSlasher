@@ -58,7 +58,7 @@ public class MobMotionControl {
             motionDirection.y = 0.0f;
 
             if (mob.getLocalTranslation().distance(point) > 4.5f) {
-                characterControl.setViewDirection(motionDirection.normalize().multLocal(runSpeed));
+                characterControl.setViewDirection(motionDirection.normalize().multLocal(runSpeed).negate());
                 characterControl.setWalkDirection(motionDirection.normalize().multLocal(runSpeed)); 
             }
 
@@ -90,7 +90,7 @@ public class MobMotionControl {
                   passivePosition.subtract(mob.getLocalTranslation(), motionDirection);
                   motionDirection.y = 0.0f;
 
-                  characterControl.setViewDirection(motionDirection.normalize().multLocal(walkSpeed));
+                  characterControl.setViewDirection(motionDirection.normalize().multLocal(walkSpeed).negate());
                   characterControl.setWalkDirection(motionDirection.normalize().multLocal(walkSpeed));
                 } else {
                     passive = true;

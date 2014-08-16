@@ -14,6 +14,7 @@ import com.jme3.renderer.Camera;
  */
 public class CharacterMotionControl {
     
+    private Camera cam;
     private ActionListener actionListener;
     private Vector3f walkDirection;
     protected boolean slash, walk, jump;
@@ -23,8 +24,9 @@ public class CharacterMotionControl {
      * CharacterMotionControl will set all the values and initialize the Action
      * Listener for the key bindings.
      */
-    public CharacterMotionControl() {        
+    public CharacterMotionControl(Camera cam) {        
         walkDirection = new Vector3f();
+        this.cam = cam;
         slash = left = right = up = down = jump = false;
         
         initMotionController();
@@ -86,7 +88,7 @@ public class CharacterMotionControl {
      * @return walkDirection - The vector containing the new direction and 
      * magnatude of the motion.
      */
-    public Vector3f updateCharacterMotion(Camera cam) {
+    public Vector3f updateCharacterMotion() {
         Vector3f camDir = cam.getDirection().clone();
         Vector3f camLeft = cam.getLeft().clone();
         camDir.y = 0;

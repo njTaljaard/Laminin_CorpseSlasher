@@ -41,7 +41,6 @@ import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.RagdollCollisionListener;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.HullCollisionShape;
-import com.jme3.bullet.control.AbstractPhysicsControl;
 import com.jme3.bullet.control.PhysicsControl;
 import com.jme3.bullet.control.ragdoll.HumanoidRagdollPreset;
 import com.jme3.bullet.control.ragdoll.RagdollPreset;

@@ -34,6 +34,9 @@ public class Character {
     
     private Node player;
     private Node playerNode;
+    private Camera cam;
+    private AssetManager assetManager;
+    private BulletAppState bullet;
     private AnimChannel channel;
     private AnimControl control;
     private GhostControl swordControl;
@@ -58,17 +61,20 @@ public class Character {
             Camera cam) {
         playerNode = new Node("Player");
         animController = new CharacterAnimControl();
-        motionController = new CharacterMotionControl();
+        motionController = new CharacterMotionControl(cam);
         walkDirection = new Vector3f();
         health = 100;
         alive = true;
+        this.cam = cam;
+        this.assetManager = assMan;
+        this.bullet = bullet;
         
-        initModel(assMan, cam);
+        initModel();
         initControl();
         initSwordGhost();
         initRagdoll();
-        assemblePlayer(bullet);
-        initCamera(cam);
+        assemblePlayer();
+        initCamera();
         initAnim();
         initKeys(inMan);
     }
@@ -78,8 +84,8 @@ public class Character {
      * @param assMan - AssetManager required to load model and material.
      * @param cam - Camera required to obtain camera position and look at.
      */
-    private void initModel(AssetManager assMan, Camera cam) {
-        player = (Node) assMan.loadModel("Models/cyborg/cyborg.j3o");
+    private void initModel() {
+        player = (Node) assetManager.loadModel("Models/cyborg/cyborg.j3o");
         player.setName("Player");
         player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, -6.2f));
         player.lookAt(cam.getDirection(), cam.getUp());
@@ -117,7 +123,7 @@ public class Character {
      * assemblePlayer add the controllers to the player and to the physics handler.
      * @param bullet - BulletAppState physics controller.
      */
-    private void assemblePlayer(BulletAppState bullet) {
+    private void assemblePlayer() {
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().add(swordControl);
         bullet.getPhysicsSpace().addAll(player);
@@ -131,7 +137,7 @@ public class Character {
      * initCamera will attach the camera to the player for motion control.
      * @param cam - Camera to be attach to the player.
      */
-    private void initCamera(Camera cam) {
+    private void initCamera() {
         cameraController = new CharacterCameraControl("3rdCam", cam, player, characterControl);
     }
     
@@ -155,9 +161,9 @@ public class Character {
      * @param cam - Camera to retrieve the directional vectors required to calculate
      * the direction to move the camera and model in.
      */
-    public boolean updateCharacterPostion(Camera cam, int playerHits, float tpf) {
+    public boolean updateCharacterPostion(int playerHits, float tpf) {
         if (alive) {
-            walkDirection = motionController.updateCharacterMotion(cam);
+            walkDirection = motionController.updateCharacterMotion();
             characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
 
             motionController.slash = animController.updateCharacterAnimations(channel, 
