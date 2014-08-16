@@ -133,9 +133,11 @@ public class Main extends SimpleApplication implements ScreenController {
                         _settings.updateSettings(set, value);
                     }
                     if (set.equals("width")) {
+                        width = Integer.parseInt(parts[1]);
                         _settings.updateSettings(set, "" + width);
                     }
                     if (set.equals("height")) {
+                        height = Integer.parseInt(parts[1]);
                         _settings.updateSettings(set, "" + height);
                     }
                 }
