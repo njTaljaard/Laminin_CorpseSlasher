@@ -23,6 +23,7 @@ public class CharacterMotionControl {
     /**
      * CharacterMotionControl will set all the values and initialize the Action
      * Listener for the key bindings.
+     * @param cam - Camera to retrieve position and direction.
      */
     public CharacterMotionControl(Camera cam) {        
         walkDirection = new Vector3f();
@@ -84,9 +85,6 @@ public class CharacterMotionControl {
     /**
      * updateCharacterMotion will calulate the resulting directional vector from
      * the keys pressed.
-     * @param cam - Camera required for the camera directional and left vector.
-     * @return walkDirection - The vector containing the new direction and 
-     * magnatude of the motion.
      */
     public Vector3f updateCharacterMotion() {
         Vector3f camDir = cam.getDirection().clone();

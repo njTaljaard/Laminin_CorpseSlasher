@@ -13,7 +13,8 @@ import java.util.ArrayList;
  * @param  Derivco
  * @param  University of Pretoria
  * @param  COS301
- * CollisionController
+ * CollisionController process the collision events regarding to attacks landed
+ * by the player and mobs.
  */
 public class CollisionController implements PhysicsCollisionListener {
     
@@ -25,6 +26,10 @@ public class CollisionController implements PhysicsCollisionListener {
         mobHits = new ArrayList<>();
     }
     
+    /**
+     * collisio processes every collision that occures throughout the scene.
+     * @param event - PhysicsCollisionEvent
+     */
     @Override
     public void collision(PhysicsCollisionEvent event) {
         
@@ -44,23 +49,42 @@ public class CollisionController implements PhysicsCollisionListener {
         }
     }
     
+    /**
+     * getMobHitSize accessor of mob hits size.
+     * @return size.
+     */
     public int getMobHitSize() {
         return mobHits.size();
     }
     
+    /**
+     * getPlayerHitSize accessor of player hits size.
+     * @return zize.
+     */
     public int getPlayerHitSize() {
         return playerHits.size();
     }
     
+    /**
+     * attacksProcessed clears the list of mob & player hits.
+     */
     public void attacksProcessed() {
         playerHits.clear();
         mobHits.clear();
     }
     
+    /**
+     * getMobHits accessor to which mobs has hit the player.
+     * @return mobHits.
+     */
     public ArrayList<Integer> getMobHits() {
         return mobHits;
     }
     
+    /**
+     * getPlayerHits accessor to which mobs the player has hit.
+     * @return playerHits.
+     */
     public ArrayList<String> getPlayerHits() {
         return playerHits;
     }

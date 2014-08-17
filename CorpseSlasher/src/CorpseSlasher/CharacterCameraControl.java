@@ -35,6 +35,7 @@ public class CharacterCameraControl {
      * @param name - Name of camera node.
      * @param cam - Camera as to add to the camera node to control the camera.
      * @param player - Spatial node containing the model and all its controllers.
+     * @param cc - BetterCharacterControl to change player turning direction.
      */
     public CharacterCameraControl(String name, Camera cam, Node player, BetterCharacterControl cc)
     {
@@ -48,7 +49,7 @@ public class CharacterCameraControl {
 	cameraNode.lookAt(pivot.getLocalTranslation(), Vector3f.UNIT_Y);
  
 	pivot.getLocalRotation().fromAngleAxis(verticalAngle, Vector3f.UNIT_X);
-        characterControl = cc;
+        this.characterControl = cc;
         initActionListener();
     }
     

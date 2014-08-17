@@ -109,12 +109,20 @@ public class MobMotionControl {
         }
     }
     
+    /**
+     * death will turn of motion control so that mob will remain dead.
+     * @param characterControl - BetterCharacterControl of mob.
+     */
     public void death(BetterCharacterControl characterControl) {
         characterControl.setWalkDirection(new Vector3f(0,0,0));
         aggro = false;
         passive = false;
     }
         
+    /**
+     * getAggroGhost gives access to the aggro ghost controller.
+     * @return aggoGhost - GhostCollisionBox.
+     */
     public GhostControl getAggroGhost() {
         return aggroGhost;
     }

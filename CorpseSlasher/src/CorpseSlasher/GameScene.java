@@ -49,8 +49,11 @@ public class GameScene {
         bullet.getPhysicsSpace().enableDebug(assestManager);
     }
     
-    public void reloadScene(AssetManager assMan, ViewPort vp, Camera cam) {
-        basicScene.reloadScene(assMan, vp, cam);
+    /**
+     * 
+     */
+    public void reloadScene() {
+        basicScene.reloadScene();
     }
     
     /**
@@ -64,6 +67,8 @@ public class GameScene {
      * @param bullet - BulletAppState to add collision detection to the terrain
      * and its added assest.
      * @param map - Corresponding scene number to assign the required terrain.
+     * @param ui - SimpleApplication to retrieve camera positions.
+     * @param settings - GameSettings.
      */
     private void initScene(AssetManager assestManager, ViewPort viewPort, Camera cam,
             BulletAppState bullet, int map, LoadingScreen ui,GameSettings settings) {
@@ -86,6 +91,7 @@ public class GameScene {
      * @param assMan - AssetManager to be able to load models and textures.
      * @param inMan - InputManager for adding key and mouse binding to be triggered.
      * @param bullet - BulletAppState to add the model to the physics handler.
+     * @param cam - Camera to be bound to player model.
      */
     private void initMainCharacter(AssetManager assMan, InputManager inMan, 
             BulletAppState bullet, Camera cam) {
@@ -124,7 +130,6 @@ public class GameScene {
     /**
      * update will update the all the corrisponding assets of the game. From 
      * light direction, time of day, water light reflection, character position.
-     * @param cam - Camera to be use for updating camera position.
      * @param tod - TimeOfDay to update the skycontrol time of day.
      * @param tpf - Update value of time between frames.
      */

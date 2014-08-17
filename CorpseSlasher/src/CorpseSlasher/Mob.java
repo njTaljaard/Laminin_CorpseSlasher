@@ -34,12 +34,10 @@ public class Mob {
     private MobMotionControl collControl;
     private BetterCharacterControl characterControl;
     private ModelRagdoll ragdoll;
-    //private Ragdoll ragdoll;
     private GhostControl attackGhost;
     private float health;
     private float eighth_pi;
     private boolean alive;
-    private boolean respawn;
     private long deathTime, spawnTime;
     
     /**
@@ -58,7 +56,6 @@ public class Mob {
         handColliosionGroup = Integer.parseInt(mobName.substring(3));
         passivePosition = position;
         alive = true;
-        respawn = false;
         health = 100;
         eighth_pi = FastMath.PI * 0.125f;
         spawnTime = new Long("10000000000");
@@ -66,6 +63,9 @@ public class Mob {
         createMob();
     }
     
+    /**
+     * createMob will create all the sub sections of the mob and assemble it.
+     */
     private void createMob() {
         animControl = new MobAnimControl();
         collControl = new MobMotionControl();
@@ -81,7 +81,6 @@ public class Mob {
     /**
      * initMob will load the required asset, set it to the required position and
      * name it acordingly.
-     * @param assMan - AssetManager required to load the model.
      */
     private void initMob() {
         mob = (Node) assetManager.loadModel("Models/Zombie/bunnett.j3o");
@@ -101,6 +100,10 @@ public class Mob {
         characterControl.setEnabled(true);
     }
     
+    /**
+     * initRagdoll will create the ragdoll required for death animation and assign
+     * the required limbs.
+     */
     private void initRagdoll() {
         ragdoll = new ModelRagdoll(0.5f, "bennettzombie_body.001-ogremesh");
         ragdoll.addBoneName("hips");
@@ -142,7 +145,6 @@ public class Mob {
 
     /**
      * assembleMob add the controllers to the mob and to the physics handler.
-     * @param bullet - BulletAppState physics controller. 
      */
     private void assembleMob() {
         mob.addControl(collControl.getAggroGhost());
@@ -171,6 +173,9 @@ public class Mob {
      * and animations that is required for that phase.
      * @param point - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
+     * @param playerHit - boolean if the player hit this mob.
+     * @param mobHit - boolean if mob has attacked player.
+     * @param tpf - Time per frame required for updating ragdoll.
      */
     public String updateMob(Vector3f point, boolean playerHit, boolean mobHit, float tpf) {
         if (alive) {
@@ -202,15 +207,18 @@ public class Mob {
         } else {
             ragdoll.update(tpf);
             if (System.nanoTime() - deathTime > spawnTime) {
-                //respawn();
-                //respawn = true;
                 alive = true;
+                health = 100;
                 swapControllers();
             }
             return "";
         }
     }
     
+    /**
+     * swapControllers will swap between controllers from BetterCharacterControl
+     * will ghost boxes for alive and ragdoll for death.
+     */
     private void swapControllers() {
         if (alive) { //Swap to character control
             mob.setLocalTranslation(passivePosition);
@@ -246,6 +254,10 @@ public class Mob {
         }
     }
     
+    /**
+     * isAlive to determine if the mob is alive.
+     * @return alive state.
+     */
     public boolean isAlive() {
         return alive;
     }

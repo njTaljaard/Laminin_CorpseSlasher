@@ -9,7 +9,6 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
-import com.jme3.bullet.control.KinematicRagdollControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -49,6 +48,7 @@ public class Character {
     private Vector3f walkDirection;
     private float health;
     private boolean alive;
+    private long deathTime, spawnTime;
     
     /**
      * Character will consist of loading the model with its materials and rigging,
@@ -65,6 +65,7 @@ public class Character {
         walkDirection = new Vector3f();
         health = 100;
         alive = true;
+        spawnTime = new Long("5000000000");
         this.cam = cam;
         this.assetManager = assMan;
         this.bullet = bullet;
@@ -81,8 +82,6 @@ public class Character {
     
     /**
      * initModel loads the model and sets it to the specified position.
-     * @param assMan - AssetManager required to load model and material.
-     * @param cam - Camera required to obtain camera position and look at.
      */
     private void initModel() {
         player = (Node) assetManager.loadModel("Models/cyborg/cyborg.j3o");
@@ -103,6 +102,10 @@ public class Character {
         characterControl.setJumpForce(new Vector3f(0,0,0));
     }
     
+    /*
+     * initRagdoll will create the ragdoll required for death animation and assign
+     * the required limbs.
+     */
     private void initRagdoll() {
         ragdoll = new ModelRagdoll(0.5f, "Cube-ogremesh");
         ragdoll.setEnabled(false);
@@ -121,13 +124,11 @@ public class Character {
     
     /**
      * assemblePlayer add the controllers to the player and to the physics handler.
-     * @param bullet - BulletAppState physics controller.
      */
     private void assemblePlayer() {
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().add(swordControl);
         bullet.getPhysicsSpace().addAll(player);
-        bullet.getPhysicsSpace().add(ragdoll);
         player.addControl(characterControl);
         playerNode.attachChild(player); 
         player.getChild("Cube-ogremesh").getControl(SkeletonControl.class).getAttachmentsNode("Sword").addControl(swordControl);
@@ -135,7 +136,6 @@ public class Character {
     
     /**
      * initCamera will attach the camera to the player for motion control.
-     * @param cam - Camera to be attach to the player.
      */
     private void initCamera() {
         cameraController = new CharacterCameraControl("3rdCam", cam, player, characterControl);
@@ -158,8 +158,9 @@ public class Character {
      * updateCharacterPosition will be called from the main game update function 
      * on every frame update, where this will call the motion and animation
      * updater separetly.
-     * @param cam - Camera to retrieve the directional vectors required to calculate
-     * the direction to move the camera and model in.
+     * @param playerHits - number of mobs hit, to check if player is currently in
+     * an attacking position.
+     * @param tpf - Time per frame to update ragdoll position.
      */
     public boolean updateCharacterPostion(int playerHits, float tpf) {
         if (alive) {
@@ -176,13 +177,18 @@ public class Character {
             }                
         } else {
             ragdoll.update(tpf);
+            if (System.nanoTime() - deathTime > spawnTime) {
+                alive = true;
+                health = 100;
+                swapControllers();
+            }
             return false;
         }
     }
     
     /**
-     * 
-     * @param knocks 
+     * processKnocks will process all the landed attacks from mobs.
+     * @param knocks - ArraysList of mob names that have hit player.
      */
     public void processKnocks(ArrayList<String> knocks) {
         if (alive) {
@@ -191,31 +197,44 @@ public class Character {
                 System.out.println("Player : ive been slapped by " + knocks.get(i) 
                         + ". Health is " + health);
                 
-                /*if (health <= 0) {
+                if (health <= 0) {
                     health = 0;
                     alive = false;
+                    deathTime = System.nanoTime();
                     System.out.println("You were killed by : " + knocks.get(i));
-                    //swapControllers();
-                }*/
+                    swapControllers();
+                }
             }
         }
     }
         
     /**
-     * 
+     * swapControllers will swap between controllers from BetterCharacterControl
+     * will ghost boxes for alive and ragdoll for death.
      */
     private void swapControllers() {
-        if (ragdoll.isEnabled()) {
+        if (alive) {            
+            cam.setLocation(new Vector3f(195.0f, 36.0f, -225.0f));
+            player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, -6.2f));
+            ragdoll.setKinematicMode();
             ragdoll.setEnabled(false);
-            player.removeControl(KinematicRagdollControl.class);
+            player.removeControl(ModelRagdoll.class);
+            bullet.getPhysicsSpace().remove(ragdoll);
             player.addControl(characterControl);
+            player.getChild("Cube-ogremesh").getControl(SkeletonControl.class).getAttachmentsNode("Sword").addControl(swordControl);
+            bullet.getPhysicsSpace().add(characterControl);
+            bullet.getPhysicsSpace().add(swordControl);
             characterControl.setEnabled(true);
         } else {
             characterControl.setEnabled(false);
             player.removeControl(BetterCharacterControl.class);
+            player.removeControl(GhostControl.class);
+            bullet.getPhysicsSpace().remove(characterControl);
+            bullet.getPhysicsSpace().remove(swordControl);
             player.addControl(ragdoll);
             ragdoll.setEnabled(true);
             ragdoll.setRagdollMode();
+            bullet.getPhysicsSpace().add(ragdoll);
         }
     }
     
@@ -250,6 +269,10 @@ public class Character {
         inMan.addListener(cameraController.getAnalogListener(), "LookDown");
     }
     
+    /**
+     * getPosition accessor to player model locations.
+     * @return location - Vector3f
+     */
     public Vector3f getPosition() {
         return player.getLocalTranslation();
     }

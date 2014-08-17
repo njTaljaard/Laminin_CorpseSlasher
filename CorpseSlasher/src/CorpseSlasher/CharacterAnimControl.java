@@ -69,6 +69,7 @@ public class CharacterAnimControl {
      * @param channel - AnimChannel controls the animation currently being used.
      * @param slash - If player is attacking.
      * @param walk - If player is currently walking.
+     * @param alive - If the player is alive to allow motion.
      */
     public boolean updateCharacterAnimations(AnimChannel channel, boolean slash, 
             boolean walk, boolean alive) {        

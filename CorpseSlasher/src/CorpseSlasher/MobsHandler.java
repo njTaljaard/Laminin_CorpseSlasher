@@ -52,9 +52,6 @@ public class MobsHandler {
     /**
      * createMobs creates each mob and adds it to the list of mobs as well as the
      * scene node.
-     * @param bullet - BulletAppState so be able to add model and collision to 
-     * the physics domain.
-     * @param assMan - AssetManager to load model into engine.
      */
     private void createMobs() {    
         int size = positions.size();
@@ -68,6 +65,9 @@ public class MobsHandler {
     /**
      * updateMobs will update each of the mobs individually.
      * @param point - Vector3f with is the direction towards the player.
+     * @param playerHits - ArrayList containing the mob name that player has hit.
+     * @param mobHits - Collision groups of mobs that have hit player.
+     * @param tpf - Time per frame to update ragdoll.
      */
     public ArrayList<String> updateMobs(Vector3f point, ArrayList<String> playerHits, 
             ArrayList<Integer> mobHits, float tpf) {
