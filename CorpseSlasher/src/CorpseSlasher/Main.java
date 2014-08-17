@@ -84,16 +84,17 @@ public class Main extends SimpleApplication implements ScreenController {
     @Override
     public void simpleInitApp() {
         gSettings = new AppSettings(true);
-        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene);
+        //UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene);
         settingsF = loadSettings();
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
-        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
+        //inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         ClientConnection.StartClientConnection();
-        UI.leaderBoard();
-        UI.optionScreen();
-        UI.loginScreen();
+        loadGame();
+        //UI.leaderBoard();
+        //UI.optionScreen();
+        //UI.loginScreen();
     }
 
     @Override
@@ -117,7 +118,6 @@ public class Main extends SimpleApplication implements ScreenController {
         GameSettings _settings = new GameSettings();
         int height = 600;
         int width = 800;
-        String previous = "";
         try {
             try (Scanner in = new Scanner(new FileReader("GameSettings.txt"))) {
                 while (in.hasNextLine()) {
@@ -154,7 +154,7 @@ public class Main extends SimpleApplication implements ScreenController {
             }
         }
         //AppSettings setting = new AppSettings(true);
-        UI.updateRes(width, height);
+        //UI.updateRes(width, height);
         //gSettings.setResolution(width, height);
         //gSettings.setFullscreen(true);
         gSettings.setFullscreen(false);
@@ -172,7 +172,7 @@ public class Main extends SimpleApplication implements ScreenController {
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
-        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager, UI.getLoadingScreen(),
+        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager, /*UI.getLoadingScreen(),*/
                 settingsF);
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
 
@@ -183,8 +183,7 @@ public class Main extends SimpleApplication implements ScreenController {
         stateManager.attach(timeOfDay);
         timeOfDay.setRate(350f);
         loggedIn = true;
-        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-        UI.changeState();
+        //UI.changeState();
     }
 
     /**

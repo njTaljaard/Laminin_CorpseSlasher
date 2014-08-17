@@ -83,7 +83,7 @@ public class BasicScene {
      * @param settings - GameSettings.
      */
     public void createScene(AssetManager assMan, ViewPort vp, Camera cam, 
-            BulletAppState bullet, LoadingScreen ui,GameSettings settings) {
+            BulletAppState bullet, /*LoadingScreen ui,*/GameSettings settings) {
         this.settings = settings;
         this.assetManager = assMan;
         this.cam = cam;
