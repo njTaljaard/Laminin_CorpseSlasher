@@ -176,12 +176,14 @@ public class Main extends SimpleApplication implements ScreenController {
                 settingsF);
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
 
-        SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
-
-        skyControl.setEnabled(true);
-        timeOfDay = new TimeOfDay(5.5f);
-        stateManager.attach(timeOfDay);
-        timeOfDay.setRate(350f);
+        if (settingsF.skyDome) {
+            SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
+            skyControl.setEnabled(true);
+            timeOfDay = new TimeOfDay(5.5f);
+            stateManager.attach(timeOfDay);
+            timeOfDay.setRate(350f);
+        }
+        
         loggedIn = true;
         //UI.changeState();
     }

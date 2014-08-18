@@ -24,9 +24,12 @@ import com.jme3.math.Plane;
 import com.jme3.math.Quaternion;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.DepthOfFieldFilter;
+import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
+import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.SimpleWaterProcessor;
 import java.util.List;
@@ -48,6 +51,7 @@ public class BasicScene {
     private Node sceneModel;
     private Vector3f lightDir;
     private Node sceneNode;
+    private Spatial skybox;
     private SkyControl skyControl;
     private String sceneName;
     private FilterPostProcessor fpp;
@@ -89,6 +93,10 @@ public class BasicScene {
         this.cam = cam;
         this.vp = vp;
         this.bullet = bullet;
+        this.simpleWater = null;
+        this.postWater = null;
+        this.skyControl = null;
+        this.skybox = null;
         fpp = new FilterPostProcessor(assMan);
         initAmbientLight();
         initSunLight();
@@ -101,7 +109,23 @@ public class BasicScene {
      * 
      */
     public void reloadScene() {
+        if (simpleWater == null) {
+            fpp.removeFilter(postWater);
+            postWater = null;
+        } else {
+            sceneNode.detachChildAt(1);
+            simpleWater = null;
+        }
         initWater();
+        
+        if (skybox == null) {
+            sceneNode.removeControl(SkyControl.class);
+            skyControl = null;
+        } else {
+            sceneNode.detachChildNamed("skybox");
+            skybox = null;
+        }
+        sceneNode.detachChildAt(2);
         initSkyBox();
     }
     
@@ -124,7 +148,7 @@ public class BasicScene {
     private void initSunLight() {
         sun = new DirectionalLight();
         sun.setDirection(lightDir);
-        sun.setColor(ColorRGBA.White.clone().multLocal(2.5f));
+        sun.setColor(ColorRGBA.White.clone());
         sun.setName("Sun");
         
         sceneNode.addLight(sun);
@@ -166,8 +190,7 @@ public class BasicScene {
     }
     
     /**
-     * initWater will create a per pixel motion water quad and add it to the scene.
-     * To be used by the higher end system.
+     * initWater determine if post processing water or simple water should be used.
      */
     private void initWater() {
         if (settings.postWater) {
@@ -178,39 +201,36 @@ public class BasicScene {
     }
     
     /**
-     * 
+     * initBasicWater will create a basic water system that does not require 
+     * any post processing.
      */
     private void initBasicWater() {
         simpleWater = new SimpleWaterProcessor(assetManager);
         simpleWater.setReflectionScene(sceneNode);
         simpleWater.setWaterDepth(80);         // transparency of water
-        simpleWater.setDistortionScale(0.05f); // strength of waves
-        simpleWater.setWaveSpeed(0.05f);       // speed of waves
- 
-        // we set the water plane
+        simpleWater.setDistortionScale(0.02f); // strength of waves
+        simpleWater.setWaveSpeed(0.02f);       // speed of waves
+        simpleWater.setDebug(false);
+        simpleWater.setWaterTransparency(0.3f);
         Vector3f waterLocation=new Vector3f(0,20,0);
         simpleWater.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation.dot(Vector3f.UNIT_Y)));
         vp.addProcessor(simpleWater);
         
-        // we define the wave size by setting the size of the texture coordinates
         Quad quad = new Quad(2000,2000);
-        quad.scaleTextureCoordinates(new Vector2f(10f,10f));
+        quad.scaleTextureCoordinates(new Vector2f(16f,16f));
         
-        // we create the water geometry from the quad
         Geometry waterPlane = new Geometry("water", quad);
         waterPlane.setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X));
         waterPlane.setLocalTranslation(-1000, 20, 1000);
         waterPlane.setShadowMode(ShadowMode.Receive);
         waterPlane.setMaterial(simpleWater.getMaterial());
-        /*Geometry waterPlane = simpleWater.createWaterGeometry(10, 10);
-        waterPlane.setLocalTranslation(-5, 0, 5);
-        waterPlane.setMaterial(simpleWater.getMaterial());*/
         
         sceneNode.attachChild(waterPlane);
     }
     
     /**
-     * 
+     * initPostProcessWater will create post processing water for a more realistic
+     * viewing effect.
      */
     private void initPostProcessWater() {
         postWater = new WaterFilter(sceneNode, lightDir); 
@@ -218,10 +238,6 @@ public class BasicScene {
         postWater.setWaveScale(0.003f);
         postWater.setMaxAmplitude(3.0f);
         postWater.setDeepWaterColor(new ColorRGBA(0.064f,0.329f,0.398f,0.8f));
-        if (settings.waterReflections) {
-            postWater.setUseRefraction(true);
-            postWater.setRefractionStrength(0.2f);
-        }
         postWater.setUseRipples(settings.waterRippels);
         postWater.setUseSpecular(settings.waterSpecular);
         postWater.setShoreHardness(0.005f);
@@ -230,19 +246,25 @@ public class BasicScene {
         postWater.setCenter(Vector3f.ZERO); 
         postWater.setRadius(2600); 
         postWater.setWaveScale(0.005f); 
+        postWater.setWaterHeight(10.0f); 
+        
+        if (settings.waterReflections) {
+            postWater.setUseRefraction(true);
+            postWater.setRefractionStrength(0.2f);
+        }
+        
         if (settings.waterFoam) {
             postWater.setFoamExistence(new Vector3f(2.5f, 2.0f, 3.0f)); 
             postWater.setFoamTexture((Texture2D) assetManager.loadTexture("Common/MatDefs/Water/Textures/foam2.jpg"));  
         }
-        postWater.setWaterHeight(10.0f); 
         
         fpp.addFilter(postWater); 
         vp.addProcessor(fpp);
     }
     
     /**
-     * initSkyBox will create a day night system skybox consisting of a moving 
-     * sun and moon, a rotating star system and a changing day night sky.
+     * initSkyBox determine if a basic skybox with textures should be create or
+     * a day night system with a moving sun and moon.
      */
     private void initSkyBox() {
         if (settings.skyDome) {
@@ -252,10 +274,22 @@ public class BasicScene {
         }
     }
      
+    /**
+     * initBasicSky creates a basic sky box for lower performance.
+     */
     private void initBasicSky() {
-        sceneNode.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
+        skybox = SkyFactory.createSky(assetManager, "Textures/Skybox/ZombieScene1.dds", true);
+        skybox.setName("skybox");
+        skybox.setCullHint(Spatial.CullHint.Never);
+        skybox.setQueueBucket(Bucket.Sky);
+        skybox.setLocalTranslation(0.0f, 2000.0f, 0.0f);
+        sceneNode.attachChild(skybox);
     }
 
+    /**
+     * initSkyControl will create a day night system skybox consisting of a moving 
+     * sun and moon, a rotating star system and a changing day night sky.
+     */
     private void initSkyControl() {
         /*
          *  AssetManager, Camera, Cloud Flattening, Star motion, Bottom dome
@@ -313,9 +347,10 @@ public class BasicScene {
     }
     
     /**
-     * 
-     * @param tod
-     * @param tpf 
+     * update runs tests is skycontrol and post water is rendering. Updates of 
+     * sky control. Sets the new position of the sun and star system with light.
+     * @param tod - Time of day.
+     * @param tpf - Time per frame.
      */
     public void update(TimeOfDay tod, float tpf) {
         if (settings.skyDome) {
