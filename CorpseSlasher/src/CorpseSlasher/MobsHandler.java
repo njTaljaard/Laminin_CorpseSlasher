@@ -100,6 +100,15 @@ public class MobsHandler {
         return landedAttacks;
     }
     
+    public boolean getAggroState() {
+        for (Mob mob : mobs) {
+            if (mob.getAggro())
+                return true;
+        }
+        
+        return false;
+    }
+    
     /**
      * retrieveMobs to attach all mobs to rootNode.
      * @return mobNode - Node contains all the mobs in the scene.

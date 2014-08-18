@@ -48,7 +48,7 @@ public class Character {
     private Vector3f walkDirection;
     private float health;
     private boolean alive;
-    private long deathTime, spawnTime;
+    private long deathTime, spawnTime, regenTime, regenInterval;
     
     /**
      * Character will consist of loading the model with its materials and rigging,
@@ -59,13 +59,15 @@ public class Character {
      */
     public Character(AssetManager assMan, InputManager inMan, BulletAppState bullet,
             Camera cam) {
-        playerNode = new Node("Player");
-        animController = new CharacterAnimControl();
-        motionController = new CharacterMotionControl(cam);
-        walkDirection = new Vector3f();
-        health = 100;
-        alive = true;
-        spawnTime = new Long("5000000000");
+        this.playerNode = new Node("Player");
+        this.animController = new CharacterAnimControl();
+        this.motionController = new CharacterMotionControl(cam);
+        this.walkDirection = new Vector3f();
+        this.health = 100;
+        this.alive = true;
+        this.spawnTime = new Long("5000000000");
+        this.regenInterval = new Long("2000000000");
+        this.regenTime = new Long("0");
         this.cam = cam;
         this.assetManager = assMan;
         this.bullet = bullet;
@@ -162,13 +164,22 @@ public class Character {
      * an attacking position.
      * @param tpf - Time per frame to update ragdoll position.
      */
-    public boolean updateCharacterPostion(int playerHits, float tpf) {
+    public boolean updateCharacterPostion(int playerHits, float tpf, boolean aggro) {
         if (alive) {
             walkDirection = motionController.updateCharacterMotion();
             characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
 
             motionController.slash = animController.updateCharacterAnimations(channel, 
                     motionController.slash, motionController.walk, alive);
+            
+            if (!aggro && regenTime == new Long("0")) {
+                regenTime = System.nanoTime();
+            } else if (System.nanoTime() - regenTime > regenInterval && health != 100 && !aggro) {
+                health += 5;
+                regenTime = new Long("0");
+                System.out.println("Regen time, health is : " + health);
+            }
+            
             if (animController.attacking && playerHits > 0) {
                 animController.attacking = false;
                 return true;

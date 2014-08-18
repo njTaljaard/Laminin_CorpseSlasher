@@ -31,7 +31,7 @@ public class Mob {
     private AnimControl control;
     private Vector3f passivePosition;
     private MobAnimControl animControl;
-    private MobMotionControl collControl;
+    private MobMotionControl motionControl;
     private BetterCharacterControl characterControl;
     private ModelRagdoll ragdoll;
     private GhostControl attackGhost;
@@ -68,7 +68,7 @@ public class Mob {
      */
     private void createMob() {
         animControl = new MobAnimControl();
-        collControl = new MobMotionControl();
+        motionControl = new MobMotionControl();
         
         initMob();
         initControl();
@@ -147,7 +147,7 @@ public class Mob {
      * assembleMob add the controllers to the mob and to the physics handler.
      */
     private void assembleMob() {
-        mob.addControl(collControl.getAggroGhost());
+        mob.addControl(motionControl.getAggroGhost());
         mob.addControl(characterControl);
         mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
                 .getAttachmentsNode("hand.R").addControl(attackGhost);
@@ -180,9 +180,9 @@ public class Mob {
     public String updateMob(Vector3f point, boolean playerHit, boolean mobHit, float tpf) {
         if (alive) {
             characterControl.update(tpf);
-            collControl.updateMobPhase(point, mob, characterControl, passivePosition);
-            animControl.updateMobAnimations(channel, collControl.aggro,
-                    collControl.walkAttack, collControl.attack, collControl.passive);
+            motionControl.updateMobPhase(point, mob, characterControl, passivePosition);
+            animControl.updateMobAnimations(channel, motionControl.aggro,
+                    motionControl.walkAttack, motionControl.attack, motionControl.passive);
 
             if (playerHit) {
                 health -= 10;
@@ -191,7 +191,7 @@ public class Mob {
                     health = 0;
                     alive = false;
                     deathTime = System.nanoTime();
-                    collControl.death(characterControl);
+                    motionControl.death(characterControl);
                     System.out.println("You killed : " + mobName);
                     swapControllers();
                     return "";
@@ -225,33 +225,40 @@ public class Mob {
             ragdoll.setKinematicMode();
             ragdoll.setEnabled(false);
             characterControl.setEnabled(true);
-            collControl.getAggroGhost().setEnabled(true);
+            motionControl.getAggroGhost().setEnabled(true);
             attackGhost.setEnabled(true);
             mob.removeControl(ModelRagdoll.class);
             bullet.getPhysicsSpace().remove(ragdoll);
-            mob.addControl(collControl.getAggroGhost());
+            mob.addControl(motionControl.getAggroGhost());
             mob.addControl(characterControl);
             mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
                     .getAttachmentsNode("hand.R").addControl(attackGhost);
             bullet.getPhysicsSpace().add(characterControl);
             bullet.getPhysicsSpace().add(attackGhost);
-            bullet.getPhysicsSpace().add(collControl.getAggroGhost());
+            bullet.getPhysicsSpace().add(motionControl.getAggroGhost());
         } else { //Swap to ragdoll control
             characterControl.setEnabled(false);
-            collControl.getAggroGhost().setEnabled(false);
+            motionControl.getAggroGhost().setEnabled(false);
             attackGhost.setEnabled(false);
             ragdoll.setEnabled(true);
             mob.removeControl(BetterCharacterControl.class);
             mob.removeControl(GhostControl.class);
             bullet.getPhysicsSpace().remove(characterControl);
             bullet.getPhysicsSpace().remove(attackGhost);
-            bullet.getPhysicsSpace().remove(collControl.getAggroGhost());
+            bullet.getPhysicsSpace().remove(motionControl.getAggroGhost());
             mob.addControl(ragdoll);
             ragdoll.setJointLimit("hips", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
             ragdoll.setJointLimit("chest", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
             bullet.getPhysicsSpace().add(ragdoll);
             ragdoll.setRagdollMode();
         }
+    }
+    
+    /**
+     * 
+     */
+    public boolean getAggro() {
+        return motionControl.aggro;
     }
     
     /**

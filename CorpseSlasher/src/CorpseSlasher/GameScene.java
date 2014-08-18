@@ -135,7 +135,8 @@ public class GameScene {
      */
     public void update(TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
-        playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), tpf);
+        playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), 
+                tpf, mobHandler.getAggroState());
         
         if (playerAttacking) {
             mobHits= mobHandler.updateMobs(character.getPosition(), 
