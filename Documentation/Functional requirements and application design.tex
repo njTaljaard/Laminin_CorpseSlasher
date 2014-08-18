@@ -87,7 +87,7 @@
 \noindent
 \titlefont Laminin \par
 \epigraph{ XGame - Derivco \\ Corspe Slasher \\ Functional requirements and application design}%
-{\textit{ 01/08/2014 }\\ \textsc{ }}
+{\textit{ 18/08/2014 }\\ \textsc{ }}
 \null\vfill
 \vspace*{4cm}
 \noindent
@@ -128,12 +128,14 @@
 			31/07/2014  \> Version 1.1  \> Added server state diagram					\> Martin Schoeman\\
 			31/07/2014  \> Version 1.1  \> Added user-interface case diagrams			\> Gerhard Smit\\
 			01/08/2014  \> Version 1.1  \> Added user-interface class diagrams			\> Gerhard Smit\\
-			01/08/2014  \> Version 1.1  \> Added services contracts for user-interface 			\> Gerhard Smit\\
-			01/08/2014  \> Version 1.1  \> Finished off services contracts and added \> \\
-			\> \>  state diagram for User-Interface \> Gerhard Smit\\
+			01/08/2014  \> Version 1.1  \> Added services contracts for user-interface 	\> Gerhard Smit\\
+			01/08/2014  \> Version 1.1  \> Finished off services contracts and 			\> Gerhard Smit\\
+			01/08/2014	\> Version 1.1	\> Added state diagram for User-Interface 		\> Gerhard Smit\\
 			01/08/2014  \> Version 1.1  \> Added GUI screen shots						\> Gerhard Smit\\
-			01/08/2014  \> Version 1.1  \> Added database ERD diagram.						\> Martin Schoeman\\
+			01/08/2014  \> Version 1.1  \> Added database ERD diagram.					\> Martin Schoeman\\
 			01/08/2014  \> Version 1.1  \> Document finalization.						\> Nico Taljaard\\
+			18/08/2014  \> Version 2.0  \> Update game class diagram					\> Nico Taljaard\\
+			18/08/2014  \> Version 2.0  \> Added update sequence diagram				\> Nico Taljaard\\
 		\end{tabbing}
 		
 	\newpage
@@ -519,6 +521,13 @@
 			
 			\begin{figure}[H]
 			\centering
+			\includegraphics[width=180mm]{UML_Diagram/Sequence/Update_Sequence.jpg}
+			\caption{Update process between frames}
+			\label{overflow}
+			\end{figure}
+			
+			\begin{figure}[H]
+			\centering
 			\includegraphics[width=180mm]{UML_Diagram/State/Mob_Aggro.jpg}
 			\caption{Enemy aggression cycle}
 			\label{overflow}
@@ -557,14 +566,14 @@
 					\label{overflow}
 					\end{figure}
 					
-					\begin{figure}[H]
+					\begin{figure}[hp!]
 					\centering
 					\includegraphics[width=180mm]{UML_Diagram/Class/Server_Classes.jpg}
 					\caption{Server level class diagram}
 					\label{overflow}
 					\end{figure}
 					
-					\begin{figure}[H]
+					\begin{figure}[hp!]
 					\centering
 					\includegraphics[width=180mm]{UML_Diagram/Class/GUI_Classes.jpg}
 					\caption{User-Interface class diagram}
