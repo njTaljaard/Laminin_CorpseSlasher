@@ -96,7 +96,7 @@ public final class ClientConnection {
             return Boolean.parseBoolean(inReader.readLine().toString());
         } catch (Exception exc) {
             //TODO: Raise exceptions through the ExceptionHandler class.
-            System.out.println("Connection Add User error: " + exc.toString());
+            //System.out.println("Connection Add User error: " + exc.toString());
         }
         return false;
     }

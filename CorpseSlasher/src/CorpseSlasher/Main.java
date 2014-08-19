@@ -59,6 +59,7 @@ public class Main extends SimpleApplication implements ScreenController {
 
     public static void main(String[] args) {
         Main app = new Main();
+        System.out.println("Did server test work: " + ServerUnitTesting.test());
 
         app.start();
     }
