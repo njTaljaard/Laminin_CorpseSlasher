@@ -5,13 +5,11 @@ import GUI.OAuth.OAuth;
 import GUI.UserInterfaceManager;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.app.state.AppState;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
@@ -30,9 +28,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 
 /**
@@ -157,8 +152,8 @@ public class Main extends SimpleApplication implements ScreenController {
         UI.updateRes(width, height);
         //gSettings.setResolution(width, height);
         //gSettings.setFullscreen(true);
-        gSettings.setFullscreen(true);
-        gSettings.setResolution(width, height);
+        //gSettings.setFullscreen(true);
+        gSettings.setResolution(1920, 1080);
         this.setSettings(gSettings);
         restart();
         return _settings;
@@ -234,7 +229,7 @@ public class Main extends SimpleApplication implements ScreenController {
             // UI.loadingScreen();
             loadGame();
         } else {
-            JOptionPane.showMessageDialog(null,"Username or password incorrect");
+            System.out.println("Username or password incorrect");
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
 
             // UI.loadingScreen();
@@ -264,18 +259,19 @@ public class Main extends SimpleApplication implements ScreenController {
 
                     if (success) {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                        loginScreen();
+                        //loginScreen();
+                        loadGame();
                     } else {
-                        JOptionPane.showMessageDialog(null,"Failed adding user");
+                        System.out.println("Failed adding user");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null,"Username already exists please try again");
+                    System.out.println("Username already exists please try again");
                 }
             } else {
-                JOptionPane.showMessageDialog(null,"Usernames may only contain Alphanumeric values and _ - ( )");
+                System.out.println("Usernames may only contain Alphanumeric values and _ - ( )");
             }
         } else {
-            JOptionPane.showMessageDialog(null,"Missmatch password");
+            System.out.println("Missmatch password");
         }
     }
 
@@ -334,10 +330,10 @@ public class Main extends SimpleApplication implements ScreenController {
                         // UI.loadingScreen();
                         loadGame();
                     } else {
-                        JOptionPane.showMessageDialog(null,"Incorrect details");
+                        System.out.println("Incorrect details");
                     }
                 } catch (OAuthSystemException | IOException ex) {
-                    JOptionPane.showMessageDialog(null,"Error occurred (1FB)");
+                    System.out.println("Error occurred (1FB)");
                 }
                 break;
             case "2":
@@ -348,10 +344,10 @@ public class Main extends SimpleApplication implements ScreenController {
                         // UI.loadingScreen();
                         loadGame();
                     } else {
-                        JOptionPane.showMessageDialog(null,"Incorrect details");
+                        System.out.println("Incorrect details");
                     }
                 } catch (OAuthSystemException | IOException ex) {
-                    JOptionPane.showMessageDialog(null,"Error occurred (2G+)");
+                   System.out.println("Error occurred (2G+)");
                 }
                 break;
         }
