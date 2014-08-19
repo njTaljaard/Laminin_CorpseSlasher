@@ -105,7 +105,7 @@ public class Mob {
      * the required limbs.
      */
     private void initRagdoll() {
-        ragdoll = new ModelRagdoll(0.5f, "bennettzombie_body.001-ogremesh");
+        ragdoll = new ModelRagdoll(0.01f, "bennettzombie_body.001-ogremesh");
         ragdoll.addBoneName("hips");
         ragdoll.addBoneName("spine");
         ragdoll.addBoneName("chest");
@@ -125,11 +125,8 @@ public class Mob {
         ragdoll.addBoneName("shin.R");
         ragdoll.addBoneName("foot.L");
         ragdoll.addBoneName("foot.R");
-        ragdoll.addBoneName("toe.L");
-        ragdoll.addBoneName("toe.R"); 
-        ragdoll.setCcdMotionThreshold(1.0f);
-        ragdoll.setCcdSweptSphereRadius(1.0f);
         ragdoll.setEnabled(false);
+        ragdoll.addCollisionListener(ragdoll);
     }
     
     /**
@@ -152,6 +149,8 @@ public class Mob {
         mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
                 .getAttachmentsNode("hand.R").addControl(attackGhost);
         bullet.getPhysicsSpace().add(characterControl);
+        bullet.getPhysicsSpace().add(attackGhost);
+        bullet.getPhysicsSpace().add(motionControl.getAggroGhost());
         bullet.getPhysicsSpace().addAll(mob);   
     }
     
@@ -228,14 +227,10 @@ public class Mob {
             motionControl.getAggroGhost().setEnabled(true);
             attackGhost.setEnabled(true);
             mob.removeControl(ModelRagdoll.class);
-            bullet.getPhysicsSpace().remove(ragdoll);
             mob.addControl(motionControl.getAggroGhost());
             mob.addControl(characterControl);
             mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
                     .getAttachmentsNode("hand.R").addControl(attackGhost);
-            bullet.getPhysicsSpace().add(characterControl);
-            bullet.getPhysicsSpace().add(attackGhost);
-            bullet.getPhysicsSpace().add(motionControl.getAggroGhost());
         } else { //Swap to ragdoll control
             characterControl.setEnabled(false);
             motionControl.getAggroGhost().setEnabled(false);
@@ -243,14 +238,12 @@ public class Mob {
             ragdoll.setEnabled(true);
             mob.removeControl(BetterCharacterControl.class);
             mob.removeControl(GhostControl.class);
-            bullet.getPhysicsSpace().remove(characterControl);
-            bullet.getPhysicsSpace().remove(attackGhost);
-            bullet.getPhysicsSpace().remove(motionControl.getAggroGhost());
             mob.addControl(ragdoll);
             ragdoll.setJointLimit("hips", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
+            ragdoll.setJointLimit("spine", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
             ragdoll.setJointLimit("chest", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
             bullet.getPhysicsSpace().add(ragdoll);
-            ragdoll.setRagdollMode();
+            ragdoll.setRagdollMode();            
         }
     }
     

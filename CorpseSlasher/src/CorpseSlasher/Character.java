@@ -15,6 +15,7 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -47,6 +48,7 @@ public class Character {
     private final float walkSpeed = 15.0f;
     private Vector3f walkDirection;
     private float health;
+    private float eighth_pi;
     private boolean alive;
     private long deathTime, spawnTime, regenTime, regenInterval;
     
@@ -64,6 +66,7 @@ public class Character {
         this.motionController = new CharacterMotionControl(cam);
         this.walkDirection = new Vector3f();
         this.health = 100;
+        this.eighth_pi = FastMath.PI * 0.125f;
         this.alive = true;
         this.spawnTime = new Long("5000000000");
         this.regenInterval = new Long("2000000000");
@@ -110,6 +113,25 @@ public class Character {
      */
     private void initRagdoll() {
         ragdoll = new ModelRagdoll(0.5f, "Cube-ogremesh");
+        ragdoll.addBoneName("spine1");
+        ragdoll.addBoneName("spine2");
+        ragdoll.addBoneName("spine3");
+        ragdoll.addBoneName("spine4");
+        ragdoll.addBoneName("spine5");
+        ragdoll.addBoneName("neck");
+        ragdoll.addBoneName("head");
+        ragdoll.addBoneName("upper_arm.r");
+        ragdoll.addBoneName("upper_arm.l");
+        ragdoll.addBoneName("lower_arm.r");
+        ragdoll.addBoneName("lower_arm.l");
+        ragdoll.addBoneName("hand.r");
+        ragdoll.addBoneName("hand.l");
+        ragdoll.addBoneName("upper_leg.r");
+        ragdoll.addBoneName("upper_leg.l");
+        ragdoll.addBoneName("lower_leg.r");
+        ragdoll.addBoneName("lower_leg.l");
+        ragdoll.addBoneName("foot.r");
+        ragdoll.addBoneName("foot.l");
         ragdoll.setEnabled(false);
     }
     
@@ -243,6 +265,11 @@ public class Character {
             bullet.getPhysicsSpace().remove(characterControl);
             bullet.getPhysicsSpace().remove(swordControl);
             player.addControl(ragdoll);
+            ragdoll.setJointLimit("spine1", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
+            ragdoll.setJointLimit("spine2", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
+            ragdoll.setJointLimit("spine3", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
+            ragdoll.setJointLimit("spine4", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
+            ragdoll.setJointLimit("spine5", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
             ragdoll.setEnabled(true);
             ragdoll.setRagdollMode();
             bullet.getPhysicsSpace().add(ragdoll);

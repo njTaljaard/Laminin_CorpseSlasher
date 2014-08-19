@@ -83,6 +83,8 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
+        Audio.assetManager = assetManager;
+        Audio.audioRenderer = audioRenderer;
         gSettings = new AppSettings(true);
         //UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene);
         settingsF = loadSettings();

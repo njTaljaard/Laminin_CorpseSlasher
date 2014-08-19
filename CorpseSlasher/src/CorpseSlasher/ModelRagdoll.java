@@ -53,6 +53,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
@@ -92,7 +93,7 @@ import java.util.logging.Logger;
  *
  * @author Normen Hansen and Rémy Bouquet (Nehon)
  */
-public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener {
+public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener, RagdollCollisionListener {
 
     protected static final Logger logger = Logger.getLogger(ModelRagdoll.class.getName());
     protected Map<String, PhysicsBoneLink> boneLinks = new HashMap<>();
@@ -118,6 +119,19 @@ public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener {
     protected float totalMass = 0;
     protected boolean added = false;
     protected String node;
+
+    @Override
+    public void collide(Bone bone, PhysicsCollisionObject object, PhysicsCollisionEvent event) {
+        
+        if (object.getUserObject() != null && object.getUserObject() instanceof Geometry) {
+            Geometry geom = (Geometry) object.getUserObject();
+            if (geom.getName().contains("terrain")) {
+                return;
+            }
+        }
+
+        this.setRagdollMode();
+    }
 
     public static enum Mode {
 
@@ -394,13 +408,12 @@ public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener {
             
             PhysicsRigidBody shapeNode = new PhysicsRigidBody(shape, rootMass / (float) reccount);
             shapeNode.setCollideWithGroups(1);
-            shapeNode.getCollisionShape().setScale(new Vector3f(30.0f, 30.0f, 30.0f));
-            shapeNode.setCcdMotionThreshold(0.1f);
-            shapeNode.setCcdSweptSphereRadius(0.1f);
-            shapeNode.setKinematic(true);
+            shapeNode.getCollisionShape().setScale(new Vector3f(20.0f, 20.0f, 20.0f));
+            shapeNode.setCcdMotionThreshold(0.0001f);
+            shapeNode.setCcdSweptSphereRadius(0.0001f);
             shapeNode.setMass(1.0f);
             totalMass += rootMass / (float) reccount;
-
+            
             link.rigidBody = shapeNode;
             link.initalWorldRotation = bone.getModelSpaceRotation().clone();
 
