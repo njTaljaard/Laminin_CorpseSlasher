@@ -79,7 +79,7 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
-        gSettings = new AppSettings(true);        
+        gSettings = new AppSettings(true);
         gSettings.setResolution(1366, 768);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene);
         loggedIn = false;
@@ -159,7 +159,7 @@ public class Main extends SimpleApplication implements ScreenController {
         return _settings;
     }
 
-    public void loadGame() {        
+    public void loadGame() {
         settingsF = loadSettings();
         inputManager.setCursorVisible(false);
         flyCam.setEnabled(true);
@@ -179,6 +179,8 @@ public class Main extends SimpleApplication implements ScreenController {
         loggedIn = true;
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.changeState();
+        restart();
+        
     }
 
     /**
@@ -192,16 +194,15 @@ public class Main extends SimpleApplication implements ScreenController {
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
         this.screen = screen;
-        usernameTxt = screen.findNiftyControl("Username_Input_ID", TextField.class);
-        passwordTxt = screen.findNiftyControl("Password_Input_ID", TextField.class);
-        accUser = screen.findNiftyControl("Username_Input_ID_2", TextField.class);
-        accEmail = screen.findNiftyControl("Email_Input_ID", TextField.class);
-        accSurname = screen.findNiftyControl("Surname_Input_ID", TextField.class);
-        accName = screen.findNiftyControl("Name_Input_ID", TextField.class);
-        accPassword = screen.findNiftyControl("Password_Input_ID_2", TextField.class);
-        accPasswordRE = screen.findNiftyControl("Password_Input_ID_2_2", TextField.class);
-        retUser = screen.findNiftyControl("Username_Input_ID_3", TextField.class);
-
+        usernameTxt = screen.findNiftyControl("#Username_Input_ID", TextField.class);
+        passwordTxt = screen.findNiftyControl("#Password_Input_ID", TextField.class);
+        accUser = screen.findNiftyControl("#Username_Input_ID_2", TextField.class);
+        accEmail = screen.findNiftyControl("#Email_Input_ID", TextField.class);
+        accSurname = screen.findNiftyControl("#Surname_Input_ID", TextField.class);
+        accName = screen.findNiftyControl("#Name_Input_ID", TextField.class);
+        accPassword = screen.findNiftyControl("#Password_Input_ID_2", TextField.class);
+        accPasswordRE = screen.findNiftyControl("#Password_Input_ID_2_2", TextField.class);
+        retUser = screen.findNiftyControl("#Username_Input_ID_3", TextField.class);
     }
 
     @Override
@@ -282,7 +283,8 @@ public class Main extends SimpleApplication implements ScreenController {
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.retrievePassword();
     }
-    public void erase(String id){
+
+    public void erase(String id) {
         TextField text = screen.findNiftyControl(id, TextField.class);
         text.setText("");
     }
@@ -291,13 +293,13 @@ public class Main extends SimpleApplication implements ScreenController {
      * Goes to the login screen
      */
     public void retrievePasswordAndGoBack() {
-        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         if (retUser.getRealText().contains("@")) {
             ClientConnection.RetrievePasswordInputEmail(retUser.getRealText());
+            nifty.gotoScreen("#Login_Screen");
         } else {
             ClientConnection.RetrievePassword(retUser.getRealText());
+            nifty.gotoScreen("#Login_Screen");
         }
-        nifty.gotoScreen("#Login_Screen");
     }
 
     /**
@@ -311,7 +313,6 @@ public class Main extends SimpleApplication implements ScreenController {
      * Goes to screen selected
      */
     public void goTo(String screen) {
-        System.out.println(screen);
         nifty.gotoScreen(screen);
     }
 
@@ -350,10 +351,10 @@ public class Main extends SimpleApplication implements ScreenController {
                         System.out.println("Incorrect details");
                     }
                 } catch (OAuthSystemException | IOException ex) {
-                   System.out.println("Error occurred (2G+)");
+                    System.out.println("Error occurred (2G+)");
                 }
                 break;
-                default:
+            default:
         }
     }
 }

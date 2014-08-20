@@ -35,6 +35,7 @@ public class RetrievePassword extends Screens {
     /**
      * Builds the retrieve password screen
      */
+    @Override
     public void build() {
         Nifty nifty = screen.getNifty();
         nifty.setIgnoreKeyboardEvents(true);
@@ -98,7 +99,7 @@ public class RetrievePassword extends Screens {
                                         interactOnClick("erase(#Username_Input_ID_3)");
                                     }
                                 });
-                                control(new ButtonBuilder("Get_Password", "Retrieve Password") {
+                                control(new ButtonBuilder("#Get_Password", "Retrieve Password") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Bottom);
