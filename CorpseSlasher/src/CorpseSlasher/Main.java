@@ -81,15 +81,16 @@ public class Main extends SimpleApplication implements ScreenController {
     public void simpleInitApp() {
         gSettings = new AppSettings(true);
         gSettings.setResolution(1366, 768);
+        gSettings.setFullscreen(false);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene);
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         ClientConnection.StartClientConnection();
-        UI.loginScreen();
         this.setSettings(gSettings);
         restart();
+        UI.loginScreen();
     }
 
     @Override
@@ -180,6 +181,7 @@ public class Main extends SimpleApplication implements ScreenController {
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.changeState();
         restart();
+        nifty.setIgnoreKeyboardEvents(true );
         
     }
 

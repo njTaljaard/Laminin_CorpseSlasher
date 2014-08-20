@@ -175,7 +175,6 @@ public class OAuth {
             e.printStackTrace();
             return false;
         }*/
-
         return true;
     }
     //Could not get Twitter Oauth working

@@ -369,7 +369,7 @@ public class SettingsScreen extends Screens {
                                 });
                             }
                         });
-                        panel(new PanelBuilder("Cloud_Motion_Button") {
+                        panel(new PanelBuilder("Cloud_Motion_Panel") {
                             {
                                 childLayoutHorizontal();
                                 marginLeft("40%");
