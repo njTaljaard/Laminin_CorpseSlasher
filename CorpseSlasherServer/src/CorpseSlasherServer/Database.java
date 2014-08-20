@@ -196,7 +196,7 @@ public class Database {
             String query = "SELECT AES_DECRYPT(password, SHA1('9876543210')) FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
             rs.next();
-            String result = rs.getString("password");
+            String result = rs.getString("AES_DECRYPT(password, SHA1('9876543210'))");
             return result;
         } catch (Exception exc) {
             System.out.println("Get password error:" + exc);
