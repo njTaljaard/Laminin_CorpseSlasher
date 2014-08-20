@@ -136,6 +136,7 @@
 			01/08/2014  \> Version 1.1  \> Document finalization.						\> Nico Taljaard\\
 			18/08/2014  \> Version 2.0  \> Update game class diagram					\> Nico Taljaard\\
 			18/08/2014  \> Version 2.0  \> Added update sequence diagram				\> Nico Taljaard\\
+			20/08/2014  \> Version 2.0  \> Added game sequence and state diagrams		\> Nico Taljaard\\
 		\end{tabbing}
 		
 	\newpage
@@ -482,7 +483,6 @@
 				\newpage
 				\subsubsection*{Server Diagrams:}
 				\addcontentsline{toc}{subsubsection}{Server Diagrams}
-				\vspace{0.2in}
 				
 				\vspace{0.1in}
 					\hspace{5mm}Server Functionality
@@ -519,35 +519,120 @@
 			\addcontentsline{toc}{subsection}{Process specifications}
 			\vspace{0.1in}
 			
-			\begin{figure}[H]
-			\centering
-			\includegraphics[width=180mm]{UML_Diagram/Sequence/Update_Sequence.jpg}
-			\caption{Update process between frames}
-			\label{overflow}
-			\end{figure}
+				\subsubsection*{Game Diagrams:}
+				\addcontentsline{toc}{subsubsection}{Game Diagrams}
+				\vspace{0.1in}
+				
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=180mm, height=150mm]{UML_Diagram/Sequence/Game_Creation.jpg}
+					\caption{Game Creation}
+					\label{overflow}
+					\end{figure}
+					
+					The entire process to create all the game aspects after a successful login:
+					\begin{itemize}
+						\item 1.1 Takes the game camera and positions it accordingly to which map is used.
+						\item 1.2 Creates basic scene with the required map, calls 1.3 and 1.4.
+						\item 2 Creates the scene ambient light with the required colour and intensity.
+						\item 3 Creates the sun light with colour and intensity, which will be bound to SkyControl is in use.
+						\item 4 Will determine if basic water or post processing water is in use. Basic water is a plane with scene reflection and simple motion. Post processed water has higher transparency, smoother motion and foam at the sea shore.
+						\item 5 Will determine if basic skybox or SkyControl should be used. Basic skybox is a box with textures placed on. SkyControl create 2 spheres, 1 with the star system and the other the sky colour and moon/sun. It controls the motion of the sun, moon, stars and the second sphere turns transparent at day night changes.
+						\item 6 Load the required scene which contains the terrain and trees. It adds a rigigbody controller to the terrain for collision control and creates a cubic collision box for each individual tree.
+						\item 1.7 Detailed in a later diagram.
+						\item 1.11.1 Initializes all the positions where mobs will be placed through out the scene.
+						\item 1.11.3 Details in a later diagram.
+					\end{itemize}
+					
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=160mm, height=90mm]{UML_Diagram/Sequence/Player_Creation.jpg}
+					\caption{Creation of player model}
+					\label{overflow}
+					\end{figure}
+					
+					The process of creating the model that the user will be controlling:
+					\begin{itemize}
+						\item 1.1 Creates the AnimEventListener that is called at the end of an animation cycle and when the animation is changed.
+						\item 2.1 Creates the ActionListener that is called on key presses and mouse clicks which send the corresponding action name through required to determine in which direction the player is moving or if he is attacking.
+						\item 3 Loads the model through the asset manager, sets the node name, set its starting position and in with direction is it looking in regards to the camera.
+						\item 4 Creates the BetterCharacterControl which is bound to the player, this controller has a size defined collision box around the player, controls all the affected forces on the player and moves the model to where it is repositioned on movement.
+						\item 5 Creates a Ghost collision box around the sword which will trigger a collision event when it passes through another collision box. The collision group it is bound to is set as well as with which groups this box can collide with.
+						\item 7 Creates the Ragdoll controller that will be triggered on player death.
+						\item 10 Adds all the created controllers to the player node and to the physics controller.
+						\item 12 Creates a camera node what will create the pivot required for mouse movement.
+						\item 12.1 Initializes the AnalogListener that will trigger on mouse movement and route the camera around the required axis with a defined speed.
+						\item 13 Retrieves the animation controller for the model containing the created animation, attaches the animation listener to the controller, creates a channel to play animations and sets the animation to the default standing animation.
+						\item 14 Sets up all the keys and mouse movement triggers with their corresponding listeners and action names.
+					\end{itemize}
+					
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=160mm, height=90mm]{UML_Diagram/Sequence/Mob_Creation.jpg}
+					\caption{Update process between frames}
+					\label{overflow}
+					\end{figure}
+					
+					The process of creating the model that will be used for all enemies:
+					\begin{itemize}
+						\item 1.1 Creates the AnimEventListener that is called at the end of an animation cycle and when the animation is changed.
+						\item 2.1 Creates the ghost controller that will be used to determine is a player has entered that detection range of a mob where aggro is obtained. When aggro is lost it will determined if it is regain able while moving toward its passive position.
+						\item 3 Loads the model through the asset manager, sets the node name and set its passive position.
+						\item 4 Creates the BetterCharacterControl which is bound to the player, this controller has a size defined collision box around the player, controls all the affected forces on the player and moves the model to where it is repositioned on movement.
+						\item 6 Creates the Ragdoll controller that will be triggered on player death.
+						\item 9 Creates a Ghost collision box around the mobs hand which will trigger a collision event when it passes through another collision box. The collision group it is bound to is set as well as with which groups this box can collide with.
+						\item 10 Adds all the created controllers to the mob node and to the physics controller.
+						\item 11 Retrieves the animation controller for the model containing the created animation, attaches the animation listener to the controller, creates a channel to play animations and sets the animation to the default standing animation.
+					\end{itemize}
+					
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=180mm, height=105mm]{UML_Diagram/Sequence/Update_Sequence.jpg}
+					\caption{Update process between frames}
+					\label{overflow}
+					\end{figure}
+					
+					This is a detailed process depiction of game updates that happens between each frame. Detail diagrams for player and mob updates follow as state diagrams.
+					
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=180mm, height=80mm]{UML_Diagram/State/Player_State.jpg}
+					\caption{Enemy update state cycle}
+					\label{overflow}
+					\end{figure}
+					
+					This diagram depicts all the active states and decisions the player goes through on frame draw. From motion and animation updates, to health loss and regeneration and attacks.
+					
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=180mm, height=80mm]{UML_Diagram/State/Mob_State.jpg}
+					\caption{Enemy update state cycle}
+					\label{overflow}
+					\end{figure}
+					
+					This diagram depicts all the active states and decisions a single mob as to go through at each new frame draw. From death and animation updates, aggression detections, motion and attack decisions.
 			
-			\begin{figure}[H]
-			\centering
-			\includegraphics[width=180mm]{UML_Diagram/State/Mob_Aggro.jpg}
-			\caption{Enemy aggression cycle}
-			\label{overflow}
-			\end{figure}
+				\subsubsection*{User-Interface Diagrams:}
+				\addcontentsline{toc}{subsubsection}{UI Diagrams}
+				\vspace{0.1in}
+					
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=180mm]{UML_Diagram/State/GUI_State.jpg}
+					\caption{User-Interface cycle}
+					\label{overflow}
+					\end{figure}
+				
+				\subsubsection*{Server Diagrams:}
+				\addcontentsline{toc}{subsubsection}{Server Diagrams}
+				\vspace{0.1in}
 			
-			Enemy aggression cycle depicts the phases an enemy player goes through to decide in which state it is in and how to react regarding that state.
-			
-				\begin{figure}[H]
-			\centering
-			\includegraphics[width=180mm]{UML_Diagram/State/Server_State_Diagram.jpg}
-			\caption{Server cycle}
-			\label{overflow}
-			\end{figure}
-			
-		\begin{figure}[H]
-			\centering
-			\includegraphics[width=180mm]{UML_Diagram/State/GUI_State.jpg}
-			\caption{User-Interface cycle}
-			\label{overflow}
-			\end{figure}
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=180mm]{UML_Diagram/State/Server_State_Diagram.jpg}
+					\caption{Server cycle}
+					\label{overflow}
+					\end{figure}
 			
 			\vspace{0.2in}
 			\subsection*{Domain Objects:}
