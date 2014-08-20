@@ -89,7 +89,7 @@ public class NewAccount extends Screens {
                                         color("#ff0000");
                                     }
                                 });
-                                control(new TextFieldBuilder("Email_Input_ID", "Enter Email") {
+                                control(new TextFieldBuilder("#Email_Input_ID", "Enter Email") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -99,6 +99,7 @@ public class NewAccount extends Screens {
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
+                                        interactOnClick("erase(#Email_Input_ID)");
                                     }
                                 });
                                 control(new LabelBuilder("Name", "Name :") {
@@ -114,7 +115,7 @@ public class NewAccount extends Screens {
                                         color("#ff0000");
                                     }
                                 });
-                                control(new TextFieldBuilder("Name_Input_ID", "Enter Name") {
+                                control(new TextFieldBuilder("#Name_Input_ID", "Enter Name") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -124,9 +125,10 @@ public class NewAccount extends Screens {
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
+                                        interactOnClick("erase(#Name_Input_ID)");
                                     }
                                 });
-                                control(new TextFieldBuilder("Surname_Input_ID", "Enter Surname") {
+                                control(new TextFieldBuilder("#Surname_Input_ID", "Enter Surname") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -136,6 +138,7 @@ public class NewAccount extends Screens {
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
+                                        interactOnClick("erase(#Surname_Input_ID)");
                                     }
                                 });
                                 control(new LabelBuilder("Surname", "Surname :") {
@@ -164,7 +167,7 @@ public class NewAccount extends Screens {
                                         color("#ff0000");
                                     }
                                 });
-                                control(new TextFieldBuilder("Username_Input_ID_2", "Enter Username") {
+                                control(new TextFieldBuilder("#Username_Input_ID_2", "Enter Username") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -174,6 +177,7 @@ public class NewAccount extends Screens {
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
+                                        interactOnClick("erase(#Username_Input_ID_2)");
                                     }
                                 });
                                 control(new LabelBuilder("Password_ID_2", "Password :") {
@@ -189,7 +193,7 @@ public class NewAccount extends Screens {
                                         color("#ff0000");
                                     }
                                 });
-                                control(new TextFieldBuilder("Password_Input_ID_2", "Enter Password") {
+                                control(new TextFieldBuilder("#Password_Input_ID_2", "Enter Password") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -199,6 +203,8 @@ public class NewAccount extends Screens {
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
+                                        passwordChar('*');
+                                        interactOnClick("erase(#Password_Input_ID_2)");
                                     }
                                 });
                                 control(new LabelBuilder("Password_ID_2_2", "RE-Password :") {
@@ -214,7 +220,7 @@ public class NewAccount extends Screens {
                                         color("#ff0000");
                                     }
                                 });
-                                control(new TextFieldBuilder("Password_Input_ID_2_2", "RE-Enter Password") {
+                                control(new TextFieldBuilder("#Password_Input_ID_2_2", "RE-Enter Password") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -224,6 +230,8 @@ public class NewAccount extends Screens {
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
+                                        passwordChar('*');
+                                        interactOnClick("erase(#Password_Input_ID_2_2)");
                                     }
                                 });
                                 control(new ButtonBuilder("Create_Account", "Create Account") {
@@ -244,7 +252,7 @@ public class NewAccount extends Screens {
                                         marginBottom("15%");
                                         height("5%");
                                         width("15%");
-                                        interactOnClick("goBack()");
+                                        interactOnClick("goTo(#Login_Screen)");
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });

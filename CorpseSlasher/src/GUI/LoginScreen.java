@@ -44,7 +44,7 @@ public class LoginScreen extends Screens {
         nifty.setIgnoreKeyboardEvents(true);
         guiViewPort.addProcessor(screen);
         buildGui(nifty);
-        nifty.gotoScreen("Login_Screen");
+        nifty.gotoScreen("#Login_Screen");
     }
 
     /**
@@ -55,10 +55,10 @@ public class LoginScreen extends Screens {
     private void buildGui(Nifty nifty) {
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
-        nifty.addScreen("Login_Screen", new ScreenBuilder("Login To Connect") {
+        nifty.addScreen("#Login_Screen", new ScreenBuilder("Login To Connect") {
             {
                 controller((ScreenController) app);
-                layer(new LayerBuilder("background") {
+                layer(new LayerBuilder("#background") {
                     {
                         font("Interface/Fonts/zombie.fnt");
                         childLayoutCenter();
@@ -66,17 +66,17 @@ public class LoginScreen extends Screens {
                         visibleToMouse(true);
                     }
                 });
-                layer(new LayerBuilder("foreground") {
+                layer(new LayerBuilder("#foreground") {
                     {
                         font("Interface/Fonts/zombie.fnt");
                         visibleToMouse(true);
                         childLayoutVertical();
                         backgroundColor(new Color(.3f, .3f, .3f, .5f));
-                        panel(new PanelBuilder("Main_Login_Panel") {
+                        panel(new PanelBuilder("#Main_Login_Panel") {
                             {
                                 childLayoutCenter();
                                 font("Interface/Fonts/zombie.fnt");
-                                control(new LabelBuilder("Username_ID", "Username :") {
+                                control(new LabelBuilder("#Username_ID", "Username :") {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
@@ -89,7 +89,7 @@ public class LoginScreen extends Screens {
                                         color("#ff0000");
                                     }
                                 });
-                                control(new TextFieldBuilder("Username_Input_ID", "Enter Username") {
+                                control(new TextFieldBuilder("#Username_Input_ID", "Enter Username") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -99,9 +99,10 @@ public class LoginScreen extends Screens {
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
+                                        interactOnClick("erase(#Username_Input_ID)");
                                     }
                                 });
-                                control(new LabelBuilder("Password_ID", "Password :") {
+                                control(new LabelBuilder("#Password_ID", "Password :") {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
@@ -114,7 +115,7 @@ public class LoginScreen extends Screens {
                                         color("#ff0000");
                                     }
                                 });
-                                control(new TextFieldBuilder("Password_Input_ID", "Enter Password") {
+                                control(new TextFieldBuilder("#Password_Input_ID", "Enter Password") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -124,9 +125,11 @@ public class LoginScreen extends Screens {
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
+                                        passwordChar('*');
+                                        interactOnClick("erase(#Password_Input_ID)");
                                     }
                                 });
-                                control(new ButtonBuilder("Connect_ID", "Login") {
+                                control(new ButtonBuilder("#Connect_ID", "Login") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Bottom);
@@ -137,7 +140,7 @@ public class LoginScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new LabelBuilder("New_Account_ID", "Create New Account") {
+                                control(new LabelBuilder("#New_Account_ID", "Create New Account") {
                                     {
                                         marginLeft("-8%");
                                         marginBottom("-44%");
@@ -148,7 +151,7 @@ public class LoginScreen extends Screens {
                                         color("#ff0000");
                                     }
                                 });
-                                control(new LabelBuilder("Retrieve_Password_ID", "Retrieve Password") {
+                                control(new LabelBuilder("#Retrieve_Password_ID", "Retrieve Password") {
                                     {
                                         marginLeft("8%");
                                         marginBottom("-44%");
@@ -162,7 +165,7 @@ public class LoginScreen extends Screens {
                             }
                         ;
                         });
-                        panel(new PanelBuilder("Button_Panel") {
+                        panel(new PanelBuilder("#Button_Panel") {
                             {
                                 childLayoutHorizontal();
                                 align(Align.Left);

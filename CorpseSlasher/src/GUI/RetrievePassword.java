@@ -85,7 +85,7 @@ public class RetrievePassword extends Screens {
                                         color("#ff0000");
                                     }
                                 });
-                                control(new TextFieldBuilder("Username_Input_ID_3", "Enter Username/Email") {
+                                control(new TextFieldBuilder("#Username_Input_ID_3", "Enter Username/Email") {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
@@ -95,6 +95,7 @@ public class RetrievePassword extends Screens {
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
+                                        interactOnClick("erase(#Username_Input_ID_3)");
                                     }
                                 });
                                 control(new ButtonBuilder("Get_Password", "Retrieve Password") {
@@ -104,7 +105,7 @@ public class RetrievePassword extends Screens {
                                         marginBottom("25%");
                                         height("5%");
                                         width("15%");
-                                        interactOnClick("loginScreen()");
+                                        interactOnClick("retrievePasswordAndGoBack()");
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
@@ -115,7 +116,7 @@ public class RetrievePassword extends Screens {
                                         marginBottom("15%");
                                         height("5%");
                                         width("15%");
-                                        interactOnClick("goBack()");
+                                        interactOnClick("goTo(#Login_Screen)");
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });

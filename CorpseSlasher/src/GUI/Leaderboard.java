@@ -39,7 +39,6 @@ public class Leaderboard extends Screens {
 
         guiViewPort.addProcessor(screen);
         buildGui(nifty);
-        nifty.gotoScreen("Leader_Board");
     }
 
     /**

@@ -61,10 +61,11 @@ public class Main extends SimpleApplication implements ScreenController {
     AppSettings gSettings;
     Nifty nifty;
     GameSettings settingsF;
+    Screen screen;
 
     public static void main(String[] args) {
         Main app = new Main();
-        app.setShowSettings(true);
+        app.setShowSettings(false);
         app.setDisplayFps(true);
         app.setDisplayStatView(false);
         System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
@@ -78,17 +79,17 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
-        gSettings = new AppSettings(true);
+        gSettings = new AppSettings(true);        
+        gSettings.setResolution(1366, 768);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene);
-        settingsF = loadSettings();
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         ClientConnection.StartClientConnection();
-        UI.leaderBoard();
-        UI.optionScreen();
         UI.loginScreen();
+        this.setSettings(gSettings);
+        restart();
     }
 
     @Override
@@ -112,7 +113,6 @@ public class Main extends SimpleApplication implements ScreenController {
         GameSettings _settings = new GameSettings();
         int height = 600;
         int width = 800;
-        String previous = "";
         try {
             try (Scanner in = new Scanner(new FileReader("GameSettings.txt"))) {
                 while (in.hasNextLine()) {
@@ -149,9 +149,9 @@ public class Main extends SimpleApplication implements ScreenController {
             }
         }
         //AppSettings setting = new AppSettings(true);
-        UI.updateRes(width, height);
+        UI.updateRes(1920, 1080);
         //gSettings.setResolution(width, height);
-        //gSettings.setFullscreen(true);
+        gSettings.setFullscreen(true);
         //gSettings.setFullscreen(true);
         gSettings.setResolution(1920, 1080);
         this.setSettings(gSettings);
@@ -159,9 +159,8 @@ public class Main extends SimpleApplication implements ScreenController {
         return _settings;
     }
 
-    public void loadGame() {
-        // Settings file loaded and now must be used in program
-
+    public void loadGame() {        
+        settingsF = loadSettings();
         inputManager.setCursorVisible(false);
         flyCam.setEnabled(true);
         bulletAppState = new BulletAppState();
@@ -192,6 +191,7 @@ public class Main extends SimpleApplication implements ScreenController {
     @Override
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
+        this.screen = screen;
         usernameTxt = screen.findNiftyControl("Username_Input_ID", TextField.class);
         passwordTxt = screen.findNiftyControl("Password_Input_ID", TextField.class);
         accUser = screen.findNiftyControl("Username_Input_ID_2", TextField.class);
@@ -282,18 +282,22 @@ public class Main extends SimpleApplication implements ScreenController {
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.retrievePassword();
     }
+    public void erase(String id){
+        TextField text = screen.findNiftyControl(id, TextField.class);
+        text.setText("");
+    }
 
     /**
      * Goes to the login screen
      */
-    public void loginScreen() {
+    public void retrievePasswordAndGoBack() {
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         if (retUser.getRealText().contains("@")) {
-            //ClientConnection.RetrievePasswordInputEmail(retUser.getRealText());
+            ClientConnection.RetrievePasswordInputEmail(retUser.getRealText());
         } else {
             ClientConnection.RetrievePassword(retUser.getRealText());
         }
-        UI.loginScreen();
+        nifty.gotoScreen("#Login_Screen");
     }
 
     /**
@@ -307,14 +311,15 @@ public class Main extends SimpleApplication implements ScreenController {
      * Goes to screen selected
      */
     public void goTo(String screen) {
-        UI.goTo(screen);
+        System.out.println(screen);
+        nifty.gotoScreen(screen);
     }
 
     /**
      * Goes back to the login screen
      */
     public void goBack() {
-        UI.goTo("Login_Screen");
+        nifty.gotoScreen("#Login_Screen");
     }
 
     /**
@@ -327,7 +332,6 @@ public class Main extends SimpleApplication implements ScreenController {
                     boolean success = OAuth.facebookLogin();
                     if (success) {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                        // UI.loadingScreen();
                         loadGame();
                     } else {
                         System.out.println("Incorrect details");
@@ -341,7 +345,6 @@ public class Main extends SimpleApplication implements ScreenController {
                     boolean success = OAuth.googleLogin();
                     if (success) {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                        // UI.loadingScreen();
                         loadGame();
                     } else {
                         System.out.println("Incorrect details");
@@ -350,6 +353,7 @@ public class Main extends SimpleApplication implements ScreenController {
                    System.out.println("Error occurred (2G+)");
                 }
                 break;
+                default:
         }
     }
 }
