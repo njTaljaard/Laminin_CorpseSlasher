@@ -111,8 +111,9 @@ public class Main extends SimpleApplication implements ScreenController {
 
     /**
      *
-     * @return an array of booleans checking which settings to activate. Loading
-     * the settings based on the .txt file
+     * @return returns the GameSettings object that contains all the 
+     * previously saved settings loaded from the text file with the
+     * settings and their values
      */
     public GameSettings loadSettings() {
         GameSettings _settings = new GameSettings();
@@ -163,7 +164,10 @@ public class Main extends SimpleApplication implements ScreenController {
         restart();
         return _settings;
     }
-
+    /**
+     * Loads the game according to the specified gamesettings object, also
+     * loads the bullet physics for the charaters and enemys
+     */
     public void loadGame() {
         settingsF = loadSettings();
         inputManager.setCursorVisible(false);

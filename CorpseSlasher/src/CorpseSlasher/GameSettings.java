@@ -36,7 +36,9 @@ public class GameSettings {
     protected boolean lightScatter = true;
     private AppSettings storedSettings;
     private ArrayList setting = new ArrayList();
-
+/**
+ * Creates the object from the stored settings file
+ */
     public GameSettings() {
         Scanner contents = null;
         try {
@@ -98,7 +100,18 @@ public class GameSettings {
         bloomLight = settings[x++];
         lightScatter = settings[x++];
     }
-
+    /**
+     * @param x1 the new postWater value
+     * @param x2 the new waterReflections value
+     * @param x3 the new waterRippels value
+     * @param x4 the new waterSpecular value
+     * @param x5 the new waterFoam value
+     * @param x6 the new skyDome value
+     * @param x7 the new starMotion value
+     * @param x8 the new cloudMotion value
+     * @param x9 the new bloomLight value
+     * @param x10 the new lightScatter value
+     */
     public void updateSettings(boolean x1, boolean x2, boolean x3, boolean x4, boolean x5, boolean x6, boolean x7, boolean x8,
             boolean x9, boolean x10) {
         postWater = x1;
@@ -172,7 +185,9 @@ public class GameSettings {
         File savedSettings = new File("GameSettings.txt");
         return storedSettings;
     }
-
+    /**
+     * Applys the new settings from the graphics settings screen
+     */
     public void apply() {
 
         FileWriter savedGame = null;
@@ -198,7 +213,12 @@ public class GameSettings {
     public void StoreSettings(AppSettings settings) {
         storedSettings = settings;
     }
-
+    /**
+     * Checks to see if the value has changed and then removes the old setting and then updates
+     * the new setting
+     * @param name the settings name to be updated
+     * @param settings the value of the setting
+     */
     public void updateSettings(String name, String settings) {
         for (int x = 0; x < setting.size(); x++) {
             String set = setting.get(x).toString();

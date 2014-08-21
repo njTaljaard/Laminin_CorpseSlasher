@@ -31,6 +31,11 @@ public class SettingsController implements ScreenController {
         this.scene = scene;
     }
     
+    /**
+     * Checks the correct settings based on previous settings
+     * @param nifty
+     * @param screen 
+     */
     @Override
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
@@ -227,6 +232,9 @@ public class SettingsController implements ScreenController {
         //Still needs to be added
         //scene.reload();
      }
+     /**
+      * updates the display setting
+      */
      public void displayApply(){
          ListBox listBox = screen.findNiftyControl("Resolution_Opts", ListBox.class);
          String res[] = listBox.getFocusItem().toString().split(" X ");

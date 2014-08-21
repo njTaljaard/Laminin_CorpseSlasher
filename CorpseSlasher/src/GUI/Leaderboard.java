@@ -24,7 +24,7 @@ import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
 /**
  *
  * @author Gerhard An extension of the screens class, allowing the user to
- * retrieve lost or forgotten passwords via the use of his account username.
+ * see all the users scores and see where they lie on the list
  */
 public class Leaderboard extends Screens {
     private static ClientConnection client;
@@ -35,7 +35,7 @@ public class Leaderboard extends Screens {
     }
 
     /**
-     * Builds the retrieve password screen
+     * Builds the leaderboard screen
      */
     public void build() {
         Nifty nifty = screen.getNifty();

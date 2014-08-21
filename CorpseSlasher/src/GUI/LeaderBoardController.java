@@ -2,8 +2,6 @@ package GUI;
 
 import CorpseSlasher.ClientConnection;
 import com.jme3.asset.AssetManager;
-import com.jme3.font.BitmapFont;
-import com.jme3.font.BitmapText;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.screen.Screen;
@@ -11,10 +9,9 @@ import de.lessvoid.nifty.screen.ScreenController;
 import java.util.Scanner;
 
 /**
- *
- * @author Gerhard
+ * The controller class for the leaderboard class, displaying and adding all
+ * scores and usernames
  */
-
 public class LeaderBoardController implements ScreenController {
 
     private Nifty nifty;
@@ -31,6 +28,9 @@ public class LeaderBoardController implements ScreenController {
         this.nifty = nifty;
         this.screen = screen;
     }
+    /**
+     * Builds the listbox displaying all the values of scoreboard
+     */
     @Override
     public void onStartScreen() { 
        nifty.setIgnoreKeyboardEvents(false);
@@ -47,6 +47,12 @@ public class LeaderBoardController implements ScreenController {
            listBox.setStyle("");
        }
     }
+    /**
+     * 
+     * @param str string to have spaces added
+     * @param spaces amount of spaces to strng coming in
+     * @return the string incoming with the added spaces
+     */
     private String addSpaces(String str,int spaces){
         str = str.toUpperCase();
         for(int x = str.length();x<spaces;x++){
@@ -58,9 +64,17 @@ public class LeaderBoardController implements ScreenController {
     public void onEndScreen() {
        nifty.setIgnoreKeyboardEvents(true);        
     }
+    /**
+     * 
+     * @param _screen screen to change to
+     * Changes the nifty gui screen based on the input
+     */
     public void goTo(String _screen){
         nifty.gotoScreen(_screen);
     }
+    /**
+     * Quits the game
+     */
     public void quitGame(){
         System.exit(1);
     }
