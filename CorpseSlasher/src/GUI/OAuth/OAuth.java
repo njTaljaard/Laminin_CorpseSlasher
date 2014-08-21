@@ -147,8 +147,8 @@ public class OAuth {
         //Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
         System.out.println(code);
 
-
-        String url = "https://accounts.google.com/o/oauth2/token";
+        //bug fix
+        /*String url = "https://accounts.google.com/o/oauth2/token";
         String in = "";
 
         try {
@@ -174,8 +174,7 @@ public class OAuth {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }
-
+        }*/
         return true;
     }
     //Could not get Twitter Oauth working

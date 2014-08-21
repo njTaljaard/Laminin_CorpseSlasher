@@ -5,13 +5,11 @@ import GUI.OAuth.OAuth;
 import GUI.UserInterfaceManager;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.app.state.AppState;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
@@ -30,9 +28,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 
 /**
@@ -66,6 +61,7 @@ public class Main extends SimpleApplication implements ScreenController {
     AppSettings gSettings;
     Nifty nifty;
     GameSettings settingsF;
+    Screen screen;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -83,20 +79,19 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
-        Audio.assetManager = assetManager;
-        Audio.audioRenderer = audioRenderer;
+        ClientConnection client = new ClientConnection();
+        client.StartClientConnection();
         gSettings = new AppSettings(true);
-        //UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene);
-        settingsF = loadSettings();
+        gSettings.setResolution(1366, 768);
+        gSettings.setFullscreen(false);
+        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene,client);
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
-        //inputManager.deleteMapping(INPUT_MAPPING_EXIT);
-        ClientConnection.StartClientConnection();
-        loadGame();
-        //UI.leaderBoard();
-        //UI.optionScreen();
-        //UI.loginScreen();
+        inputManager.deleteMapping(INPUT_MAPPING_EXIT);
+        this.setSettings(gSettings);
+        restart();
+        UI.loginScreen();
     }
 
     @Override
@@ -156,19 +151,18 @@ public class Main extends SimpleApplication implements ScreenController {
             }
         }
         //AppSettings setting = new AppSettings(true);
-        //UI.updateRes(width, height);
+        UI.updateRes(1920, 1080);
         //gSettings.setResolution(width, height);
+        gSettings.setFullscreen(true);
         //gSettings.setFullscreen(true);
-        gSettings.setFullscreen(false);
-        gSettings.setResolution(width, height);
+        gSettings.setResolution(1920, 1080);
         this.setSettings(gSettings);
         restart();
         return _settings;
     }
 
     public void loadGame() {
-        // Settings file loaded and now must be used in program
-
+        settingsF = loadSettings();
         inputManager.setCursorVisible(false);
         flyCam.setEnabled(true);
         bulletAppState = new BulletAppState();
@@ -187,7 +181,11 @@ public class Main extends SimpleApplication implements ScreenController {
         }
         
         loggedIn = true;
-        //UI.changeState();
+        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+        UI.changeState();
+        restart();
+        nifty.setIgnoreKeyboardEvents(true );
+        
     }
 
     /**
@@ -200,16 +198,16 @@ public class Main extends SimpleApplication implements ScreenController {
     @Override
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
-        usernameTxt = screen.findNiftyControl("Username_Input_ID", TextField.class);
-        passwordTxt = screen.findNiftyControl("Password_Input_ID", TextField.class);
-        accUser = screen.findNiftyControl("Username_Input_ID_2", TextField.class);
-        accEmail = screen.findNiftyControl("Email_Input_ID", TextField.class);
-        accSurname = screen.findNiftyControl("Surname_Input_ID", TextField.class);
-        accName = screen.findNiftyControl("Name_Input_ID", TextField.class);
-        accPassword = screen.findNiftyControl("Password_Input_ID_2", TextField.class);
-        accPasswordRE = screen.findNiftyControl("Password_Input_ID_2_2", TextField.class);
-        retUser = screen.findNiftyControl("Username_Input_ID_3", TextField.class);
-
+        this.screen = screen;
+        usernameTxt = screen.findNiftyControl("#Username_Input_ID", TextField.class);
+        passwordTxt = screen.findNiftyControl("#Password_Input_ID", TextField.class);
+        accUser = screen.findNiftyControl("#Username_Input_ID_2", TextField.class);
+        accEmail = screen.findNiftyControl("#Email_Input_ID", TextField.class);
+        accSurname = screen.findNiftyControl("#Surname_Input_ID", TextField.class);
+        accName = screen.findNiftyControl("#Name_Input_ID", TextField.class);
+        accPassword = screen.findNiftyControl("#Password_Input_ID_2", TextField.class);
+        accPasswordRE = screen.findNiftyControl("#Password_Input_ID_2_2", TextField.class);
+        retUser = screen.findNiftyControl("#Username_Input_ID_3", TextField.class);
     }
 
     @Override
@@ -267,7 +265,8 @@ public class Main extends SimpleApplication implements ScreenController {
 
                     if (success) {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                        loginScreen();
+                        //loginScreen();
+                        loadGame();
                     } else {
                         System.out.println("Failed adding user");
                     }
@@ -290,17 +289,22 @@ public class Main extends SimpleApplication implements ScreenController {
         UI.retrievePassword();
     }
 
+    public void erase(String id) {
+        TextField text = screen.findNiftyControl(id, TextField.class);
+        text.setText("");
+    }
+
     /**
      * Goes to the login screen
      */
-    public void loginScreen() {
-        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+    public void retrievePasswordAndGoBack() {
         if (retUser.getRealText().contains("@")) {
-            //ClientConnection.RetrievePasswordInputEmail(retUser.getRealText());
+            ClientConnection.RetrievePasswordInputEmail(retUser.getRealText());
+            nifty.gotoScreen("#Login_Screen");
         } else {
             ClientConnection.RetrievePassword(retUser.getRealText());
+            nifty.gotoScreen("#Login_Screen");
         }
-        UI.loginScreen();
     }
 
     /**
@@ -314,14 +318,14 @@ public class Main extends SimpleApplication implements ScreenController {
      * Goes to screen selected
      */
     public void goTo(String screen) {
-        UI.goTo(screen);
+        nifty.gotoScreen(screen);
     }
 
     /**
      * Goes back to the login screen
      */
     public void goBack() {
-        UI.goTo("Login_Screen");
+        nifty.gotoScreen("#Login_Screen");
     }
 
     /**
@@ -334,7 +338,6 @@ public class Main extends SimpleApplication implements ScreenController {
                     boolean success = OAuth.facebookLogin();
                     if (success) {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                        // UI.loadingScreen();
                         loadGame();
                     } else {
                         System.out.println("Incorrect details");
@@ -348,7 +351,6 @@ public class Main extends SimpleApplication implements ScreenController {
                     boolean success = OAuth.googleLogin();
                     if (success) {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                        // UI.loadingScreen();
                         loadGame();
                     } else {
                         System.out.println("Incorrect details");
@@ -357,6 +359,7 @@ public class Main extends SimpleApplication implements ScreenController {
                     System.out.println("Error occurred (2G+)");
                 }
                 break;
+            default:
         }
     }
 }

@@ -53,7 +53,7 @@ public class Database {
     public boolean addUser(String username, String password, String name, String surname, String email) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "INSERT INTO user (username,password,name,surname,email,zombieKills) VALUES ('" + username + "',AES_ENCRYPT('" + password + "', SHA1('9876543210')),'" + name + "','" + surname + "','" + email + "',0)";
+            String query = "INSERT INTO user (username,password,name,surname,email,zombieKills,experiencePoints) VALUES ('" + username + "',AES_ENCRYPT('" + password + "', SHA1('9876543210')),'" + name + "','" + surname + "','" + email + "',0,0)";
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
@@ -77,7 +77,7 @@ public class Database {
     public boolean login(String username, String password) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "SELECT username FROM user WHERE password = AES_DECRYPT('" + password + "', SHA1('9876543210'))";
+            String query = "SELECT username FROM user WHERE password = AES_ENCRYPT('" + password + "', SHA1('9876543210'))";
             ResultSet rs = stmt.executeQuery(query);
             rs.next();
             String result = rs.getString("username");
@@ -196,7 +196,7 @@ public class Database {
             String query = "SELECT AES_DECRYPT(password, SHA1('9876543210')) FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
             rs.next();
-            String result = rs.getString("password");
+            String result = rs.getString("AES_DECRYPT(password, SHA1('9876543210'))");
             return result;
         } catch (Exception exc) {
             System.out.println("Get password error:" + exc);

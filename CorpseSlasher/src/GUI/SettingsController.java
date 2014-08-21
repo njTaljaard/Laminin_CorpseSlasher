@@ -52,42 +52,52 @@ public class SettingsController implements ScreenController {
                 case "PostWater":
                     checkbox = screen.findNiftyControl("Post_Water_Button", CheckBox.class); 
                     checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    x1 = Boolean.parseBoolean(parts[1]);
                     break;
                 case "WaterReflections":
                     checkbox = screen.findNiftyControl("Water_Reflections_Button", CheckBox.class); 
                     checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    x2 = Boolean.parseBoolean(parts[1]);
                     break;
                 case "WaterRipples":
                     checkbox = screen.findNiftyControl("Water_Ripples_Button", CheckBox.class); 
                     checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    x3 = Boolean.parseBoolean(parts[1]);
                     break;
                 case "WaterSpecular":
                     checkbox = screen.findNiftyControl("Water_Specular_Button", CheckBox.class); 
                     checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    x4 = Boolean.parseBoolean(parts[1]);
                     break;
                 case "WaterFoam":
                     checkbox = screen.findNiftyControl("Water_Foam_Button", CheckBox.class); 
                     checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    x5 = Boolean.parseBoolean(parts[1]);
                     break;
                 case "SkyDome":
                     checkbox = screen.findNiftyControl("Sky_Dome_Button", CheckBox.class); 
                     checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    x6 = Boolean.parseBoolean(parts[1]);
                     break;
                 case "StarMotion":
                     checkbox = screen.findNiftyControl("Star_Motion_Button", CheckBox.class); 
                     checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    x7 = Boolean.parseBoolean(parts[1]);
                     break;
                 case "CloudMotion":
                     checkbox = screen.findNiftyControl("Cloud_Motion_Button", CheckBox.class); 
                     checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    x8 = Boolean.parseBoolean(parts[1]);
                     break;
                 case "BloomLight":
                     checkbox = screen.findNiftyControl("Bloom_Light_Button", CheckBox.class); 
                     checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    x9 = Boolean.parseBoolean(parts[1]);
                     break;
                 case "LightScatter":
                     checkbox = screen.findNiftyControl("Light_Scatter_Button", CheckBox.class); 
                     checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                    x10 = Boolean.parseBoolean(parts[1]);
                     break;
             }
             }
