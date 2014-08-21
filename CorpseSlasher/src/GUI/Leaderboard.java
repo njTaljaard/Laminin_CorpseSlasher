@@ -4,10 +4,12 @@
  */
 package GUI;
 
+import CorpseSlasher.ClientConnection;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
+import com.jme3.font.BitmapFont;
 import com.jme3.input.InputManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
@@ -25,9 +27,11 @@ import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
  * retrieve lost or forgotten passwords via the use of his account username.
  */
 public class Leaderboard extends Screens {
+    private static ClientConnection client;
 
-    Leaderboard(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
+    Leaderboard(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen,ClientConnection client) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
+        Leaderboard.client = client;
     }
 
     /**
@@ -47,11 +51,12 @@ public class Leaderboard extends Screens {
      * build, adding buttons and labels
      */
     private void buildGui(Nifty nifty) {
+       BitmapFont myFont = assetManager.loadFont("Interface/Fonts/Monospaced.fnt");
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
         nifty.addScreen("Leader_Board", new ScreenBuilder("Leaderboard") {
             {
-                controller(new LeaderBoardController());
+                controller(new LeaderBoardController(client,assetManager));
                 layer(new LayerBuilder("background") {
                     {
                         font("Interface/Fonts/zombie.fnt");
@@ -181,7 +186,7 @@ public class Leaderboard extends Screens {
                                         marginLeft("25%");
                                         height("15%");
                                         marginTop("15%");
-                                        font("Interface/Fonts/zombie.fnt");                                        
+                                        font("Interface/Fonts/Monospaced.fnt");
                                     }
                                 });
                             }

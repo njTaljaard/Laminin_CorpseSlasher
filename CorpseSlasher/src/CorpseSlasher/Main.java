@@ -79,15 +79,16 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
+        ClientConnection client = new ClientConnection();
+        client.StartClientConnection();
         gSettings = new AppSettings(true);
         gSettings.setResolution(1366, 768);
         gSettings.setFullscreen(false);
-        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene);
+        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene,client);
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
-        ClientConnection.StartClientConnection();
         this.setSettings(gSettings);
         restart();
         UI.loginScreen();
