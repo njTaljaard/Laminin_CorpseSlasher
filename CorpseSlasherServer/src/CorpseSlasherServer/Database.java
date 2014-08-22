@@ -173,7 +173,7 @@ public class Database {
     public boolean changePassword(String username, String password) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "UPDATE user SET password = AES_ENCRYPT('" + password + "'SHA1('9876543210')) WHERE username = '" + username + "'";
+            String query = "UPDATE user SET password = AES_ENCRYPT('" + password + "', SHA1('9876543210')) WHERE username = '" + username + "'";
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
