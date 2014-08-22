@@ -138,6 +138,10 @@
 			18/08/2014  \> Version 2.0  \> Added update sequence diagram				\> Nico Taljaard\\
 			20/08/2014  \> Version 2.0  \> Added game sequence and state diagrams		\> Nico Taljaard\\
 			20/08/2014  \> Version 2.0  \> Updated game code documentation				\> Nico Taljaard\\
+			22/08/2014  \> Version 2.0  \> Updated database ERD diagram.				\> Martin Schoeman\\
+			22/08/2014  \> Version 2.0  \> Added the Client and Server Sequence Diagram	\> Martin Schoeman\\
+			22/08/2014  \> Version 2.0  \> Added GUI sequence Diagram					\> Martin Schoeman\\
+			22/08/2014  \> Version 2.0  \> Added unit testing code documentation.		\> Martin Schoeman\\
 		\end{tabbing}
 		
 	\newpage
@@ -616,6 +620,13 @@
 				\subsubsection*{User-Interface Diagrams:}
 				\addcontentsline{toc}{subsubsection}{UI Diagrams}
 				\vspace{0.1in}
+				
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=180mm]{UML_Diagram/Sequence/GUI_Screens.jpg}
+					\caption{User-Interface cycle}
+					\label{overflow}
+					\end{figure}
 					
 					\begin{figure}[H]
 					\centering
@@ -627,6 +638,13 @@
 				\subsubsection*{Server Diagrams:}
 				\addcontentsline{toc}{subsubsection}{Server Diagrams}
 				\vspace{0.1in}
+				
+					\begin{figure}[H]
+					\centering
+					\includegraphics[width=180mm]{UML_Diagram/Sequence/Client_Server_Sequence_Diagram.jpg}
+					\caption{Client and Server communication sequence diagram}
+					\label{overflow}
+					\end{figure}
 			
 					\begin{figure}[H]
 					\centering
@@ -673,8 +691,8 @@
 				
 					\begin{figure}[H]
 					\centering
-					\includegraphics[width=40mm]{UML_Diagram/ERD/Database.png}
-					\caption{Game level class diagram}
+					\includegraphics[width=180mm]{UML_Diagram/ERD/Database.jpg}
+					\caption{Database ERD diagram}
 					\label{overflow}
 					\end{figure}
 					
@@ -2115,6 +2133,101 @@
 											body - - body of email. \\ \\
 											Returns: \\
 											- returns true if email is sent and false if not sent.
+								\end{itemize}
+					\end{itemize}
+					
+					\vspace{0.2in}
+				\subsubsection*{Server Unit test:}
+				\addcontentsline{toc}{subsubsection}{Server Unit test}
+				\vspace{0.1in}	
+					\begin{itemize}
+						\item	Method Detail
+								\begin{itemize}
+									\item	test \\
+											 public static boolean test() \\
+
+											runs all the other functions in the ServerUnitTesting class,\\											so the user only have to run this function to do the unit \\ testing. \\ \\
+											Returns: \\
+											- return true if all the tests was successful and false if not.
+											
+											\item	createUser \\
+											 public static boolean createUser() \\
+
+											createUser test's the addUser function. \\ \\
+											Returns: \\
+											- return true if all the tests was successful and false if not.
+											
+											\item	login \\
+											  public static boolean login() \\
+
+											login test's the Login function. \\ \\
+											Returns: \\
+											- return true if all the tests was successful and false if not.
+											
+											\item	usernameAvailble \\
+											 public static boolean usernameAvailble() \\
+
+											usernameAvailble test's the CheckUsernameAvailable function. \\ \\
+											Returns: \\
+											- return true if all the tests was successful and false if not.
+											
+											\item	logout \\
+											 public static boolean logout() \\
+
+											logout test's the Logout function. \\ \\
+											Returns: \\
+											- return true if all the tests was successful and false if not.
+											
+											\item	getLeaderBoard \\
+											public static boolean getLeaderBoard() \\
+
+											getLeaderBoard test's the retrieveLeaderBoard function. \\ \\
+											Returns: \\
+											- return true if all the tests was successful and false if not.
+											
+											\item	addKill \\
+											 public static boolean addKill() \\
+
+											addKill test's the AddOneKill function. \\ \\
+											Returns: \\
+											- return true if all the tests was successful and false if not.
+											
+											\item	setKills \\
+											  public static boolean setKills() \\
+
+											setKills test's the SetKills function. \\ \\
+											Returns: \\
+											- return true if all the tests was successful and false if not.
+											
+											\item	getKills \\
+											  public static int getKills() \\
+
+											getKills test's the GetKills function. \\ \\
+											Returns: \\
+											- return true if all the tests was successful and false if not.
+											
+											\item	setPassword \\
+											 public static boolean setPassword() \\
+
+											setPassword test's the SetPassword function. \\ \\
+											Returns: \\
+											- return true if all the tests was successful and false if not.
+											
+											\item	getPassword \\
+											public static boolean getPassword() \\
+
+											 getPassword test's the RetrievePassword function. \\ \\
+											Returns: \\
+											- return true if all the tests was successful and false if not.
+											
+											\item	getPasswordEmailInput \\
+											 public static boolean getPasswordEmailInput() \\
+
+											getPasswordEmailInput test's the getPasswordEmailInput function. \\ \\
+											Returns: \\
+											- return true if all the tests was successful and false if not.
+											
+											
 								\end{itemize}
 					\end{itemize}
 		
