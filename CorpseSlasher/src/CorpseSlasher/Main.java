@@ -85,7 +85,7 @@ public class Main extends SimpleApplication implements ScreenController {
         client.StartClientConnection();
         gSettings = new AppSettings(true);
         gSettings.setResolution(1366, 768);
-        gSettings.setFullscreen(false);
+        gSettings.setFullscreen(true);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene,client);
         loggedIn = false;
         flyCam.setEnabled(false);
@@ -93,8 +93,8 @@ public class Main extends SimpleApplication implements ScreenController {
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         this.setSettings(gSettings);
         restart();
-        //UI.loginScreen();
-        loadGame();
+        UI.loginScreen();
+        //loadGame();
     }
 
     @Override
@@ -117,7 +117,7 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public GameSettings loadSettings() {
         GameSettings _settings = new GameSettings();
-        /*int height = 600;
+        int height = 600;
         int width = 800;
         try {
             try (Scanner in = new Scanner(new FileReader("GameSettings.txt"))) {
@@ -153,12 +153,8 @@ public class Main extends SimpleApplication implements ScreenController {
             } else {
                 ex.printStackTrace();
             }
-        }*/
-        //AppSettings setting = new AppSettings(true);
+        }
         UI.updateRes(1366, 768);
-        //gSettings.setResolution(width, height);
-        gSettings.setFullscreen(false);
-        //gSettings.setFullscreen(true);
         gSettings.setResolution(1366, 768);
         this.setSettings(gSettings);
         restart();
