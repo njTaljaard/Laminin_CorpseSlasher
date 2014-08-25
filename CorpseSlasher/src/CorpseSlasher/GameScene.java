@@ -134,6 +134,8 @@ public class GameScene {
     private void initAudio() {
         Audio.initAmbient();
         Audio.loadOcean();
+        Audio.loadCharacterAudio();
+        Audio.loadMobAudio();
     }
     
     /**

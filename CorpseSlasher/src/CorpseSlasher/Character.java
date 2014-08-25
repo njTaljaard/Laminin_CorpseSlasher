@@ -229,6 +229,7 @@ public class Character {
                 health -= 10;
                 System.out.println("Player : ive been slapped by " + knocks.get(i) 
                         + ". Health is " + health);
+                Audio.playCharacterDamage(player.getLocalTranslation());
                 
                 if (health <= 0) {
                     health = 0;

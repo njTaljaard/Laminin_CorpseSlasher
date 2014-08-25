@@ -181,11 +181,14 @@ public class Mob {
             characterControl.update(tpf);
             motionControl.updateMobPhase(point, mob, characterControl, passivePosition);
             animControl.updateMobAnimations(channel, motionControl.aggro,
-                    motionControl.walkAttack, motionControl.attack, motionControl.passive);
-
+                    motionControl.walkAttack, motionControl.attack, 
+                    motionControl.passive, mob.getLocalTranslation());
+            
             if (playerHit) {
                 health -= 10;
                 System.out.println(mobName + " i have been hit!!!! My health is " + health);
+                Audio.playMobDamage(mob.getLocalTranslation());
+                
                 if (health <= 0) {
                     health = 0;
                     alive = false;
@@ -200,9 +203,9 @@ public class Mob {
             if (animControl.attacking && mobHit) {
                 animControl.attacking = false;
                 return mobName;
-            } else {
-                return "";
             }
+            
+            return "";
         } else {
             ragdoll.update(tpf);
             if (System.nanoTime() - deathTime > spawnTime) {
