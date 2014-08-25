@@ -44,8 +44,10 @@ public class CharacterMotionControl {
             public void onAction(String binding, boolean value, float tpf) {
                 switch (binding) {
                     case "Slash":
-                        if (value) 
+                        if (value) {
                             slash = true;
+                            Audio.playCharacterAttack(cam.getLocation());
+                        }
                         break;
                     case "Left":
                         if (value) { 
