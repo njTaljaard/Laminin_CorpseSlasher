@@ -93,8 +93,8 @@ public class Main extends SimpleApplication implements ScreenController {
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         this.setSettings(gSettings);
         restart();
-        UI.loginScreen();
-        //loadGame();
+        //UI.loginScreen();
+        loadGame();
     }
 
     @Override
@@ -117,7 +117,7 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public GameSettings loadSettings() {
         GameSettings _settings = new GameSettings();
-        int height = 600;
+        /*int height = 600;
         int width = 800;
         try {
             try (Scanner in = new Scanner(new FileReader("GameSettings.txt"))) {
@@ -153,7 +153,7 @@ public class Main extends SimpleApplication implements ScreenController {
             } else {
                 ex.printStackTrace();
             }
-        }
+        }*/
         //AppSettings setting = new AppSettings(true);
         UI.updateRes(1366, 768);
         //gSettings.setResolution(width, height);

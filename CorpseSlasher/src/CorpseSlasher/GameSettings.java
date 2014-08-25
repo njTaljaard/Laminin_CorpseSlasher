@@ -83,7 +83,7 @@ public class GameSettings {
             }
         } catch (FileNotFoundException ex) {
         } finally {
-            contents.close();
+ //           contents.close();
         }
     }
 
