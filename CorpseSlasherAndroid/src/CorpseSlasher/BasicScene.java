@@ -101,8 +101,8 @@ public class BasicScene {
         fpp = new FilterPostProcessor(assMan);
         initAmbientLight();
         initSunLight();
-        initWater();
-        initSkyBox();
+        //initWater();
+        //initSkyBox();
         initTerrain();
     }
     
@@ -160,7 +160,8 @@ public class BasicScene {
      * it to the basic scene node. Add collision detection to the terrain.
      */
     private void initTerrain() {
-        sceneModel = (Node) assetManager.loadModel("Scenes/" + sceneName + ".j3o");
+        //sceneModel = (Node) assetManager.loadModel("Scenes/" + sceneName + ".j3o");
+        sceneModel = (Node) assetManager.loadModel("Scenes/ZombieAndroidScene.j3o");
         sceneModel.setName("Terrian");
         
         if (sceneModel != null) {
@@ -170,7 +171,7 @@ public class BasicScene {
             terrain.getControl(RigidBodyControl.class).setCollisionGroup(1);
             bullet.getPhysicsSpace().add(terrain);
             
-            Node treeNode = (Node) sceneModel.getChild("Tree");
+            /*Node treeNode = (Node) sceneModel.getChild("Tree");
             List<Spatial> treeList = treeNode.getChildren();
             
             for (int i = 0; i < treeList.size(); i++) {
@@ -180,13 +181,10 @@ public class BasicScene {
                 
                 treeList.get(i).addControl(rig);
                 bullet.getPhysicsSpace().add(treeList.get(i));
-            }
+            }*/
             sceneNode.attachChild(sceneModel);
         } else {
             System.out.println("I am not loaded - terrain");
-            /**
-             * @TODO throw exception to exception handler.
-             */
         }
     }
     
@@ -207,7 +205,7 @@ public class BasicScene {
      */
     private void initBasicWater() {
         simpleWater = new SimpleWaterProcessor(assetManager);
-        simpleWater.setReflectionScene(sceneNode);
+        //simpleWater.setReflectionScene(sceneNode);
         simpleWater.setWaterDepth(80);         // transparency of water
         simpleWater.setDistortionScale(0.02f); // strength of waves
         simpleWater.setWaveSpeed(0.02f);       // speed of waves
@@ -354,7 +352,7 @@ public class BasicScene {
      * @param tpf - Time per frame.
      */
     public void update(TimeOfDay tod, float tpf) {
-        if (settings.skyDome) {
+        /*if (settings.skyDome) {
             skyControl.update(tpf);
             skyControl.getSunAndStars().setHour(tod.getHour());
             sun.setDirection(skyControl.getUpdater().getDirection());
@@ -363,7 +361,7 @@ public class BasicScene {
             } else {
                 simpleWater.setLightPosition(sun.getDirection());
             }
-        }
+        }*/
     }
     
     /**

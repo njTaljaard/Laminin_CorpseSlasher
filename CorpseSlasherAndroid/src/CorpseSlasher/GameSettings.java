@@ -24,16 +24,16 @@ import java.util.Scanner;
  */
 public class GameSettings {
 
-    protected boolean postWater = true;
-    protected boolean waterReflections = true;
-    protected boolean waterRippels = true;
-    protected boolean waterSpecular = true;
-    protected boolean waterFoam = true;
-    protected boolean skyDome  = true;
-    protected boolean starMotion = true;
-    protected boolean cloudMotion = true;
-    protected boolean bloomLight = true;
-    protected boolean lightScatter = true;
+    protected boolean postWater = false;
+    protected boolean waterReflections = false;
+    protected boolean waterRippels = false;
+    protected boolean waterSpecular = false;
+    protected boolean waterFoam = false;
+    protected boolean skyDome  = false;
+    protected boolean starMotion = false;
+    protected boolean cloudMotion = false;
+    protected boolean bloomLight = false;
+    protected boolean lightScatter = false;
     private AppSettings storedSettings;
     private ArrayList setting = new ArrayList();
 /**
