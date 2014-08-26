@@ -165,7 +165,7 @@ public class BasicScene {
         
         if (sceneModel != null) {
             sceneModel.setName("Terrian");        
-            Spatial terrain = sceneModel.getChild("terrain-ZombieScene1");
+            Spatial terrain = sceneModel.getChild("terrain-ZombieAndroidScene");
             terrain.addControl(new RigidBodyControl(0));
             terrain.getControl(RigidBodyControl.class).setCollisionGroup(1);
             bullet.getPhysicsSpace().add(terrain);
