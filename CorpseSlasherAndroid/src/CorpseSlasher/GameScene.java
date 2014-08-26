@@ -41,9 +41,9 @@ public class GameScene {
         
         initCameraPosition(cam, selectedMap);
         initScene(assestManager, viewPort, cam, bullet, selectedMap,/* ui,*/ settings);
-        initMainCharacter(assestManager, inMan, bullet, cam);
-        initMobs(bullet, assestManager);
-        initAudio();
+        //initMainCharacter(assestManager, inMan, bullet, cam);
+        //initMobs(bullet, assestManager);
+        //initAudio();
         
         collController = new CollisionController();
         bullet.getPhysicsSpace().addCollisionListener(collController);
@@ -75,7 +75,7 @@ public class GameScene {
             BulletAppState bullet, int map, /*LoadingScreen ui,*/GameSettings settings) {
         switch(map) {
             case(0) :   
-                basicScene = new BasicScene("ZombieScene1");
+                basicScene = new BasicScene("ZombieAndroidScene");
                 basicScene.createScene(assestManager, viewPort, cam, bullet, /*ui,*/settings);
                 sceneNode = basicScene.retrieveSceneNode();
                 break;
@@ -144,7 +144,7 @@ public class GameScene {
      */
     public void update(TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
-        playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), 
+        /*playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), 
                 tpf, mobHandler.getAggroState());
         
         if (playerAttacking) {
@@ -155,7 +155,7 @@ public class GameScene {
                     new ArrayList<String>(), collController.getMobHits(), tpf);
         }
         character.processKnocks(mobHits);
-        collController.attacksProcessed();
+        collController.attacksProcessed();*/
     }
     
     /**
