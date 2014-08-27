@@ -9,6 +9,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -30,6 +31,12 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
+import com.jme3.terrain.geomipmap.TerrainLodControl;
+import com.jme3.terrain.geomipmap.TerrainQuad;
+import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
+import com.jme3.terrain.heightmap.AbstractHeightMap;
+import com.jme3.terrain.heightmap.HeightMap;
+import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.SimpleWaterProcessor;
@@ -57,7 +64,6 @@ public class BasicScene {
     private String sceneName;
     private FilterPostProcessor fpp;
     private AmbientLight ambient;
-    private DirectionalLight sun;
     private WaterFilter postWater;
     private SimpleWaterProcessor simpleWater;
     private GameSettings settings;
@@ -73,7 +79,7 @@ public class BasicScene {
     public BasicScene(String mapName) {
         sceneName = mapName;
         sceneNode = new Node("BasicScene");
-        lightDir = new Vector3f(2.9236743f, -3.27054665f, 5.896916f);
+        //lightDir = new Vector3f(30.0f, -25.0f, 30.0f);
     }
     
     /**
@@ -100,7 +106,7 @@ public class BasicScene {
         this.skybox = null;
         fpp = new FilterPostProcessor(assMan);
         initAmbientLight();
-        //initSunLight();
+        initSunLight();
         //initWater();
         //initSkyBox();
         initTerrain();
@@ -147,12 +153,27 @@ public class BasicScene {
      * color.
      */
     private void initSunLight() {
-        sun = new DirectionalLight();
-        sun.setDirection(lightDir);
+        ColorRGBA col = new ColorRGBA(0.99215f, 0.72156f, 0.074509f, 1.0f);
+        DirectionalLight sun = new DirectionalLight();
+        sun.setDirection(new Vector3f(30.0f, -25.0f, 30.0f));
         sun.setColor(ColorRGBA.White.clone());
         sun.setName("Sun");
-        
         sceneNode.addLight(sun);
+        
+        DirectionalLight sun2 = new DirectionalLight();
+        sun2.setDirection(new Vector3f(-30.f, -15.0f, 30.0f));
+        sun2.setColor(col);
+        sceneNode.addLight(sun2);
+        
+        DirectionalLight sun4 = new DirectionalLight();
+        sun4.setDirection(new Vector3f(30.f, -15.0f, -30.0f));
+        sun4.setColor(col);
+        sceneNode.addLight(sun4);
+        
+        DirectionalLight sun3 = new DirectionalLight();
+        sun3.setDirection(new Vector3f(-30.f, -15.0f, -30.0f));
+        sun3.setColor(col);
+        sceneNode.addLight(sun3);
     }
     
     /**
@@ -161,31 +182,40 @@ public class BasicScene {
      */
     private void initTerrain() {
         //sceneModel = (Node) assetManager.loadModel("Scenes/" + sceneName + ".j3o");
-        sceneModel = (Node) assetManager.loadModel("Scenes/ZombieAndroidScene.j3o");
+        Spatial trrn = assetManager.loadModel("Scenes/ZombieAndroidScene.j3o");
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrian/ground.png"));
+        //mat.getAdditionalRenderState().setWireframe(true);
+        //mat.setColor("Color", ColorRGBA.Green);
+        trrn.setMaterial(mat);
+        sceneModel = (Node) trrn;
         sceneModel.setName("Terrian");
         
-        if (sceneModel != null) {
+        sceneNode.attachChild(sceneModel);
+                    
+        /*if (sceneModel != null) {
             sceneModel.setName("Terrian");        
             Spatial terrain = sceneModel.getChild("terrain-ZombieAndroidScene");
             terrain.addControl(new RigidBodyControl(0));
             terrain.getControl(RigidBodyControl.class).setCollisionGroup(1);
             bullet.getPhysicsSpace().add(terrain);
             
-            /*Node treeNode = (Node) sceneModel.getChild("Tree");
+            Node treeNode = (Node) sceneModel.getChild("Tree");
             List<Spatial> treeList = treeNode.getChildren();
             
             for (int i = 0; i < treeList.size(); i++) {
-                BoxCollisionShape treeCol = new BoxCollisionShape(new Vector3f(3.5f, 15, 3.5f));
+                BoxCollisionShape treeCol = new BoxCollisionShape(new Vector3f(0.875f, 3.75f, 0.875f));
                 RigidBodyControl rig = new RigidBodyControl(treeCol,0);
                 rig.setCollisionGroup(1);
                 
                 treeList.get(i).addControl(rig);
                 bullet.getPhysicsSpace().add(treeList.get(i));
-            }*/
+            }
+            
             sceneNode.attachChild(sceneModel);
         } else {
             System.out.println("I am not loaded - terrain");
-        }
+        }*/
     }
     
     /**
