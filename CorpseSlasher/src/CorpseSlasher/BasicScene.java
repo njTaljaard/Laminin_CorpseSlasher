@@ -134,9 +134,10 @@ public class BasicScene {
      * initAmbientLight will crreate the basic ambient light to be able to see 
      * within the scene.
      */
-    private void initAmbientLight() { 
+    private void initAmbientLight() {
+        ColorRGBA col = new ColorRGBA(0.99215f, 0.72156f, 0.074509f, 1.0f); 
         ambient = new AmbientLight();
-        ambient.setColor(ColorRGBA.White.clone().multLocal(1.5f));
+        ambient.setColor(col);
         ambient.setName("Ambient");
         
         sceneNode.addLight(ambient); 
@@ -147,9 +148,10 @@ public class BasicScene {
      * color.
      */
     private void initSunLight() {
+        ColorRGBA col = new ColorRGBA(0.99215f, 0.72156f, 0.074509f, 1.0f);
         sun = new DirectionalLight();
         sun.setDirection(lightDir);
-        sun.setColor(ColorRGBA.White.clone());
+        sun.setColor(col);
         sun.setName("Sun");
         
         sceneNode.addLight(sun);
