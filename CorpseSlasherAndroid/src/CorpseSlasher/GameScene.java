@@ -120,8 +120,8 @@ public class GameScene {
     private void initCameraPosition(Camera cam, int map) {
         switch(map) {
             case(0) :
-                cam.setLocation(new Vector3f(195.0f, 36.0f, -225.0f));
-                cam.lookAt(new Vector3f(200, 25, -500), cam.getUp());
+                cam.setLocation(new Vector3f(88.0f, 19.0f, 96.0f));
+                cam.lookAt(new Vector3f(-150, 7, -125), cam.getUp());
                 break;
             default :
                 break;

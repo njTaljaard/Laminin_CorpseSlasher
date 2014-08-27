@@ -100,7 +100,7 @@ public class BasicScene {
         this.skybox = null;
         fpp = new FilterPostProcessor(assMan);
         initAmbientLight();
-        initSunLight();
+        //initSunLight();
         //initWater();
         //initSkyBox();
         initTerrain();
