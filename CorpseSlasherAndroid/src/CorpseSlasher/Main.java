@@ -181,14 +181,15 @@ public class Main extends SimpleApplication implements ScreenController {
             timeOfDay = new TimeOfDay(5.5f);
             stateManager.attach(timeOfDay);
             timeOfDay.setRate(350f);
+            System.out.println("sky dome displayed");
         }
         
         loggedIn = true;
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.changeState();
         restart();
-        nifty.setIgnoreKeyboardEvents(true );
-        
+        nifty.setIgnoreKeyboardEvents(true); 
+        System.out.println("made it here");
     }
 
     /**
@@ -234,14 +235,10 @@ public class Main extends SimpleApplication implements ScreenController {
 
         if (success) {
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-
-            // UI.loadingScreen();
             loadGame();
         } else {
             System.out.println("Username or password incorrect");
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-
-            // UI.loadingScreen();
             loadGame();
         }
     }
