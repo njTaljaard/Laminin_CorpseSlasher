@@ -64,13 +64,11 @@ public class NewAccount extends Screens {
                         font("Interface/Fonts/zombie.fnt");
                         childLayoutCenter();
                         backgroundImage("Backgrounds/ZOMBIE1.jpg");
-                        visibleToMouse(true);
                     }
                 });
                 layer(new LayerBuilder("foreground") {
                     {
                         font("Interface/Fonts/zombie.fnt");
-                        visibleToMouse(true);
                         childLayoutVertical();
                         backgroundColor(new Color(.3f, .3f, .3f, .5f));
                         panel(new PanelBuilder("Main_Account_Panel") {
@@ -84,7 +82,6 @@ public class NewAccount extends Screens {
                                         marginTop("22%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                     }
@@ -96,7 +93,6 @@ public class NewAccount extends Screens {
                                         marginTop("22%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                         interactOnClick("erase(#Email_Input_ID)");
@@ -110,7 +106,6 @@ public class NewAccount extends Screens {
                                         marginTop("30%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                     }
@@ -122,7 +117,6 @@ public class NewAccount extends Screens {
                                         marginTop("30%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                         interactOnClick("erase(#Name_Input_ID)");
@@ -135,7 +129,6 @@ public class NewAccount extends Screens {
                                         marginTop("38%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                         interactOnClick("erase(#Surname_Input_ID)");
@@ -149,7 +142,6 @@ public class NewAccount extends Screens {
                                         marginTop("38%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                     }
@@ -162,7 +154,6 @@ public class NewAccount extends Screens {
                                         marginTop("46%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                     }
@@ -174,7 +165,6 @@ public class NewAccount extends Screens {
                                         marginTop("46%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                         interactOnClick("erase(#Username_Input_ID_2)");
@@ -188,7 +178,6 @@ public class NewAccount extends Screens {
                                         marginTop("54%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                     }
@@ -200,7 +189,6 @@ public class NewAccount extends Screens {
                                         marginTop("54%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                         passwordChar('*');
@@ -215,7 +203,6 @@ public class NewAccount extends Screens {
                                         marginTop("62%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                     }
@@ -227,7 +214,6 @@ public class NewAccount extends Screens {
                                         marginTop("62%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                         passwordChar('*');

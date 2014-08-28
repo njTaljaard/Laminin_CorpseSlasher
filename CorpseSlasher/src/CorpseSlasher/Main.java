@@ -7,7 +7,10 @@ import GUI.UserInterfaceManager;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.system.AppSettings;
+import com.jme3.ui.Picture;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
@@ -62,6 +65,8 @@ public class Main extends SimpleApplication implements ScreenController {
     Nifty nifty;
     GameSettings settingsF;
     Screen screen;
+    Picture healthBorder;
+    Picture health;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -82,22 +87,24 @@ public class Main extends SimpleApplication implements ScreenController {
         ClientConnection client = new ClientConnection();
         client.StartClientConnection();
         gSettings = new AppSettings(true);
-        gSettings.setResolution(1366, 768);
+        gSettings.setResolution(1920, 1080);
         gSettings.setFullscreen(false);
-        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene,client);
+        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene, client);
         loggedIn = false;
         flyCam.setEnabled(false);
-        inputManager.setCursorVisible(true);
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         this.setSettings(gSettings);
         restart();
+        inputManager.setCursorVisible(true);
         UI.loginScreen();
+        //loadGame();
     }
 
     @Override
     public void simpleUpdate(float tpf) {
         if (loggedIn) {
             gameScene.update(bulletAppState, cam, timeOfDay, tpf);
+            health.setWidth((gameScene.getHealth()/100f)*(gSettings.getWidth()/2.1f));
         }
     }
 
@@ -150,11 +157,8 @@ public class Main extends SimpleApplication implements ScreenController {
                 ex.printStackTrace();
             }
         }
-        //AppSettings setting = new AppSettings(true);
         UI.updateRes(1920, 1080);
-        //gSettings.setResolution(width, height);
-        gSettings.setFullscreen(true);
-        //gSettings.setFullscreen(true);
+        gSettings.setFullscreen(false);
         gSettings.setResolution(1920, 1080);
         this.setSettings(gSettings);
         restart();
@@ -163,8 +167,6 @@ public class Main extends SimpleApplication implements ScreenController {
 
     public void loadGame() {
         settingsF = loadSettings();
-        inputManager.setCursorVisible(false);
-        flyCam.setEnabled(true);
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
@@ -178,12 +180,25 @@ public class Main extends SimpleApplication implements ScreenController {
         timeOfDay = new TimeOfDay(5.5f);
         stateManager.attach(timeOfDay);
         timeOfDay.setRate(350f);
-        loggedIn = true;
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.changeState();
-        restart();
-        nifty.setIgnoreKeyboardEvents(true );
-        
+        nifty.setIgnoreKeyboardEvents(true);
+        inputManager.setCursorVisible(false);
+        guiNode.setQueueBucket(Bucket.Gui);
+        healthBorder = new Picture("Health Bar");
+        health = new Picture("Health");
+        healthBorder.setImage(assetManager, "HUD/Healthbar.png", true);
+        healthBorder.setWidth(gSettings.getWidth() / 2);
+        healthBorder.setHeight(gSettings.getHeight() / 10);
+        healthBorder.setPosition(gSettings.getWidth() / 4f, gSettings.getHeight() / 1.12f);
+        guiNode.attachChild(healthBorder);
+        health.setImage(assetManager, "HUD/Health.png", true);
+        health.setWidth(gSettings.getWidth() / 2.5f);
+        health.setHeight(gSettings.getHeight() / 12);
+        health.setPosition(gSettings.getWidth() / 3.83f, gSettings.getHeight() / 1.109f);
+        guiNode.attachChild(health);
+        UI.setGuis(healthBorder,health, guiNode);
+        loggedIn = true;
     }
 
     /**
@@ -229,13 +244,13 @@ public class Main extends SimpleApplication implements ScreenController {
 
         if (success) {
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-
+            inputManager.setCursorVisible(false);
             // UI.loadingScreen();
             loadGame();
         } else {
             System.out.println("Username or password incorrect");
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-
+            inputManager.setCursorVisible(false);
             // UI.loadingScreen();
             loadGame();
         }

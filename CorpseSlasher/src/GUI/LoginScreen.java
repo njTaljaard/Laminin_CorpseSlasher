@@ -64,13 +64,11 @@ public class LoginScreen extends Screens {
                         font("Interface/Fonts/zombie.fnt");
                         childLayoutCenter();
                         backgroundImage("Backgrounds/ZOMBIE1.jpg");
-                        visibleToMouse(true);
                     }
                 });
                 layer(new LayerBuilder("#foreground") {
                     {
                         font("Interface/Fonts/zombie.fnt");
-                        visibleToMouse(true);
                         childLayoutVertical();
                         backgroundColor(new Color(.3f, .3f, .3f, .5f));
                         panel(new PanelBuilder("#Main_Login_Panel") {
@@ -85,7 +83,6 @@ public class LoginScreen extends Screens {
                                         marginTop("54%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                     }
@@ -97,7 +94,6 @@ public class LoginScreen extends Screens {
                                         marginTop("54%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                         interactOnClick("erase(#Username_Input_ID)");
@@ -111,7 +107,6 @@ public class LoginScreen extends Screens {
                                         marginTop("62%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                     }
@@ -123,7 +118,6 @@ public class LoginScreen extends Screens {
                                         marginTop("62%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                         passwordChar('*');
@@ -179,7 +173,6 @@ public class LoginScreen extends Screens {
                                 paddingRight("7px");
                                 paddingTop("4px");
                                 paddingBottom("4px");
-                                visibleToMouse(true);
 
                                 font("Interface/Fonts/zombie.fnt");
                                 panel(new PanelBuilder() {

@@ -14,6 +14,8 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Node;
+import com.jme3.ui.Picture;
 
 /**
  * 
@@ -36,6 +38,9 @@ public final class UserInterfaceManager {
     private int width;
     private int height;
     private static ClientConnection client;
+    private Picture healthBorder;
+    private Picture health;
+    private Node guiNode;
     /**
      * 
      * @param assetManager
@@ -59,6 +64,11 @@ public final class UserInterfaceManager {
         Screen = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
         guiScreens = new Screens[6];
     }
+    public void setGuis(Picture border,Picture health,Node guiNode){
+        this.guiNode = guiNode;
+        this.healthBorder = border;
+        this.health = health;
+    }
     public void updateRes(int width, int height){
         this.width = width;
         this.height = height;
@@ -74,7 +84,7 @@ public final class UserInterfaceManager {
         guiScreens[0] = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                 Screen);
         guiScreens[0].build();
-        guiScreens[0].updateRes(1366, 768);
+        guiScreens[0].updateRes(1920, 1080);
     }
     /**
      * Creates the new account account screen
@@ -83,7 +93,7 @@ public final class UserInterfaceManager {
          guiScreens[1] = new NewAccount(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                            Screen);
         guiScreens[1].build();
-        guiScreens[1].updateRes(1366, 768);
+        guiScreens[1].updateRes(1920, 1080);
     }
     /**
      * Creates the retrieve password screen
@@ -92,7 +102,7 @@ public final class UserInterfaceManager {
         guiScreens[2] = new RetrievePassword(assetManager, inputManager, audioRenderer, guiViewPort,
                                         appState, app, Screen);
         guiScreens[2].build();
-        guiScreens[2].updateRes(1366, 768);
+        guiScreens[2].updateRes(1920, 1080);
     }
     public void leaderBoard() {
         guiScreens[5] = new Leaderboard(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen,client);
@@ -104,6 +114,7 @@ public final class UserInterfaceManager {
      */
     public void changeState() {
         loginScreen = !loginScreen;
+        inputManager.setCursorVisible(false);
     }
     /**
      * Adds the mapping of the ESC_KEY to the settings screen, so that it will be called
@@ -123,12 +134,16 @@ public final class UserInterfaceManager {
                             leaderBoard();
                         }
                         inputManager.setCursorVisible(true);
+                        guiNode.detachChild(healthBorder);
+                        guiNode.detachChild(health);
                         guiScreens[3].goTo("Option_Screen");  
                         //state.setEnabled(false);
                         guiScreens[3].updateRes(width, height);
                     } else {
                        // state.setEnabled(true);
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+                        guiNode.attachChild(healthBorder);
+                        guiNode.attachChild(health);
                         inputManager.setCursorVisible(false);
                     }
                 }

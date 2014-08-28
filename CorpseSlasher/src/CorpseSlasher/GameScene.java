@@ -141,7 +141,9 @@ public class GameScene {
         character.processKnocks(mobHits);
         collController.attacksProcessed();
     }
-    
+    public float getHealth() {
+        return character.getHealth();
+    }
     /**
      * retrieveSceneNode to obtain the node that contains all the assests of the
      * scene which will be added to the rootNode for it to be renderable.
