@@ -47,7 +47,7 @@ public class GameScene {
         
         collController = new CollisionController();
         bullet.getPhysicsSpace().addCollisionListener(collController);
-        bullet.getPhysicsSpace().enableDebug(assestManager);
+        //bullet.getPhysicsSpace().enableDebug(assestManager);
     }
     
     /**

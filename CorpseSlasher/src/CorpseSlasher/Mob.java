@@ -151,7 +151,7 @@ public class Mob {
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().add(attackGhost);
         bullet.getPhysicsSpace().add(motionControl.getAggroGhost());
-        bullet.getPhysicsSpace().addAll(mob);   
+        bullet.getPhysicsSpace().addAll(mob);  
     }
     
     /**
@@ -225,26 +225,32 @@ public class Mob {
         if (alive) { //Swap to character control
             mob.setLocalTranslation(passivePosition);
             ragdoll.setKinematicMode();
+            bullet.getPhysicsSpace().removeAll(mob);
+            
             ragdoll.setEnabled(false);
+            
+            mob.removeControl(ModelRagdoll.class);
+            mob.addControl(characterControl);
+            mob.addControl(motionControl.getAggroGhost());
+            mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
+                    .getAttachmentsNode("hand.R").addControl(attackGhost);
+            
             characterControl.setEnabled(true);
             motionControl.getAggroGhost().setEnabled(true);
             attackGhost.setEnabled(true);
-            mob.removeControl(ModelRagdoll.class);
-            mob.addControl(motionControl.getAggroGhost());
-            mob.addControl(characterControl);
-            mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
-                    .getAttachmentsNode("hand.R").addControl(attackGhost);
         } else { //Swap to ragdoll control
             characterControl.setEnabled(false);
             motionControl.getAggroGhost().setEnabled(false);
             attackGhost.setEnabled(false);
             ragdoll.setEnabled(true);
+            
             mob.removeControl(BetterCharacterControl.class);
             mob.removeControl(GhostControl.class);
             mob.addControl(ragdoll);
+            
             ragdoll.setJointLimit("hips", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
             ragdoll.setJointLimit("spine", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
-            ragdoll.setJointLimit("chest", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
+            ragdoll.setJointLimit("chest", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi); 
             bullet.getPhysicsSpace().add(ragdoll);
             ragdoll.setRagdollMode();            
         }
