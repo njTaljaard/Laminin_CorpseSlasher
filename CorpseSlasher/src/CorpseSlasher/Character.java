@@ -315,6 +315,9 @@ public class Character {
     public Vector3f getPosition() {
         return player.getLocalTranslation();
     }
+    public float getHealth() {
+        return health;
+    }
     
     /**
      * retrievePlayerNode an accessor to the game node containing the player model.

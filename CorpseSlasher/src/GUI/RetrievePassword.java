@@ -61,13 +61,11 @@ public class RetrievePassword extends Screens {
                         font("Interface/Fonts/zombie.fnt");
                         childLayoutCenter();
                         backgroundImage("Backgrounds/ZOMBIE1.jpg");
-                        visibleToMouse(true);
                     }
                 });
                 layer(new LayerBuilder("foreground") {
                     {
                         font("Interface/Fonts/zombie.fnt");
-                        visibleToMouse(true);
                         childLayoutVertical();
                         backgroundColor(new Color(.3f, .3f, .3f, .5f));
                         panel(new PanelBuilder("Main_Retrieve_Password") {
@@ -81,7 +79,6 @@ public class RetrievePassword extends Screens {
                                         marginTop("50%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                     }
@@ -93,7 +90,6 @@ public class RetrievePassword extends Screens {
                                         marginTop("50%");
                                         height("5%");
                                         width("15%");
-                                        visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
                                         interactOnClick("erase(#Username_Input_ID_3)");

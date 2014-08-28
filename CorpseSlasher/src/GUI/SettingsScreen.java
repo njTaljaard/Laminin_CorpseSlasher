@@ -572,6 +572,11 @@ public class SettingsScreen extends Screens {
                 });
             }
         }.build(nifty));
+        nifty.addScreen("Sound Settings",new ScreenBuilder("#Sound_Settings"){
+            {
+                
+            }
+        }.build(nifty));
     }
 
     /**
