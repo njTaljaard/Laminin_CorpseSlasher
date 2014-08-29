@@ -184,7 +184,7 @@ public class BasicScene {
         //sceneModel = (Node) assetManager.loadModel("Scenes/" + sceneName + ".j3o");
         Spatial trrn = assetManager.loadModel("Scenes/ZombieAndroidScene.j3o");
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrian/ground.png"));
+        mat.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrian/Terrain.png"));
         //mat.getAdditionalRenderState().setWireframe(true);
         //mat.setColor("Color", ColorRGBA.Green);
         trrn.setMaterial(mat);
