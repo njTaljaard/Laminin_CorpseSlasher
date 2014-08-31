@@ -62,6 +62,7 @@ public class BasicScene {
     private Spatial skybox;
     private SkyControl skyControl;
     private String sceneName;
+    private List<Spatial> treeList;
     private FilterPostProcessor fpp;
     private AmbientLight ambient;
     private WaterFilter postWater;
@@ -182,40 +183,37 @@ public class BasicScene {
      */
     private void initTerrain() {
         //sceneModel = (Node) assetManager.loadModel("Scenes/" + sceneName + ".j3o");
-        Spatial trrn = assetManager.loadModel("Scenes/ZombieAndroidScene.j3o");
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrian/Terrain.png"));
-        //mat.getAdditionalRenderState().setWireframe(true);
-        //mat.setColor("Color", ColorRGBA.Green);
-        trrn.setMaterial(mat);
-        sceneModel = (Node) trrn;
+        sceneModel = (Node) assetManager.loadModel("Scenes/ZombieAndroidScene.j3o");
         sceneModel.setName("Terrian");
         
-        sceneNode.attachChild(sceneModel);
+        Spatial trrn = sceneModel.getChild("terrain-ZombieAndroidScene");
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrian/Terrain.png"));
+        trrn.setMaterial(mat);
+        
                     
-        /*if (sceneModel != null) {
-            sceneModel.setName("Terrian");        
-            Spatial terrain = sceneModel.getChild("terrain-ZombieAndroidScene");
-            terrain.addControl(new RigidBodyControl(0));
-            terrain.getControl(RigidBodyControl.class).setCollisionGroup(1);
-            bullet.getPhysicsSpace().add(terrain);
+        if (sceneModel != null) {
+            /*trrn.addControl(new RigidBodyControl(0));
+            trrn.getControl(RigidBodyControl.class).setCollisionGroup(1);
+            bullet.getPhysicsSpace().add(trrn);*/
             
             Node treeNode = (Node) sceneModel.getChild("Tree");
-            List<Spatial> treeList = treeNode.getChildren();
+            treeList = treeNode.getChildren();
             
             for (int i = 0; i < treeList.size(); i++) {
-                BoxCollisionShape treeCol = new BoxCollisionShape(new Vector3f(0.875f, 3.75f, 0.875f));
+                System.out.println("Tree  :  " + i);
+                /*BoxCollisionShape treeCol = new BoxCollisionShape(new Vector3f(0.875f, 3.75f, 0.875f));
                 RigidBodyControl rig = new RigidBodyControl(treeCol,0);
                 rig.setCollisionGroup(1);
                 
                 treeList.get(i).addControl(rig);
-                bullet.getPhysicsSpace().add(treeList.get(i));
+                bullet.getPhysicsSpace().add(treeList.get(i));*/
             }
             
             sceneNode.attachChild(sceneModel);
         } else {
             System.out.println("I am not loaded - terrain");
-        }*/
+        }
     }
     
     /**
@@ -381,7 +379,7 @@ public class BasicScene {
      * @param tod - Time of day.
      * @param tpf - Time per frame.
      */
-    public void update(TimeOfDay tod, float tpf) {
+    public void update(TimeOfDay tod, float tpf, Vector3f position) {
         /*if (settings.skyDome) {
             skyControl.update(tpf);
             skyControl.getSunAndStars().setHour(tod.getHour());
@@ -392,6 +390,10 @@ public class BasicScene {
                 simpleWater.setLightPosition(sun.getDirection());
             }
         }*/
+        
+        for (Spatial tree : treeList) {
+            tree.lookAt(position, Vector3f.UNIT_Y);
+        }
     }
     
     /**

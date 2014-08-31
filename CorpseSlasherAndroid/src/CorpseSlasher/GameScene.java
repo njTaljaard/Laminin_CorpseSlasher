@@ -142,8 +142,8 @@ public class GameScene {
      * @param tod - TimeOfDay to update the skycontrol time of day.
      * @param tpf - Update value of time between frames.
      */
-    public void update(TimeOfDay tod, float tpf) {
-        basicScene.update(tod, tpf);
+    public void update(TimeOfDay tod, float tpf, Camera cam) {
+        basicScene.update(tod, tpf, cam.getLocation());
         /*playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), 
                 tpf, mobHandler.getAggroState());
         
