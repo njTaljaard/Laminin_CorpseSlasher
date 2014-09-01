@@ -190,7 +190,13 @@ public class Character {
         if (alive) {
             walkDirection = motionController.updateCharacterMotion();
             characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
-
+            
+            if (motionController.walk) {
+                Audio.playCharacterWalk(player.getLocalTranslation());
+            } else {
+                Audio.pauseCharacterWalk();
+            }
+            
             motionController.slash = animController.updateCharacterAnimations(channel, 
                     motionController.slash, motionController.walk, alive);
             
@@ -315,6 +321,8 @@ public class Character {
     public Vector3f getPosition() {
         return player.getLocalTranslation();
     }
+    
+    
     public float getHealth() {
         return health;
     }

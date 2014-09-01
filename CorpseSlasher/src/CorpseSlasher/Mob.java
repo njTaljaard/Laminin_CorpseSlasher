@@ -38,7 +38,7 @@ public class Mob {
     private float health;
     private float eighth_pi;
     private boolean alive;
-    private long deathTime, spawnTime;
+    private long deathTime, spawnTime, regenTime, regenInterval;
     
     /**
      * Mob creates a basic mob the required functionality.
@@ -58,7 +58,8 @@ public class Mob {
         alive = true;
         health = 100;
         eighth_pi = FastMath.PI * 0.125f;
-        spawnTime = new Long("10000000000");
+        this.spawnTime = new Long("10000000000");
+        this.regenInterval = new Long("2000000000");
         
         createMob();
     }
@@ -180,12 +181,19 @@ public class Mob {
         if (alive) {
             characterControl.update(tpf);
             motionControl.updateMobPhase(point, mob, characterControl, passivePosition);
+            
+            if (motionControl.walk) {
+                Audio.playMobWalk(mob.getLocalTranslation());
+            } else {
+                Audio.pauseMobWalk();
+            }
+            
             animControl.updateMobAnimations(channel, motionControl.aggro,
                     motionControl.walkAttack, motionControl.attack, 
                     motionControl.passive, mob.getLocalTranslation());
             
             if (playerHit) {
-                health -= 10;
+                health -= 15;
                 System.out.println(mobName + " i have been hit!!!! My health is " + health);
                 Audio.playMobDamage(mob.getLocalTranslation());
                 
@@ -198,6 +206,14 @@ public class Mob {
                     swapControllers();
                     return "";
                 }
+            }
+            
+            if (!motionControl.aggro && regenTime == new Long("0")) {
+                regenTime = System.nanoTime();
+            } else if (System.nanoTime() - regenTime > regenInterval && health != 100 && !motionControl.aggro) {
+                health += 5;
+                regenTime = new Long("0");
+                System.out.println("Regen time, health is : " + health);
             }
 
             if (animControl.attacking && mobHit) {
@@ -228,16 +244,13 @@ public class Mob {
             bullet.getPhysicsSpace().removeAll(mob);
             
             ragdoll.setEnabled(false);
-            
             mob.removeControl(ModelRagdoll.class);
-            mob.addControl(characterControl);
-            mob.addControl(motionControl.getAggroGhost());
-            mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
-                    .getAttachmentsNode("hand.R").addControl(attackGhost);
             
             characterControl.setEnabled(true);
             motionControl.getAggroGhost().setEnabled(true);
             attackGhost.setEnabled(true);
+            
+            assembleMob();
         } else { //Swap to ragdoll control
             characterControl.setEnabled(false);
             motionControl.getAggroGhost().setEnabled(false);

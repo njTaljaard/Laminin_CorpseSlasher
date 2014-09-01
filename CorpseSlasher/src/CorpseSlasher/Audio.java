@@ -5,7 +5,6 @@ import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.audio.Environment;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 
 /**
  * @author Laminin
@@ -28,6 +27,7 @@ public final class Audio {
     private static AudioNode playerAttack2;
     private static AudioNode playerAttack3;
     private static AudioNode playerDamage;
+    private static AudioNode playerWalk;
     
     private static int mobAttackCount;
     private static AudioNode mobAttack1;
@@ -36,6 +36,7 @@ public final class Audio {
     private static AudioNode mobAttack4;
     private static AudioNode mobAttack5;
     private static AudioNode mobDamage;
+    private static AudioNode mobWalk;
     
     private static Environment env;
     
@@ -123,6 +124,12 @@ public final class Audio {
         playerDamage.setVolume(0.15f);
         playerDamage.setLooping(false);
         playerDamage.setPositional(false);
+        
+        playerWalk = new AudioNode(assetManager, "Audio/walk_l.ogg", false);
+        playerWalk.setMaxDistance(10);
+        playerWalk.setVolume(0.05f);
+        playerWalk.setLooping(false);
+        playerWalk.setPositional(true);
     }
     
     public static void loadMobAudio() {
@@ -166,6 +173,12 @@ public final class Audio {
         mobDamage.setVolume(0.15f);
         mobDamage.setLooping(false);
         mobDamage.setPositional(false);
+        
+        mobWalk = new AudioNode(assetManager, "Audio/walk_r.ogg", false);
+        mobWalk.setMaxDistance(10);
+        mobWalk.setVolume(0.05f);
+        mobWalk.setLooping(false);
+        mobWalk.setPositional(true);
     }
     
     public static void playCharacterAttack(Vector3f position) {
@@ -191,6 +204,15 @@ public final class Audio {
     public static void playCharacterDamage(Vector3f position) {
         playerDamage.setLocalTranslation(position);
         playerDamage.play();
+    }
+    
+    public static void playCharacterWalk(Vector3f position) {
+        playerWalk.setLocalTranslation(position);
+        playerWalk.play();
+    }
+
+    public static void pauseCharacterWalk() {
+        playerWalk.pause();
     }
     
     public static void playMobAttack(Vector3f position) {
@@ -226,5 +248,14 @@ public final class Audio {
     public static void playMobDamage(Vector3f position) {
         mobDamage.setLocalTranslation(position);
         mobDamage.playInstance();
+    }
+    
+    public static void playMobWalk(Vector3f position) {
+        mobWalk.setLocalTranslation(position);
+        mobWalk.play();
+    }
+    
+    public static void pauseMobWalk() {
+        mobWalk.pause();
     }
 }

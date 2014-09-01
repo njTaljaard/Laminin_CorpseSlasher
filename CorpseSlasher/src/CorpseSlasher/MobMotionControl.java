@@ -15,7 +15,7 @@ import com.jme3.scene.Spatial;
  */
 public class MobMotionControl {
     
-    protected boolean aggro, walkAttack, attack, passive;
+    protected boolean aggro, walkAttack, attack, passive, walk;
     private final float runSpeed = 8.0f;
     private final float walkSpeed = 6.0f;
     private Vector3f motionDirection;
@@ -27,6 +27,7 @@ public class MobMotionControl {
         aggro = false;
         walkAttack = false;
         attack = false;
+        walk = false;
         motionDirection = new Vector3f();
         initAggroGhost();
     }
@@ -65,15 +66,19 @@ public class MobMotionControl {
             if (mob.getLocalTranslation().distance(point) < 4.0f) {
                 attack = true;
                 walkAttack = false;
+                walk = false;
             } else if (mob.getLocalTranslation().distance(point) < 8.0f) {
                 walkAttack = true;
+                walk = true;
             } else if (passivePosition.distance(mob.getLocalTranslation()) > 25.0f) {
                 aggro = false;
                 attack = false;
                 walkAttack = false;
+                walk = false;
             } else {
                 attack = false;
                 walkAttack = false;
+                walk = true;
             }
         } else { 
             if (!passive) {
@@ -89,11 +94,13 @@ public class MobMotionControl {
                 if (passivePosition.distance(mob.getLocalTranslation()) > 3.0f) {
                   passivePosition.subtract(mob.getLocalTranslation(), motionDirection);
                   motionDirection.y = 0.0f;
+                  walk = true;
 
                   characterControl.setViewDirection(motionDirection.normalize().multLocal(walkSpeed).negate());
                   characterControl.setWalkDirection(motionDirection.normalize().multLocal(walkSpeed));
                 } else {
                     passive = true;
+                    walk = false;
                     characterControl.setViewDirection(new Vector3f(0, 0, 0));
                     characterControl.setWalkDirection(new Vector3f(0, 0, 0));
                     //set animation channel to passive animation.
