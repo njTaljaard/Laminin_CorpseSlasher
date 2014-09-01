@@ -7,6 +7,7 @@ import GUI.UserInterfaceManager;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 
@@ -87,9 +88,7 @@ public class Main extends SimpleApplication implements ScreenController {
         ClientConnection client = new ClientConnection();
         client.StartClientConnection();
         gSettings = new AppSettings(true);
-<<<<<<< HEAD
         gSettings.setResolution(1366, 768);
-        gSettings.setFullscreen(true);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene,client);
         loggedIn = false;
         flyCam.setEnabled(false);
@@ -104,12 +103,8 @@ public class Main extends SimpleApplication implements ScreenController {
     @Override
     public void simpleUpdate(float tpf) {
         if (loggedIn) {
-<<<<<<< HEAD
             gameScene.update(timeOfDay, tpf);
-=======
-            gameScene.update(bulletAppState, cam, timeOfDay, tpf);
             health.setWidth((gameScene.getHealth()/100f)*(gSettings.getWidth()/2.1f));
->>>>>>> User-Interface
         }
     }
 
@@ -163,14 +158,8 @@ public class Main extends SimpleApplication implements ScreenController {
                 ex.printStackTrace();
             }
         }
-<<<<<<< HEAD
         UI.updateRes(1366, 768);
         gSettings.setResolution(1366, 768);
-=======
-        UI.updateRes(1920, 1080);
-        gSettings.setFullscreen(false);
-        gSettings.setResolution(1920, 1080);
->>>>>>> User-Interface
         this.setSettings(gSettings);
         restart();
         return _settings;
@@ -188,7 +177,6 @@ public class Main extends SimpleApplication implements ScreenController {
                 settingsF);
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
 
-<<<<<<< HEAD
         if (settingsF.skyDome) {
             SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
             skyControl.setEnabled(true);
@@ -197,15 +185,6 @@ public class Main extends SimpleApplication implements ScreenController {
             timeOfDay.setRate(350f);
         }
         
-        loggedIn = true;
-=======
-        SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
-
-        skyControl.setEnabled(true);
-        timeOfDay = new TimeOfDay(5.5f);
-        stateManager.attach(timeOfDay);
-        timeOfDay.setRate(350f);
->>>>>>> User-Interface
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.changeState();
         nifty.setIgnoreKeyboardEvents(true);
