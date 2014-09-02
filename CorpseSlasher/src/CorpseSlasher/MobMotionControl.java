@@ -58,7 +58,7 @@ public class MobMotionControl {
             point.subtract(mob.getLocalTranslation(), motionDirection);
             motionDirection.y = 0.0f;
 
-            if (mob.getLocalTranslation().distance(point) > 4.5f) {
+            if (mob.getLocalTranslation().distance(point) > 5.0f) {
                 characterControl.setViewDirection(motionDirection.normalize().multLocal(runSpeed).negate());
                 characterControl.setWalkDirection(motionDirection.normalize().multLocal(runSpeed)); 
             }

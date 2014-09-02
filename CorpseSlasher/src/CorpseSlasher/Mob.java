@@ -20,7 +20,7 @@ import com.jme3.math.FastMath;
  * @param  COS301
  * Mob is a single instance of a mob to be added to the scene.
  */
-public class Mob {
+public class Mob extends Thread {
     
     protected String mobName;
     protected int handColliosionGroup;
@@ -30,14 +30,16 @@ public class Mob {
     private AnimChannel channel;
     private AnimControl control;
     private Vector3f passivePosition;
+    private MobAudioControl audio;
     private MobAnimControl animControl;
     private MobMotionControl motionControl;
     private BetterCharacterControl characterControl;
     private ModelRagdoll ragdoll;
     private GhostControl attackGhost;
-    private float health;
-    private float eighth_pi;
-    private boolean alive;
+    private Vector3f point;
+    private String attackLanded;
+    private float health, eighth_pi, tpf;
+    private boolean alive, mobHit, playerHit;
     private long deathTime, spawnTime, regenTime, regenInterval;
     
     /**
@@ -58,6 +60,7 @@ public class Mob {
         alive = true;
         health = 100;
         eighth_pi = FastMath.PI * 0.125f;
+        attackLanded = "";
         this.spawnTime = new Long("10000000000");
         this.regenInterval = new Long("2000000000");
         
@@ -68,7 +71,8 @@ public class Mob {
      * createMob will create all the sub sections of the mob and assemble it.
      */
     private void createMob() {
-        animControl = new MobAnimControl();
+        audio = new MobAudioControl(assetManager);
+        animControl = new MobAnimControl(audio);
         motionControl = new MobMotionControl();
         
         initMob();
@@ -167,6 +171,21 @@ public class Mob {
         channel.setAnim("Stand");
         channel.setLoopMode(LoopMode.Cycle); 
     }
+    
+    /**
+     * 
+     * @param point - Vector3f the direction of the player required in 
+     * the attack phase to move the mobs towards the player.
+     * @param playerHit - boolean if the player hit this mob.
+     * @param mobHit - boolean if mob has attacked player.
+     * @param tpf - Time per frame required for updating ragdoll. 
+     */
+    public void set(Vector3f point, boolean playerHit, boolean mobHit, float tpf) {
+        this.point = point;
+        this.playerHit = playerHit;
+        this.mobHit = mobHit;
+        this.tpf = tpf;
+    }
       
     /**
      * updateMob will update the mobs phase according to if aggro was triggers 
@@ -177,15 +196,16 @@ public class Mob {
      * @param mobHit - boolean if mob has attacked player.
      * @param tpf - Time per frame required for updating ragdoll.
      */
-    public String updateMob(Vector3f point, boolean playerHit, boolean mobHit, float tpf) {
+    @Override
+    public void run() {
         if (alive) {
             characterControl.update(tpf);
             motionControl.updateMobPhase(point, mob, characterControl, passivePosition);
             
             if (motionControl.walk) {
-                Audio.playMobWalk(mob.getLocalTranslation());
+                audio.playMobWalk();
             } else {
-                Audio.pauseMobWalk();
+                audio.pauseMobWalk();
             }
             
             animControl.updateMobAnimations(channel, motionControl.aggro,
@@ -195,7 +215,7 @@ public class Mob {
             if (playerHit) {
                 health -= 15;
                 System.out.println(mobName + " i have been hit!!!! My health is " + health);
-                Audio.playMobDamage(mob.getLocalTranslation());
+                audio.playMobDamage(mob.getLocalTranslation());
                 
                 if (health <= 0) {
                     health = 0;
@@ -204,7 +224,8 @@ public class Mob {
                     motionControl.death(characterControl);
                     System.out.println("You killed : " + mobName);
                     swapControllers();
-                    return "";
+                    attackLanded = "";
+                    return;
                 }
             }
             
@@ -218,10 +239,11 @@ public class Mob {
 
             if (animControl.attacking && mobHit) {
                 animControl.attacking = false;
-                return mobName;
+                attackLanded = mobName;
+                return;
             }
             
-            return "";
+            attackLanded = "";
         } else {
             ragdoll.update(tpf);
             if (System.nanoTime() - deathTime > spawnTime) {
@@ -229,7 +251,7 @@ public class Mob {
                 health = 100;
                 swapControllers();
             }
-            return "";
+            attackLanded = "";
         }
     }
     
@@ -272,6 +294,13 @@ public class Mob {
     /**
      * 
      */
+    public String getAttackLanded() {
+        return attackLanded;
+    }
+    
+    /**
+     * 
+     */
     public boolean getAggro() {
         return motionControl.aggro;
     }
@@ -280,7 +309,7 @@ public class Mob {
      * isAlive to determine if the mob is alive.
      * @return alive state.
      */
-    public boolean isAlive() {
+    public boolean alive() {
         return alive;
     }
     

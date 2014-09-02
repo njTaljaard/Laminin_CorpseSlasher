@@ -29,15 +29,6 @@ public final class Audio {
     private static AudioNode playerDamage;
     private static AudioNode playerWalk;
     
-    private static int mobAttackCount;
-    private static AudioNode mobAttack1;
-    private static AudioNode mobAttack2;
-    private static AudioNode mobAttack3;
-    private static AudioNode mobAttack4;
-    private static AudioNode mobAttack5;
-    private static AudioNode mobDamage;
-    private static AudioNode mobWalk;
-    
     private static Environment env;
     
     public static void initAmbient() {
@@ -129,133 +120,35 @@ public final class Audio {
         playerWalk.setMaxDistance(10);
         playerWalk.setVolume(0.05f);
         playerWalk.setLooping(false);
-        playerWalk.setPositional(true);
+        playerWalk.setPositional(false);
     }
     
-    public static void loadMobAudio() {
-        mobAttack1 = new AudioNode(assetManager, "Audio/zombieAttack1.ogg", false);
-        mobAttack1.setTimeOffset(125.0f);
-        mobAttack1.setMaxDistance(10);
-        mobAttack1.setVolume(0.15f);
-        mobAttack1.setLooping(false);
-        mobAttack1.setPositional(false);
-        
-        mobAttack2 = new AudioNode(assetManager, "Audio/zombieAttack2.ogg", false);
-        mobAttack2.setTimeOffset(125.0f);
-        mobAttack2.setMaxDistance(10);
-        mobAttack2.setVolume(0.15f);
-        mobAttack2.setLooping(false);   
-        mobAttack2.setPositional(false);     
-        
-        mobAttack3 = new AudioNode(assetManager, "Audio/zombieAttack3.ogg", false);
-        mobAttack3.setTimeOffset(125.0f);
-        mobAttack3.setMaxDistance(10);
-        mobAttack3.setVolume(0.15f);
-        mobAttack3.setLooping(false);
-        mobAttack3.setPositional(false);
-        
-        mobAttack4 = new AudioNode(assetManager, "Audio/zombieAttack4.ogg", false);
-        mobAttack4.setTimeOffset(125.0f);
-        mobAttack4.setMaxDistance(10);
-        mobAttack4.setVolume(0.15f);
-        mobAttack4.setLooping(false);   
-        mobAttack4.setPositional(false);     
-        
-        mobAttack5 = new AudioNode(assetManager, "Audio/zombieAttack5.ogg", false);
-        mobAttack5.setTimeOffset(125.0f);
-        mobAttack5.setMaxDistance(10);
-        mobAttack5.setVolume(0.15f);
-        mobAttack5.setLooping(false);
-        mobAttack5.setPositional(false);
-        
-        mobDamage = new AudioNode(assetManager, "Audio/playerHitMob.ogg", false);
-        mobDamage.setMaxDistance(10);
-        mobDamage.setVolume(0.15f);
-        mobDamage.setLooping(false);
-        mobDamage.setPositional(false);
-        
-        mobWalk = new AudioNode(assetManager, "Audio/walk_r.ogg", false);
-        mobWalk.setMaxDistance(10);
-        mobWalk.setVolume(0.05f);
-        mobWalk.setLooping(false);
-        mobWalk.setPositional(true);
-    }
-    
-    public static void playCharacterAttack(Vector3f position) {
+    public static void playCharacterAttack() {
         switch (playerAttackCount) {
             case 1  :
-                playerAttack1.setLocalTranslation(position);
                 playerAttack1.play();
                 playerAttackCount++;
                 break;
             case 2  :
-                playerAttack2.setLocalTranslation(position);
                 playerAttack2.play();
                 playerAttackCount++;
                 break;
             default :
-                playerAttack3.setLocalTranslation(position);
                 playerAttack3.play();
                 playerAttackCount = 1;
                 break;
         }
     }
     
-    public static void playCharacterDamage(Vector3f position) {
-        playerDamage.setLocalTranslation(position);
+    public static void playCharacterDamage() {
         playerDamage.play();
     }
     
-    public static void playCharacterWalk(Vector3f position) {
-        playerWalk.setLocalTranslation(position);
+    public static void playCharacterWalk() {
         playerWalk.play();
     }
 
     public static void pauseCharacterWalk() {
         playerWalk.pause();
-    }
-    
-    public static void playMobAttack(Vector3f position) {
-        switch (mobAttackCount) {
-            case 1  :
-                mobAttack1.setLocalTranslation(position);
-                mobAttack1.playInstance();
-                playerAttackCount++;
-                break;
-            case 2  :
-                mobAttack2.setLocalTranslation(position);
-                mobAttack2.playInstance();
-                playerAttackCount++;
-                break;
-            case 3  :
-                mobAttack3.setLocalTranslation(position);
-                mobAttack3.playInstance();
-                playerAttackCount++;
-                break;
-            case 4  :
-                mobAttack4.setLocalTranslation(position);
-                mobAttack4.playInstance();
-                playerAttackCount++;
-                break;
-            default :
-                mobAttack5.setLocalTranslation(position);
-                mobAttack5.playInstance();
-                mobAttackCount = 1;
-                break;
-        }
-    }
-    
-    public static void playMobDamage(Vector3f position) {
-        mobDamage.setLocalTranslation(position);
-        mobDamage.playInstance();
-    }
-    
-    public static void playMobWalk(Vector3f position) {
-        mobWalk.setLocalTranslation(position);
-        mobWalk.play();
-    }
-    
-    public static void pauseMobWalk() {
-        mobWalk.pause();
     }
 }

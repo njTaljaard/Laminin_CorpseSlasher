@@ -105,6 +105,7 @@ public class Main extends SimpleApplication implements ScreenController {
     public void simpleUpdate(float tpf) {
         if (loggedIn) {
             gameScene.update(timeOfDay, tpf);
+            audioRenderer.update(tpf);
             health.setWidth((gameScene.getHealth()/100f)*(gSettings.getWidth()/2.1f));
         }
     }

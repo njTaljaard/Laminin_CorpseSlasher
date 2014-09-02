@@ -192,7 +192,7 @@ public class Character {
             characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
             
             if (motionController.walk) {
-                Audio.playCharacterWalk(player.getLocalTranslation());
+                Audio.playCharacterWalk();
             } else {
                 Audio.pauseCharacterWalk();
             }
@@ -232,17 +232,19 @@ public class Character {
     public void processKnocks(ArrayList<String> knocks) {
         if (alive) {
             for (int i = 0; i < knocks.size(); i++) {
-                health -= 10;
-                System.out.println("Player : ive been slapped by " + knocks.get(i) 
-                        + ". Health is " + health);
-                Audio.playCharacterDamage(player.getLocalTranslation());
-                
-                if (health <= 0) {
-                    health = 0;
-                    alive = false;
-                    deathTime = System.nanoTime();
-                    System.out.println("You were killed by : " + knocks.get(i));
-                    swapControllers();
+                if (!knocks.get(i).equals("")) {
+                    health -= 10;
+                    System.out.println("Player : ive been slapped by " + knocks.get(i) 
+                            + ". Health is " + health);
+                    Audio.playCharacterDamage();
+
+                    if (health <= 0) {
+                        health = 0;
+                        alive = false;
+                        deathTime = System.nanoTime();
+                        System.out.println("You were killed by : " + knocks.get(i));
+                        swapControllers();
+                    }
                 }
             }
         }

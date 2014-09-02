@@ -46,7 +46,6 @@ public class CharacterMotionControl {
                     case "Slash":
                         if (value) {
                             slash = true;
-                            Audio.playCharacterAttack(cam.getLocation());
                         }
                         break;
                     case "Left":

@@ -47,7 +47,7 @@ public class GameScene {
         
         collController = new CollisionController();
         bullet.getPhysicsSpace().addCollisionListener(collController);
-        bullet.getPhysicsSpace().enableDebug(assestManager);
+        //bullet.getPhysicsSpace().enableDebug(assestManager);
     }
     
     /**
@@ -132,10 +132,9 @@ public class GameScene {
      * 
      */
     private void initAudio() {
-        Audio.initAmbient();
-        Audio.loadOcean();
+        //Audio.initAmbient();
+        //Audio.loadOcean();
         Audio.loadCharacterAudio();
-        Audio.loadMobAudio();
     }
     
     /**

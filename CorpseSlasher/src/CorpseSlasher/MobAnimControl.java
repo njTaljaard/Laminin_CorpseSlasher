@@ -17,10 +17,12 @@ import com.jme3.math.Vector3f;
 public class MobAnimControl {
     
     private AnimEventListener animationListener;
+    private MobAudioControl audio;
     public boolean attacking;
     
-    public MobAnimControl() {
+    public MobAnimControl(MobAudioControl audio) {
         initAnimEventListener();
+        this.audio = audio;
         attacking = false;
     }
     
@@ -89,7 +91,7 @@ public class MobAnimControl {
                     channel.setAnim("Attack", 0.05f);
                     channel.setLoopMode(LoopMode.DontLoop);
                     channel.setSpeed(1.0f);
-                    Audio.playMobAttack(position);
+                    audio.playMobAttack(position);
                     attacking = true;
                 }
             } else {
