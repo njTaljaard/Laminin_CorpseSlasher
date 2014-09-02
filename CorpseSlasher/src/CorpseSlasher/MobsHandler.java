@@ -75,34 +75,30 @@ public class MobsHandler {
         //pool = Executors.newFixedThreadPool(12);
         landedAttacks.clear();
         
-        for (Mob mob : mobs) {   
-            if (mob.alive()) {
-                if (playerHits.contains(mob.mobName)) {
-                    if (mobHits.contains(mob.handColliosionGroup)) {
-                        mob.set(point, true, true, tpf);
+        for (Mob mob : mobs) {  
+            if (mob.getPosition().distance(point) < 50) {
+                if (mob.alive()) {
+                    if (playerHits.contains(mob.mobName)) {
+                        if (mobHits.contains(mob.handColliosionGroup)) {
+                            mob.set(point, true, true, tpf);
+                        } else {
+                            mob.set(point, true, false, tpf);
+                        }
                     } else {
-                        mob.set(point, true, false, tpf);
+                        if (mobHits.contains(mob.handColliosionGroup)) {
+                            mob.set(point, false, true, tpf);
+                        } else {
+                            mob.set(point, false, false, tpf);
+                        }
                     }
-                } else {
-                    if (mobHits.contains(mob.handColliosionGroup)) {
-                        mob.set(point, false, true, tpf);
-                    } else {
-                        mob.set(point, false, false, tpf);
-                    }
+
                 }
-                
+
+                pool.execute(mob);
             }
-            
-            System.out.println("Executer :" + mob.getName());
-            pool.execute(mob);
         }
         
-        //pool.shutdown();
-        //while (!pool.isTerminated()) {}
-        
-        System.out.println("wait");
         while (pool.getActiveCount() > 0){}
-        System.out.println("done");
         
         for (Mob mob : mobs) {
                 landedAttacks.add(mob.getAttackLanded());

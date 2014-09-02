@@ -291,6 +291,10 @@ public class Mob extends Thread {
         }
     }
     
+    public Vector3f getPosition() {
+        return mob.getLocalTranslation();
+    }
+    
     /**
      * 
      */
