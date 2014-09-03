@@ -24,6 +24,7 @@ public class Mob extends Thread {
     
     protected String mobName;
     protected int handColliosionGroup;
+    protected boolean swapControllers;
     private Node mob;
     private AssetManager assetManager;
     private BulletAppState bullet;
@@ -223,7 +224,7 @@ public class Mob extends Thread {
                     deathTime = System.nanoTime();
                     motionControl.death(characterControl);
                     System.out.println("You killed : " + mobName);
-                    swapControllers();
+                    swapControllers = true;
                     attackLanded = "";
                     return;
                 }
@@ -245,11 +246,11 @@ public class Mob extends Thread {
             
             attackLanded = "";
         } else {
-            ragdoll.update(tpf);
+            //ragdoll.update(tpf);
             if (System.nanoTime() - deathTime > spawnTime) {
                 alive = true;
                 health = 100;
-                swapControllers();
+                swapControllers = true;
             }
             attackLanded = "";
         }
@@ -259,7 +260,8 @@ public class Mob extends Thread {
      * swapControllers will swap between controllers from BetterCharacterControl
      * will ghost boxes for alive and ragdoll for death.
      */
-    private void swapControllers() {
+    protected void swapControllers() {
+        swapControllers = false;
         if (alive) { //Swap to character control
             mob.setLocalTranslation(passivePosition);
             ragdoll.setKinematicMode();

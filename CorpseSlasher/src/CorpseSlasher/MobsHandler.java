@@ -41,7 +41,7 @@ public class MobsHandler {
         mobs = new ArrayList<>();
         positions = new ArrayList<>();
         landedAttacks = new ArrayList<>();
-        blockingQueue  = new ArrayBlockingQueue<Runnable>(50);
+        blockingQueue  = new ArrayBlockingQueue<>(50);
         pool = new ThreadPoolExecutor(8, 12, Long.MAX_VALUE, TimeUnit.SECONDS, blockingQueue);
         this.assetManager = assMan;
         this.bullet = bullet;
@@ -101,7 +101,10 @@ public class MobsHandler {
         while (pool.getActiveCount() > 0){}
         
         for (Mob mob : mobs) {
-                landedAttacks.add(mob.getAttackLanded());
+            if (mob.swapControllers) {
+                mob.swapControllers();
+            }
+            landedAttacks.add(mob.getAttackLanded());
         }
         
         return landedAttacks;
