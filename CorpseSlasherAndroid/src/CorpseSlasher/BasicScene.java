@@ -1,14 +1,9 @@
 package CorpseSlasher;
 
-import GUI.LoadingScreen;
 import com.jme3.asset.AssetManager;
-import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
-import com.jme3.light.Light;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
@@ -24,24 +19,11 @@ import com.jme3.water.WaterFilter;
 import com.jme3.math.FastMath;
 import com.jme3.math.Plane;
 import com.jme3.math.Quaternion;
-import com.jme3.post.filters.BloomFilter;
-import com.jme3.post.filters.DepthOfFieldFilter;
-import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
-import com.jme3.terrain.geomipmap.TerrainLodControl;
-import com.jme3.terrain.geomipmap.TerrainQuad;
-import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
-import com.jme3.terrain.heightmap.AbstractHeightMap;
-import com.jme3.terrain.heightmap.HeightMap;
-import com.jme3.terrain.heightmap.ImageBasedHeightMap;
-import com.jme3.texture.Texture;
-import com.jme3.util.SkyFactory;
 import com.jme3.water.SimpleWaterProcessor;
 import java.util.List;
-import jme3utilities.Misc;
 import jme3utilities.TimeOfDay;
 
 /**
@@ -109,7 +91,6 @@ public class BasicScene {
         initAmbientLight();
         initSunLight();
         //initWater();
-        //initSkyBox();
         initTerrain();
     }
     
@@ -125,16 +106,6 @@ public class BasicScene {
             simpleWater = null;
         }
         initWater();
-        
-        if (skybox == null) {
-            sceneNode.removeControl(SkyControl.class);
-            skyControl = null;
-        } else {
-            sceneNode.detachChildNamed("skybox");
-            skybox = null;
-        }
-        sceneNode.detachChildAt(2);
-        initSkyBox();
     }
     
     /**
@@ -190,14 +161,13 @@ public class BasicScene {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrian/Terrain.png"));
         trrn.setMaterial(mat);
-        
-                    
+                            
         if (sceneModel != null) {
             /*trrn.addControl(new RigidBodyControl(0));
             trrn.getControl(RigidBodyControl.class).setCollisionGroup(1);
             bullet.getPhysicsSpace().add(trrn);*/
             
-            Node treeNode = (Node) sceneModel.getChild("Tree");
+            /*Node treeNode = (Node) sceneModel.getChild("Tree");
             treeList = treeNode.getChildren();
             
             for (int i = 0; i < treeList.size(); i++) {
@@ -207,8 +177,8 @@ public class BasicScene {
                 rig.setCollisionGroup(1);
                 
                 treeList.get(i).addControl(rig);
-                bullet.getPhysicsSpace().add(treeList.get(i));*/
-            }
+                bullet.getPhysicsSpace().add(treeList.get(i));*
+            }*/
             
             sceneNode.attachChild(sceneModel);
         } else {
@@ -288,91 +258,7 @@ public class BasicScene {
         fpp.addFilter(postWater); 
         vp.addProcessor(fpp);
     }
-    
-    /**
-     * initSkyBox determine if a basic skybox with textures should be create or
-     * a day night system with a moving sun and moon.
-     */
-    private void initSkyBox() {
-        if (settings.skyDome) {
-            initSkyControl();
-        } else {
-            initBasicSky();
-        }
-    }
-     
-    /**
-     * initBasicSky creates a basic sky box for lower performance.
-     */
-    private void initBasicSky() {
-        skybox = SkyFactory.createSky(assetManager, "Textures/Skybox/ZombieScene1.dds", true);
-        skybox.setName("skybox");
-        skybox.setCullHint(Spatial.CullHint.Never);
-        skybox.setQueueBucket(Bucket.Sky);
-        skybox.setLocalTranslation(0.0f, 2000.0f, 0.0f);
-        sceneNode.attachChild(skybox);
-    }
-
-    /**
-     * initSkyControl will create a day night system skybox consisting of a moving 
-     * sun and moon, a rotating star system and a changing day night sky.
-     */
-    private void initSkyControl() {
-        /*
-         *  AssetManager, Camera, Cloud Flattening, Star motion, Bottom dome
-         */
-        skyControl = new SkyControl(assetManager, cam, 0.7f, settings.starMotion, true);
-        skyControl.setCloudModulation(settings.cloudMotion);
-        skyControl.setCloudiness(0.6f);
-        skyControl.setCloudYOffset(0.5f);
-        skyControl.setTopVerticalAngle(1.65f);
-        skyControl.getSunAndStars().setObserverLatitude(37.4046f * FastMath.DEG_TO_RAD);
-        
-        //Add scene light to skycontrol
-        for (Light light : sceneNode.getLocalLightList()) {
-            switch (light.getName()) {
-                case "Ambient":
-                    skyControl.getUpdater().setAmbientLight((AmbientLight) light);
-                    break;
-                case "Sun":
-                    skyControl.getUpdater().setMainLight((DirectionalLight) light);
-                    break;
-            }
-        }
-        
-        /**
-         * @TODO Test setting if bloom is activated
-         */
-        //skyControl.getUpdater().addBloomFilter(initBloomLight(assMan, vp));
-        
-        sceneNode.addControl(skyControl);
-    }
-    
-    /**
-     * initBloomLight will create bloom lighting effect and add it to the skybox
-     * day night system controler.
-     */
-    private BloomFilter initBloomLight() {
-        BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
-        bloom.setBlurScale(2.5f);
-        bloom.setExposurePower(1f);
-        Misc.getFpp(vp, assetManager).addFilter(bloom);
-        
-        return bloom;
-    }
-    
-    /**
-     * 
-     */
-    private void initDepthOfField() {
-        DepthOfFieldFilter dofFilter = new DepthOfFieldFilter();
-        dofFilter.setFocusDistance(50);
-        dofFilter.setFocusRange(100);
-        dofFilter.setBlurScale(1.15f);
-        fpp.addFilter(dofFilter);
-        vp.addProcessor(fpp);
-    }
-        
+            
     /**
      * update runs tests is skycontrol and post water is rendering. Updates of 
      * sky control. Sets the new position of the sun and star system with light.
@@ -380,20 +266,9 @@ public class BasicScene {
      * @param tpf - Time per frame.
      */
     public void update(TimeOfDay tod, float tpf, Vector3f position) {
-        /*if (settings.skyDome) {
-            skyControl.update(tpf);
-            skyControl.getSunAndStars().setHour(tod.getHour());
-            sun.setDirection(skyControl.getUpdater().getDirection());
-            if (settings.postWater) {
-                postWater.setLightDirection(sun.getDirection());
-            } else {
-                simpleWater.setLightPosition(sun.getDirection());
-            }
-        }*/
-        
-        for (Spatial tree : treeList) {
+        /*for (Spatial tree : treeList) {
             tree.lookAt(position, Vector3f.UNIT_Y);
-        }
+        }*/
     }
     
     /**
