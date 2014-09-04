@@ -59,9 +59,11 @@ public final class UserInterfaceManager {
         Screen = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
         guiScreens = new Screens[6];
     }
-    public void updateRes(int width, int height){
+    public void setRes(int width, int height){        
         this.width = width;
         this.height = height;
+    }
+    public void updateRes(int width, int height){
         for(Screens screen_1 : guiScreens){
             if(screen_1 != null)
             screen_1.updateRes(width,height);
@@ -75,7 +77,7 @@ public final class UserInterfaceManager {
         guiScreens[0] = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                 Screen);
         guiScreens[0].build();
-        guiScreens[0].updateRes(1920, 1080);
+        guiScreens[0].updateRes(width, height);
     }
     /**
      * Creates the new account account screen
@@ -84,7 +86,7 @@ public final class UserInterfaceManager {
          guiScreens[1] = new NewAccount(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                            Screen);
         guiScreens[1].build();
-        guiScreens[1].updateRes(1920, 1080);
+        guiScreens[1].updateRes(width, height);
     }
     /**
      * Creates the retrieve password screen
@@ -93,12 +95,12 @@ public final class UserInterfaceManager {
         guiScreens[2] = new RetrievePassword(assetManager, inputManager, audioRenderer, guiViewPort,
                                         appState, app, Screen);
         guiScreens[2].build();
-        guiScreens[2].updateRes(1920, 1080);
+        guiScreens[2].updateRes(width, height);
     }
     public void leaderBoard() {
         guiScreens[5] = new Leaderboard(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen,client);
         guiScreens[5].build();
-        guiScreens[5].updateRes(1920, 1080);
+        guiScreens[5].updateRes(width, height);
     }
     /**
      * Updates the state of the game so that settings menu can be called after login only
@@ -126,7 +128,7 @@ public final class UserInterfaceManager {
                         inputManager.setCursorVisible(true);
                         guiScreens[3].goTo("Option_Screen");  
                         //state.setEnabled(false);
-                        guiScreens[3].updateRes(1920, 1080);
+                        guiScreens[3].updateRes(width, height);
                     } else {
                        // state.setEnabled(true);
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
@@ -152,7 +154,8 @@ public final class UserInterfaceManager {
     public void loadingScreen() {
         guiScreens[4] = new LoadingScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
 
-        guiScreens[4].updateRes(1920, 1080);
+        //guiScreens[4].updateRes(1280, 800);
+        guiScreens[4].updateRes(width, height);
     }
     /**
      * 

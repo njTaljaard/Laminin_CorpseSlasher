@@ -62,6 +62,7 @@ public class Main extends SimpleApplication implements ScreenController {
     Nifty nifty;
     GameSettings settingsF;
     Screen screen;
+    int width,height;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -79,14 +80,17 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
+        height = 1080;
+        width = 1920;
         Audio.assetManager = assetManager;
         Audio.audioRenderer = audioRenderer;
         ClientConnection client = new ClientConnection();
         client.StartClientConnection();
         gSettings = new AppSettings(true);
-        gSettings.setResolution(1366, 768);
+        gSettings.setResolution(width, height);
         gSettings.setFullscreen(true);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene,client);
+        UI.setRes(width, height);
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.setCursorVisible(true);
@@ -154,8 +158,10 @@ public class Main extends SimpleApplication implements ScreenController {
                 ex.printStackTrace();
             }
         }*/
-        UI.updateRes(1366, 768);
-        gSettings.setResolution(1366, 768);
+        //UI.updateRes(1280, 800);
+        //gSettings.setResolution(1280, 800);
+        UI.updateRes(width, height);
+        gSettings.setResolution(width, height);
         this.setSettings(gSettings);
         restart();
         return _settings;
