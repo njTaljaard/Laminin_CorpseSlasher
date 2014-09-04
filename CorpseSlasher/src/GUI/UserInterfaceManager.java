@@ -84,7 +84,7 @@ public final class UserInterfaceManager {
         guiScreens[0] = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                 Screen);
         guiScreens[0].build();
-        guiScreens[0].updateRes(1920, 1080);
+        guiScreens[0].updateRes(1366, 768);
     }
     /**
      * Creates the new account account screen

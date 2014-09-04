@@ -76,7 +76,7 @@ public class MobAudioControl {
     }
     
     public void playMobAttack(Vector3f position) {
-        /*switch (mobAttackCount) {
+        switch (mobAttackCount) {
             case 1  :
                 mobAttack1.setLocalTranslation(position);
                 mobAttack1.play();
@@ -102,19 +102,19 @@ public class MobAudioControl {
                 mobAttack5.play();
                 mobAttackCount = 1;
                 break;
-        }*/
+        }
     }
     
     public void playMobDamage(Vector3f position) {
-        //mobDamage.setLocalTranslation(position);
-        //mobDamage.play();
+        mobDamage.setLocalTranslation(position);
+        mobDamage.play();
     }
     
     public void playMobWalk() {
-        //mobWalk.play();
+        mobWalk.play();
     }
     
     public void pauseMobWalk() {
-        //mobWalk.pause();
+        mobWalk.pause();
     }
 }

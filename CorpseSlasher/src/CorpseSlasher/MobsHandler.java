@@ -101,6 +101,25 @@ public class MobsHandler {
         while (pool.getActiveCount() > 0){}
         
         for (Mob mob : mobs) {
+            if (mob.alive()) {
+                if (mob.walkAudio) {
+                    Audio.playMobWalk();
+                } else {
+                    Audio.pauseMobWalk();
+                }
+
+                if (mob.attackAudio) {
+                    Audio.playMobAttack(mob.getPosition());
+                }
+
+                if (mob.damageAudio) {
+                    Audio.playMobDamage(mob.getPosition());
+                }
+            }
+            mob.walkAudio = false;
+            mob.attackAudio = false;
+            mob.damageAudio = false;
+            
             if (mob.swapControllers) {
                 mob.swapControllers();
             }

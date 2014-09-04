@@ -24,14 +24,14 @@ public class Mob extends Thread {
     
     protected String mobName;
     protected int handColliosionGroup;
-    protected boolean swapControllers;
+    protected boolean swapControllers, attackAudio, walkAudio, damageAudio;
     private Node mob;
     private AssetManager assetManager;
     private BulletAppState bullet;
     private AnimChannel channel;
     private AnimControl control;
     private Vector3f passivePosition;
-    private MobAudioControl audio;
+    //private MobAudioControl audio;
     private MobAnimControl animControl;
     private MobMotionControl motionControl;
     private BetterCharacterControl characterControl;
@@ -72,8 +72,8 @@ public class Mob extends Thread {
      * createMob will create all the sub sections of the mob and assemble it.
      */
     private void createMob() {
-        audio = new MobAudioControl(assetManager);
-        animControl = new MobAnimControl(audio);
+        //audio = new MobAudioControl(assetManager);
+        animControl = new MobAnimControl();
         motionControl = new MobMotionControl();
         
         initMob();
@@ -204,19 +204,19 @@ public class Mob extends Thread {
             motionControl.updateMobPhase(point, mob, characterControl, passivePosition);
             
             if (motionControl.walk) {
-                audio.playMobWalk();
+                walkAudio = true;
             } else {
-                audio.pauseMobWalk();
+                walkAudio = false;
             }
             
-            animControl.updateMobAnimations(channel, motionControl.aggro,
+            attackAudio = animControl.updateMobAnimations(channel, motionControl.aggro,
                     motionControl.walkAttack, motionControl.attack, 
                     motionControl.passive, mob.getLocalTranslation());
             
             if (playerHit) {
                 health -= 15;
                 System.out.println(mobName + " i have been hit!!!! My health is " + health);
-                audio.playMobDamage(mob.getLocalTranslation());
+                damageAudio = true;
                 
                 if (health <= 0) {
                     health = 0;
@@ -228,6 +228,8 @@ public class Mob extends Thread {
                     attackLanded = "";
                     return;
                 }
+            } else {
+                damageAudio = false;
             }
             
             if (!motionControl.aggro && regenTime == new Long("0")) {

@@ -17,12 +17,10 @@ import com.jme3.math.Vector3f;
 public class MobAnimControl {
     
     private AnimEventListener animationListener;
-    private MobAudioControl audio;
     public boolean attacking;
     
-    public MobAnimControl(MobAudioControl audio) {
+    public MobAnimControl() {
         initAnimEventListener();
-        this.audio = audio;
         attacking = false;
     }
     
@@ -76,7 +74,7 @@ public class MobAnimControl {
      * @param attack - Boolean if mob can be stationary and attack.
      * @param passive - Boolean if mob is not aggroed and at spawn position.
      */
-    public void updateMobAnimations(AnimChannel channel, boolean aggro, 
+    public boolean updateMobAnimations(AnimChannel channel, boolean aggro, 
             boolean walkAttack, boolean attack, boolean passive, Vector3f position) {
         if (aggro) {                
             if (walkAttack) {
@@ -91,8 +89,8 @@ public class MobAnimControl {
                     channel.setAnim("Attack", 0.05f);
                     channel.setLoopMode(LoopMode.DontLoop);
                     channel.setSpeed(1.0f);
-                    audio.playMobAttack(position);
                     attacking = true;
+                    return true;
                 }
             } else {
                 if (!channel.getAnimationName().equals("Walk")){
@@ -113,6 +111,7 @@ public class MobAnimControl {
                 channel.setLoopMode(LoopMode.Cycle);                    
             }
         }
+        return false;
     }
     
     /**

@@ -88,7 +88,7 @@ public class Main extends SimpleApplication implements ScreenController {
         ClientConnection client = new ClientConnection();
         client.StartClientConnection();
         gSettings = new AppSettings(true);
-        gSettings.setResolution(1920, 1080);
+        gSettings.setResolution(1366, 768);
         gSettings.setFullscreen(true);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene,client);
         loggedIn = false;
@@ -160,9 +160,9 @@ public class Main extends SimpleApplication implements ScreenController {
                 ex.printStackTrace();
             }
         }
-        UI.updateRes(1920, 1080);
+        UI.updateRes(1366, 768);
         gSettings.setFullscreen(true);
-        gSettings.setResolution(1920, 1080);
+        gSettings.setResolution(1366, 768);
         this.setSettings(gSettings);
         restart();
         return _settings;
@@ -192,7 +192,7 @@ public class Main extends SimpleApplication implements ScreenController {
         UI.changeState();
         nifty.setIgnoreKeyboardEvents(true);
         inputManager.setCursorVisible(false);
-        guiNode.setQueueBucket(Bucket.Gui);
+        //guiNode.setQueueBucket(Bucket.Gui);
         healthBorder = new Picture("Health Bar");
         health = new Picture("Health");
         healthBorder.setImage(assetManager, "HUD/Healthbar.png", true);
