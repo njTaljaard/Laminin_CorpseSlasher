@@ -16,6 +16,7 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.ElementBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
@@ -23,6 +24,7 @@ import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.checkbox.builder.CheckboxBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
+import de.lessvoid.nifty.controls.slider.builder.SliderBuilder;
 import de.lessvoid.nifty.screen.ScreenController;
 import java.awt.Toolkit;
 
@@ -124,6 +126,7 @@ public class SettingsScreen extends Screens {
                                         width("150px");
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Sound_Settings)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Leaderboard") {
@@ -211,6 +214,7 @@ public class SettingsScreen extends Screens {
                                         width("150px");
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Sound_Settings)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Leaderboard") {
@@ -499,6 +503,7 @@ public class SettingsScreen extends Screens {
                                         width("150px");
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Sound_Settings)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Leaderboard") {
@@ -574,6 +579,214 @@ public class SettingsScreen extends Screens {
         }.build(nifty));
         nifty.addScreen("Sound Settings",new ScreenBuilder("#Sound_Settings"){
             {
+                controller(new SettingsController(UI,scene));
+                layer(new LayerBuilder("background") {
+                    {
+                        font("Interface/Fonts/zombie.fnt");
+                        childLayoutCenter();;
+                        backgroundImage("Backgrounds/ZOMBIE1.jpg");
+                        visibleToMouse(true);
+                    }
+                });
+                layer(new LayerBuilder("foreground") {
+                    {
+                        font("Interface/Fonts/zombie.fnt");
+                        childLayoutOverlay();
+                        panel(new PanelBuilder("Settings") {
+                            {
+                                font("Interface/Fonts/zombie.fnt");
+                                childLayoutVertical();
+                                control(new ButtonBuilder("", "Display Settings") {
+                                    {
+                                        marginTop("48%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(ElementBuilder.Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(Display_Settings)");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Difficulty Settings") {
+                                    {
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(ElementBuilder.Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Graphics Settings") {
+                                    {
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(ElementBuilder.Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(Graphics_Extension)");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Sound Settings") {
+                                    {
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(ElementBuilder.Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Leaderboard") {
+                                    {
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(ElementBuilder.Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(Leader_Board)");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Quit Game") {
+                                    {
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(ElementBuilder.Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("quitGame()");
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+                layer(new LayerBuilder("Settings") {
+                    {
+                       childLayoutVertical();
+                        panel(new PanelBuilder("#Master_Volume_Panel") {
+                            {
+                                childLayoutHorizontal();
+                                marginLeft("30%");
+                                marginTop("35%");
+                                control(new LabelBuilder("", "Master Volume : ") {
+                                    {
+                                        color("#ff0000");
+                                        font("Interface/Fonts/zombie.fnt");
+                                    }
+                                });
+                                control(new SliderBuilder("#Master_Volume", false){
+                                    {
+                                        marginLeft("20px");
+                                        min(0);
+                                        max(100);
+                                        width("25%");
+                                    }
+                                });
+                            }
+                        });
+                        panel(new PanelBuilder("#Ambient_Volume_Panel") {
+                            {
+                                childLayoutHorizontal();
+                                marginLeft("30%");
+                                marginTop("8%");
+                                control(new LabelBuilder("", "Ambient Volume : ") {
+                                    {
+                                        color("#ff0000");
+                                        font("Interface/Fonts/zombie.fnt");
+                                    }
+                                });
+                                control(new SliderBuilder("#Ambient_Volume", false){
+                                    {
+                                        marginLeft("20px");
+                                        min(0);
+                                        max(100);
+                                        width("25%");
+                                    }
+                                });
+                            }
+                        });
+                        panel(new PanelBuilder("#Combat_Volume_Panel") {
+                            {
+                                childLayoutHorizontal();
+                                marginLeft("30%");
+                                marginTop("8%");
+                                control(new LabelBuilder("", "Combat Volume : ") {
+                                    {
+                                        color("#ff0000");
+                                        font("Interface/Fonts/zombie.fnt");
+                                    }
+                                });
+                                control(new SliderBuilder("#Combat_Volume", false){
+                                    {
+                                        marginLeft("20px");
+                                        min(0);
+                                        max(100);
+                                        width("25%");
+                                    }
+                                });
+                            }
+                        });
+                        panel(new PanelBuilder("#Dialog_Volume_Panel") {
+                            {
+                                childLayoutHorizontal();
+                                marginLeft("30%");
+                                marginTop("8%");
+                                control(new LabelBuilder("", "Dialog Volume : ") {
+                                    {
+                                        color("#ff0000");
+                                        font("Interface/Fonts/zombie.fnt");
+                                    }
+                                });
+                                control(new SliderBuilder("#Dialog_Volume", false){
+                                    {
+                                        marginLeft("20px");
+                                        min(0);
+                                        max(100);
+                                        width("25%");
+                                    }
+                                });
+                            }
+                        });
+                        panel(new PanelBuilder("#Footsteps_Volume_Panel") {
+                            {
+                                childLayoutHorizontal();
+                                marginLeft("30%");
+                                marginTop("8%");
+                                control(new LabelBuilder("", "Footsteps Volume : ") {
+                                    {
+                                        color("#ff0000");
+                                        font("Interface/Fonts/zombie.fnt");
+                                    }
+                                });
+                                control(new SliderBuilder("#Footsteps_Volume", false){
+                                    {
+                                        marginLeft("20px");
+                                        min(0);
+                                        max(100);
+                                        width("25%");
+                                    }
+                                });
+                            }
+                        });
+                        panel(new PanelBuilder("Apply_Panel") {
+                            {
+                                childLayoutHorizontal();
+                                marginLeft("45%");
+                                marginTop("5%");
+                                control(new ButtonBuilder("#Apply_Button", "Apply Settings") {
+                                    {
+                                        interactOnClick("soundApply()");
+                                        font("Interface/Fonts/zombie.fnt");
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
                 
             }
         }.build(nifty));

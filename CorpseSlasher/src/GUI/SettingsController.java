@@ -7,6 +7,8 @@ import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.Slider;
+import de.lessvoid.nifty.controls.SliderChangedEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import java.io.FileNotFoundException;
@@ -22,6 +24,7 @@ public class SettingsController implements ScreenController {
     private GameSettings settings = new GameSettings();
     private UserInterfaceManager UI;
     private boolean x1,x2,x3,x4,x5,x6,x7,x8,x9,x10;
+    public static float mVol, aVol, cVol, dVol, fVol;
     private Nifty nifty;
     private Screen screen;
     private GameScene scene;
@@ -38,11 +41,12 @@ public class SettingsController implements ScreenController {
         ListBox listBox = screen.findNiftyControl("Resolution_Opts", ListBox.class);
         listBox.addItem("1920 X 1080");
         listBox.addItem("1600 X 900");
-        listBox.addItem("1280 X 720");
+        listBox.addItem("1280 X 800");
+        listBox.addItem("1366 X 768");
         listBox.addItem("1024 X 768");
-        listBox.addItem("800 X 600");
-        
-            CheckBox checkbox = null; 
+        listBox.addItem("1280 X 720");
+        listBox.addItem("800 X 600");       
+        CheckBox checkbox = null; 
         try {
             Scanner scFile = new Scanner(new FileReader("GameSettings.txt"));
             while(scFile.hasNextLine()){
@@ -102,6 +106,39 @@ public class SettingsController implements ScreenController {
             }
             }
             scFile.close();
+            scFile = new Scanner(new FileReader("SoundSettins.ini"));
+            Slider slider = null;
+            while(scFile.hasNextLine()){
+                String line = scFile.nextLine();
+                String[] parts = line.split("=");
+                switch(parts[0]){
+                    case "Master":
+                        slider = screen.findNiftyControl("#Master_Volume_Panel", Slider.class);                        
+                        mVol = Float.parseFloat(parts[1]);
+                        slider.setValue(mVol);
+                        break;
+                    case "Ambient":
+                        slider = screen.findNiftyControl("#Ambient_Volume_Panel", Slider.class);
+                        aVol = Float.parseFloat(parts[1]);
+                        slider.setValue(aVol);
+                        break;
+                    case "Combat":
+                        slider = screen.findNiftyControl("#Combat_Volume_Panel", Slider.class);
+                        cVol = Float.parseFloat(parts[1]);
+                        slider.setValue(cVol);
+                        break;
+                    case "Dialog" :
+                        slider = screen.findNiftyControl("#Dialog_Volume_Panel", Slider.class);
+                        dVol = Float.parseFloat(parts[1]);
+                        slider.setValue(dVol);
+                        break;
+                    case "Footsteps" :
+                        slider = screen.findNiftyControl("#Master_Volume_Panel", Slider.class);
+                        fVol = Float.parseFloat(parts[1]);
+                        slider.setValue(fVol);
+                        break;
+                }
+            }
         } catch (FileNotFoundException ex) {
         }
         
@@ -221,7 +258,9 @@ public class SettingsController implements ScreenController {
       * Applys the settings according to the selected and deselected check boxes
       */
      public void applySettings(){
-        settings = new GameSettings();        
+         if(settings == null){
+        settings = new GameSettings();   
+         }    
         settings.updateSettings(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10);
         settings.apply();
         //Still needs to be added
@@ -244,5 +283,31 @@ public class SettingsController implements ScreenController {
      }
      public void goTo(String _screen){
          nifty.gotoScreen(_screen);
+     }
+     @NiftyEventSubscriber(id = "#Master_Volume")
+     public void volumeSliderM(final String id,SliderChangedEvent event){
+         mVol  = event.getValue();
+     }
+     @NiftyEventSubscriber(id = "#Ambient_Volume")
+     public void volumeSliderA(final String id,SliderChangedEvent event){
+         aVol  = event.getValue();
+     }
+     @NiftyEventSubscriber(id = "#Combat_Volume")
+     public void volumeSliderC(final String id,SliderChangedEvent event){
+         cVol  = event.getValue();
+     }
+     @NiftyEventSubscriber(id = "#Dialog_Volume")
+     public void volumeSliderD(final String id,SliderChangedEvent event){
+         dVol  = event.getValue();
+     }
+     @NiftyEventSubscriber(id = "#Footsteps_Volume")
+     public void volumeSliderF(final String id,SliderChangedEvent event){
+         fVol  = event.getValue();
+     }  
+     public void soundApply(){
+         if(settings == null){
+            settings = new GameSettings();   
+         }   
+         settings.updateSound(mVol,aVol,cVol,dVol,fVol);
      }
 }
