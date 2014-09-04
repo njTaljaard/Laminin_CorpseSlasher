@@ -41,6 +41,7 @@ public class LoginScreen extends Screens {
      */
     public void build() {
         nifty = screen.getNifty();
+        //nifty.enableAutoScaling(1280, 800);
         nifty.enableAutoScaling(1920, 1080);
         nifty.setIgnoreKeyboardEvents(true);
         guiViewPort.addProcessor(screen);

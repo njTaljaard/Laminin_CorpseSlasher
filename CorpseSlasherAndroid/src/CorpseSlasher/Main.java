@@ -84,7 +84,7 @@ public class Main extends SimpleApplication implements ScreenController {
         ClientConnection client = new ClientConnection();
         client.StartClientConnection();
         gSettings = new AppSettings(true);
-        gSettings.setResolution(1366, 768);
+        gSettings.setResolution(1280, 800);
         gSettings.setFullscreen(true);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene,client);
         loggedIn = false;
@@ -154,8 +154,10 @@ public class Main extends SimpleApplication implements ScreenController {
                 ex.printStackTrace();
             }
         }*/
-        UI.updateRes(1366, 768);
-        gSettings.setResolution(1366, 768);
+        //UI.updateRes(1280, 800);
+        //gSettings.setResolution(1280, 800);
+        UI.updateRes(1920, 1080);
+        gSettings.setResolution(1920, 1080);
         this.setSettings(gSettings);
         restart();
         return _settings;
