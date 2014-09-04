@@ -67,6 +67,7 @@ public class Main extends SimpleApplication implements ScreenController {
     Screen screen;
     Picture healthBorder;
     Picture health;
+    int width, height;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -84,12 +85,15 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
+        width = 1920;
+        height = 1080;
         ClientConnection client = new ClientConnection();
         client.StartClientConnection();
         gSettings = new AppSettings(true);
-        gSettings.setResolution(1920, 1080);
+        gSettings.setResolution(width, height);
         gSettings.setFullscreen(false);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene, client);
+        UI.setRes(width, height);
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
@@ -120,8 +124,6 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public GameSettings loadSettings() {
         GameSettings _settings = new GameSettings();
-        int height = 600;
-        int width = 800;
         try {
             try (Scanner in = new Scanner(new FileReader("GameSettings.txt"))) {
                 while (in.hasNextLine()) {
@@ -157,10 +159,11 @@ public class Main extends SimpleApplication implements ScreenController {
                 ex.printStackTrace();
             }
         }
-        UI.updateRes(1920, 1080);
+        UI.updateRes(width, height);
         gSettings.setFullscreen(false);
-        gSettings.setResolution(1920, 1080);
+        gSettings.setResolution(width, height);
         this.setSettings(gSettings);
+        UI.setSettings(gSettings);
         restart();
         return _settings;
     }

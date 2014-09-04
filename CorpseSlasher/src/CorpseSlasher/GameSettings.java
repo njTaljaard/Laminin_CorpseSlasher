@@ -110,8 +110,20 @@ public class GameSettings {
             contents.close();
         }
     }
-    public void updateSound(float mVol,float aVol,float cVol,float dVol,float fVol){
+    public void updateSound(float mVol,float aVol,float cVol,float dVol,float fVol) throws IOException{
+        GameSettings.mVol = mVol;
+        GameSettings.aVol = aVol;
+        GameSettings.cVol = cVol;
+        GameSettings.dVol = dVol;
+        GameSettings.fVol = fVol;
         
+        FileWriter soundFile = new FileWriter("SoundSettings.ini");
+        soundFile.append("Master="+mVol+"\n");
+        soundFile.append("Ambient="+aVol+"\n");
+        soundFile.append("Combat="+cVol+"\n");
+        soundFile.append("Dialog="+dVol+"\n");
+        soundFile.append("Footsteps="+fVol+"\n");
+        soundFile.close();
     }
 
     public GameSettings(boolean[] settings) {

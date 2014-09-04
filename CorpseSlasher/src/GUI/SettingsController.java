@@ -13,7 +13,10 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -106,39 +109,40 @@ public class SettingsController implements ScreenController {
             }
             }
             scFile.close();
-            scFile = new Scanner(new FileReader("SoundSettins.ini"));
+            Scanner soundScanner = new Scanner(new FileReader("SoundSettings.ini"));
             Slider slider = null;
-            while(scFile.hasNextLine()){
-                String line = scFile.nextLine();
+            while(soundScanner.hasNextLine()){
+                String line = soundScanner.nextLine();
                 String[] parts = line.split("=");
                 switch(parts[0]){
                     case "Master":
-                        slider = screen.findNiftyControl("#Master_Volume_Panel", Slider.class);                        
+                        slider = screen.findNiftyControl("#Master_Volume", Slider.class);                        
                         mVol = Float.parseFloat(parts[1]);
                         slider.setValue(mVol);
                         break;
                     case "Ambient":
-                        slider = screen.findNiftyControl("#Ambient_Volume_Panel", Slider.class);
+                        slider = screen.findNiftyControl("#Ambient_Volume", Slider.class);
                         aVol = Float.parseFloat(parts[1]);
                         slider.setValue(aVol);
                         break;
                     case "Combat":
-                        slider = screen.findNiftyControl("#Combat_Volume_Panel", Slider.class);
+                        slider = screen.findNiftyControl("#Combat_Volume", Slider.class);
                         cVol = Float.parseFloat(parts[1]);
                         slider.setValue(cVol);
                         break;
                     case "Dialog" :
-                        slider = screen.findNiftyControl("#Dialog_Volume_Panel", Slider.class);
+                        slider = screen.findNiftyControl("#Dialog_Volume", Slider.class);
                         dVol = Float.parseFloat(parts[1]);
                         slider.setValue(dVol);
                         break;
                     case "Footsteps" :
-                        slider = screen.findNiftyControl("#Master_Volume_Panel", Slider.class);
+                        slider = screen.findNiftyControl("#Footsteps_Volume", Slider.class);
                         fVol = Float.parseFloat(parts[1]);
                         slider.setValue(fVol);
                         break;
                 }
             }
+            soundScanner.close();
         } catch (FileNotFoundException ex) {
         }
         
@@ -273,7 +277,7 @@ public class SettingsController implements ScreenController {
          String height = res[1];
          settings.updateSettings("width", width);         
          settings.updateSettings("height", height);
-         //UI.updateRes(Integer.parseInt(width),Integer.parseInt(height));
+         UI.updateRes(Integer.parseInt(width),Integer.parseInt(height));
      }
      /**
       * Quits the game
@@ -308,6 +312,10 @@ public class SettingsController implements ScreenController {
          if(settings == null){
             settings = new GameSettings();   
          }   
-         settings.updateSound(mVol,aVol,cVol,dVol,fVol);
+        try {
+            settings.updateSound(mVol,aVol,cVol,dVol,fVol);
+        } catch (IOException ex) {
+            Logger.getLogger(SettingsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
      }
 }
