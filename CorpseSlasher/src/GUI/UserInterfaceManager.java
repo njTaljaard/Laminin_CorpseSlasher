@@ -15,6 +15,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 
 /**
@@ -41,6 +42,7 @@ public final class UserInterfaceManager {
     private Picture healthBorder;
     private Picture health;
     private Node guiNode;
+    private AppSettings settings;
     /**
      * 
      * @param assetManager
@@ -69,13 +71,21 @@ public final class UserInterfaceManager {
         this.healthBorder = border;
         this.health = health;
     }
-    public void updateRes(int width, int height){
+    public void setRes(int width, int height){        
         this.width = width;
         this.height = height;
+    }
+    public void updateRes(int width, int height){
         for(Screens screen_1 : guiScreens){
             if(screen_1 != null)
             screen_1.updateRes(width,height);
+            Screen.getNifty().enableAutoScaling(width, height);            
         }
+        //settings.setResolution(width, height);
+        app.restart();
+    }
+    public void setSettings(AppSettings settings){
+        this.settings = settings;
     }
     /**
      * Creates the login screen
@@ -84,7 +94,7 @@ public final class UserInterfaceManager {
         guiScreens[0] = new LoginScreen(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                 Screen);
         guiScreens[0].build();
-        guiScreens[0].updateRes(1366, 768);
+        guiScreens[0].updateRes(width, height);
     }
     /**
      * Creates the new account account screen
@@ -93,7 +103,7 @@ public final class UserInterfaceManager {
          guiScreens[1] = new NewAccount(assetManager, inputManager, audioRenderer, guiViewPort, appState, app,
                                            Screen);
         guiScreens[1].build();
-        guiScreens[1].updateRes(1920, 1080);
+        guiScreens[1].updateRes(width, height);
     }
     /**
      * Creates the retrieve password screen
@@ -102,7 +112,7 @@ public final class UserInterfaceManager {
         guiScreens[2] = new RetrievePassword(assetManager, inputManager, audioRenderer, guiViewPort,
                                         appState, app, Screen);
         guiScreens[2].build();
-        guiScreens[2].updateRes(1920, 1080);
+        guiScreens[2].updateRes(width, height);
     }
     public void leaderBoard() {
         guiScreens[5] = new Leaderboard(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen,client);

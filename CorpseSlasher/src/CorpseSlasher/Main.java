@@ -7,6 +7,7 @@ import GUI.UserInterfaceManager;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
@@ -66,10 +67,11 @@ public class Main extends SimpleApplication implements ScreenController {
     Screen screen;
     Picture healthBorder;
     Picture health;
+    int width, height;
 
     public static void main(String[] args) {
         Main app = new Main();
-        app.setShowSettings(true);
+        app.setShowSettings(false);
         app.setDisplayFps(true);
         app.setDisplayStatView(false);
         System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
@@ -83,14 +85,15 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
-        Audio.assetManager = assetManager;
-        Audio.audioRenderer = audioRenderer;
+        width = 1920;
+        height = 1080;
         ClientConnection client = new ClientConnection();
         client.StartClientConnection();
         gSettings = new AppSettings(true);
-        gSettings.setResolution(1366, 768);
-        gSettings.setFullscreen(true);
-        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene,client);
+        gSettings.setResolution(width, height);
+        gSettings.setFullscreen(false);
+        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene, client);
+        UI.setRes(width, height);
         loggedIn = false;
         flyCam.setEnabled(false);
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
@@ -104,8 +107,7 @@ public class Main extends SimpleApplication implements ScreenController {
     @Override
     public void simpleUpdate(float tpf) {
         if (loggedIn) {
-            gameScene.update(timeOfDay, tpf);
-            audioRenderer.update(tpf);
+            gameScene.update(bulletAppState, cam, timeOfDay, tpf);
             health.setWidth((gameScene.getHealth()/100f)*(gSettings.getWidth()/2.1f));
         }
     }
@@ -117,14 +119,11 @@ public class Main extends SimpleApplication implements ScreenController {
 
     /**
      *
-     * @return returns the GameSettings object that contains all the 
-     * previously saved settings loaded from the text file with the
-     * settings and their values
+     * @return an array of booleans checking which settings to activate. Loading
+     * the settings based on the .txt file
      */
     public GameSettings loadSettings() {
         GameSettings _settings = new GameSettings();
-        int height = 600;
-        int width = 800;
         try {
             try (Scanner in = new Scanner(new FileReader("GameSettings.txt"))) {
                 while (in.hasNextLine()) {
@@ -160,39 +159,35 @@ public class Main extends SimpleApplication implements ScreenController {
                 ex.printStackTrace();
             }
         }
-        UI.updateRes(1366, 768);
-        gSettings.setFullscreen(true);
-        gSettings.setResolution(1366, 768);
+        UI.updateRes(width, height);
+        gSettings.setFullscreen(false);
+        gSettings.setResolution(width, height);
         this.setSettings(gSettings);
+        UI.setSettings(gSettings);
         restart();
         return _settings;
     }
-    /**
-     * Loads the game according to the specified gamesettings object, also
-     * loads the bullet physics for the charaters and enemys
-     */
+
     public void loadGame() {
         settingsF = loadSettings();
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
-        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager, /*UI.getLoadingScreen(),*/
+        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager, UI.getLoadingScreen(),
                 settingsF);
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
 
-        if (settingsF.skyDome) {
-            SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
-            skyControl.setEnabled(true);
-            timeOfDay = new TimeOfDay(5.5f);
-            stateManager.attach(timeOfDay);
-            timeOfDay.setRate(350f);
-        }
-        
+        SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
+
+        skyControl.setEnabled(true);
+        timeOfDay = new TimeOfDay(5.5f);
+        stateManager.attach(timeOfDay);
+        timeOfDay.setRate(350f);
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.changeState();
         nifty.setIgnoreKeyboardEvents(true);
         inputManager.setCursorVisible(false);
-        //guiNode.setQueueBucket(Bucket.Gui);
+        guiNode.setQueueBucket(Bucket.Gui);
         healthBorder = new Picture("Health Bar");
         health = new Picture("Health");
         healthBorder.setImage(assetManager, "HUD/Healthbar.png", true);

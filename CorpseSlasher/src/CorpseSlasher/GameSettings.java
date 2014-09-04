@@ -24,16 +24,17 @@ import java.util.Scanner;
  */
 public class GameSettings {
 
-    protected boolean postWater = true;
-    protected boolean waterReflections = true;
-    protected boolean waterRippels = true;
-    protected boolean waterSpecular = true;
-    protected boolean waterFoam = true;
-    protected boolean skyDome  = true;
-    protected boolean starMotion = true;
-    protected boolean cloudMotion = true;
-    protected boolean bloomLight = true;
-    protected boolean lightScatter = true;
+    static boolean postWater = true;
+    static boolean waterReflections = true;
+    static boolean waterRippels = true;
+    static boolean waterSpecular = true;
+    static boolean waterFoam = true;
+    static boolean skyDome  = true;
+    static boolean starMotion = true;
+    static boolean cloudMotion = true;
+    static boolean bloomLight = true;
+    static boolean lightScatter = true;
+    static float mVol,aVol,cVol,dVol,fVol;
     private AppSettings storedSettings;
     private ArrayList setting = new ArrayList();
 /**
@@ -81,10 +82,50 @@ public class GameSettings {
                 }
 
             }
+            contents.close();contents = new Scanner(new FileReader("SoundSettings.ini"));
+            while (contents.hasNextLine()) {
+                String line = contents.nextLine();
+                setting.add(line);
+                String parts[] = line.split("=");
+                switch (parts[0]) {
+                    case "Master":
+                        mVol = Float.parseFloat(parts[1]);
+                        break;
+                    case "Ambient":
+                        aVol = Float.parseFloat(parts[1]);
+                        break;
+                    case "Combat":
+                        cVol = Float.parseFloat(parts[1]);
+                        break;
+                    case "Dialog":
+                        dVol = Float.parseFloat(parts[1]);
+                        break;
+                    case "Footsteps":
+                        fVol = Float.parseFloat(parts[1]);
+                        break;
+                }
+
+            }
+            
         } catch (FileNotFoundException ex) {
         } finally {
  //           contents.close();
         }
+    }
+    public void updateSound(float mVol,float aVol,float cVol,float dVol,float fVol) throws IOException{
+        GameSettings.mVol = mVol;
+        GameSettings.aVol = aVol;
+        GameSettings.cVol = cVol;
+        GameSettings.dVol = dVol;
+        GameSettings.fVol = fVol;
+        
+        FileWriter soundFile = new FileWriter("SoundSettings.ini");
+        soundFile.append("Master="+mVol+"\n");
+        soundFile.append("Ambient="+aVol+"\n");
+        soundFile.append("Combat="+cVol+"\n");
+        soundFile.append("Dialog="+dVol+"\n");
+        soundFile.append("Footsteps="+fVol+"\n");
+        soundFile.close();
     }
 
     public GameSettings(boolean[] settings) {
@@ -140,7 +181,7 @@ public class GameSettings {
         return postWater;
     }
 
-    public boolean isWaterReflections() {
+    public  boolean isWaterReflections() {
         return waterReflections;
     }
 
