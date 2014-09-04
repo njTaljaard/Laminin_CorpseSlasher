@@ -2,7 +2,6 @@ package CorpseSlasher;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -162,13 +161,13 @@ public class BasicScene {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrian/Terrain.png"));
         trrn.setMaterial(mat);
-                          
+                            
         if (sceneModel != null) {
-            trrn.addControl(new RigidBodyControl(0));
+            /*trrn.addControl(new RigidBodyControl(0));
             trrn.getControl(RigidBodyControl.class).setCollisionGroup(1);
-            bullet.getPhysicsSpace().add(trrn);
+            bullet.getPhysicsSpace().add(trrn);*/
             
-            Node treeNode = (Node) sceneModel.getChild("Tree");
+            /*Node treeNode = (Node) sceneModel.getChild("Tree");
             treeList = treeNode.getChildren();
             
             for (int i = 0; i < treeList.size(); i++) {
@@ -178,8 +177,8 @@ public class BasicScene {
                 rig.setCollisionGroup(1);
                 
                 treeList.get(i).addControl(rig);
-                bullet.getPhysicsSpace().add(treeList.get(i));*/
-            }
+                bullet.getPhysicsSpace().add(treeList.get(i));*
+            }*/
             
             sceneNode.attachChild(sceneModel);
         } else {
@@ -267,9 +266,9 @@ public class BasicScene {
      * @param tpf - Time per frame.
      */
     public void update(TimeOfDay tod, float tpf, Vector3f position) {
-        for (Spatial tree : treeList) {
+        /*for (Spatial tree : treeList) {
             tree.lookAt(position, Vector3f.UNIT_Y);
-        }
+        }*/
     }
     
     /**
