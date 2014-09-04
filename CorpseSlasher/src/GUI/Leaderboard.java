@@ -113,6 +113,7 @@ public class Leaderboard extends Screens {
                                         width("150px");
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Sound_Settings)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Leaderboard") {

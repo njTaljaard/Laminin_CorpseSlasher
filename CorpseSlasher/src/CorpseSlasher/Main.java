@@ -107,7 +107,7 @@ public class Main extends SimpleApplication implements ScreenController {
     @Override
     public void simpleUpdate(float tpf) {
         if (loggedIn) {
-            gameScene.update(bulletAppState, cam, timeOfDay, tpf);
+            gameScene.update(timeOfDay, tpf);
             health.setWidth((gameScene.getHealth()/100f)*(gSettings.getWidth()/2.1f));
         }
     }
@@ -173,7 +173,7 @@ public class Main extends SimpleApplication implements ScreenController {
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
-        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager, UI.getLoadingScreen(),
+        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager/*, UI.getLoadingScreen()*/,
                 settingsF);
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
 
