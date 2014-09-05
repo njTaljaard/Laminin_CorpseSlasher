@@ -285,6 +285,7 @@ public class SettingsController implements ScreenController {
          String height = res[1];
          settings.updateSettings("width", width);         
          settings.updateSettings("height", height);
+         settings.apply();
          UI.updateRes(Integer.parseInt(width),Integer.parseInt(height));
      }
      /**

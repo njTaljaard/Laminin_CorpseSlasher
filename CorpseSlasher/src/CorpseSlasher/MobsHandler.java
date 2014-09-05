@@ -120,9 +120,9 @@ public class MobsHandler {
             mob.attackAudio = false;
             mob.damageAudio = false;
             
-            if (mob.swapControllers) {
+            /*if (mob.swapControllers) {
                 mob.swapControllers();
-            }
+            }*/
             landedAttacks.add(mob.getAttackLanded());
         }
         

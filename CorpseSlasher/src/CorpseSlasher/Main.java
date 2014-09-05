@@ -85,13 +85,14 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
-        width = 1920;
-        height = 1080;
+        width = 1366;
+        height = 768;
+        Audio.assetManager = assetManager;
+        Audio.audioRenderer = audioRenderer;
         ClientConnection client = new ClientConnection();
         client.StartClientConnection();
         gSettings = new AppSettings(true);
         gSettings.setResolution(width, height);
-        gSettings.setFullscreen(false);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene, client);
         UI.setRes(width, height);
         loggedIn = false;
@@ -162,6 +163,7 @@ public class Main extends SimpleApplication implements ScreenController {
         UI.updateRes(width, height);
         gSettings.setFullscreen(false);
         gSettings.setResolution(width, height);
+        gSettings.setFullscreen(true);
         this.setSettings(gSettings);
         UI.setSettings(gSettings);
         restart();

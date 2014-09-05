@@ -54,7 +54,7 @@ public final class Audio {
     }
     
     public static void loadOcean() {
-        wave1 = new AudioNode(assetManager, "Audio/waves_sound.ogg", false);
+       wave1 = new AudioNode(assetManager, "Audio/waves_sound.ogg", false);
         wave1.setLocalTranslation(1000, 10, 1000);
         wave1.setPositional(true);
         wave1.setLooping(true);
@@ -64,7 +64,7 @@ public final class Audio {
         wave1.setVolume(0.1f);
         wave1.setDirection(new Vector3f(0,90,0));
         
-        /*wave2 = new AudioNode(assetManager, "Audio/waves_sound.ogg", false);
+        wave2 = new AudioNode(assetManager, "Audio/waves_sound.ogg", false);
         wave2.setLocalTranslation(-1000, 10, 1000);
         wave2.setMaxDistance(700.0f);
         wave2.setPositional(true);
@@ -89,12 +89,12 @@ public final class Audio {
         wave4.setRefDistance(400f);
         wave4.setVolume(0.1f);
         wave4.setDirection(Vector3f.ZERO);
-        wave4.setLooping(true);*/
+        wave4.setLooping(true);
         
         wave1.play();
-        //wave2.play();
-        //wave3.play();
-        //wave4.play();
+        wave2.play();
+        wave3.play();
+        wave4.play();
     }
     
     public static void loadCharacterAudio() {
@@ -150,7 +150,7 @@ public final class Audio {
     }
     
     public static void playCharacterDamage() {
-        playerDamage.play();
+       playerDamage.play();
     }
     
     public static void playCharacterWalk() {
@@ -237,19 +237,19 @@ public final class Audio {
                 mobAttack5.playInstance();
                 mobAttackCount = 1;
                 break;
-        }
+        } 
     }
     
     public synchronized static void playMobDamage(Vector3f position) {
-        mobDamage.setLocalTranslation(position);
-        mobDamage.playInstance();
+       mobDamage.setLocalTranslation(position);
+       mobDamage.playInstance();
     }
     
     public synchronized static void playMobWalk() {
-        mobWalk.play();
+       mobWalk.play();
     }
     
     public synchronized static void pauseMobWalk() {
-        mobWalk.pause();
+       mobWalk.pause();
     }
 }
