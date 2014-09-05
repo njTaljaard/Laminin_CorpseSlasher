@@ -2,6 +2,9 @@ package CorpseSlasherServer;
 
 //import com.sun.istack.internal.logging.Logger;
 import java.sql.*;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import org.apache.commons.codec.binary.Base64;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 
@@ -17,6 +20,13 @@ import java.sql.*;
 public class Database {
 
     Connection conn = null;
+    
+    /**
+     * key - is the secret key used for the encryption.
+     */
+    private static byte[] key = {
+            0x74, 0x68, 0x69, 0x73, 0x49, 0x73, 0x41, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x4b, 0x65, 0x79
+    };//"thisIsASecretKey";
 
     /**
      *
@@ -77,14 +87,24 @@ public class Database {
     public boolean login(String username, String password) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "SELECT username FROM user WHERE password = AES_ENCRYPT('" + password + "', SHA1('9876543210'))";
+            String query = "SELECT  AES_DECRYPT(password, SHA1('9876543210')) FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            String result = rs.getString("username");
-            if (result.compareTo(username) == 0) {
-                return true;
+            if (rs.next())
+            {
+                String IPAndPassword = decrypt(rs.getString("AES_DECRYPT(password, SHA1('9876543210'))"));
+                //Get just the password by removing the IP
+                String result = IPAndPassword.substring(IPAndPassword.indexOf('/') + 1);
+                String tmp = decrypt(password);
+                String userPass = tmp.substring(tmp.indexOf('/') + 1);
+                if (result.compareTo(userPass) == 0) {
+                    return true;
+                }
+                return false;
             }
-            return false;
+            else
+            {
+                return false;
+            }
 
         } catch (Exception exc) {
             System.out.println("Login error:" + exc);
@@ -265,13 +285,18 @@ public class Database {
             Statement stmt = conn.createStatement();
             String query = "SELECT username FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            String result = rs.getString("username");
-            if (result.compareTo(username) == 0) {
+            if (rs.next())
+            {
+                String result = rs.getString("username");
+                if (result.compareTo(username) == 0) {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
                 return false;
             }
-            return true;
-
         } catch (Exception exc) {
             System.out.println("available username error:" + exc);
             return true;
@@ -376,5 +401,30 @@ public class Database {
             //TODO: Send exception to exception handler class to process. 
         }
         
+    }
+    
+    /**
+      * 
+      * decrypt - takes an encrypted string as input and returns the decrypted version of the input.
+      * 
+      * @param strToDecrypt string that needs to be decrypted.
+      * @return returns the decrypted string of the input string.
+      */
+    public static String decrypt(String strToDecrypt)
+    {
+        try
+        {
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+            final SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            final String decryptedString = new String(cipher.doFinal(Base64.decodeBase64(strToDecrypt)));
+            return decryptedString;
+        }
+        catch (Exception e)
+        {
+          e.printStackTrace();
+
+        }
+        return null;
     }
 }
