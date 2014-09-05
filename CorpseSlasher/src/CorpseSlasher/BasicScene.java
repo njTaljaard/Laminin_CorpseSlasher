@@ -196,7 +196,7 @@ public class BasicScene {
      * initWater determine if post processing water or simple water should be used.
      */
     private void initWater() {
-        if (settings.postWater) {
+        if (GameSettings.postWater) {
              initPostProcessWater();
          } else {
              initBasicWater();

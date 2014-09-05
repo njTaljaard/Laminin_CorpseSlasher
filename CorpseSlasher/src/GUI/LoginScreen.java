@@ -69,7 +69,7 @@ public class LoginScreen extends Screens {
                     {
                         font("Interface/Fonts/zombie.fnt");
                         childLayoutVertical();
-                        backgroundColor(new Color(.3f, .3f, .3f, .5f));
+                        //backgroundColor(new Color(.3f, .3f, .3f, .5f));
                         panel(new PanelBuilder("#Main_Login_Panel") {
                             {
                                 childLayoutCenter();

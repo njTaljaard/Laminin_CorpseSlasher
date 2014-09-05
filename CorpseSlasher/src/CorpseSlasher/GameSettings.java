@@ -126,6 +126,7 @@ public class GameSettings {
         soundFile.append("Dialog="+dVol+"\n");
         soundFile.append("Footsteps="+fVol+"\n");
         soundFile.close();
+        Audio.updateVolume();
     }
 
     public GameSettings(boolean[] settings) {

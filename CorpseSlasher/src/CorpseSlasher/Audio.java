@@ -17,6 +17,7 @@ public final class Audio {
     
     protected static AudioRenderer audioRenderer;
     protected static AssetManager assetManager;
+    
     private static AudioNode wave1;
     private static AudioNode wave2;
     private static AudioNode wave3;
@@ -40,6 +41,22 @@ public final class Audio {
     
     private static Environment env;
     
+    public static void updateVolume() {
+        wave1.setVolume(GameSettings.mVol / 200 + GameSettings.aVol / 200);
+        playerAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+        playerAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+        playerAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+        playerDamage.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+        playerWalk.setVolume(GameSettings.mVol / 200 + GameSettings.fVol / 200);
+        mobAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+        mobAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+        mobAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+        mobAttack4.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+        mobAttack5.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+        mobDamage.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+        mobWalk.setVolume(GameSettings.mVol / 200 + GameSettings.fVol / 200);
+    }
+    
     public static void initAmbient() {
         /*
          * density, diffusion, gain, gainHF, decayTime, decayHF, reflGain, reflDelay, lateGain, lateDelay
@@ -61,10 +78,10 @@ public final class Audio {
         wave1.setDirectional(true);
         wave1.setMaxDistance(200.0f);
         wave1.setRefDistance(100f);
-        wave1.setVolume(0.1f);
+        wave1.setVolume(GameSettings.mVol / 200 + GameSettings.aVol / 200);
         wave1.setDirection(new Vector3f(0,90,0));
         
-        wave2 = new AudioNode(assetManager, "Audio/waves_sound.ogg", false);
+        /*wave2 = new AudioNode(assetManager, "Audio/waves_sound.ogg", false);
         wave2.setLocalTranslation(-1000, 10, 1000);
         wave2.setMaxDistance(700.0f);
         wave2.setPositional(true);
@@ -89,45 +106,45 @@ public final class Audio {
         wave4.setRefDistance(400f);
         wave4.setVolume(0.1f);
         wave4.setDirection(Vector3f.ZERO);
-        wave4.setLooping(true);
+        wave4.setLooping(true);*/
         
         wave1.play();
-        wave2.play();
+        /*wave2.play();
         wave3.play();
-        wave4.play();
+        wave4.play();*/
     }
     
     public static void loadCharacterAudio() {
         playerAttack1 = new AudioNode(assetManager, "Audio/playerAttack1.ogg", false);
         playerAttack1.setTimeOffset(125.0f);
         playerAttack1.setMaxDistance(10);
-        playerAttack1.setVolume(0.15f);
+        playerAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
         playerAttack1.setLooping(false);
         playerAttack1.setPositional(false);
         
         playerAttack2 = new AudioNode(assetManager, "Audio/playerAttack2.ogg", false);
         playerAttack2.setTimeOffset(125.0f);
         playerAttack2.setMaxDistance(10);
-        playerAttack2.setVolume(0.15f);
+        playerAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
         playerAttack2.setLooping(false);   
         playerAttack2.setPositional(false);     
         
         playerAttack3 = new AudioNode(assetManager, "Audio/playerAttack3.ogg", false);
         playerAttack3.setTimeOffset(125.0f);
         playerAttack3.setMaxDistance(10);
-        playerAttack3.setVolume(0.15f);
+        playerAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
         playerAttack3.setLooping(false);
         playerAttack3.setPositional(false);
         
         playerDamage = new AudioNode(assetManager, "Audio/mobHitPlayer.ogg", false);
         playerDamage.setMaxDistance(10);
-        playerDamage.setVolume(0.15f);
+        playerDamage.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
         playerDamage.setLooping(false);
         playerDamage.setPositional(false);
         
         playerWalk = new AudioNode(assetManager, "Audio/walk_l.ogg", false);
         playerWalk.setMaxDistance(10);
-        playerWalk.setVolume(0.1f);
+        playerWalk.setVolume(GameSettings.mVol / 200 + GameSettings.fVol / 200);
         playerWalk.setLooping(false);
         playerWalk.setPositional(false);
     }
@@ -165,47 +182,47 @@ public final class Audio {
         mobAttack1 = new AudioNode(assetManager, "Audio/zombieAttack1.ogg", false);
         mobAttack1.setTimeOffset(125.0f);
         mobAttack1.setMaxDistance(10);
-        mobAttack1.setVolume(0.15f);
+        mobAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
         mobAttack1.setLooping(false);
         mobAttack1.setPositional(false);
         
         mobAttack2 = new AudioNode(assetManager, "Audio/zombieAttack2.ogg", false);
         mobAttack2.setTimeOffset(125.0f);
         mobAttack2.setMaxDistance(10);
-        mobAttack2.setVolume(0.15f);
+        mobAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
         mobAttack2.setLooping(false);   
         mobAttack2.setPositional(false);     
         
         mobAttack3 = new AudioNode(assetManager, "Audio/zombieAttack3.ogg", false);
         mobAttack3.setTimeOffset(125.0f);
         mobAttack3.setMaxDistance(10);
-        mobAttack3.setVolume(0.15f);
+        mobAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
         mobAttack3.setLooping(false);
         mobAttack3.setPositional(false);
         
         mobAttack4 = new AudioNode(assetManager, "Audio/zombieAttack4.ogg", false);
         mobAttack4.setTimeOffset(125.0f);
         mobAttack4.setMaxDistance(10);
-        mobAttack4.setVolume(0.15f);
+        mobAttack4.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
         mobAttack4.setLooping(false);   
         mobAttack4.setPositional(false);     
         
         mobAttack5 = new AudioNode(assetManager, "Audio/zombieAttack5.ogg", false);
         mobAttack5.setTimeOffset(125.0f);
         mobAttack5.setMaxDistance(10);
-        mobAttack5.setVolume(0.15f);
+        mobAttack5.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
         mobAttack5.setLooping(false);
         mobAttack5.setPositional(false);
         
         mobDamage = new AudioNode(assetManager, "Audio/playerHitMob.ogg", false);
         mobDamage.setMaxDistance(10);
-        mobDamage.setVolume(0.15f);
+        mobDamage.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
         mobDamage.setLooping(false);
         mobDamage.setPositional(false);
         
         mobWalk = new AudioNode(assetManager, "Audio/walk_r.ogg", false);
         mobWalk.setMaxDistance(10);
-        mobWalk.setVolume(0.1f);
+        mobWalk.setVolume(GameSettings.mVol / 200 + GameSettings.fVol / 200);
         mobWalk.setLooping(false);
         mobWalk.setPositional(true);
     }

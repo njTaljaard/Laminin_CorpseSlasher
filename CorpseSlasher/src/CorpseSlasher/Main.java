@@ -171,7 +171,7 @@ public class Main extends SimpleApplication implements ScreenController {
     }
 
     public void loadGame() {
-        settingsF = loadSettings();
+                    settingsF = loadSettings();
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
