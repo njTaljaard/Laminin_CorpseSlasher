@@ -24,6 +24,7 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
+import com.jme3.util.SkyFactory;
 import com.jme3.water.SimpleWaterProcessor;
 import java.util.List;
 import jme3utilities.TimeOfDay;
@@ -92,6 +93,7 @@ public class BasicScene {
         fpp = new FilterPostProcessor(assMan);
         initAmbientLight();
         initSunLight();
+        initSkybox();
         //initWater();
         initTerrain();
     }
@@ -170,16 +172,16 @@ public class BasicScene {
             
             Node treeNode = (Node) sceneModel.getChild("Tree");
             treeList = treeNode.getChildren();
+            
             Material treeMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            Texture treeTex;
+            Texture treeTex = assetManager.loadTexture("Textures/treeTexture.png");
+            
+            treeMat.setTexture("ColorMap", treeTex);
+            treeMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
             
             for (int i = 0; i < treeList.size(); i++) {
                 System.out.println("Tree  :  " + i);
-                treeTex = assetManager.loadTexture("Textures/treeTexture.png");
-                treeMat.setTexture("ColorMap", treeTex);
-                treeMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-                ((Geometry) ((Node) treeList.get(i)).getChild("Tree-3d-geom-0")).setMaterial(treeMat);
-                
+                ((Geometry) ((Node) treeList.get(i)).getChild("Tree-3d-geom-0")).setMaterial(treeMat);                
                 /*BoxCollisionShape treeCol = new BoxCollisionShape(new Vector3f(0.875f, 3.75f, 0.875f));
                 RigidBodyControl rig = new RigidBodyControl(treeCol,0);
                 rig.setCollisionGroup(1);
@@ -194,15 +196,26 @@ public class BasicScene {
         }
     }
     
+    private void initSkybox() {
+        Texture north = assetManager.loadTexture("Textures/Skybox/negative_z.png");
+        Texture south = assetManager.loadTexture("Textures/Skybox/positive_z.png");
+        Texture east  = assetManager.loadTexture("Textures/Skybox/positive_x.png");
+        Texture west  = assetManager.loadTexture("Textures/Skybox/negative_x.png");
+        Texture top   = assetManager.loadTexture("Textures/Skybox/positive_y.png");
+        Texture down  = assetManager.loadTexture("Textures/Skybox/negative_y.png");
+        Spatial sky   = SkyFactory.createSky(assetManager, west, east, north, south, top, down);
+        sceneNode.attachChild(sky);
+    }
+    
     /**
      * initWater determine if post processing water or simple water should be used.
      */
     private void initWater() {
-        if (settings.postWater) {
+        /* if (settings.postWater) {
              initPostProcessWater();
-         } else {
+         } else { */
              initBasicWater();
-         }
+         // }
     }
     
     /**
