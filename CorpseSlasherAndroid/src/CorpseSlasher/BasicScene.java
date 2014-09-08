@@ -5,6 +5,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -22,6 +23,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
+import com.jme3.texture.Texture;
 import com.jme3.water.SimpleWaterProcessor;
 import java.util.List;
 import jme3utilities.TimeOfDay;
@@ -153,7 +155,6 @@ public class BasicScene {
      * it to the basic scene node. Add collision detection to the terrain.
      */
     private void initTerrain() {
-        //sceneModel = (Node) assetManager.loadModel("Scenes/" + sceneName + ".j3o");
         sceneModel = (Node) assetManager.loadModel("Scenes/ZombieAndroidScene.j3o");
         sceneModel.setName("Terrian");
         
@@ -167,18 +168,25 @@ public class BasicScene {
             trrn.getControl(RigidBodyControl.class).setCollisionGroup(1);
             bullet.getPhysicsSpace().add(trrn);*/
             
-            /*Node treeNode = (Node) sceneModel.getChild("Tree");
+            Node treeNode = (Node) sceneModel.getChild("Tree");
             treeList = treeNode.getChildren();
+            Material treeMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            Texture treeTex;
             
             for (int i = 0; i < treeList.size(); i++) {
                 System.out.println("Tree  :  " + i);
+                treeTex = assetManager.loadTexture("Textures/treeTexture.png");
+                treeMat.setTexture("ColorMap", treeTex);
+                treeMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+                ((Geometry) ((Node) treeList.get(i)).getChild("Tree-3d-geom-0")).setMaterial(treeMat);
+                
                 /*BoxCollisionShape treeCol = new BoxCollisionShape(new Vector3f(0.875f, 3.75f, 0.875f));
                 RigidBodyControl rig = new RigidBodyControl(treeCol,0);
                 rig.setCollisionGroup(1);
                 
                 treeList.get(i).addControl(rig);
-                bullet.getPhysicsSpace().add(treeList.get(i));*
-            }*/
+                bullet.getPhysicsSpace().add(treeList.get(i));*/
+            }
             
             sceneNode.attachChild(sceneModel);
         } else {
@@ -266,9 +274,9 @@ public class BasicScene {
      * @param tpf - Time per frame.
      */
     public void update(TimeOfDay tod, float tpf, Vector3f position) {
-        /*for (Spatial tree : treeList) {
+        for (Spatial tree : treeList) {
             tree.lookAt(position, Vector3f.UNIT_Y);
-        }*/
+        }
     }
     
     /**
