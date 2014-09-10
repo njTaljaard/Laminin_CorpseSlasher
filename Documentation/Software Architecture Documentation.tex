@@ -127,6 +127,10 @@
 			01/08/2014	\> Version 1.0	\> Added technologies							\> Nico Taljaard \\
 			01/08/2014	\> Version 1.0	\> Added tactics and strategies					\> Nico Taljaard \\
 			09/09/2014	\> Version 1.0	\> Updated quality requirements					\> Nico Taljaard \\
+			10/09/2014 	\> Version 1.0  \> Added higher level use case diagram			\> Martin Schoeman\\
+			10/09/2014  \> Version 1.0	\> Moved architectural constraints to technology\> Martin Schoeman\\
+			10/09/2014  \> Version 1.0  \> Inserted correct architectural constraints	\> Martin Schoeman\\
+			10/09/2014	\> Version 1.0  \> Added a security quality requirement			\> Martin Schoeman\\
 		\end{tabbing}
 		
 	\newpage
@@ -154,21 +158,31 @@
 		
 		\begin{figure}[ht!]
 		\centering
-		\includegraphics[width=180mm]{high_level_use_case_diagram}
+		\includegraphics[width=180mm]{UML_Diagram/Use_Case/High_Level}
 		\caption{High level use case diagram}
 		\label{overflow}
 		\end{figure}
 		
 		\vspace{0.2in}
 		
-		\newpage
+		\vspace{0.2in}
+		
+		\begin{figure}[ht!]
+		\centering
+		\includegraphics[width=180mm]{UML_Diagram/Use_Case/high_level_use_case_diagram}
+		\caption{High level use case diagram for game}
+		\label{overflow}
+		\end{figure}
+		
+		\vspace{0.2in}
+		
 		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Sub-level use case diagrams}}} \addcontentsline{toc}{section}{Sub-level use case diagrams}
 		
 		\vspace{0.2in}
 		
 		\begin{figure}[H]
 		\centering
-		\includegraphics[width=180mm]{login}
+		\includegraphics[width=180mm]{UML_Diagram/Use_Case/login}
 		\caption{Login use case diagram}
 		\label{overflow}
 		\end{figure}
@@ -177,7 +191,7 @@
 		
 		\begin{figure}[H]
 		\centering
-		\includegraphics[width=180mm]{signup}
+		\includegraphics[width=180mm]{UML_Diagram/Use_Case/signup}
 		\caption{Sign up use case diagram}
 		\label{overflow}
 		\end{figure}
@@ -186,7 +200,7 @@
 		
 		\begin{figure}[H]
 		\centering
-		\includegraphics[width=180mm]{game_menu}
+		\includegraphics[width=180mm]{UML_Diagram/Use_Case/game_menu}
 		\caption{Game menu use case diagram}
 		\label{overflow}
 		\end{figure}
@@ -331,6 +345,7 @@
 						\item Password retrieval only to an know uses with a verified email address.
 						\item Clean up all incoming data on client and server for incorrect formats, data types \& lengths.
 						\item Test if the incoming data comes from authenticated user.
+						\item Encrypt all passwords sent from client to server and no passwords ever gets sent from server to client, unless it is to their email address.
 					\end{itemize}
 				
 				\subsubsection*{Maintainability}
@@ -380,43 +395,30 @@
 			\vspace{0.1in}
 					\vspace{0.1in}
 		
-			\subsubsection*{Technologies}
-			\addcontentsline{toc}{subsubsection}{Technologies}
-			\vspace{0.1in}
-			
-				\begin{enumerate}					
-					\item \textbf{Graphics}
-					\\OpenGL 2.0 - 4.4 / OpenES 2.0+ will be used as the rendering language within the game engine, it is an open source graphical language allowing for rendering.
-					
-					\item \textbf{Audio}
-					\\OpenAL 1.0 will be used for audio within the game, it is an open source audio language allowing for audio rendering.
-					
-					\item \textbf{Development language}
-					\\The desktop \& mobile application as well as the server will be implemented using JavaSE as it is a widely supported language and has a powerful API with a huge support community, Java is also compatiable with the Android platform and it is easy to integrate between Android and Java as Android is based on Java.
-					
-					\item \textbf{LDAP integration}
-					\\Apache oltu is a Java implemented OAuth(version 1.0) library that will be the used to communicate with external LDAP servers. LDAP is a safe and secure database service that will prevent access to unwanted users. SocialAuth is easy to use and widely supported and very simple to understand.
-					
-					\item \textbf{Networking}
-					\\jSpiderMonkey will be used to handle client side networking within the jMonkeyEngine framework as a nice to have for later purposes of multiplayer functionality as nice to have.
-					
-					\item \textbf{Persistence}
-					\\MySQL will be used to store all data which is accessible through a JDBC. MySQL is easy to use and very powerful as it allows for over 100000 concurrent connections at a time, it has a huge support community, it is also very easy to intergrate with Java.
-				\end{enumerate}
-				
-			\subsubsection*{Architectural patterns/frameworks}
-			\addcontentsline{toc}{subsubsection}{Architectural patterns/frameworks}
-			\vspace{0.1in}
 			
 				\begin{enumerate}
-					\item \textbf{Game Engine}
-					\\jMonkeyEngine 3.0 is a Java Framework that will be used to implement the game, it is an open source game engine as well as freeware, with a huge library that allows for interactive and graphical games, also having a nice support community, jMonkey is very easy to use and allows for easy port to Android and iOS making it an optimal choice for developing open source games.
+					\item \textbf{Open source}
+					\\Research open source or freeware technologies available; this includes freely available art work.
 					
-					\item \textbf{Client Server}
-					\\A client server pattern should be used between the external application and the backend server, as this allows the seperation of what has to be done purely server side and purely client side, as it can become expensive when the server has to process commands that can be processed on the client side and is only used on the client's side.
+					\item \textbf{Cross-platform}
+					\\The game needs to run on at least two different platforms (desktop and mobile) or can be an HTML application that can be wrapped for different platforms.
 					
-					\item \textbf{Layering}
-					\\The backend server should implement layering from connections to clients down to the LDAP and MySQL server connections, allowing us to have multiple handlers for each indivual layer, so that each layer stays independant from the other.
+					\item \textbf{Using OAuth login and posts}
+					\\OAuth integration; Facebook, Twitter or G+ login and achievement updates.
+					
+					\item \textbf{Custom login}
+					\\if user does not want to use OAuth, he or she can use custom login.
+					
+					\item \textbf{Encryption}
+					\\Passwords needs to be encrypted when stored.
+					
+					\item \textbf{Recover password}
+					\\Add forgot password feature.
+									
+					\item \textbf{Live Leader Board}
+					\\The game needs to have a points system that updates real time.
+					
+					
 				\end{enumerate}
 			
 		\vspace{0.2in}
@@ -497,6 +499,26 @@
 		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Technologies }}}
 		\addcontentsline{toc}{section}{Technologies}
 		\vspace{0.1in}
+		
+		\begin{enumerate}					
+					\item \textbf{Graphics}
+					\\OpenGL 2.0 - 4.4 / OpenES 2.0+ will be used as the rendering language within the game engine, it is an open source graphical language allowing for rendering.
+					
+					\item \textbf{Audio}
+					\\OpenAL 1.0 will be used for audio within the game, it is an open source audio language allowing for audio rendering.
+					
+					\item \textbf{Development language}
+					\\The desktop \& mobile application as well as the server will be implemented using JavaSE as it is a widely supported language and has a powerful API with a huge support community, Java is also compatiable with the Android platform and it is easy to integrate between Android and Java as Android is based on Java.
+					
+					\item \textbf{LDAP integration}
+					\\Apache oltu is a Java implemented OAuth(version 1.0) library that will be the used to communicate with external LDAP servers. LDAP is a safe and secure database service that will prevent access to unwanted users. SocialAuth is easy to use and widely supported and very simple to understand.
+					
+					\item \textbf{Networking}
+					\\jSpiderMonkey will be used to handle client side networking within the jMonkeyEngine framework as a nice to have for later purposes of multiplayer functionality as nice to have.
+					
+					\item \textbf{Persistence}
+					\\MySQL will be used to store all data which is accessible through a JDBC. MySQL is easy to use and very powerful as it allows for over 100000 concurrent connections at a time, it has a huge support community, it is also very easy to intergrate with Java.
+				\end{enumerate}
 			
 			\begin{itemize}
 				\item Game:
