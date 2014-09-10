@@ -182,7 +182,7 @@
 		
 		\begin{figure}[H]
 		\centering
-		\includegraphics[width=180mm]{UML_Diagram/Use_Case/login}
+		\includegraphics[width=180mm]{UML_Diagram/Use_Case/login_simple}
 		\caption{Login use case diagram}
 		\label{overflow}
 		\end{figure}
@@ -429,10 +429,28 @@
 		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Architectural patterns or styles }}}
 		\addcontentsline{toc}{section}{Architectural patterns or styles}
 		\vspace{0.1in}
-		There is a Client Server pattern in place	which allows us to have both a server running in a central place, while having the client running on different nodes such as desktops, laptops or mobile devices and then creating a unique connection to the server. This pattern allows the storage of all data in only one place and to keep every single node connected, a nice to have is to add the functionality of a version checker to each individual client. There are two elements in this pattern a client and a server, the client handles all client side functionality, such as the update of frames and the calling of a screen to change or graphics to change etc. The server only handles updates to the leaderboard, the creation of accounts and the storing of data and the sending and receiving of data between the client and the server, this is achieved through the use of the TCP/IP protocol which allows the server and the client to communicate, the data that is captured by the server is then sent to the database through the use of JDBC. \\
-		\vspace{0.1in}
-		\\
-		Layering was also used as an Architectural pattern, which allows to have independant layers, each layer is handled seperately with its own handler so in the case of a layer failing the entire application does not fail and the service can continue. There are three high layers being, the application, the server and the database layer, inside the application layer there are a series of sub lower level layers, being the user-interface layer, the game control layer, the game constructor layer, the player layer and the enemy layer, these layers are all handled on the client side and they communicate with each other through different channels. The character and the enemy layer interact through the use of bullet collision detection, each time the character enter the enemys collision box the two communicate and allows the character and enemy to interact, the user-interface is accesed through the use of key bindings and a seperate controller, the two game layers communicate through the use of constructing and updating after each frame and after an event takes place such as an enemy dying or the character moving. The Network layer consists a thread pool executor, which handles all the incoming connections on a seperate thread allowing multiple conenctions to the server, the application and server communicate through the above mentioned protocol. The final layer is the database layer which only communicates with the server through the use of JDBC storing all the data that server captured from the client and using it for updates to the leaderboard.
+		\begin{itemize}
+		\item Game :
+		\begin{itemize}
+		\item Concurrency : All the mobs that are in the update radius are updated per frame to a new position, state or animation.
+		\item Queuing : The thread pooling in place makes use of a blocking queue.
+		\item Layering : The game/client side makes use of a layering system through the update, where a game update occurs and then the update is sent to the character and mod handler to update their respective locations or states.
+		\item Interpreter : The opening of user-interface screens are being sent to a single class to open the correct screen.
+		\item Iterator : When an update to the size of the user-interface is being made all the screens are updated in succession.
+		\end{itemize}
+		\item Server :
+		\begin{itemize}
+		\item Facade : There is a single input class that acts as in interface for all the server classes.
+		\item Interpreter : There is a single input class redirecting all the commands coming from the client to the different server classes.
+		\item Layering : Multiple layers have been implemented on the server side, to allow for better security and simplicity.
+		\item Blackboard system : The oauth classes posts on the user's social media page on his behalf.
+		\item Event-drive : When a server call or event is requested from the client side, the server processes that query that was sent. 
+		\item MVC : The client connection is the view, server is the controller and the database is the model.
+		\item Multitier : The structure that exists between the client and the server.
+		\item Pipe and filter : The connection between the server and the client is the pipe while the server itself acts as the filter.
+		\item Service orientated : There are multiple plugable aspects regarding the server such as the ability to send emails and the database being used.
+		\end{itemize}
+		\end{itemize}
 		\vspace{0.2in}
 		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Architectural tactics or strategies }}}
 		\addcontentsline{toc}{section}{Architectural tactics or strategies}
