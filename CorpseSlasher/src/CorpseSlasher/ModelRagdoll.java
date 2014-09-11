@@ -703,7 +703,7 @@ public class ModelRagdoll implements PhysicsControl, PhysicsCollisionListener, R
         AnimControl animControl = (((Node)targetModel).getChild(node)).getControl(AnimControl.class);
         animControl.setEnabled(mode == Mode.Kinematic);
 
-        baseRigidBody.setKinematic(mode == Mode.Kinematic);
+        //baseRigidBody.setKinematic(mode == Mode.Kinematic);
         TempVars vars = TempVars.get();
        
         for (PhysicsBoneLink link : boneLinks.values()) {

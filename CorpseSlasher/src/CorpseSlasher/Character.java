@@ -205,7 +205,7 @@ public class Character {
             } else if (System.nanoTime() - regenTime > regenInterval && health != 100 && !aggro) {
                 health += 5;
                 regenTime = new Long("0");
-                System.out.println("Regen time, health is : " + health);
+                //System.out.println("Regen time, health is : " + health);
             }
             
             if (animController.attacking && playerHits > 0) {
@@ -231,18 +231,18 @@ public class Character {
      */
     public void processKnocks(ArrayList<String> knocks) {
         if (alive) {
-            for (int i = 0; i < knocks.size(); i++) {
-                if (!knocks.get(i).equals("")) {
+            for (String knock : knocks) {
+                if (!knock.equals("")) {
                     health -= 10;
-                    System.out.println("Player : ive been slapped by " + knocks.get(i) 
-                            + ". Health is " + health);
+                    //System.out.println("Player : ive been slapped by " + knocks.get(i) 
+                    //        + ". Health is " + health);
                     Audio.playCharacterDamage();
 
                     if (health <= 0) {
                         health = 0;
                         alive = false;
                         deathTime = System.nanoTime();
-                        System.out.println("You were killed by : " + knocks.get(i));
+                        //System.out.println("You were killed by : " + knocks.get(i));
                         swapControllers();
                     }
                 }
@@ -324,7 +324,10 @@ public class Character {
         return player.getLocalTranslation();
     }
     
-    
+    /**
+     * 
+     * @return 
+     */
     public float getHealth() {
         return health;
     }

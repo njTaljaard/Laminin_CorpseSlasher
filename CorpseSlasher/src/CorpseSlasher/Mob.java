@@ -22,7 +22,7 @@ import com.jme3.math.FastMath;
  */
 public class Mob extends Thread {
     
-    protected String mobName;
+    protected String mobName, attackLanded;
     protected int handColliosionGroup;
     protected boolean swapControllers, attackAudio, walkAudio, damageAudio;
     private Node mob;
@@ -31,14 +31,12 @@ public class Mob extends Thread {
     private AnimChannel channel;
     private AnimControl control;
     private Vector3f passivePosition;
-    //private MobAudioControl audio;
     private MobAnimControl animControl;
     private MobMotionControl motionControl;
     private BetterCharacterControl characterControl;
     private ModelRagdoll ragdoll;
     private GhostControl attackGhost;
     private Vector3f point;
-    private String attackLanded;
     private float health, eighth_pi, tpf;
     private boolean alive, mobHit, playerHit;
     private long deathTime, spawnTime, regenTime, regenInterval;
@@ -191,11 +189,6 @@ public class Mob extends Thread {
     /**
      * updateMob will update the mobs phase according to if aggro was triggers 
      * and animations that is required for that phase.
-     * @param point - Vector3f the direction of the player required in 
-     * the attack phase to move the mobs towards the player.
-     * @param playerHit - boolean if the player hit this mob.
-     * @param mobHit - boolean if mob has attacked player.
-     * @param tpf - Time per frame required for updating ragdoll.
      */
     @Override
     public void run() {
@@ -215,7 +208,7 @@ public class Mob extends Thread {
             
             if (playerHit) {
                 health -= 15;
-                System.out.println(mobName + " i have been hit!!!! My health is " + health);
+                //System.out.println(mobName + " i have been hit!!!! My health is " + health);
                 damageAudio = true;
                 
                 if (health <= 0) {
@@ -223,9 +216,8 @@ public class Mob extends Thread {
                     alive = false;
                     deathTime = System.nanoTime();
                     motionControl.death(characterControl);
-                    System.out.println("You killed : " + mobName);
+                    //System.out.println("You killed : " + mobName);
                     swapControllers = true;
-                    attackLanded = "";
                     return;
                 }
             } else {
@@ -237,24 +229,20 @@ public class Mob extends Thread {
             } else if (System.nanoTime() - regenTime > regenInterval && health != 100 && !motionControl.aggro) {
                 health += 5;
                 regenTime = new Long("0");
-                System.out.println("Regen time, health is : " + health);
+                //System.out.println("Regen time, health is : " + health);
             }
 
             if (animControl.attacking && mobHit) {
                 animControl.attacking = false;
                 attackLanded = mobName;
-                return;
             }
-            
-            attackLanded = "";
         } else {
-            //ragdoll.update(tpf);
+            ragdoll.update(tpf);
             if (System.nanoTime() - deathTime > spawnTime) {
                 alive = true;
                 health = 100;
                 swapControllers = true;
             }
-            attackLanded = "";
         }
     }
     
@@ -263,7 +251,11 @@ public class Mob extends Thread {
      * will ghost boxes for alive and ragdoll for death.
      */
     protected void swapControllers() {
+        walkAudio = false;
+        attackAudio = false;
+        damageAudio = false;
         swapControllers = false;
+        
         if (alive) { //Swap to character control
             mob.setLocalTranslation(passivePosition);
             ragdoll.setKinematicMode();
@@ -295,19 +287,17 @@ public class Mob extends Thread {
         }
     }
     
+    /**
+     * 
+     * @return 
+     */
     public Vector3f getPosition() {
         return mob.getLocalTranslation();
     }
     
     /**
      * 
-     */
-    public String getAttackLanded() {
-        return attackLanded;
-    }
-    
-    /**
-     * 
+     * @return 
      */
     public boolean getAggro() {
         return motionControl.aggro;

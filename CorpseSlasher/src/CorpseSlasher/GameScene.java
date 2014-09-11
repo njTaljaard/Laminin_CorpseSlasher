@@ -161,7 +161,10 @@ public class GameScene {
         collController.attacksProcessed();
     }
     
-    
+    /**
+     * 
+     * @return 
+     */
     public float getHealth() {
         return character.getHealth();
     }

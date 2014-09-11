@@ -5,6 +5,8 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -41,7 +43,7 @@ public class MobsHandler {
         mobs = new ArrayList<>();
         positions = new ArrayList<>();
         landedAttacks = new ArrayList<>();
-        blockingQueue  = new ArrayBlockingQueue<>(50);
+        blockingQueue  = new ArrayBlockingQueue<>(20);
         pool = new ThreadPoolExecutor(8, 12, Long.MAX_VALUE, TimeUnit.SECONDS, blockingQueue);
         this.assetManager = assMan;
         this.bullet = bullet;
@@ -72,11 +74,10 @@ public class MobsHandler {
      */
     public ArrayList<String> updateMobs(Vector3f point, ArrayList<String> playerHits, 
             ArrayList<Integer> mobHits, float tpf) {
-        //pool = Executors.newFixedThreadPool(12);
         landedAttacks.clear();
         
         for (Mob mob : mobs) {  
-            if (mob.getPosition().distance(point) < 50) {
+            if (mob.getPosition().distance(point) < 100) {
                 if (mob.alive()) {
                     if (playerHits.contains(mob.mobName)) {
                         if (mobHits.contains(mob.handColliosionGroup)) {
@@ -115,15 +116,18 @@ public class MobsHandler {
                 if (mob.damageAudio) {
                     Audio.playMobDamage(mob.getPosition());
                 }
-            }
-            mob.walkAudio = false;
-            mob.attackAudio = false;
-            mob.damageAudio = false;
-            
-            /*if (mob.swapControllers) {
+
+                mob.walkAudio = false;
+                mob.attackAudio = false;
+                mob.damageAudio = false;
+            }  
+
+            if (mob.swapControllers) {
                 mob.swapControllers();
-            }*/
-            landedAttacks.add(mob.getAttackLanded());
+            }
+            
+            landedAttacks.add(mob.attackLanded);
+            mob.attackLanded = "";
         }
         
         return landedAttacks;
