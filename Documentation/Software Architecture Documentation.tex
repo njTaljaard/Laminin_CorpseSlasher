@@ -131,6 +131,9 @@
 			10/09/2014  \> Version 1.0	\> Moved architectural constraints to technology\> Martin Schoeman\\
 			10/09/2014  \> Version 1.0  \> Inserted correct architectural constraints	\> Martin Schoeman\\
 			10/09/2014	\> Version 1.0  \> Added a security quality requirement			\> Martin Schoeman\\
+			10/09/2014	\> Version 1.0	\> Update patterns \& strategies				\> Gerhard Smit \\
+			10/09/2014	\> Version 1.0	\> Simpe UI use case							\> Gerhard Smit \\
+			11/09/2014	\> Version 1.0	\> Spacing changes								\> Nico Taljaard \\
 		\end{tabbing}
 		
 	\newpage
@@ -158,15 +161,22 @@
 		
 		\begin{figure}[ht!]
 		\centering
-		\includegraphics[width=180mm]{UML_Diagram/Use_Case/High_Level}
+		\includegraphics[width=180mm, height=50mm]{UML_Diagram/Use_Case/High_Level}
 		\caption{High level use case diagram}
 		\label{overflow}
 		\end{figure}
 		
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=180mm, height=70mm]{UML_Diagram/Use_Case/login_simple}
+		\caption{Login use case diagram}
+		\label{overflow}
+		\end{figure}		
+				
 		\vspace{0.2in}
 		
-		\vspace{0.2in}
-		
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Sub-level use case diagrams}}} \addcontentsline{toc}{section}{Sub-level use case diagrams}
+				
 		\begin{figure}[ht!]
 		\centering
 		\includegraphics[width=180mm]{UML_Diagram/Use_Case/high_level_use_case_diagram}
@@ -176,22 +186,9 @@
 		
 		\vspace{0.2in}
 		
-		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Sub-level use case diagrams}}} \addcontentsline{toc}{section}{Sub-level use case diagrams}
-		
-		\vspace{0.2in}
-		
-		\begin{figure}[H]
+		\begin{figure}[ht!]
 		\centering
-		\includegraphics[width=180mm]{UML_Diagram/Use_Case/login_simple}
-		\caption{Login use case diagram}
-		\label{overflow}
-		\end{figure}
-		
-		\vspace{0.2in}
-		
-		\begin{figure}[H]
-		\centering
-		\includegraphics[width=180mm]{UML_Diagram/Use_Case/signup}
+		\includegraphics[width=180mm, height=70mm]{UML_Diagram/Use_Case/signup}
 		\caption{Sign up use case diagram}
 		\label{overflow}
 		\end{figure}
@@ -323,7 +320,7 @@
 								\item Adding multiple maps for game play as a nice to have: \\
 										Add the selection UI and file name containing scene.
 								\item Adding a variety of enemy players as a nice to have.
-								\item Adding further environmental features as a nice to have.
+								\item Adding further environmental features as a nice to have. \\ \\
 							\end{itemize}
 						\item Backend Server:
 							\begin{itemize}
@@ -374,7 +371,7 @@
 						\item We use Nifty GUI to display GUI's in the game.
 					\end{itemize}
 				
-				\vspace{0.1in}				
+				\newpage			
 				
 				The system will be accessible by human users through the following channels:
 				\begin{itemize}
