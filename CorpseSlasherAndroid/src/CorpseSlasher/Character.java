@@ -78,11 +78,11 @@ public class Character {
         initModel();
         initControl();
         initSwordGhost();
-        initRagdoll();
+        //initRagdoll();
         assemblePlayer();
         initCamera();
         initAnim();
-        initKeys(inMan);
+        //initKeys(inMan);
     }
     
     /**
@@ -91,8 +91,8 @@ public class Character {
     private void initModel() {
         player = (Node) assetManager.loadModel("Models/cyborg/cyborg.j3o");
         player.setName("Player");
-        player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, -6.2f));
-        player.lookAt(cam.getDirection(), cam.getUp());
+        player.setLocalTranslation(cam.getLocation().add(-15.8f, -5.5f, -16.2f));
+        player.lookAt(cam.getDirection().negate(), cam.getUp());
     }
     
     /**
@@ -100,8 +100,8 @@ public class Character {
      * motion and forces control.
      */
     private void initControl() {
-        characterControl = new BetterCharacterControl(0.8f, 4.85f, 50);
-        characterControl.setGravity(new Vector3f(0, -800, 0));
+        characterControl = new BetterCharacterControl(0.2f, 0.85f, 12.5f);
+        characterControl.setGravity(new Vector3f(0, -200, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);
         characterControl.setJumpForce(new Vector3f(0,0,0));
@@ -141,7 +141,7 @@ public class Character {
      * and a mob.
      */
     private void initSwordGhost() {
-        swordControl = new GhostControl(new BoxCollisionShape(new Vector3f(0.05f, 1.65f, 0.15f)));
+        swordControl = new GhostControl(new BoxCollisionShape(new Vector3f(0.05f, 0.25f, 0.15f)));
         swordControl.setCollisionGroup(8);
         swordControl.setCollideWithGroups(6);
     }
@@ -155,7 +155,7 @@ public class Character {
         bullet.getPhysicsSpace().addAll(player);
         player.addControl(characterControl);
         playerNode.attachChild(player); 
-        player.getChild("Cube-ogremesh").getControl(SkeletonControl.class).getAttachmentsNode("Sword").addControl(swordControl);
+        //player.getChild("Cube-ogremesh").getControl(SkeletonControl.class).getAttachmentsNode("Sword").addControl(swordControl);
     }
     
     /**
@@ -191,7 +191,7 @@ public class Character {
             walkDirection = motionController.updateCharacterMotion();
             characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
 
-            motionController.slash = animController.updateCharacterAnimations(channel, 
+            /*motionController.slash = animController.updateCharacterAnimations(channel, 
                     motionController.slash, motionController.walk, alive);
             
             if (!aggro && regenTime == new Long("0")) {
@@ -215,8 +215,9 @@ public class Character {
                 health = 100;
                 swapControllers();
             }
-            return false;
+            return false;*/
         }
+        return false;
     }
     
     /**

@@ -2,6 +2,7 @@ package CorpseSlasher;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -158,17 +159,18 @@ public class BasicScene {
      */
     private void initTerrain() {
         sceneModel = (Node) assetManager.loadModel("Scenes/ZombieAndroidScene.j3o");
-        sceneModel.setName("Terrian");
-        
-        Spatial trrn = sceneModel.getChild("terrain-ZombieAndroidScene");
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrian/Terrain.png"));
-        trrn.setMaterial(mat);
                             
         if (sceneModel != null) {
-            /*trrn.addControl(new RigidBodyControl(0));
+            sceneModel.setName("Terrian");
+        
+            Spatial trrn = sceneModel.getChild("terrain-ZombieAndroidScene");
+            Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            mat.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrian/Terrain.png"));
+            trrn.setMaterial(mat);
+            
+            trrn.addControl(new RigidBodyControl(0));
             trrn.getControl(RigidBodyControl.class).setCollisionGroup(1);
-            bullet.getPhysicsSpace().add(trrn);*/
+            bullet.getPhysicsSpace().add(trrn);
             
             Node treeNode = (Node) sceneModel.getChild("Tree");
             treeList = treeNode.getChildren();

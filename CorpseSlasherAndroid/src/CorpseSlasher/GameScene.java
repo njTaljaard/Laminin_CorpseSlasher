@@ -41,7 +41,7 @@ public class GameScene {
         
         initCameraPosition(cam, selectedMap);
         initScene(assestManager, viewPort, cam, bullet, selectedMap,/* ui,*/ settings);
-        //initMainCharacter(assestManager, inMan, bullet, cam);
+        initMainCharacter(assestManager, inMan, bullet, cam);
         //initMobs(bullet, assestManager);
         //initAudio();
         
@@ -120,7 +120,7 @@ public class GameScene {
     private void initCameraPosition(Camera cam, int map) {
         switch(map) {
             case(0) :
-                cam.setLocation(new Vector3f(88.0f, 19.0f, 96.0f));
+                cam.setLocation(new Vector3f(88.0f, 17.0f, 96.0f));
                 cam.lookAt(new Vector3f(-150, 7, -125), cam.getUp());
                 break;
             default :
@@ -144,10 +144,10 @@ public class GameScene {
      */
     public void update(TimeOfDay tod, float tpf, Camera cam) {
         basicScene.update(tod, tpf, cam.getLocation());
+        playerAttacking = character.updateCharacterPostion(0, tpf, false);
         /*playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), 
                 tpf, mobHandler.getAggroState());
         
-        if (playerAttacking) {
             mobHits= mobHandler.updateMobs(character.getPosition(), 
                     collController.getPlayerHits(), collController.getMobHits(), tpf);
         } else {
