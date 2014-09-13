@@ -115,12 +115,14 @@ public class SettingsController implements ScreenController {
 
     @Override
     public void onStartScreen() {
-       nifty.setIgnoreKeyboardEvents(false);
+       nifty.setIgnoreKeyboardEvents(false); 
+        nifty.setIgnoreMouseEvents(false);
     }
 
     @Override
     public void onEndScreen() { 
-       nifty.setIgnoreKeyboardEvents(true);      
+       nifty.setIgnoreKeyboardEvents(true);  
+        nifty.setIgnoreMouseEvents(true);     
     }
     /**
      * 

@@ -33,7 +33,8 @@ public class LeaderBoardController implements ScreenController {
      */
     @Override
     public void onStartScreen() { 
-       nifty.setIgnoreKeyboardEvents(false);
+       nifty.setIgnoreKeyboardEvents(false); 
+        nifty.setIgnoreMouseEvents(false);
        ListBox listBox = screen.findNiftyControl("#scorebar", ListBox.class);
        String leaderboard = client.retrieveLeaderBoard();
        Scanner scLine = new Scanner(leaderboard).useDelimiter(",");
@@ -62,7 +63,8 @@ public class LeaderBoardController implements ScreenController {
     }
     @Override
     public void onEndScreen() {
-       nifty.setIgnoreKeyboardEvents(true);        
+       nifty.setIgnoreKeyboardEvents(true);   
+        nifty.setIgnoreMouseEvents(true);      
     }
     /**
      * 

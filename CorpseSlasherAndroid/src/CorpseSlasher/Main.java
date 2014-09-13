@@ -195,6 +195,7 @@ public class Main extends SimpleApplication implements ScreenController {
         UI.changeState();
         restart();
         nifty.setIgnoreKeyboardEvents(true); 
+        nifty.setIgnoreMouseEvents(true);
         System.out.println("made it here");
     }
 
@@ -222,12 +223,14 @@ public class Main extends SimpleApplication implements ScreenController {
 
     @Override
     public void onStartScreen() {
-        nifty.setIgnoreKeyboardEvents(false);
+        nifty.setIgnoreKeyboardEvents(false); 
+        nifty.setIgnoreMouseEvents(false);
     }
 
     @Override
     public void onEndScreen() {
-        nifty.setIgnoreKeyboardEvents(true);
+        nifty.setIgnoreKeyboardEvents(true); 
+        nifty.setIgnoreMouseEvents(true);
     }
 
     /**
