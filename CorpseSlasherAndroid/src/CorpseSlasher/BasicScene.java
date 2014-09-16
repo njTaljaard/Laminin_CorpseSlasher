@@ -95,7 +95,7 @@ public class BasicScene {
         initAmbientLight();
         initSunLight();
         initSkybox();
-        //initWater();
+        initWater();
         initTerrain();
     }
     
@@ -226,22 +226,22 @@ public class BasicScene {
      */
     private void initBasicWater() {
         simpleWater = new SimpleWaterProcessor(assetManager);
-        //simpleWater.setReflectionScene(sceneNode);
-        simpleWater.setWaterDepth(80);         // transparency of water
+        simpleWater.setReflectionScene(sceneNode);
+        simpleWater.setWaterDepth(20);         // transparency of water
         simpleWater.setDistortionScale(0.02f); // strength of waves
         simpleWater.setWaveSpeed(0.02f);       // speed of waves
         simpleWater.setDebug(false);
-        simpleWater.setWaterTransparency(0.3f);
-        Vector3f waterLocation=new Vector3f(0,20,0);
+        simpleWater.setWaterTransparency(2.0f);
+        Vector3f waterLocation=new Vector3f(0,5,0);
         simpleWater.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation.dot(Vector3f.UNIT_Y)));
         vp.addProcessor(simpleWater);
         
-        Quad quad = new Quad(2000,2000);
-        quad.scaleTextureCoordinates(new Vector2f(16f,16f));
+        Quad quad = new Quad(500,500);
+        quad.scaleTextureCoordinates(new Vector2f(4f,4f));
         
         Geometry waterPlane = new Geometry("water", quad);
         waterPlane.setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X));
-        waterPlane.setLocalTranslation(-1000, 20, 1000);
+        waterPlane.setLocalTranslation(-250, 5, 250);
         waterPlane.setShadowMode(ShadowMode.Receive);
         waterPlane.setMaterial(simpleWater.getMaterial());
         

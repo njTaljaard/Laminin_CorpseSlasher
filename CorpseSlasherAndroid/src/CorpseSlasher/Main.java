@@ -97,8 +97,8 @@ public class Main extends SimpleApplication implements ScreenController {
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         this.setSettings(gSettings);
         restart();
-        UI.loginScreen();
-        //loadGame();
+        //UI.loginScreen();
+        loadGame();
     }
 
     @Override
@@ -194,9 +194,9 @@ public class Main extends SimpleApplication implements ScreenController {
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.changeState();
         restart();
-        nifty.setIgnoreKeyboardEvents(true); 
-        nifty.setIgnoreMouseEvents(true);
-        System.out.println("made it here");
+        //nifty.setIgnoreKeyboardEvents(true); 
+        //nifty.setIgnoreMouseEvents(true);
+        //System.out.println("made it here");
     }
 
     /**
