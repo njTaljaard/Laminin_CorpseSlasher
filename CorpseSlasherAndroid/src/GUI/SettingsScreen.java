@@ -86,7 +86,7 @@ public class SettingsScreen extends Screens {
                                 childLayoutVertical();
                                 control(new ButtonBuilder("", "Display Settings") {
                                     {
-                                        marginTop("48%");
+                                        marginTop("42%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -137,6 +137,18 @@ public class SettingsScreen extends Screens {
                                         interactOnClick("goTo(Leader_Board)");
                                     }
                                 });
+                                control(new ButtonBuilder("", "Logout") {
+                                    {
+                                        controller((ScreenController) app);
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Login_Screen)");
+                                    }
+                                });
                                 control(new ButtonBuilder("", "Quit Game") {
                                     {
                                         marginTop("2%");
@@ -174,7 +186,7 @@ public class SettingsScreen extends Screens {
                                 childLayoutVertical();
                                 control(new ButtonBuilder("", "Display Settings") {
                                     {
-                                        marginTop("48%");
+                                        marginTop("42%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -222,6 +234,18 @@ public class SettingsScreen extends Screens {
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
                                         interactOnClick("goTo(Leader_Board)");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Logout") {
+                                    {
+                                        controller((ScreenController) app);
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Login_Screen)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Quit Game") {
@@ -462,7 +486,7 @@ public class SettingsScreen extends Screens {
                                 childLayoutVertical();
                                 control(new ButtonBuilder("", "Display Settings") {
                                     {
-                                        marginTop("48%");
+                                        marginTop("42%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -510,6 +534,18 @@ public class SettingsScreen extends Screens {
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
                                         interactOnClick("goTo(Leader_Board)");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Logout") {
+                                    {
+                                        controller((ScreenController) app);
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Login_Screen)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Quit Game") {

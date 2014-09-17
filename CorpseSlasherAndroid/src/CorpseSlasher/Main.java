@@ -88,7 +88,7 @@ public class Main extends SimpleApplication implements ScreenController {
         client.StartClientConnection();
         gSettings = new AppSettings(true);
         gSettings.setResolution(width, height);
-        gSettings.setFullscreen(true);
+        gSettings.setFullscreen(false);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene,client);
         UI.setRes(width, height);
         loggedIn = false;
@@ -97,8 +97,8 @@ public class Main extends SimpleApplication implements ScreenController {
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         this.setSettings(gSettings);
         restart();
-        //UI.loginScreen();
-        loadGame();
+        UI.loginScreen();
+        //loadGame();
     }
 
     @Override
@@ -321,12 +321,16 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public void quitGame() {
         stop(false);
+        System.exit(0);
     }
 
     /**
      * Goes to screen selected
      */
     public void goTo(String screen) {
+        if(screen.equals("#Login_Screen")){
+            
+        }
         nifty.gotoScreen(screen);
     }
 

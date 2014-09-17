@@ -76,7 +76,7 @@ public class LeaderBoardController implements ScreenController {
      * Quits the game
      */
     public void quitGame(){
-        System.exit(1);
+        System.exit(0);
     }
     
 }

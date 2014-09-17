@@ -20,6 +20,7 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
+import de.lessvoid.nifty.screen.ScreenController;
 
 /**
  *
@@ -123,6 +124,18 @@ public class Leaderboard extends Screens {
                                         width("150px");
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Logout") {
+                                    {
+                                        controller((ScreenController) app);
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Login_Screen)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Quit Game") {

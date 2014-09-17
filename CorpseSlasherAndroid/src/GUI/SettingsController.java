@@ -250,7 +250,7 @@ public class SettingsController implements ScreenController {
       * Quits the game
       */
      public void quitGame(){
-         System.exit(1);
+         System.exit(0);
      }
      public void goTo(String _screen){
          nifty.gotoScreen(_screen);
