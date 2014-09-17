@@ -15,6 +15,7 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.input.controls.TouchTrigger;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -45,7 +46,7 @@ public class Character {
     private CharacterCameraControl cameraController;
     private CharacterMotionControl motionController;
     private ModelRagdoll ragdoll;
-    private final float walkSpeed = 15.0f;
+    private final float walkSpeed = 3.75f;
     private Vector3f walkDirection;
     private float health;
     private float eighth_pi;
@@ -82,7 +83,7 @@ public class Character {
         assemblePlayer();
         initCamera();
         initAnim();
-        //initKeys(inMan);
+        initKeys(inMan);
     }
     
     /**
@@ -191,8 +192,9 @@ public class Character {
             walkDirection = motionController.updateCharacterMotion();
             characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
 
-            /*motionController.slash = animController.updateCharacterAnimations(channel, 
+            motionController.slash = animController.updateCharacterAnimations(channel, 
                     motionController.slash, motionController.walk, alive);
+            motionController.slash = false;
             
             if (!aggro && regenTime == new Long("0")) {
                 regenTime = System.nanoTime();
@@ -215,9 +217,8 @@ public class Character {
                 health = 100;
                 swapControllers();
             }
-            return false;*/
+            return false;
         }
-        return false;
     }
     
     /**
@@ -283,7 +284,13 @@ public class Character {
      * when pressed.
      */
     private void initKeys(InputManager inMan) {
-        inMan.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
+        inMan.addMapping("MoveTouch", new TouchTrigger(0));
+        inMan.addListener(motionController.getTouchListener(), "MoveTouch");
+        
+        inMan.addMapping("LookTouch", new TouchTrigger(0));
+        inMan.addListener(cameraController.getTouchListener(), "LookTouch");
+        
+        /*inMan.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
         inMan.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
         inMan.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
         inMan.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
@@ -305,7 +312,7 @@ public class Character {
         inMan.addListener(cameraController.getAnalogListener(), "TurnLeft");
         inMan.addListener(cameraController.getAnalogListener(), "TurnRight");
         inMan.addListener(cameraController.getAnalogListener(), "LookUp");
-        inMan.addListener(cameraController.getAnalogListener(), "LookDown");
+        inMan.addListener(cameraController.getAnalogListener(), "LookDown");*/
     }
     
     /**

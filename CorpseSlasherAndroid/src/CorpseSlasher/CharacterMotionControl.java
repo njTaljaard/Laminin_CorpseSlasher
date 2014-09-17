@@ -1,6 +1,8 @@
 package CorpseSlasher;
 
 import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.TouchListener;
+import com.jme3.input.event.TouchEvent;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 
@@ -16,9 +18,12 @@ public class CharacterMotionControl {
     
     private Camera cam;
     private ActionListener actionListener;
-    private Vector3f walkDirection;
+    private TouchListener touchListener;
+    private Vector3f walkDirection, camDir, camLeft;
     protected boolean slash, walk, jump;
     private boolean left, right, up, down;
+    private float x, y, pressure, deltaX, deltaY;
+    private int pointer;
     
     /**
      * CharacterMotionControl will set all the values and initialize the Action
@@ -31,6 +36,7 @@ public class CharacterMotionControl {
         slash = left = right = up = down = jump = false;
         
         initMotionController();
+        initTouchController();
     }
     
     /**
@@ -83,12 +89,58 @@ public class CharacterMotionControl {
     }
     
     /**
+     * 
+     */
+    private void initTouchController() {
+        touchListener = new TouchListener() {
+
+            @Override
+            public void onTouch(String name, TouchEvent event, float tpf) {
+                switch(event.getType())
+                {
+                    case MOVE:
+                        x = event.getX();
+                        
+                        if (x < 1000) {
+                            deltaX = event.getDeltaX();
+                            deltaY = event.getDeltaY();
+                            
+                            if (deltaX > 0.5) { //right
+                                right = true;
+                                left = false;
+                            } else if (deltaX < -1.0) { //left
+                                left = true;
+                                right = false;
+                            }
+
+                            if (deltaY > 1.0) { //forward
+                                up = true;
+                                down = false;
+                            } else if (deltaY < -1.0) { //back
+                                down = true;
+                                up = false;
+                            }
+                        } 
+                        break;
+                    case TAP:
+                        slash = true;
+                        break;
+                    case UP :
+                        left = right = up = down = false;
+                    default:
+                        break;
+                }
+            }
+        };
+    }    
+    
+    /**
      * updateCharacterMotion will calulate the resulting directional vector from
      * the keys pressed.
      */
     public Vector3f updateCharacterMotion() {
-        Vector3f camDir = cam.getDirection().clone();
-        Vector3f camLeft = cam.getLeft().clone();
+        camDir = cam.getDirection().clone();
+        camLeft = cam.getLeft().clone();
         camDir.y = 0;
         camLeft.y = 0;
         walkDirection.set(0, 0, 0);
@@ -116,5 +168,12 @@ public class CharacterMotionControl {
      */
     public ActionListener getMotionController() {
         return actionListener;
+    }
+    
+    /**
+     * 
+     */
+    public TouchListener getTouchListener() {
+        return touchListener;
     }
 }

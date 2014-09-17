@@ -2,6 +2,13 @@ package CorpseSlasher;
 
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.input.controls.AnalogListener;
+import com.jme3.input.controls.TouchListener;
+import com.jme3.input.event.TouchEvent;
+import static com.jme3.input.event.TouchEvent.Type.FLING;
+import static com.jme3.input.event.TouchEvent.Type.LONGPRESSED;
+import static com.jme3.input.event.TouchEvent.Type.MOVE;
+import static com.jme3.input.event.TouchEvent.Type.TAP;
+import static com.jme3.input.event.TouchEvent.Type.UP;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -22,12 +29,15 @@ public class CharacterCameraControl {
     private Node pivot;
     private CameraNode cameraNode;
     private AnalogListener analogListener;
+    private TouchListener touchListener;
     private BetterCharacterControl characterControl;
-    private float xMovementSpeed = 0.5f;
-    private float yMovementSpeed = 0.5f;
-    private float verticalAngle = 5 * FastMath.DEG_TO_RAD;
+    private Quaternion turn = new Quaternion();
+    private float xMovementSpeed = 0.01f;
+    private float yMovementSpeed = 0.01f;
+    private float verticalAngle = 1.25f * FastMath.DEG_TO_RAD;
     private float maxVerticalAngle = 85 * FastMath.DEG_TO_RAD;
-    private float minVerticalAngle = -25 * FastMath.DEG_TO_RAD;
+    private float minVerticalAngle = -21 * FastMath.DEG_TO_RAD;
+    private float x, deltaX, deltaY;
  
     /**
      * CharacterCameraControl will create the functionality that will enable the
@@ -51,6 +61,7 @@ public class CharacterCameraControl {
 	pivot.getLocalRotation().fromAngleAxis(verticalAngle, Vector3f.UNIT_X);
         this.characterControl = cc;
         initActionListener();
+        initTouchListener();
     }
     
     /**
@@ -60,21 +71,61 @@ public class CharacterCameraControl {
         analogListener = new AnalogListener() {
             @Override
             public void onAnalog(String name, float value, float tpf) {
-                Quaternion turn = new Quaternion();
+                turn = new Quaternion();
                 switch(name) {
                     case "TurnLeft":
                         turn.fromAngleAxis(xMovementSpeed * value, Vector3f.UNIT_Y);
                         characterControl.setViewDirection(turn.mult(characterControl.getViewDirection()));
                         break;
                     case "TurnRight":
-                        turn.fromAngleAxis(-xMovementSpeed * value, Vector3f.UNIT_Y);
+                        turn.fromAngleAxis(xMovementSpeed * value, Vector3f.UNIT_Y);
                         characterControl.setViewDirection(turn.mult(characterControl.getViewDirection()));
                         break;
                     case "LookUp":
-                        verticalRotate(yMovementSpeed*value);
+                        verticalRotate(yMovementSpeed * value);
                         break;
                     case "LookDown":
-                        verticalRotate(-yMovementSpeed*value);
+                        verticalRotate(-yMovementSpeed * value);
+                        break;
+                }
+            }
+        };
+    }
+    
+    /**
+     * 
+     */
+    private void initTouchListener() {
+        touchListener = new TouchListener() {
+
+            @Override
+            public void onTouch(String name, TouchEvent event, float tpf) {
+                turn = new Quaternion();
+                switch(event.getType())
+                {
+                    case MOVE:
+                        x = event.getX();
+                        
+                        if (x > 1000) {
+                            deltaX = event.getDeltaX();
+                            deltaY = event.getDeltaY();
+                            
+                            if (deltaX > 1.0) { //right
+                                turn.fromAngleAxis(-xMovementSpeed * deltaX, Vector3f.UNIT_Y);
+                                characterControl.setViewDirection(turn.mult(characterControl.getViewDirection()));
+                            } else if (deltaX < -1.0) { //left
+                                turn.fromAngleAxis(-xMovementSpeed * deltaX, Vector3f.UNIT_Y);
+                                characterControl.setViewDirection(turn.mult(characterControl.getViewDirection()));
+                            }
+
+                            if (deltaY > 1.0) { //up
+                                verticalRotate(yMovementSpeed * deltaY);
+                            } else if (deltaY < -1.0) { //down
+                                verticalRotate(yMovementSpeed * deltaY);
+                            }
+                        }
+                        break;
+                    default:
                         break;
                 }
             }
@@ -108,5 +159,12 @@ public class CharacterCameraControl {
      */
     public AnalogListener getAnalogListener() {
         return analogListener;
+    }
+    
+    /**
+     * 
+     */
+    public TouchListener getTouchListener() {
+        return touchListener;
     }
 }
