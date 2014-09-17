@@ -41,15 +41,17 @@ public class SettingsScreen extends Screens {
     private boolean isWide;
     private UserInterfaceManager UI;
     private GameScene scene;
+    private SettingsController settingsControl;
 
     SettingsScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
-            ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay Screen, UserInterfaceManager UI,GameScene scene) {
+            ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay Screen, UserInterfaceManager UI, GameScene scene) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
         this.UI = UI;
         this.scene = scene;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         sHeight = (int) toolkit.getScreenSize().getHeight();
         sWidth = (int) toolkit.getScreenSize().getWidth();
+        settingsControl = new SettingsController(UI, scene, app);
         if ((sWidth / sHeight) == (16 / 9)) {
             isWide = true;
         } else {
@@ -88,7 +90,7 @@ public class SettingsScreen extends Screens {
                                 childLayoutVertical();
                                 control(new ButtonBuilder("", "Display Settings") {
                                     {
-                                        marginTop("48%");
+                                        marginTop("42%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -140,6 +142,18 @@ public class SettingsScreen extends Screens {
                                         interactOnClick("goTo(Leader_Board)");
                                     }
                                 });
+                                control(new ButtonBuilder("", "Logout") {
+                                    {
+                                        controller((ScreenController) app);
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Login_Screen)");
+                                    }
+                                });
                                 control(new ButtonBuilder("", "Quit Game") {
                                     {
                                         marginTop("2%");
@@ -159,7 +173,7 @@ public class SettingsScreen extends Screens {
         }.build(nifty));
         nifty.addScreen("Graphics_Settings", new ScreenBuilder("Graphics_Extension") {
             {
-                controller(new SettingsController(UI,scene));
+                controller(settingsControl);
                 layer(new LayerBuilder("background") {
                     {
                         font("Interface/Fonts/zombie.fnt");
@@ -177,7 +191,7 @@ public class SettingsScreen extends Screens {
                                 childLayoutVertical();
                                 control(new ButtonBuilder("", "Display Settings") {
                                     {
-                                        marginTop("48%");
+                                        marginTop("42%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -226,6 +240,18 @@ public class SettingsScreen extends Screens {
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
                                         interactOnClick("goTo(Leader_Board)");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Logout") {
+                                    {
+                                        controller((ScreenController) app);
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Login_Screen)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Quit Game") {
@@ -447,7 +473,7 @@ public class SettingsScreen extends Screens {
         }.build(nifty));
         nifty.addScreen("Display_Screen", new ScreenBuilder("Display_Settings") {
             {
-                controller(new SettingsController(UI,scene));
+                controller(settingsControl);
                 layer(new LayerBuilder("background") {
                     {
                         font("Interface/Fonts/zombie.fnt");
@@ -466,7 +492,7 @@ public class SettingsScreen extends Screens {
                                 childLayoutVertical();
                                 control(new ButtonBuilder("", "Display Settings") {
                                     {
-                                        marginTop("48%");
+                                        marginTop("42%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -515,6 +541,18 @@ public class SettingsScreen extends Screens {
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
                                         interactOnClick("goTo(Leader_Board)");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Logout") {
+                                    {
+                                        controller((ScreenController) app);
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Login_Screen)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Quit Game") {
@@ -577,9 +615,9 @@ public class SettingsScreen extends Screens {
                 });
             }
         }.build(nifty));
-        nifty.addScreen("Sound Settings",new ScreenBuilder("#Sound_Settings"){
+        nifty.addScreen("Sound Settings", new ScreenBuilder("#Sound_Settings") {
             {
-                controller(new SettingsController(UI,scene));
+                controller(settingsControl);
                 layer(new LayerBuilder("background") {
                     {
                         font("Interface/Fonts/zombie.fnt");
@@ -598,7 +636,7 @@ public class SettingsScreen extends Screens {
                                 childLayoutVertical();
                                 control(new ButtonBuilder("", "Display Settings") {
                                     {
-                                        marginTop("48%");
+                                        marginTop("42%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -649,6 +687,18 @@ public class SettingsScreen extends Screens {
                                         interactOnClick("goTo(Leader_Board)");
                                     }
                                 });
+                                control(new ButtonBuilder("", "Logout") {
+                                    {
+                                        controller((ScreenController) app);
+                                        marginTop("2%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Login_Screen)");
+                                    }
+                                });
                                 control(new ButtonBuilder("", "Quit Game") {
                                     {
                                         marginTop("2%");
@@ -666,7 +716,7 @@ public class SettingsScreen extends Screens {
                 });
                 layer(new LayerBuilder("Settings") {
                     {
-                       childLayoutVertical();
+                        childLayoutVertical();
                         panel(new PanelBuilder("#Master_Volume_Panel") {
                             {
                                 childLayoutHorizontal();
@@ -678,7 +728,7 @@ public class SettingsScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new SliderBuilder("#Master_Volume", false){
+                                control(new SliderBuilder("#Master_Volume", false) {
                                     {
                                         marginLeft("20px");
                                         min(0);
@@ -699,7 +749,7 @@ public class SettingsScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new SliderBuilder("#Ambient_Volume", false){
+                                control(new SliderBuilder("#Ambient_Volume", false) {
                                     {
                                         marginLeft("20px");
                                         min(0);
@@ -720,7 +770,7 @@ public class SettingsScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new SliderBuilder("#Combat_Volume", false){
+                                control(new SliderBuilder("#Combat_Volume", false) {
                                     {
                                         marginLeft("20px");
                                         min(0);
@@ -741,7 +791,7 @@ public class SettingsScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new SliderBuilder("#Dialog_Volume", false){
+                                control(new SliderBuilder("#Dialog_Volume", false) {
                                     {
                                         marginLeft("20px");
                                         min(0);
@@ -762,7 +812,7 @@ public class SettingsScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new SliderBuilder("#Footsteps_Volume", false){
+                                control(new SliderBuilder("#Footsteps_Volume", false) {
                                     {
                                         marginLeft("20px");
                                         min(0);
@@ -787,7 +837,7 @@ public class SettingsScreen extends Screens {
                         });
                     }
                 });
-                
+
             }
         }.build(nifty));
     }

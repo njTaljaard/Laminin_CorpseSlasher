@@ -28,10 +28,11 @@ import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
  */
 public class Leaderboard extends Screens {
     private static ClientConnection client;
-
+    private LeaderBoardController control;
     Leaderboard(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen,ClientConnection client) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
         Leaderboard.client = client;
+        control = new LeaderBoardController(client, assetManager,app);
     }
 
     /**
@@ -56,7 +57,7 @@ public class Leaderboard extends Screens {
         nifty.loadControlFile("nifty-default-controls.xml");
         nifty.addScreen("Leader_Board", new ScreenBuilder("Leaderboard") {
             {
-                controller(new LeaderBoardController(client,assetManager));
+                controller(control);
                 layer(new LayerBuilder("background") {
                     {
                         font("Interface/Fonts/zombie.fnt");

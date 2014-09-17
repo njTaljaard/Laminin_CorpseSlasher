@@ -163,7 +163,6 @@ public class Main extends SimpleApplication implements ScreenController {
         UI.updateRes(width, height);
         gSettings.setFullscreen(false);
         gSettings.setResolution(width, height);
-        gSettings.setFullscreen(true);
         this.setSettings(gSettings);
         UI.setSettings(gSettings);
         restart();
@@ -330,12 +329,16 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public void quitGame() {
         stop(false);
+        System.exit(0);
     }
 
     /**
      * Goes to screen selected
      */
     public void goTo(String screen) {
+         if(screen.equals("#Login_Screen")){
+             System.out.println("back to login screen");
+         }
         nifty.gotoScreen(screen);
     }
 

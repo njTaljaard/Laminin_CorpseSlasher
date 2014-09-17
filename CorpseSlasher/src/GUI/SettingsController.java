@@ -2,6 +2,7 @@ package GUI;
 
 import CorpseSlasher.GameScene;
 import CorpseSlasher.GameSettings;
+import com.jme3.app.Application;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.CheckBox;
@@ -31,10 +32,12 @@ public class SettingsController implements ScreenController {
     private Nifty nifty;
     private Screen screen;
     private GameScene scene;
+    private Application app;
     
-    public SettingsController(UserInterfaceManager UI,GameScene scene){
+    public SettingsController(UserInterfaceManager UI,GameScene scene, Application app){
         this.UI = UI;
         this.scene = scene;
+        this.app = app;
     }
     
     /**
@@ -292,7 +295,8 @@ public class SettingsController implements ScreenController {
       * Quits the game
       */
      public void quitGame(){
-         System.exit(1);
+         app.stop(false);
+        System.exit(0);
      }
      public void goTo(String _screen){
          nifty.gotoScreen(_screen);

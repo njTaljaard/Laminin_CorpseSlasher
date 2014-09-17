@@ -1,6 +1,7 @@
 package GUI;
 
 import CorpseSlasher.ClientConnection;
+import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.ListBox;
@@ -19,9 +20,12 @@ public class LeaderBoardController implements ScreenController {
     private static boolean init = true;
     private static ClientConnection client;
     private AssetManager assMan;
-    public LeaderBoardController(ClientConnection client,AssetManager assManager){
+    private Application app;
+    
+    public LeaderBoardController(ClientConnection client,AssetManager assManager, Application app){
         LeaderBoardController.client = client;
         assMan = assManager;
+        this.app = app;
     }
     @Override
     public void bind(Nifty nifty, Screen screen) {
@@ -76,7 +80,8 @@ public class LeaderBoardController implements ScreenController {
      * Quits the game
      */
     public void quitGame(){
-        System.exit(1);
+        app.stop(false);
+        System.exit(0);
     }
     
 }
