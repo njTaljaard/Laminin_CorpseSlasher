@@ -326,6 +326,16 @@ public class Character {
     
     /**
      * 
+     */
+    public void setPosition(Camera cam) {
+        characterControl.setEnabled(false);
+        player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, -6.2f));
+        player.lookAt(cam.getDirection(), cam.getUp());
+        characterControl.setEnabled(true);
+    }
+    
+    /**
+     * 
      * @return 
      */
     public float getHealth() {

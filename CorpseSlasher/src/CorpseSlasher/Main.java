@@ -9,6 +9,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 
@@ -48,7 +49,7 @@ public class Main extends SimpleApplication implements ScreenController {
     GameScene gameScene;
     BulletAppState bulletAppState;
     TimeOfDay timeOfDay;
-    boolean loggedIn;
+    boolean loggedIn, relog;
     TextField usernameTxt;
     TextField passwordTxt;
     TextField accUser;
@@ -96,6 +97,7 @@ public class Main extends SimpleApplication implements ScreenController {
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene, client);
         UI.setRes(width, height);
         loggedIn = false;
+        relog = false;
         flyCam.setEnabled(false);
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         this.setSettings(gSettings);
@@ -173,7 +175,7 @@ public class Main extends SimpleApplication implements ScreenController {
                     settingsF = loadSettings();
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
-        stateManager.attach(bulletAppState);
+        stateManager.attach(bulletAppState);       
         gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager/*, UI.getLoadingScreen()*/,
                 settingsF);
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
@@ -202,6 +204,11 @@ public class Main extends SimpleApplication implements ScreenController {
         health.setPosition(gSettings.getWidth() / 3.83f, gSettings.getHeight() / 1.109f);
         guiNode.attachChild(health);
         UI.setGuis(healthBorder,health, guiNode);
+        loggedIn = true;
+    }
+    
+    public void relog() {
+        gameScene.relog(cam, 0);
         loggedIn = true;
     }
 
@@ -250,13 +257,21 @@ public class Main extends SimpleApplication implements ScreenController {
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
             inputManager.setCursorVisible(false);
             // UI.loadingScreen();
-            loadGame();
+            if (relog) {
+                relog();
+            } else {
+                loadGame();
+            }
         } else {
             System.out.println("Username or password incorrect");
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
             inputManager.setCursorVisible(false);
             // UI.loadingScreen();
-            loadGame();
+            if (relog) {
+                relog();
+            } else {
+                loadGame();
+            }
         }
     }
 
@@ -340,6 +355,9 @@ public class Main extends SimpleApplication implements ScreenController {
              System.out.println("back to login screen");
          }
         nifty.gotoScreen(screen);
+        loggedIn = false;
+        relog = true;
+        Audio.pauseAmbient();
     }
 
     /**

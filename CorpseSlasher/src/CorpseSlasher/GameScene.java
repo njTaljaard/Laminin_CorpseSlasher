@@ -57,6 +57,12 @@ public class GameScene {
         basicScene.reloadScene();
     }
     
+    public void relog(Camera cam, int selectedMap) {
+        initCameraPosition(cam, selectedMap);
+        character.setPosition(cam);
+        Audio.playAmbient();
+    }
+    
     /**
      * initScene will retrieve and combine all the variase assets that will
      * make up the entire scene.
@@ -136,6 +142,7 @@ public class GameScene {
         Audio.loadOcean();
         Audio.loadCharacterAudio();
         Audio.loadMobAudio();
+        Audio.playAmbient();
     }
     
     /**

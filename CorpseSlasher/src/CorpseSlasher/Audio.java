@@ -108,10 +108,17 @@ public final class Audio {
         wave4.setDirection(Vector3f.ZERO);
         wave4.setLooping(true);*/
         
-        wave1.play();
         /*wave2.play();
         wave3.play();
         wave4.play();*/
+    }
+    
+    public static void playAmbient() {
+        wave1.play();
+    }
+    
+    public static void pauseAmbient() {
+        wave1.pause();
     }
     
     public static void loadCharacterAudio() {
