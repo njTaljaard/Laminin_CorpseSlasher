@@ -61,9 +61,21 @@ public class Input {
                         return "false";
                     }
                 }
+                case "addOAuthUser": {
+                    obj.put("username", clientObj.get("username").toString());
+                    if (dbu.setOAuthNewUser(obj)) {
+                        return "true";
+                    } else {
+                        return "false";
+                    }
+                }
                 case "getKills": {
                     obj.put("username", clientObj.get("username").toString());
                     return Integer.toString(dbu.getKills(obj));
+                }
+                case "getOAuthKills": {
+                    obj.put("username", clientObj.get("username").toString());
+                    return Integer.toString(dbu.getOAuthKills(obj));
                 }
                 case "setKills": {
                     obj.put("username", clientObj.get("username").toString());
@@ -74,9 +86,26 @@ public class Input {
                         return "false";
                     }
                 }
+                case "setOAuthKills": {
+                    obj.put("username", clientObj.get("username").toString());
+                    obj.put("zombieKills", clientObj.get("zombieKills").toString());
+                    if (dbu.setOAuthKills(obj)) {
+                        return "true";
+                    } else {
+                        return "false";
+                    }
+                }
                 case "addOneKill": {
                     obj.put("username", clientObj.get("username").toString());
                     if (dbu.increaseKillsByOne(obj)) {
+                        return "true";
+                    } else {
+                        return "false";
+                    }
+                }
+                case "addOAuthOneKill": {
+                    obj.put("username", clientObj.get("username").toString());
+                    if (dbu.increaseOAuthKillsByOne(obj)) {
                         return "true";
                     } else {
                         return "false";

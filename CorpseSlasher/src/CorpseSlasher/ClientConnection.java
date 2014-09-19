@@ -113,6 +113,29 @@ public final class ClientConnection {
         }
         return false;
     }
+    
+    /**
+     * AddOAuthUser - sends a JSON object with the OAuth clients username to the server,
+     * to add new user to database.
+     *
+     * @param username - client's username
+     *
+     * @return returns what ever boolean value the server returns, true if the
+     * user was added to database and false if it failed.
+     */
+    public static boolean AddOAuthUser(String username) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("type", "addOAuthUser");
+            obj.put("username", username);
+            outWriter.println(obj);
+            return Boolean.parseBoolean(inReader.readLine().toString());
+        } catch (Exception exc) {
+            //TODO: Raise exceptions through the ExceptionHandler class.
+            System.out.println("Connection Add OAuth User error: " + exc.toString());
+        }
+        return false;
+    }
 
     /**
      * RetrievePassword - sends the client's username in a JSON object to the
@@ -206,6 +229,27 @@ public final class ClientConnection {
         }
         return -1;
     }
+    
+    /**
+     * GetOAuthKills - get the number of client's zombie kills from the server.
+     *
+     * @param username - client's username.
+     *
+     * @return - return the number of client's zombie kills or -1 if it failed.
+     */
+    public static int GetOAuthKills(String username) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("type", "getOAuthKills");
+            obj.put("username", username);
+            outWriter.println(obj);
+            return Integer.parseInt(inReader.readLine().toString());
+        } catch (Exception exc) {
+            //TODO: Raise exceptions through the ExceptionHandler class.
+            System.out.println("Connection get OAuth kills error: " + exc.toString());
+        }
+        return -1;
+    }
 
     /**
      * SetKills - send the number of client's zombie kills to the server to be
@@ -231,6 +275,31 @@ public final class ClientConnection {
         }
         return false;
     }
+    
+    /**
+     * SetOAuthKills - send the number of client's zombie kills to the server to be
+     * saved
+     *
+     * @param username - client's username
+     * @param zombieKills - client's number of zombie kills.
+     *
+     * @return - returns true if the client's zombie kills was saved on the
+     * server or false if it failed.
+     */
+    public static boolean SetOAuthKills(String username, String zombieKills) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("type", "setOAuthKills");
+            obj.put("username", username);
+            obj.put("zombieKills", zombieKills);
+            outWriter.println(obj);
+            return Boolean.parseBoolean(inReader.readLine().toString());
+        } catch (Exception exc) {
+            //TODO: Raise exceptions through the ExceptionHandler class.
+            System.out.println("Connection set OAuth kills error: " + exc.toString());
+        }
+        return false;
+    }
 
     /**
      * AddOneKill - adds one kill to the client's total number of kills.
@@ -250,6 +319,28 @@ public final class ClientConnection {
         } catch (Exception exc) {
             //TODO: Raise exceptions through the ExceptionHandler class.
             System.out.println("Connection add one kill error: " + exc.toString());
+        }
+        return false;
+    }
+    
+    /**
+     * AddOAuthOneKill - adds one kill to the client's total number of kills.
+     *
+     * @param username - client's username.
+     *
+     * @return - returns true if the one kill was added server side and false if
+     * it failed.
+     */
+    public static boolean AddOAuthOneKill(String username) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("type", "addOAuthOneKill");
+            obj.put("username", username);
+            outWriter.println(obj);
+            return Boolean.parseBoolean(inReader.readLine().toString());
+        } catch (Exception exc) {
+            //TODO: Raise exceptions through the ExceptionHandler class.
+            System.out.println("Connection add one OAuth kill error: " + exc.toString());
         }
         return false;
     }

@@ -43,6 +43,25 @@ public class DatabaseUpdate {
             return false;
         }
     }
+    
+    /**
+     * setOAuthNewUser sends a new OAuth user's username to the database class.
+     *
+     * @param JSONObj - has the new OAuth user's username.
+     * @return - returns true if user details was sent to the Database class or
+     * returns false if failed.
+     */
+    public boolean setOAuthNewUser(JSONObject JSONObj) {
+        try {
+            db.connect();
+            db.addOAuthUser(JSONObj.get("username").toString());
+            return true;
+        } catch (Exception exc) {
+            System.out.println("Set new OAuth user error: " + exc.toString());
+            return false;
+        }
+    }
+
 
     /**
      *
@@ -102,6 +121,23 @@ public class DatabaseUpdate {
             return -1;
         }
     }
+    
+    /**
+     *
+     * getOAuthKills returns the zombie kills of the client by receiving it from the
+     * Database class.
+     *
+     * @param JSONObj - JSON object containing the client username.
+     * @return - return the client zombie kills.
+     */
+    public int getOAuthKills(JSONObject JSONObj) {
+        try {
+            db.connect();
+            return db.getOAuthZombieKills(JSONObj.get("username").toString());
+        } catch (Exception exc) {
+            return -1;
+        }
+    }
 
     /**
      *
@@ -125,6 +161,29 @@ public class DatabaseUpdate {
             return false;
         }
     }
+    
+    /**
+     *
+     * setOAuthKills sends the zombie kills of a client to the Database class.
+     *
+     * @param JSONObj - JSON object containing the client username and zombie
+     * kills.
+     * @return - return true if the zombie kills where sent to the Database
+     * class or false if it failed.
+     */
+    public boolean setOAuthKills(JSONObject JSONObj) {
+        try {
+            db.connect();
+            if (db.setOAuthZombieKills(JSONObj.get("username").toString(), Integer.parseInt(JSONObj.get("zombieKills").toString()))) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception exc) {
+
+            return false;
+        }
+    }
 
     /**
      *
@@ -138,6 +197,28 @@ public class DatabaseUpdate {
         try {
             db.connect();
             if (db.increaseZombieKillsByOne(JSONObj.get("username").toString())) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception exc) {
+
+            return false;
+        }
+    }
+    
+    /**
+     *
+     * increaseOAuthKillsByOne sends the client username to the Database class.
+     *
+     * @param JSONObj - JSON object containing the client username.
+     * @return returns true if client username was sent successfully to the
+     * Database class or false if it failed.
+     */
+    public boolean increaseOAuthKillsByOne(JSONObject JSONObj) {
+        try {
+            db.connect();
+            if (db.increaseOAuthZombieKillsByOne(JSONObj.get("username").toString())) {
                 return true;
             } else {
                 return false;

@@ -38,7 +38,7 @@ public class Database {
     public boolean connect() {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();//load driver
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/corpseslasher", "root", "");//establish connection
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/corpseslasher", "root", "GMN3CS2L1");//establish connection
             //System.out.println("connected to database");
             return true;
         } catch (Exception exc) {
@@ -71,7 +71,27 @@ public class Database {
             return false;
             //TODO: Send exception to exception handler class to process. 
         }
-
+    }
+    
+    /**
+     *
+     * addOAuthUser adds a new OAuth user to the database.
+     *
+     * @param username - client's username.
+     * @return returns true if OAuth user was successfully added in database
+     * or false if it failed.
+     */
+    public boolean addOAuthUser(String username) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "INSERT INTO oauth_user (name,zombieKills,experiencePoints) VALUES ('" + username + "',0,0)";
+            stmt.executeUpdate(query);
+            return true;
+        } catch (Exception exc) {
+            System.out.println("Add user error:" + exc);
+            return false;
+            //TODO: Send exception to exception handler class to process. 
+        }
     }
 
     /**
@@ -125,9 +145,44 @@ public class Database {
             Statement stmt = conn.createStatement();
             String query = "SELECT zombieKills FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            String result = rs.getString("zombieKills");
-            return Integer.parseInt(result);
+            if (rs.next())
+            {
+                String result = rs.getString("zombieKills");
+                return Integer.parseInt(result);
+            }
+            else
+            {
+                return -1;
+            }
+
+        } catch (Exception exc) {
+            System.out.println("Get zombie kills error:" + exc);
+            return -1;
+            //TODO: Send exception to exception handler class to process. 
+        }
+    }
+    
+    /**
+     *
+     * getOAuthZombieKills returns the number of zombie kills of a client.
+     *
+     * @param username - client's username.
+     * @return returns the client's number of zombie kills.
+     */
+    public int getOAuthZombieKills(String username) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT zombieKills FROM oauth_user WHERE name = '" + username + "'";
+            ResultSet rs = stmt.executeQuery(query);
+            if (rs.next())
+            {
+                String result = rs.getString("zombieKills");
+                return Integer.parseInt(result);
+            }
+            else
+            {
+                return -1;
+            }
 
         } catch (Exception exc) {
             System.out.println("Get zombie kills error:" + exc);
@@ -158,6 +213,29 @@ public class Database {
             //TODO: Send exception to exception handler class to process. 
         }
     }
+    
+    /**
+     *
+     * setOAuthZombieKills stores the client's number of zombie kills in the
+     * database.
+     *
+     * @param username - client's username.
+     * @param zombieKills - client's number of zombie kills.
+     * @return - returns true if the client's number of zombie kills was stored
+     * in the database or false if it failed.
+     */
+    public boolean setOAuthZombieKills(String username, int zombieKills) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "UPDATE oauth_user SET zombieKills = " + zombieKills + " WHERE name = '" + username + "'";
+            stmt.executeUpdate(query);
+            return true;
+        } catch (Exception exc) {
+            System.out.println("Set zombie kills error:" + exc);
+            return false;
+            //TODO: Send exception to exception handler class to process. 
+        }
+    }
 
     /**
      *
@@ -172,6 +250,28 @@ public class Database {
         try {
             Statement stmt = conn.createStatement();
             String query = "UPDATE user SET zombieKills = zombieKills + 1 WHERE username = '" + username + "'";
+            stmt.executeUpdate(query);
+            return true;
+        } catch (Exception exc) {
+            System.out.println("Increase zombie kills by one error:" + exc);
+            return false;
+            //TODO: Send exception to exception handler class to process. 
+        }
+    }
+    
+    /**
+     *
+     * increaseOAuthZombieKillsByOne increases a client's number of zombie kills by
+     * one.
+     *
+     * @param username - client's username.
+     * @return returns true if the client's number of zombie kills is increase
+     * with one in the database or false if it fails.
+     */
+    public boolean increaseOAuthZombieKillsByOne(String username) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "UPDATE oauth_user SET zombieKills = zombieKills + 1 WHERE name = '" + username + "'";
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
@@ -215,9 +315,15 @@ public class Database {
             Statement stmt = conn.createStatement();
             String query = "SELECT AES_DECRYPT(password, SHA1('9876543210')) FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            String result = rs.getString("AES_DECRYPT(password, SHA1('9876543210'))");
-            return result;
+            if (rs.next())
+            {
+                String result = rs.getString("AES_DECRYPT(password, SHA1('9876543210'))");
+                return result;
+            }
+            else
+            {
+                return "";
+            }
         } catch (Exception exc) {
             System.out.println("Get password error:" + exc);
             return "";
@@ -238,9 +344,15 @@ public class Database {
             Statement stmt = conn.createStatement();
             String query = "SELECT username FROM user WHERE email = '" + email + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            String result = rs.getString("username");
-            return result;
+            if (rs.next())
+            {
+                String result = rs.getString("username");
+                return result;
+            }
+            else
+            {
+                return "";
+            }
         } catch (Exception exc) {
             System.out.println("Get username error:" + exc);
             return "";
@@ -261,9 +373,15 @@ public class Database {
             Statement stmt = conn.createStatement();
             String query = "SELECT email FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            String result = rs.getString("email");
-            return result;
+            if (rs.next())
+            {
+                String result = rs.getString("email");
+                return result;
+            }
+            else
+            {
+                return "";
+            }
         } catch (Exception exc) {
             System.out.println("Get email error:" + exc);
             return "";
