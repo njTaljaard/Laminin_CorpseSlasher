@@ -20,10 +20,11 @@ import com.jme3.math.FastMath;
  * @param  COS301
  * Mob is a single instance of a mob to be added to the scene.
  */
-public class Mob {
+public class Mob extends Thread {
     
-    protected String mobName;
+    protected String mobName, attackLanded;
     protected int handColliosionGroup;
+    protected boolean swapControllers, attackAudio, walkAudio, damageAudio;
     private Node mob;
     private AssetManager assetManager;
     private BulletAppState bullet;
@@ -35,10 +36,10 @@ public class Mob {
     private BetterCharacterControl characterControl;
     private ModelRagdoll ragdoll;
     private GhostControl attackGhost;
-    private float health;
-    private float eighth_pi;
-    private boolean alive;
-    private long deathTime, spawnTime;
+    private Vector3f point;
+    private float health, eighth_pi, tpf;
+    private boolean alive, mobHit, playerHit;
+    private long deathTime, spawnTime, regenTime, regenInterval;
     
     /**
      * Mob creates a basic mob the required functionality.
@@ -58,7 +59,9 @@ public class Mob {
         alive = true;
         health = 100;
         eighth_pi = FastMath.PI * 0.125f;
-        spawnTime = new Long("10000000000");
+        attackLanded = "";
+        this.spawnTime = new Long("10000000000");
+        this.regenInterval = new Long("2000000000");
         
         createMob();
     }
@@ -67,12 +70,13 @@ public class Mob {
      * createMob will create all the sub sections of the mob and assemble it.
      */
     private void createMob() {
+        //audio = new MobAudioControl(assetManager);
         animControl = new MobAnimControl();
         motionControl = new MobMotionControl();
         
         initMob();
         initControl();
-        initRagdoll();
+        //initRagdoll();
         initAttackGhost();
         assembleMob();
         initAnim();
@@ -151,7 +155,7 @@ public class Mob {
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().add(attackGhost);
         bullet.getPhysicsSpace().add(motionControl.getAggroGhost());
-        bullet.getPhysicsSpace().addAll(mob);   
+        bullet.getPhysicsSpace().addAll(mob);  
     }
     
     /**
@@ -166,51 +170,79 @@ public class Mob {
         channel.setAnim("Stand");
         channel.setLoopMode(LoopMode.Cycle); 
     }
-      
+    
     /**
-     * updateMob will update the mobs phase according to if aggro was triggers 
-     * and animations that is required for that phase.
+     * 
      * @param point - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
      * @param playerHit - boolean if the player hit this mob.
      * @param mobHit - boolean if mob has attacked player.
-     * @param tpf - Time per frame required for updating ragdoll.
+     * @param tpf - Time per frame required for updating ragdoll. 
      */
-    public String updateMob(Vector3f point, boolean playerHit, boolean mobHit, float tpf) {
+    public void set(Vector3f point, boolean playerHit, boolean mobHit, float tpf) {
+        this.point = point;
+        this.playerHit = playerHit;
+        this.mobHit = mobHit;
+        this.tpf = tpf;
+    }
+      
+    /**
+     * updateMob will update the mobs phase according to if aggro was triggers 
+     * and animations that is required for that phase.
+     */
+    @Override
+    public void run() {
         if (alive) {
             characterControl.update(tpf);
             motionControl.updateMobPhase(point, mob, characterControl, passivePosition);
-            animControl.updateMobAnimations(channel, motionControl.aggro,
-                    motionControl.walkAttack, motionControl.attack, motionControl.passive);
-
+            
+            if (motionControl.walk) {
+                walkAudio = true;
+            } else {
+                walkAudio = false;
+            }
+            
+            attackAudio = animControl.updateMobAnimations(channel, motionControl.aggro,
+                    motionControl.walkAttack, motionControl.attack, 
+                    motionControl.passive, mob.getLocalTranslation());
+            
             if (playerHit) {
-                health -= 10;
-                System.out.println(mobName + " i have been hit!!!! My health is " + health);
+                health -= 15;
+                //System.out.println(mobName + " i have been hit!!!! My health is " + health);
+                damageAudio = true;
+                
                 if (health <= 0) {
                     health = 0;
                     alive = false;
                     deathTime = System.nanoTime();
                     motionControl.death(characterControl);
-                    System.out.println("You killed : " + mobName);
-                    swapControllers();
-                    return "";
+                    //System.out.println("You killed : " + mobName);
+                    swapControllers = true;
+                    return;
                 }
+            } else {
+                damageAudio = false;
+            }
+            
+            if (!motionControl.aggro && regenTime == new Long("0")) {
+                regenTime = System.nanoTime();
+            } else if (System.nanoTime() - regenTime > regenInterval && health != 100 && !motionControl.aggro) {
+                health += 5;
+                regenTime = new Long("0");
+                //System.out.println("Regen time, health is : " + health);
             }
 
             if (animControl.attacking && mobHit) {
                 animControl.attacking = false;
-                return mobName;
-            } else {
-                return "";
+                attackLanded = mobName;
             }
         } else {
             ragdoll.update(tpf);
             if (System.nanoTime() - deathTime > spawnTime) {
                 alive = true;
                 health = 100;
-                swapControllers();
+                swapControllers = true;
             }
-            return "";
         }
     }
     
@@ -218,30 +250,38 @@ public class Mob {
      * swapControllers will swap between controllers from BetterCharacterControl
      * will ghost boxes for alive and ragdoll for death.
      */
-    private void swapControllers() {
+    protected void swapControllers() {
+        walkAudio = false;
+        attackAudio = false;
+        damageAudio = false;
+        swapControllers = false;
+        
         if (alive) { //Swap to character control
             mob.setLocalTranslation(passivePosition);
             ragdoll.setKinematicMode();
+            bullet.getPhysicsSpace().removeAll(mob);
+            
             ragdoll.setEnabled(false);
+            mob.removeControl(ModelRagdoll.class);
+            
             characterControl.setEnabled(true);
             motionControl.getAggroGhost().setEnabled(true);
             attackGhost.setEnabled(true);
-            mob.removeControl(ModelRagdoll.class);
-            mob.addControl(motionControl.getAggroGhost());
-            mob.addControl(characterControl);
-            mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
-                    .getAttachmentsNode("hand.R").addControl(attackGhost);
+            
+            assembleMob();
         } else { //Swap to ragdoll control
             characterControl.setEnabled(false);
             motionControl.getAggroGhost().setEnabled(false);
             attackGhost.setEnabled(false);
             ragdoll.setEnabled(true);
+            
             mob.removeControl(BetterCharacterControl.class);
             mob.removeControl(GhostControl.class);
             mob.addControl(ragdoll);
+            
             ragdoll.setJointLimit("hips", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
             ragdoll.setJointLimit("spine", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
-            ragdoll.setJointLimit("chest", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
+            ragdoll.setJointLimit("chest", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi); 
             bullet.getPhysicsSpace().add(ragdoll);
             ragdoll.setRagdollMode();            
         }
@@ -249,6 +289,15 @@ public class Mob {
     
     /**
      * 
+     * @return 
+     */
+    public Vector3f getPosition() {
+        return mob.getLocalTranslation();
+    }
+    
+    /**
+     * 
+     * @return 
      */
     public boolean getAggro() {
         return motionControl.aggro;
@@ -258,7 +307,7 @@ public class Mob {
      * isAlive to determine if the mob is alive.
      * @return alive state.
      */
-    public boolean isAlive() {
+    public boolean alive() {
         return alive;
     }
     

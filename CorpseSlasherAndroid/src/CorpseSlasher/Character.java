@@ -192,6 +192,12 @@ public class Character {
             walkDirection = motionController.updateCharacterMotion();
             characterControl.setWalkDirection(walkDirection.normalize().multLocal(walkSpeed));
 
+            /*if (motionController.walk) {
+                Audio.playCharacterWalk();
+            } else {
+                Audio.pauseCharacterWalk();
+            }*/
+            
             motionController.slash = animController.updateCharacterAnimations(channel, 
                     motionController.slash, motionController.walk, alive);
             motionController.slash = false;
@@ -201,7 +207,7 @@ public class Character {
             } else if (System.nanoTime() - regenTime > regenInterval && health != 100 && !aggro) {
                 health += 5;
                 regenTime = new Long("0");
-                System.out.println("Regen time, health is : " + health);
+                //System.out.println("Regen time, health is : " + health);
             }
             
             if (animController.attacking && playerHits > 0) {
@@ -211,11 +217,11 @@ public class Character {
                 return false;
             }                
         } else {
-            ragdoll.update(tpf);
+            //ragdoll.update(tpf);
             if (System.nanoTime() - deathTime > spawnTime) {
                 alive = true;
                 health = 100;
-                swapControllers();
+                //swapControllers();
             }
             return false;
         }
@@ -229,15 +235,15 @@ public class Character {
         if (alive) {
             for (int i = 0; i < knocks.size(); i++) {
                 health -= 10;
-                System.out.println("Player : ive been slapped by " + knocks.get(i) 
-                        + ". Health is " + health);
+                //System.out.println("Player : ive been slapped by " + knocks.get(i) 
+                //        + ". Health is " + health);
                 
                 if (health <= 0) {
                     health = 0;
                     alive = false;
                     deathTime = System.nanoTime();
-                    System.out.println("You were killed by : " + knocks.get(i));
-                    swapControllers();
+                    //System.out.println("You were killed by : " + knocks.get(i));
+                    //swapControllers();
                 }
             }
         }
@@ -321,6 +327,24 @@ public class Character {
      */
     public Vector3f getPosition() {
         return player.getLocalTranslation();
+    }
+    
+    /**
+     *
+     */
+    public void setPosition(Camera cam) {
+        characterControl.setEnabled(false);
+        player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, -6.2f));
+        player.lookAt(cam.getDirection(), cam.getUp());
+        characterControl.setEnabled(true);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public float getHealth() {
+        return health;
     }
     
     /**

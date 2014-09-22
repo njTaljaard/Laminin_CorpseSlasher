@@ -80,6 +80,7 @@ public class CharacterAnimControl {
                     channel.setLoopMode(LoopMode.DontLoop);
                     channel.setSpeed(1.15f);
                     attacking = true;
+                    //Audio.playCharacterAttack();
                 } else {
                     if (!channel.getAnimationName().equals("Slash")) {
                         channel.setAnim("Slash", 1.0f);

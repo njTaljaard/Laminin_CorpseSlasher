@@ -1,4 +1,4 @@
-C:\Users\Gerhard\Desktop\Laminin_CorpseSlasher\CorpseSlasherAndroid\mobile\gen\com\lamnin\corpseslasher\R.java \
- : C:\Users\Gerhard\Desktop\Laminin_CorpseSlasher\CorpseSlasherAndroid\mobile\res\layout\main.xml \
-C:\Users\Gerhard\Desktop\Laminin_CorpseSlasher\CorpseSlasherAndroid\mobile\res\values\strings.xml \
-C:\Users\Gerhard\Desktop\Laminin_CorpseSlasher\CorpseSlasherAndroid\mobile\bin\AndroidManifest.xml \
+D:\Documents\UP\2014\COS301\GitRepo\Laminin_CorpseSlasher\CorpseSlasherAndroid\mobile\gen\com\lamnin\corpseslasher\R.java \
+ : D:\Documents\UP\2014\COS301\GitRepo\Laminin_CorpseSlasher\CorpseSlasherAndroid\mobile\res\layout\main.xml \
+D:\Documents\UP\2014\COS301\GitRepo\Laminin_CorpseSlasher\CorpseSlasherAndroid\mobile\res\values\strings.xml \
+D:\Documents\UP\2014\COS301\GitRepo\Laminin_CorpseSlasher\CorpseSlasherAndroid\mobile\bin\AndroidManifest.xml \

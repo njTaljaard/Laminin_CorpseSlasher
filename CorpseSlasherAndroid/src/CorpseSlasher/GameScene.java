@@ -43,10 +43,10 @@ public class GameScene {
         initScene(assestManager, viewPort, cam, bullet, selectedMap,/* ui,*/ settings);
         initMainCharacter(assestManager, inMan, bullet, cam);
         //initMobs(bullet, assestManager);
-        //initAudio();
+        initAudio();
         
-        //collController = new CollisionController();
-        //bullet.getPhysicsSpace().addCollisionListener(collController);
+        collController = new CollisionController();
+        bullet.getPhysicsSpace().addCollisionListener(collController);
         //bullet.getPhysicsSpace().enableDebug(assestManager);
     }
     
@@ -134,6 +134,8 @@ public class GameScene {
     private void initAudio() {
         Audio.initAmbient();
         Audio.loadOcean();
+        Audio.loadCharacterAudio();
+        Audio.loadMobAudio();
     }
     
     /**
@@ -144,18 +146,19 @@ public class GameScene {
      */
     public void update(TimeOfDay tod, float tpf, Camera cam) {
         basicScene.update(tod, tpf, cam.getLocation());
-        playerAttacking = character.updateCharacterPostion(0, tpf, false);
-        /*playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), 
+        //playerAttacking = character.updateCharacterPostion(0, tpf, false);
+        playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), 
                 tpf, mobHandler.getAggroState());
         
+        /*if (playerAttacking) {
             mobHits= mobHandler.updateMobs(character.getPosition(), 
                     collController.getPlayerHits(), collController.getMobHits(), tpf);
         } else {
             mobHits = mobHandler.updateMobs(character.getPosition(), 
                     new ArrayList<String>(), collController.getMobHits(), tpf);
-        }
-        character.processKnocks(mobHits);
-        collController.attacksProcessed();*/
+        }*/
+        //character.processKnocks(mobHits);
+        //collController.attacksProcessed();
     }
     
     /**

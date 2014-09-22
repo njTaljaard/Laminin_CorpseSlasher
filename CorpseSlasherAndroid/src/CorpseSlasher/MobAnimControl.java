@@ -4,6 +4,7 @@ import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
 import com.jme3.animation.LoopMode;
+import com.jme3.math.Vector3f;
 
 /**
  * @author Laminin
@@ -73,8 +74,8 @@ public class MobAnimControl {
      * @param attack - Boolean if mob can be stationary and attack.
      * @param passive - Boolean if mob is not aggroed and at spawn position.
      */
-    public void updateMobAnimations(AnimChannel channel, boolean aggro, 
-            boolean walkAttack, boolean attack, boolean passive) {
+    public boolean updateMobAnimations(AnimChannel channel, boolean aggro, 
+            boolean walkAttack, boolean attack, boolean passive, Vector3f position) {
         if (aggro) {                
             if (walkAttack) {
                 if (!channel.getAnimationName().equals("WalkAttack")) {
@@ -89,6 +90,7 @@ public class MobAnimControl {
                     channel.setLoopMode(LoopMode.DontLoop);
                     channel.setSpeed(1.0f);
                     attacking = true;
+                    return true;
                 }
             } else {
                 if (!channel.getAnimationName().equals("Walk")){
@@ -109,6 +111,7 @@ public class MobAnimControl {
                 channel.setLoopMode(LoopMode.Cycle);                    
             }
         }
+        return false;
     }
     
     /**
