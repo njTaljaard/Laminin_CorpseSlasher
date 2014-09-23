@@ -1,10 +1,6 @@
 package CorpseSlasherServer;
 
 import org.json.*;
-import java.io.*;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 /**
  * @author Laminin
@@ -31,14 +27,14 @@ public class Input {
             JSONObject obj = new JSONObject();
             DatabaseUpdate dbu = new DatabaseUpdate();
             String type = clientObj.get("type").toString();
-            /*if (type == "retrieveLeaderBoard")
+            if (type.equals("retrieveLeaderBoard") || type.equals("retrievePasswordInputEmail"))
             {
-                auditLog(type,"unknown");
+                AuditLog.writeAudit("unknown", type);
             }
             else
             {
-                auditLog(type,clientObj.get("username").toString());
-            }*/
+                AuditLog.writeAudit(clientObj.get("username").toString(), type);
+            }
             switch (type) {
                 case "login": {
                     obj.put("username", clientObj.get("username").toString());
@@ -129,7 +125,7 @@ public class Input {
                         return "false";
                     }
                 }
-                    case "retrievePasswordInputEmail": {
+                case "retrievePasswordInputEmail": {
                     obj.put("email", clientObj.get("email").toString());
 
                     if (dbu.retrievePasswordInputEmail(obj)) {
@@ -154,22 +150,8 @@ public class Input {
                     return "";
             }
         } catch (Exception exc) {
-            System.out.println("Input error: " + exc);
+            ExceptionHandler.catchException("Input", "getInput", exc.toString());
         }
         return "";
-    }
-    
-    public void auditLog(String username, String queryType)
-    {
-        
-        try{
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            Date date = new Date();
-            System.out.println(); //2014/08/06 15:59:48
-            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("auditLog.txt", true)));
-            out.println(dateFormat.format(date) + " , Username : " + username + " , Query : " + queryType);
-        }catch (IOException e) {
-            //TODO: Send exception to exception handler class to process.
-        }
     }
 }

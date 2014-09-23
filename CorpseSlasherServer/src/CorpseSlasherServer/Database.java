@@ -42,9 +42,8 @@ public class Database {
             //System.out.println("connected to database");
             return true;
         } catch (Exception exc) {
-            System.out.println("Database connection error:" + exc);
-            return false;
-            //TODO: Send exception to exception handler class to process. 
+            ExceptionHandler.catchException("Database", "connect", exc.toString());
+            return false; 
         }
     }
 
@@ -67,9 +66,8 @@ public class Database {
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
-            System.out.println("Add user error:" + exc);
+            ExceptionHandler.catchException("Database", "addUser", exc.toString());
             return false;
-            //TODO: Send exception to exception handler class to process. 
         }
     }
     
@@ -88,9 +86,8 @@ public class Database {
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
-            System.out.println("Add user error:" + exc);
+            ExceptionHandler.catchException("Database", "addOAuthUser", exc.toString());
             return false;
-            //TODO: Send exception to exception handler class to process. 
         }
     }
 
@@ -127,9 +124,8 @@ public class Database {
             }
 
         } catch (Exception exc) {
-            System.out.println("Login error:" + exc);
-            return false;
-            //TODO: Send exception to exception handler class to process. 
+            ExceptionHandler.catchException("Database", "login", exc.toString());
+            return false; 
         }
     }
 
@@ -156,9 +152,8 @@ public class Database {
             }
 
         } catch (Exception exc) {
-            System.out.println("Get zombie kills error:" + exc);
+            ExceptionHandler.catchException("Database", "getZombieKills", exc.toString());
             return -1;
-            //TODO: Send exception to exception handler class to process. 
         }
     }
     
@@ -185,9 +180,8 @@ public class Database {
             }
 
         } catch (Exception exc) {
-            System.out.println("Get zombie kills error:" + exc);
+            ExceptionHandler.catchException("Database", "getOAuthZombieKills", exc.toString());
             return -1;
-            //TODO: Send exception to exception handler class to process. 
         }
     }
 
@@ -208,9 +202,8 @@ public class Database {
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
-            System.out.println("Set zombie kills error:" + exc);
+            ExceptionHandler.catchException("Database", "setZombieKills", exc.toString());
             return false;
-            //TODO: Send exception to exception handler class to process. 
         }
     }
     
@@ -231,9 +224,8 @@ public class Database {
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
-            System.out.println("Set zombie kills error:" + exc);
+            ExceptionHandler.catchException("Database", "setOAuthZombieKills", exc.toString());
             return false;
-            //TODO: Send exception to exception handler class to process. 
         }
     }
 
@@ -253,9 +245,8 @@ public class Database {
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
-            System.out.println("Increase zombie kills by one error:" + exc);
+            ExceptionHandler.catchException("Database", "increaseZombieKillsByOne", exc.toString());
             return false;
-            //TODO: Send exception to exception handler class to process. 
         }
     }
     
@@ -275,9 +266,8 @@ public class Database {
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
-            System.out.println("Increase zombie kills by one error:" + exc);
-            return false;
-            //TODO: Send exception to exception handler class to process. 
+            ExceptionHandler.catchException("Database", "increaseOAuthZombieKillsByOne", exc.toString());
+            return false; 
         }
     }
 
@@ -297,9 +287,8 @@ public class Database {
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
-            System.out.println("Change password error:" + exc);
+            ExceptionHandler.catchException("Database", "changePassword", exc.toString());
             return false;
-            //TODO: Send exception to exception handler class to process. 
         }
     }
 
@@ -325,9 +314,8 @@ public class Database {
                 return "";
             }
         } catch (Exception exc) {
-            System.out.println("Get password error:" + exc);
+            ExceptionHandler.catchException("Database", "getPassword", exc.toString());
             return "";
-            //TODO: Send exception to exception handler class to process. 
         }
 
     }
@@ -354,9 +342,8 @@ public class Database {
                 return "";
             }
         } catch (Exception exc) {
-            System.out.println("Get username error:" + exc);
+            ExceptionHandler.catchException("Database", "getUsername", exc.toString());
             return "";
-            //TODO: Send exception to exception handler class to process. 
         }
 
     }
@@ -383,9 +370,8 @@ public class Database {
                 return "";
             }
         } catch (Exception exc) {
-            System.out.println("Get email error:" + exc);
-            return "";
-            //TODO: Send exception to exception handler class to process. 
+            ExceptionHandler.catchException("Database", "getMail", exc.toString());
+            return ""; 
         }
     }
 
@@ -416,9 +402,8 @@ public class Database {
                 return false;
             }
         } catch (Exception exc) {
-            System.out.println("available username error:" + exc);
-            return true;
-            //TODO: Send exception to exception handler class to process. 
+            ExceptionHandler.catchException("Database", "availableUsername", exc.toString());
+            return true; 
         }
     }
     
@@ -513,10 +498,9 @@ public class Database {
         }
         catch (Exception exc)
         {
-            System.out.println("Leader board error:" + exc);
+            ExceptionHandler.catchException("Database", "availableUsername", exc.toString());
             //Logger.getLogger(Database.class).log(Level.SEVERE, null,exc);
             return null;
-            //TODO: Send exception to exception handler class to process. 
         }
         
     }
@@ -540,8 +524,7 @@ public class Database {
         }
         catch (Exception e)
         {
-          e.printStackTrace();
-
+          ExceptionHandler.catchException("Database", "decrypt", e.toString());
         }
         return null;
     }

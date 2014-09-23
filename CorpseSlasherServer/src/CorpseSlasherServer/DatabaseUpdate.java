@@ -39,7 +39,7 @@ public class DatabaseUpdate {
             db.addUser(JSONObj.get("username").toString(), JSONObj.get("password").toString(), JSONObj.get("name").toString(), JSONObj.get("surname").toString(), JSONObj.get("email").toString());
             return true;
         } catch (Exception exc) {
-            System.out.println("Set new user error: " + exc.toString());
+            ExceptionHandler.catchException("DatabaseUpdate", "setNewUser", exc.toString());
             return false;
         }
     }
@@ -57,7 +57,7 @@ public class DatabaseUpdate {
             db.addOAuthUser(JSONObj.get("username").toString());
             return true;
         } catch (Exception exc) {
-            System.out.println("Set new OAuth user error: " + exc.toString());
+            ExceptionHandler.catchException("DatabaseUpdate", "setOAuthNewUser", exc.toString());
             return false;
         }
     }
@@ -79,7 +79,7 @@ public class DatabaseUpdate {
                 return false;
             }
         } catch (Exception exc) {
-
+            ExceptionHandler.catchException("DatabaseUpdate", "checkLogin", exc.toString());
             return false;
         }
     }
@@ -101,6 +101,7 @@ public class DatabaseUpdate {
                 return false;
             }
         } catch (Exception exc) {
+            ExceptionHandler.catchException("DatabaseUpdate", "checkUsernameAvailable", exc.toString());
             return false;
         }
     }
@@ -118,6 +119,7 @@ public class DatabaseUpdate {
             db.connect();
             return db.getZombieKills(JSONObj.get("username").toString());
         } catch (Exception exc) {
+            ExceptionHandler.catchException("DatabaseUpdate", "getKills", exc.toString());
             return -1;
         }
     }
@@ -135,6 +137,7 @@ public class DatabaseUpdate {
             db.connect();
             return db.getOAuthZombieKills(JSONObj.get("username").toString());
         } catch (Exception exc) {
+            ExceptionHandler.catchException("DatabaseUpdate", "getOAuthKills", exc.toString());
             return -1;
         }
     }
@@ -157,7 +160,7 @@ public class DatabaseUpdate {
                 return false;
             }
         } catch (Exception exc) {
-
+            ExceptionHandler.catchException("DatabaseUpdate", "setKills", exc.toString());
             return false;
         }
     }
@@ -180,7 +183,7 @@ public class DatabaseUpdate {
                 return false;
             }
         } catch (Exception exc) {
-
+            ExceptionHandler.catchException("DatabaseUpdate", "setOAuthKills", exc.toString());
             return false;
         }
     }
@@ -202,7 +205,7 @@ public class DatabaseUpdate {
                 return false;
             }
         } catch (Exception exc) {
-
+            ExceptionHandler.catchException("DatabaseUpdate", "increaseKillsByOne", exc.toString());
             return false;
         }
     }
@@ -224,7 +227,7 @@ public class DatabaseUpdate {
                 return false;
             }
         } catch (Exception exc) {
-
+            ExceptionHandler.catchException("DatabaseUpdate", "increaseOAuthKillsByOne", exc.toString());
             return false;
         }
     }
@@ -246,6 +249,7 @@ public class DatabaseUpdate {
                 return false;
             }
         } catch (Exception exc) {
+            ExceptionHandler.catchException("DatabaseUpdate", "setPassword", exc.toString());
             return false;
         }
     }
@@ -267,6 +271,7 @@ public class DatabaseUpdate {
             mail.sendMail(db.getMail(username), "Corpse Slasher Password", "Your Corpse Slasher Password: " + pass.substring(pass.indexOf('/') + 1));
             return true;
         } catch (Exception exc) {
+            ExceptionHandler.catchException("DatabaseUpdate", "retrievePassword", exc.toString());
             return false;
         }
     }
@@ -289,6 +294,7 @@ public class DatabaseUpdate {
             mail.sendMail(email, "Corpse Slasher Password", "Your Corpse Slasher Password: " + pass.substring(pass.indexOf('/') + 1));
             return true;
         } catch (Exception exc) {
+            ExceptionHandler.catchException("DatabaseUpdate", "retrievePasswordInputEmail", exc.toString());
             return false;
         }
     }
@@ -315,6 +321,7 @@ public class DatabaseUpdate {
         }
         catch (Exception exc)
         {
+            ExceptionHandler.catchException("DatabaseUpdate", "retriveLeaderBoard", exc.toString());
             return "";
         }
     }
@@ -338,7 +345,7 @@ public class DatabaseUpdate {
         }
         catch (Exception e)
         {
-           e.printStackTrace();
+            ExceptionHandler.catchException("DatabaseUpdate", "encrypt", e.toString());
         }
         return null;
 
@@ -363,8 +370,7 @@ public class DatabaseUpdate {
         }
         catch (Exception e)
         {
-          e.printStackTrace();
-
+          ExceptionHandler.catchException("DatabaseUpdate", "decrypt", e.toString());
         }
         return null;
     }

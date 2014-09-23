@@ -49,7 +49,7 @@ public class ClientConnection implements Runnable {
 
             }
         } catch (Exception exc) {
-            System.out.println("Client connection error: " + exc);
+            ExceptionHandler.catchException("ClientConnection", "run", exc.toString());
         }
     }
 }

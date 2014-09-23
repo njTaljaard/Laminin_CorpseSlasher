@@ -222,7 +222,7 @@ public class ServerUnitTesting {
         {
             
             String board = ClientConnection.retrieveLeaderBoard();
-            System.out.println(board);
+            System.out.println("Leader board in string format: " + board);
             if (board == "")
             {
                 return false;
