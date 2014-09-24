@@ -11,7 +11,11 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
+import com.jme3.material.Material;
 import com.jme3.math.FastMath;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
+import java.util.List;
 
 /**
  * @author Laminin
@@ -70,7 +74,6 @@ public class Mob extends Thread {
      * createMob will create all the sub sections of the mob and assemble it.
      */
     private void createMob() {
-        //audio = new MobAudioControl(assetManager);
         animControl = new MobAnimControl();
         motionControl = new MobMotionControl();
         
@@ -87,7 +90,29 @@ public class Mob extends Thread {
      * name it acordingly.
      */
     private void initMob() {
-        mob = (Node) assetManager.loadModel("Models/Zombie/bunnett.j3o");
+        mob = (Node) assetManager.loadModel("Models/ZombieMobile/bunnett.j3o");
+        
+        /*List<Spatial> geoms = ((Node) ((Node) ((Node)mob.getChild("metarig")).getChild("bennettzombie_body.001"))).getChildren();
+        Material mat = new Material(assetManager, "Textures/ZombieTextures/bennetzombie_body.png");
+        Geometry geo = (Geometry) geoms.get(0);
+        geo.setMaterial(mat);
+        
+        mat = new Material(assetManager, "Textures/ZombieTextures/bennetzombie_arm.png");
+        geo = (Geometry) geoms.get(1);
+        geo.setMaterial(mat);
+        
+        mat = new Material(assetManager, "Textures/ZombieTextures/bennetzombie_eyes.png");
+        geo = (Geometry) geoms.get(2);
+        geo.setMaterial(mat);
+        
+        mat = new Material(assetManager, "Textures/ZombieTextures/bennetzombie_teeth.png");
+        geo = (Geometry) geoms.get(3);
+        geo.setMaterial(mat);
+        
+        mat = new Material(assetManager, "Textures/ZombieTextures/bennetzombie_face.png");
+        geo = (Geometry) geoms.get(4);
+        geo.setMaterial(mat);*/
+        
         mob.setLocalTranslation(passivePosition);
         mob.setName(mobName);
     }
@@ -97,8 +122,8 @@ public class Mob extends Thread {
      * motion and forces control.
      */
     private void initControl() {
-        characterControl = new BetterCharacterControl(0.45f, 5.0f, 1);
-        characterControl.setGravity(new Vector3f(0, -800, 0));
+        characterControl = new BetterCharacterControl(0.2f, 0.85f, 12.5f);
+        characterControl.setGravity(new Vector3f(0, -200, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);
         characterControl.setEnabled(true);

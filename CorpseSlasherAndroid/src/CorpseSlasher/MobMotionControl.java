@@ -38,7 +38,7 @@ public class MobMotionControl {
      * collision group and the group it does collid with.
      */
     private void initAggroGhost() {
-        aggroGhost = new GhostControl(new SphereCollisionShape(15f));
+        aggroGhost = new GhostControl(new SphereCollisionShape(3.75f));
         aggroGhost.setCollisionGroup(6);
         aggroGhost.setCollideWithGroups(8);
     }

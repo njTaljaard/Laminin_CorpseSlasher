@@ -42,7 +42,7 @@ public class GameScene {
         initCameraPosition(cam, selectedMap);
         initScene(assestManager, viewPort, cam, bullet, selectedMap,/* ui,*/ settings);
         initMainCharacter(assestManager, inMan, bullet, cam);
-        //initMobs(bullet, assestManager);
+        initMobs(bullet, assestManager);
         initAudio();
         
         collController = new CollisionController();
@@ -146,17 +146,17 @@ public class GameScene {
      */
     public void update(TimeOfDay tod, float tpf, Camera cam) {
         basicScene.update(tod, tpf, cam.getLocation());
-        //playerAttacking = character.updateCharacterPostion(0, tpf, false);
+        playerAttacking = character.updateCharacterPostion(0, tpf, false);
         playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), 
                 tpf, mobHandler.getAggroState());
         
-        /*if (playerAttacking) {
+        if (playerAttacking) {
             mobHits= mobHandler.updateMobs(character.getPosition(), 
                     collController.getPlayerHits(), collController.getMobHits(), tpf);
         } else {
             mobHits = mobHandler.updateMobs(character.getPosition(), 
                     new ArrayList<String>(), collController.getMobHits(), tpf);
-        }*/
+        }
         //character.processKnocks(mobHits);
         //collController.attacksProcessed();
     }
