@@ -32,3 +32,30 @@ Date: 2014/09/26 10:47:36, Username: Enter Username, Query: login
 Date: 2014/09/26 10:53:58, Username: Enter Username, Query: login
 Date: 2014/09/26 10:55:20, Username: Enter Username, Query: login
 Date: 2014/09/26 10:56:21, Username: Enter Username, Query: login
+Date: 2014/09/26 11:12:47, Username: Enter Username, Query: login
+Date: 2014/09/26 11:14:17, Username: Enter Username, Query: login
+Date: 2014/09/26 11:14:36, Username: unknown, Query: retrieveLeaderBoard
+Date: 2014/09/26 11:24:41, Username: Enter Username, Query: login
+Date: 2014/09/26 11:24:58, Username: unknown, Query: retrieveLeaderBoard
+Date: 2014/09/26 11:25:51, Username: Enter Username, Query: login
+Date: 2014/09/26 11:26:22, Username: unknown, Query: retrieveLeaderBoard
+Date: 2014/09/26 11:27:50, Username: Enter Username, Query: login
+Date: 2014/09/26 11:28:39, Username: unknown, Query: retrieveLeaderBoard
+Date: 2014/09/26 11:29:46, Username: u10651994, Query: checkUsernameAvailable
+Date: 2014/09/26 11:30:08, Username: u10651994, Query: addUser
+Date: 2014/09/26 11:33:55, Username: u10651994, Query: checkUsernameAvailable
+Date: 2014/09/26 11:34:08, Username: u10651994, Query: addUser
+Date: 2014/09/26 11:34:59, Username: u10651994, Query: checkUsernameAvailable
+Date: 2014/09/26 11:35:00, Username: u10651994, Query: addUser
+Date: 2014/09/26 11:35:31, Username: u10651994, Query: checkUsernameAvailable
+Date: 2014/09/26 11:35:32, Username: u10651994, Query: addUser
+Date: 2014/09/26 11:36:19, Username: Enter Username, Query: login
+Date: 2014/09/26 11:37:08, Username: Enter Username, Query: login
+Date: 2014/09/26 11:40:37, Username: Enter Username, Query: login
+Date: 2014/09/26 11:41:57, Username: unknown, Query: retrieveLeaderBoard
+Date: 2014/09/26 11:42:35, Username: Enter Username, Query: login
+Date: 2014/09/26 11:42:57, Username: unknown, Query: retrieveLeaderBoard
+Date: 2014/09/26 11:43:28, Username: Enter Username, Query: login
+Date: 2014/09/26 11:45:33, Username: unknown, Query: retrieveLeaderBoard
+Date: 2014/09/26 11:50:39, Username: Enter Username, Query: login
+Date: 2014/09/26 11:50:57, Username: unknown, Query: retrieveLeaderBoard

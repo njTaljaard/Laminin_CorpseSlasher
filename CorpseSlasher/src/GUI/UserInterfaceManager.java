@@ -38,7 +38,6 @@ public final class UserInterfaceManager {
     private GameScene scene;
     private int width;
     private int height;
-    private static ClientConnection client;
     private Picture healthBorder;
     private Picture health;
     private Node guiNode;
@@ -54,14 +53,13 @@ public final class UserInterfaceManager {
      * initializes the user interface manager so it can interchange between different screens
      */
     public void init(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
-                     ViewPort guiViewPort, AppStateManager appState, Application app,GameScene scene,ClientConnection client) {
+                     ViewPort guiViewPort, AppStateManager appState, Application app,GameScene scene) {
         this.assetManager  = assetManager;
         this.inputManager  = inputManager;
         this.audioRenderer = audioRenderer;
         this.guiViewPort   = guiViewPort;
         this.app           = app;
         this.appState      = appState;
-        UserInterfaceManager.client = client;
         settingsScreen();
         Screen = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
         guiScreens = new Screens[6];
@@ -116,7 +114,7 @@ public final class UserInterfaceManager {
         guiScreens[2].updateRes(width, height);
     }
     public void leaderBoard() {
-        guiScreens[5] = new Leaderboard(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen,client);
+        guiScreens[5] = new Leaderboard(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
         guiScreens[5].build();
        guiScreens[5].updateRes(width, height);
     }

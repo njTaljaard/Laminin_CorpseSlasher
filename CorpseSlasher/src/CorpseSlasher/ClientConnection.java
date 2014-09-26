@@ -34,6 +34,8 @@ public final class ClientConnection {
     private static final String hostAddress = "localhost";
     private static final int hostPortNumber = 32323;
     private static String username_ = "";
+    public static boolean loggedIn = false;
+    public static boolean relog = false;
     /**
      * key - is the secret key used for the encryption.
      */

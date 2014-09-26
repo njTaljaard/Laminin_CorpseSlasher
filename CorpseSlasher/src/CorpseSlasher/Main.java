@@ -49,7 +49,6 @@ public class Main extends SimpleApplication implements ScreenController {
     GameScene gameScene;
     BulletAppState bulletAppState;
     TimeOfDay timeOfDay;
-    boolean loggedIn, relog;
     TextField usernameTxt;
     TextField passwordTxt;
     TextField accUser;
@@ -90,14 +89,11 @@ public class Main extends SimpleApplication implements ScreenController {
         height = 1080;
         Audio.assetManager = assetManager;
         Audio.audioRenderer = audioRenderer;
-        ClientConnection client = new ClientConnection();
-        client.StartClientConnection();
+        ClientConnection.StartClientConnection();
         gSettings = new AppSettings(true);
         gSettings.setResolution(width, height);
-        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene, client);
+        UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene);
         UI.setRes(width, height);
-        loggedIn = false;
-        relog = false;
         flyCam.setEnabled(false);
         inputManager.deleteMapping(INPUT_MAPPING_EXIT);
         this.setSettings(gSettings);
@@ -109,7 +105,7 @@ public class Main extends SimpleApplication implements ScreenController {
 
     @Override
     public void simpleUpdate(float tpf) {
-        if (loggedIn) {
+        if (ClientConnection.loggedIn) {
             gameScene.update(timeOfDay, tpf);
             health.setWidth((gameScene.getHealth()/100f)*(gSettings.getWidth()/2.1f));
         }
@@ -204,12 +200,12 @@ public class Main extends SimpleApplication implements ScreenController {
         health.setPosition(gSettings.getWidth() / 3.83f, gSettings.getHeight() / 1.109f);
         guiNode.attachChild(health);
         UI.setGuis(healthBorder,health, guiNode);
-        loggedIn = true;
+        ClientConnection.loggedIn = true;
     }
     
     public void relog() {
         gameScene.relog(cam, 0);
-        loggedIn = true;
+        ClientConnection.loggedIn = true;
         guiNode.attachChild(healthBorder);
         guiNode.attachChild(health);
     }
@@ -254,25 +250,30 @@ public class Main extends SimpleApplication implements ScreenController {
 
         // System.out.println(selectedButton.getSelectedId() + " was chosen");
         boolean success = ClientConnection.Login(usernameTxt.getRealText(), passwordTxt.getRealText());
+        String username = usernameTxt.getRealText();
 
         if (success) {
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
             inputManager.setCursorVisible(false);
             // UI.loadingScreen();
-            if (relog) {
+            if (ClientConnection.relog) {
                 relog();
+                ClientConnection.setUsername(username);
             } else {
                 loadGame();
+                ClientConnection.setUsername(username);
             }
         } else {
             System.out.println("Username or password incorrect");
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
             inputManager.setCursorVisible(false);
             // UI.loadingScreen();
-            if (relog) {
+            if (ClientConnection.relog) {
                 relog();
+                //ClientConnection.setUsername(username);
             } else {
                 loadGame();
+                //ClientConnection.setUsername(username);
             }
         }
     }
@@ -357,8 +358,8 @@ public class Main extends SimpleApplication implements ScreenController {
              System.out.println("back to login screen");
          }
         nifty.gotoScreen(screen);
-        loggedIn = false;
-        relog = true;
+        ClientConnection.loggedIn = false;
+        ClientConnection.relog = true;
         Audio.pauseAmbient();
     }
 

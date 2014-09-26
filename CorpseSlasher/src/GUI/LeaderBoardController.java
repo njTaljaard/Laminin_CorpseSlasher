@@ -1,5 +1,6 @@
 package GUI;
 
+import CorpseSlasher.Audio;
 import CorpseSlasher.ClientConnection;
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
@@ -8,6 +9,7 @@ import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 /**
  * The controller class for the leaderboard class, displaying and adding all
@@ -18,12 +20,10 @@ public class LeaderBoardController implements ScreenController {
     private Nifty nifty;
     private Screen screen;
     private static boolean init = true;
-    private static ClientConnection client;
     private AssetManager assMan;
     private Application app;
     
-    public LeaderBoardController(ClientConnection client,AssetManager assManager, Application app){
-        LeaderBoardController.client = client;
+    public LeaderBoardController(AssetManager assManager, Application app){
         assMan = assManager;
         this.app = app;
     }
@@ -39,17 +39,17 @@ public class LeaderBoardController implements ScreenController {
     public void onStartScreen() { 
        nifty.setIgnoreKeyboardEvents(false);
        ListBox listBox = screen.findNiftyControl("#scorebar", ListBox.class);
-       String leaderboard = client.retrieveLeaderBoard();
-       Scanner scLine = new Scanner(leaderboard).useDelimiter(",");
-       while(scLine.hasNext()){
-           String name = scLine.next();
-           String kills = scLine.next();
-           String exp = scLine.next();
+       String leaderboard = ClientConnection.retrieveLeaderBoard();
+        StringTokenizer details = new StringTokenizer(leaderboard,",");
+        for(int x = 0;x<details.countTokens();x++){
+           String name = details.nextToken();
+           String kills =details.nextToken();
+           String exp = details.nextToken();
            String finalStr = addSpaces(name,25)+"\t\t\t\t\t"+addSpaces(kills,15)+"\t\t\t"+exp;       
            listBox.addItem(finalStr);
            System.out.println(finalStr);
            listBox.setStyle("");
-       }
+        }
     }
     /**
      * 
@@ -73,8 +73,14 @@ public class LeaderBoardController implements ScreenController {
      * @param _screen screen to change to
      * Changes the nifty gui screen based on the input
      */
-    public void goTo(String _screen){
-        nifty.gotoScreen(_screen);
+    public void goTo(String screen) {
+         if(screen.equals("#Login_Screen")){
+             System.out.println("back to login screen");
+         }
+        nifty.gotoScreen(screen);
+        ClientConnection.loggedIn = false;
+        ClientConnection.relog = true;
+        Audio.pauseAmbient();
     }
     /**
      * Quits the game

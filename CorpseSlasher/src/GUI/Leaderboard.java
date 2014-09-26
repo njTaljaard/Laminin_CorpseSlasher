@@ -28,12 +28,10 @@ import de.lessvoid.nifty.screen.ScreenController;
  * see all the users scores and see where they lie on the list
  */
 public class Leaderboard extends Screens {
-    private static ClientConnection client;
     private LeaderBoardController control;
-    Leaderboard(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen,ClientConnection client) {
+    Leaderboard(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
-        Leaderboard.client = client;
-        control = new LeaderBoardController(client, assetManager,app);
+        control = new LeaderBoardController(assetManager,app);
     }
 
     /**

@@ -1,5 +1,7 @@
 package GUI;
 
+import CorpseSlasher.Audio;
+import CorpseSlasher.ClientConnection;
 import CorpseSlasher.GameScene;
 import CorpseSlasher.GameSettings;
 import com.jme3.app.Application;
@@ -59,64 +61,64 @@ public class SettingsController implements ScreenController {
         listBox.addItem("800 X 600");       
         CheckBox checkbox = null; 
         try {
-            Scanner scFile = new Scanner(new FileReader("GameSettings.ini"));
-            while(scFile.hasNextLine()){
-            String line = scFile.nextLine();
-            String[] parts = line.split("=");
-            switch(parts[0]){
-                case "PostWater":
-                    checkbox = screen.findNiftyControl("Post_Water_Button", CheckBox.class); 
-                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
-                    x1 = Boolean.parseBoolean(parts[1]);
-                    break;
-                case "WaterReflections":
-                    checkbox = screen.findNiftyControl("Water_Reflections_Button", CheckBox.class); 
-                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
-                    x2 = Boolean.parseBoolean(parts[1]);
-                    break;
-                case "WaterRipples":
-                    checkbox = screen.findNiftyControl("Water_Ripples_Button", CheckBox.class); 
-                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
-                    x3 = Boolean.parseBoolean(parts[1]);
-                    break;
-                case "WaterSpecular":
-                    checkbox = screen.findNiftyControl("Water_Specular_Button", CheckBox.class); 
-                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
-                    x4 = Boolean.parseBoolean(parts[1]);
-                    break;
-                case "WaterFoam":
-                    checkbox = screen.findNiftyControl("Water_Foam_Button", CheckBox.class); 
-                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
-                    x5 = Boolean.parseBoolean(parts[1]);
-                    break;
-                case "SkyDome":
-                    checkbox = screen.findNiftyControl("Sky_Dome_Button", CheckBox.class); 
-                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
-                    x6 = Boolean.parseBoolean(parts[1]);
-                    break;
-                case "StarMotion":
-                    checkbox = screen.findNiftyControl("Star_Motion_Button", CheckBox.class); 
-                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
-                    x7 = Boolean.parseBoolean(parts[1]);
-                    break;
-                case "CloudMotion":
-                    checkbox = screen.findNiftyControl("Cloud_Motion_Button", CheckBox.class); 
-                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
-                    x8 = Boolean.parseBoolean(parts[1]);
-                    break;
-                case "BloomLight":
-                    checkbox = screen.findNiftyControl("Bloom_Light_Button", CheckBox.class); 
-                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
-                    x9 = Boolean.parseBoolean(parts[1]);
-                    break;
-                case "LightScatter":
-                    checkbox = screen.findNiftyControl("Light_Scatter_Button", CheckBox.class); 
-                    checkbox.setChecked(Boolean.parseBoolean(parts[1]));
-                    x10 = Boolean.parseBoolean(parts[1]);
-                    break;
+            try (Scanner scFile = new Scanner(new FileReader("GameSettings.ini"))) {
+                while(scFile.hasNextLine()){
+                String line = scFile.nextLine();
+                String[] parts = line.split("=");
+                switch(parts[0]){
+                    case "PostWater":
+                        checkbox = screen.findNiftyControl("Post_Water_Button", CheckBox.class); 
+                        checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                        x1 = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "WaterReflections":
+                        checkbox = screen.findNiftyControl("Water_Reflections_Button", CheckBox.class); 
+                        checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                        x2 = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "WaterRipples":
+                        checkbox = screen.findNiftyControl("Water_Ripples_Button", CheckBox.class); 
+                        checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                        x3 = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "WaterSpecular":
+                        checkbox = screen.findNiftyControl("Water_Specular_Button", CheckBox.class); 
+                        checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                        x4 = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "WaterFoam":
+                        checkbox = screen.findNiftyControl("Water_Foam_Button", CheckBox.class); 
+                        checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                        x5 = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "SkyDome":
+                        checkbox = screen.findNiftyControl("Sky_Dome_Button", CheckBox.class); 
+                        checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                        x6 = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "StarMotion":
+                        checkbox = screen.findNiftyControl("Star_Motion_Button", CheckBox.class); 
+                        checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                        x7 = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "CloudMotion":
+                        checkbox = screen.findNiftyControl("Cloud_Motion_Button", CheckBox.class); 
+                        checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                        x8 = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "BloomLight":
+                        checkbox = screen.findNiftyControl("Bloom_Light_Button", CheckBox.class); 
+                        checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                        x9 = Boolean.parseBoolean(parts[1]);
+                        break;
+                    case "LightScatter":
+                        checkbox = screen.findNiftyControl("Light_Scatter_Button", CheckBox.class); 
+                        checkbox.setChecked(Boolean.parseBoolean(parts[1]));
+                        x10 = Boolean.parseBoolean(parts[1]);
+                        break;
+                }
+                }
             }
-            }
-            scFile.close();
             Scanner soundScanner = new Scanner(new FileReader("SoundSettings.ini"));
             Slider slider = null;
             while(soundScanner.hasNextLine()){
@@ -298,9 +300,15 @@ public class SettingsController implements ScreenController {
          app.stop(false);
         System.exit(0);
      }
-     public void goTo(String _screen){
-         nifty.gotoScreen(_screen);
-     }
+    public void goTo(String screen) {
+         if(screen.equals("#Login_Screen")){
+             System.out.println("back to login screen");
+         }
+        nifty.gotoScreen(screen);
+        ClientConnection.loggedIn = false;
+        ClientConnection.relog = true;
+        Audio.pauseAmbient();
+    }
      @NiftyEventSubscriber(id = "#Master_Volume")
      public void volumeSliderM(final String id,SliderChangedEvent event){
          mVol  = event.getValue();
