@@ -33,7 +33,7 @@ public final class ClientConnection {
     private static PrintWriter outWriter;
     private static final String hostAddress = "localhost";
     private static final int hostPortNumber = 32323;
-    
+    private static String username_ = "";
     /**
      * key - is the secret key used for the encryption.
      */
@@ -81,6 +81,19 @@ public final class ClientConnection {
             System.out.println("Connection login error: " + exc.toString());
         }
         return false;
+    }
+    
+    /**
+     * 
+     * setUsername saves the client's username client side, for some functions
+     * that does not take the username as a parameter but needs to send the username
+     * to the server.
+     * 
+     * @param username - client's username
+     */
+    public static void setUsername(String username)
+    {
+        username_ = username;
     }
 
     /**
@@ -316,6 +329,34 @@ public final class ClientConnection {
             obj.put("username", username);
             outWriter.println(obj);
             return Boolean.parseBoolean(inReader.readLine().toString());
+        } catch (Exception exc) {
+            //TODO: Raise exceptions through the ExceptionHandler class.
+            System.out.println("Connection add one kill error: " + exc.toString());
+        }
+        return false;
+    }
+    
+    /**
+     * AddOneKill - adds one kill to the client's total number of kills.
+     *
+     * @return - returns true if the one kill was added server side and false if
+     * it failed.
+     */
+    public static boolean AddOneKill() {
+        JSONObject obj = new JSONObject();
+        try {
+            if (username_ == "")
+            {
+                System.out.println("Connection add one kill error: username is not set. Please call setUsername(username) function before AddOneKill() function");
+                return false;
+            }
+            else
+            {
+            obj.put("type", "addOneKill");
+            obj.put("username", username_);
+            outWriter.println(obj);
+            return Boolean.parseBoolean(inReader.readLine().toString());
+            }
         } catch (Exception exc) {
             //TODO: Raise exceptions through the ExceptionHandler class.
             System.out.println("Connection add one kill error: " + exc.toString());

@@ -218,6 +218,7 @@ public class Mob extends Thread {
                     motionControl.death(characterControl);
                     //System.out.println("You killed : " + mobName);
                     swapControllers = true;
+                    ClientConnection.AddOneKill();
                     return;
                 }
             } else {
