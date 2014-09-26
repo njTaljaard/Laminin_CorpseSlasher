@@ -56,10 +56,10 @@ public class Email {
             transport.close();
             return true;
         } catch (AddressException ae) {
-            ae.printStackTrace();
+            ExceptionHandler.catchException("Email", "sendMail", ae.toString());
             return false;
         } catch (MessagingException me) {
-            me.printStackTrace();
+            ExceptionHandler.catchException("Email", "sendMail", me.toString());
             return false;
         }
     }

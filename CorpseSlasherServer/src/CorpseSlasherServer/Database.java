@@ -2,6 +2,9 @@ package CorpseSlasherServer;
 
 //import com.sun.istack.internal.logging.Logger;
 import java.sql.*;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import org.apache.commons.codec.binary.Base64;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 
@@ -17,6 +20,13 @@ import java.sql.*;
 public class Database {
 
     Connection conn = null;
+    
+    /**
+     * key - is the secret key used for the encryption.
+     */
+    private static byte[] key = {
+            0x74, 0x68, 0x69, 0x73, 0x49, 0x73, 0x41, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x4b, 0x65, 0x79
+    };//"thisIsASecretKey";
 
     /**
      *
@@ -28,13 +38,12 @@ public class Database {
     public boolean connect() {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();//load driver
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/corpseslasher", "root", "");//establish connection
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/corpseslasher", "root", "GMN3CS2L1");//establish connection
             //System.out.println("connected to database");
             return true;
         } catch (Exception exc) {
-            System.out.println("Database connection error:" + exc);
-            return false;
-            //TODO: Send exception to exception handler class to process. 
+            ExceptionHandler.catchException("Database", "connect", exc.toString());
+            return false; 
         }
     }
 
@@ -57,11 +66,29 @@ public class Database {
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
-            System.out.println("Add user error:" + exc);
+            ExceptionHandler.catchException("Database", "addUser", exc.toString());
             return false;
-            //TODO: Send exception to exception handler class to process. 
         }
-
+    }
+    
+    /**
+     *
+     * addOAuthUser adds a new OAuth user to the database.
+     *
+     * @param username - client's username.
+     * @return returns true if OAuth user was successfully added in database
+     * or false if it failed.
+     */
+    public boolean addOAuthUser(String username) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "INSERT INTO oauth_user (name,zombieKills,experiencePoints) VALUES ('" + username + "',0,0)";
+            stmt.executeUpdate(query);
+            return true;
+        } catch (Exception exc) {
+            ExceptionHandler.catchException("Database", "addOAuthUser", exc.toString());
+            return false;
+        }
     }
 
     /**
@@ -77,19 +104,28 @@ public class Database {
     public boolean login(String username, String password) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "SELECT username FROM user WHERE password = AES_ENCRYPT('" + password + "', SHA1('9876543210'))";
+            String query = "SELECT  AES_DECRYPT(password, SHA1('9876543210')) FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            String result = rs.getString("username");
-            if (result.compareTo(username) == 0) {
-                return true;
+            if (rs.next())
+            {
+                String IPAndPassword = decrypt(rs.getString("AES_DECRYPT(password, SHA1('9876543210'))"));
+                //Get just the password by removing the IP
+                String result = IPAndPassword.substring(IPAndPassword.indexOf('/') + 1);
+                String tmp = decrypt(password);
+                String userPass = tmp.substring(tmp.indexOf('/') + 1);
+                if (result.compareTo(userPass) == 0) {
+                    return true;
+                }
+                return false;
             }
-            return false;
+            else
+            {
+                return false;
+            }
 
         } catch (Exception exc) {
-            System.out.println("Login error:" + exc);
-            return false;
-            //TODO: Send exception to exception handler class to process. 
+            ExceptionHandler.catchException("Database", "login", exc.toString());
+            return false; 
         }
     }
 
@@ -105,14 +141,47 @@ public class Database {
             Statement stmt = conn.createStatement();
             String query = "SELECT zombieKills FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            String result = rs.getString("zombieKills");
-            return Integer.parseInt(result);
+            if (rs.next())
+            {
+                String result = rs.getString("zombieKills");
+                return Integer.parseInt(result);
+            }
+            else
+            {
+                return -1;
+            }
 
         } catch (Exception exc) {
-            System.out.println("Get zombie kills error:" + exc);
+            ExceptionHandler.catchException("Database", "getZombieKills", exc.toString());
             return -1;
-            //TODO: Send exception to exception handler class to process. 
+        }
+    }
+    
+    /**
+     *
+     * getOAuthZombieKills returns the number of zombie kills of a client.
+     *
+     * @param username - client's username.
+     * @return returns the client's number of zombie kills.
+     */
+    public int getOAuthZombieKills(String username) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT zombieKills FROM oauth_user WHERE name = '" + username + "'";
+            ResultSet rs = stmt.executeQuery(query);
+            if (rs.next())
+            {
+                String result = rs.getString("zombieKills");
+                return Integer.parseInt(result);
+            }
+            else
+            {
+                return -1;
+            }
+
+        } catch (Exception exc) {
+            ExceptionHandler.catchException("Database", "getOAuthZombieKills", exc.toString());
+            return -1;
         }
     }
 
@@ -133,9 +202,30 @@ public class Database {
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
-            System.out.println("Set zombie kills error:" + exc);
+            ExceptionHandler.catchException("Database", "setZombieKills", exc.toString());
             return false;
-            //TODO: Send exception to exception handler class to process. 
+        }
+    }
+    
+    /**
+     *
+     * setOAuthZombieKills stores the client's number of zombie kills in the
+     * database.
+     *
+     * @param username - client's username.
+     * @param zombieKills - client's number of zombie kills.
+     * @return - returns true if the client's number of zombie kills was stored
+     * in the database or false if it failed.
+     */
+    public boolean setOAuthZombieKills(String username, int zombieKills) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "UPDATE oauth_user SET zombieKills = " + zombieKills + " WHERE name = '" + username + "'";
+            stmt.executeUpdate(query);
+            return true;
+        } catch (Exception exc) {
+            ExceptionHandler.catchException("Database", "setOAuthZombieKills", exc.toString());
+            return false;
         }
     }
 
@@ -155,9 +245,29 @@ public class Database {
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
-            System.out.println("Increase zombie kills by one error:" + exc);
+            ExceptionHandler.catchException("Database", "increaseZombieKillsByOne", exc.toString());
             return false;
-            //TODO: Send exception to exception handler class to process. 
+        }
+    }
+    
+    /**
+     *
+     * increaseOAuthZombieKillsByOne increases a client's number of zombie kills by
+     * one.
+     *
+     * @param username - client's username.
+     * @return returns true if the client's number of zombie kills is increase
+     * with one in the database or false if it fails.
+     */
+    public boolean increaseOAuthZombieKillsByOne(String username) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "UPDATE oauth_user SET zombieKills = zombieKills + 1 WHERE name = '" + username + "'";
+            stmt.executeUpdate(query);
+            return true;
+        } catch (Exception exc) {
+            ExceptionHandler.catchException("Database", "increaseOAuthZombieKillsByOne", exc.toString());
+            return false; 
         }
     }
 
@@ -177,9 +287,8 @@ public class Database {
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
-            System.out.println("Change password error:" + exc);
+            ExceptionHandler.catchException("Database", "changePassword", exc.toString());
             return false;
-            //TODO: Send exception to exception handler class to process. 
         }
     }
 
@@ -195,13 +304,18 @@ public class Database {
             Statement stmt = conn.createStatement();
             String query = "SELECT AES_DECRYPT(password, SHA1('9876543210')) FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            String result = rs.getString("AES_DECRYPT(password, SHA1('9876543210'))");
-            return result;
+            if (rs.next())
+            {
+                String result = rs.getString("AES_DECRYPT(password, SHA1('9876543210'))");
+                return result;
+            }
+            else
+            {
+                return "";
+            }
         } catch (Exception exc) {
-            System.out.println("Get password error:" + exc);
+            ExceptionHandler.catchException("Database", "getPassword", exc.toString());
             return "";
-            //TODO: Send exception to exception handler class to process. 
         }
 
     }
@@ -218,13 +332,18 @@ public class Database {
             Statement stmt = conn.createStatement();
             String query = "SELECT username FROM user WHERE email = '" + email + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            String result = rs.getString("username");
-            return result;
+            if (rs.next())
+            {
+                String result = rs.getString("username");
+                return result;
+            }
+            else
+            {
+                return "";
+            }
         } catch (Exception exc) {
-            System.out.println("Get username error:" + exc);
+            ExceptionHandler.catchException("Database", "getUsername", exc.toString());
             return "";
-            //TODO: Send exception to exception handler class to process. 
         }
 
     }
@@ -241,13 +360,18 @@ public class Database {
             Statement stmt = conn.createStatement();
             String query = "SELECT email FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            String result = rs.getString("email");
-            return result;
+            if (rs.next())
+            {
+                String result = rs.getString("email");
+                return result;
+            }
+            else
+            {
+                return "";
+            }
         } catch (Exception exc) {
-            System.out.println("Get email error:" + exc);
-            return "";
-            //TODO: Send exception to exception handler class to process. 
+            ExceptionHandler.catchException("Database", "getMail", exc.toString());
+            return ""; 
         }
     }
 
@@ -265,17 +389,21 @@ public class Database {
             Statement stmt = conn.createStatement();
             String query = "SELECT username FROM user WHERE username = '" + username + "'";
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            String result = rs.getString("username");
-            if (result.compareTo(username) == 0) {
+            if (rs.next())
+            {
+                String result = rs.getString("username");
+                if (result.compareTo(username) == 0) {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
                 return false;
             }
-            return true;
-
         } catch (Exception exc) {
-            System.out.println("available username error:" + exc);
-            return true;
-            //TODO: Send exception to exception handler class to process. 
+            ExceptionHandler.catchException("Database", "availableUsername", exc.toString());
+            return true; 
         }
     }
     
@@ -370,11 +498,34 @@ public class Database {
         }
         catch (Exception exc)
         {
-            System.out.println("Leader board error:" + exc);
+            ExceptionHandler.catchException("Database", "availableUsername", exc.toString());
             //Logger.getLogger(Database.class).log(Level.SEVERE, null,exc);
             return null;
-            //TODO: Send exception to exception handler class to process. 
         }
         
+    }
+    
+    /**
+      * 
+      * decrypt - takes an encrypted string as input and returns the decrypted version of the input.
+      * 
+      * @param strToDecrypt string that needs to be decrypted.
+      * @return returns the decrypted string of the input string.
+      */
+    public static String decrypt(String strToDecrypt)
+    {
+        try
+        {
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+            final SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            final String decryptedString = new String(cipher.doFinal(Base64.decodeBase64(strToDecrypt)));
+            return decryptedString;
+        }
+        catch (Exception e)
+        {
+          ExceptionHandler.catchException("Database", "decrypt", e.toString());
+        }
+        return null;
     }
 }

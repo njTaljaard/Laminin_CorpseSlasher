@@ -51,7 +51,7 @@ public class Main implements Runnable {
             }
 
         } catch (IOException ex) {
-            //TODO: Send exception to exception handler class to process. 
+            ExceptionHandler.catchException("Main", "run", ex.toString()); 
         }
     }
 }

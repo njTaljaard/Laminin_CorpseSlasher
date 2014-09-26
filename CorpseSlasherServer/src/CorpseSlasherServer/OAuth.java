@@ -53,7 +53,7 @@ public class OAuth {
             return code.substring(code.indexOf("=") + 1).split(" ")[0];
             //}
         } catch (Exception exc) {
-            System.out.println("Internal OAuth server error: " + exc.toString());
+            ExceptionHandler.catchException("OAuth", "acceptCode", exc.toString());
             return "";
         }
     }
@@ -83,7 +83,7 @@ public class OAuth {
                 URI domain = new URI(request.getLocationUri());
                 java.awt.Desktop.getDesktop().browse(domain);
             } catch (Exception exc) {
-                System.out.println("URI error: " + exc.toString());
+                ExceptionHandler.catchException("OAuth", "facebookLogin", exc.toString());
                 return false;
             }
 
@@ -112,8 +112,7 @@ public class OAuth {
             //Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
             return true;
         } catch (OAuthProblemException e) {
-            System.out.println("OAuth error: " + e.getError());
-            System.out.println("OAuth error description: " + e.getDescription());
+            ExceptionHandler.catchException("OAuth", "facebookLogin", e.getError() + ": " + e.getDescription());
             return false;
         }
     }
@@ -130,13 +129,11 @@ public class OAuth {
      * @throws IOException throws an exception if there is and IO error.
      */
     public static boolean googleLogin() throws OAuthSystemException, IOException {
-
-
         try {
             URI domain = new URI("https://accounts.google.com/o/oauth2/auth?scope=email%20profile&redirect_uri=http://localhost:8080&response_type=code&client_id=505441356969-kqpsidp2kfv0udl5vopauroupumm7401.apps.googleusercontent.com");
             java.awt.Desktop.getDesktop().browse(domain);
         } catch (Exception exc) {
-            System.out.println("URI error: " + exc.toString());
+            ExceptionHandler.catchException("OAuth", "googleLogin", exc.toString());
             return false;
         }
 
@@ -175,7 +172,7 @@ public class OAuth {
             System.out.println(in);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionHandler.catchException("OAuth", "googleLogin", e.toString());
             return false;
         }
 
@@ -226,7 +223,7 @@ public class OAuth {
      System.out.println(in);
 
      } catch (Exception e) {
-     e.printStackTrace();
+     ExceptionHandler.catchException("OAuth", "googleLogin", exc.toString());
      return false;
      }
 
