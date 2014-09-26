@@ -43,7 +43,7 @@ public class GameSettings {
     public GameSettings() {
         Scanner contents = null;
         try {
-            contents = new Scanner(new FileReader("GameSettings.txt"));
+            contents = new Scanner(new FileReader("GameSettings.ini"));
             while (contents.hasNextLine()) {
                 String line = contents.nextLine();
                 setting.add(line);
@@ -82,7 +82,8 @@ public class GameSettings {
                 }
 
             }
-            contents.close();contents = new Scanner(new FileReader("SoundSettings.ini"));
+            contents.close();
+            contents = new Scanner(new FileReader("SoundSettings.ini"));
             while (contents.hasNextLine()) {
                 String line = contents.nextLine();
                 setting.add(line);
@@ -224,7 +225,7 @@ public class GameSettings {
      * @return the settings to be used.
      */
     public AppSettings LoadSettings() {
-        File savedSettings = new File("GameSettings.txt");
+        File savedSettings = new File("GameSettings.ini");
         return storedSettings;
     }
     /**
@@ -234,7 +235,7 @@ public class GameSettings {
 
         FileWriter savedGame = null;
         try {
-            savedGame = new FileWriter("GameSettings.txt");
+            savedGame = new FileWriter("GameSettings.ini");
             for (Object line : setting) {
                 savedGame.append(line.toString() + "\n");
             }

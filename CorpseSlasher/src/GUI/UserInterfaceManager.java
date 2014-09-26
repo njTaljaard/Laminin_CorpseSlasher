@@ -76,10 +76,11 @@ public final class UserInterfaceManager {
         this.height = height;
     }
     public void updateRes(int width, int height){
+        System.out.println(width+" : "+height);
         for(Screens screen_1 : guiScreens){
             if(screen_1 != null)
-            screen_1.updateRes(width,height);
-            Screen.getNifty().enableAutoScaling(width, height);            
+            screen_1.updateRes(width,height); 
+            Screen.getNifty().enableAutoScaling(width, height);           
         }
         //settings.setResolution(width, height);
         app.restart();

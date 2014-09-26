@@ -86,8 +86,8 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
-        width = 1366;
-        height = 768;
+        width = 1920;
+        height = 1080;
         Audio.assetManager = assetManager;
         Audio.audioRenderer = audioRenderer;
         ClientConnection client = new ClientConnection();
@@ -128,7 +128,7 @@ public class Main extends SimpleApplication implements ScreenController {
     public GameSettings loadSettings() {
         GameSettings _settings = new GameSettings();
         try {
-            try (Scanner in = new Scanner(new FileReader("GameSettings.txt"))) {
+            try (Scanner in = new Scanner(new FileReader("GameSettings.ini"))) {
                 while (in.hasNextLine()) {
                     String nextLine = in.nextLine();
                     String parts[] = nextLine.split("=");
@@ -163,7 +163,7 @@ public class Main extends SimpleApplication implements ScreenController {
             }
         }
         UI.updateRes(width, height);
-        gSettings.setFullscreen(false);
+        gSettings.setFullscreen(true);
         gSettings.setResolution(width, height);
         this.setSettings(gSettings);
         UI.setSettings(gSettings);
@@ -210,6 +210,8 @@ public class Main extends SimpleApplication implements ScreenController {
     public void relog() {
         gameScene.relog(cam, 0);
         loggedIn = true;
+        guiNode.attachChild(healthBorder);
+        guiNode.attachChild(health);
     }
 
     /**

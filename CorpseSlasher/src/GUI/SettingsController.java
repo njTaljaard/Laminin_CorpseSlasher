@@ -59,7 +59,7 @@ public class SettingsController implements ScreenController {
         listBox.addItem("800 X 600");       
         CheckBox checkbox = null; 
         try {
-            Scanner scFile = new Scanner(new FileReader("GameSettings.txt"));
+            Scanner scFile = new Scanner(new FileReader("GameSettings.ini"));
             while(scFile.hasNextLine()){
             String line = scFile.nextLine();
             String[] parts = line.split("=");

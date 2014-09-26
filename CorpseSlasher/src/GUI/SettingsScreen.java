@@ -144,7 +144,6 @@ public class SettingsScreen extends Screens {
                                 });
                                 control(new ButtonBuilder("", "Logout") {
                                     {
-                                        controller((ScreenController) app);
                                         marginTop("2%");
                                         marginLeft("5%");
                                         height("50px");
@@ -244,7 +243,6 @@ public class SettingsScreen extends Screens {
                                 });
                                 control(new ButtonBuilder("", "Logout") {
                                     {
-                                        controller((ScreenController) app);
                                         marginTop("2%");
                                         marginLeft("5%");
                                         height("50px");
@@ -545,7 +543,6 @@ public class SettingsScreen extends Screens {
                                 });
                                 control(new ButtonBuilder("", "Logout") {
                                     {
-                                        controller((ScreenController) app);
                                         marginTop("2%");
                                         marginLeft("5%");
                                         height("50px");
@@ -689,7 +686,6 @@ public class SettingsScreen extends Screens {
                                 });
                                 control(new ButtonBuilder("", "Logout") {
                                     {
-                                        controller((ScreenController) app);
                                         marginTop("2%");
                                         marginLeft("5%");
                                         height("50px");

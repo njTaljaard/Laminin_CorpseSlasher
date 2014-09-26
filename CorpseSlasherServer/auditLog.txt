@@ -18,3 +18,17 @@ Date: 2014/09/23 12:35:54, Username: u10651994, Query: addOneKill
 Date: 2014/09/23 12:35:54, Username: u10651994, Query: getKills
 Date: 2014/09/23 12:35:54, Username: u10651994, Query: retrievePassword
 Date: 2014/09/23 12:36:00, Username: unknown, Query: retrievePasswordInputEmail
+Date: 2014/09/26 10:10:38, Username: Enter Username, Query: login
+Date: 2014/09/26 10:12:49, Username: Enter Username, Query: login
+Date: 2014/09/26 10:13:19, Username: unknown, Query: retrieveLeaderBoard
+Date: 2014/09/26 10:13:21, Username: unknown, Query: retrieveLeaderBoard
+Date: 2014/09/26 10:15:06, Username: Enter Username, Query: login
+Date: 2014/09/26 10:22:59, Username: Enter Username, Query: login
+Date: 2014/09/26 10:32:28, Username: Enter Username, Query: login
+Date: 2014/09/26 10:38:29, Username: Enter Username, Query: login
+Date: 2014/09/26 10:41:43, Username: Enter Username, Query: login
+Date: 2014/09/26 10:45:15, Username: Enter Username, Query: login
+Date: 2014/09/26 10:47:36, Username: Enter Username, Query: login
+Date: 2014/09/26 10:53:58, Username: Enter Username, Query: login
+Date: 2014/09/26 10:55:20, Username: Enter Username, Query: login
+Date: 2014/09/26 10:56:21, Username: Enter Username, Query: login
