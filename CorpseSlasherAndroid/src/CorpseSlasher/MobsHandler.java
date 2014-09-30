@@ -77,7 +77,7 @@ public class MobsHandler {
         landedAttacks.clear();
         
         for (Mob mob : mobs) {  
-            if (mob.getPosition().distance(point) < 100) {
+            if (mob.getPosition().distance(point) < 25) {
                 if (mob.alive()) {
                     if (playerHits.contains(mob.mobName)) {
                         if (mobHits.contains(mob.handColliosionGroup)) {
@@ -95,6 +95,7 @@ public class MobsHandler {
 
                 }
 
+                //mob.run();
                 pool.execute(mob);
             }
         }
@@ -154,7 +155,7 @@ public class MobsHandler {
      * initPositions initialize a list of positions where mobs are to be spawned.
      */
     private void initPositions() {
-        positions.add(new Vector3f(75.0f, 18.0f, 80.0f));
+        positions.add(new Vector3f(80.0f, 18.0f, 85.0f));
         //Quad 1 ++
         /*positions.add(new Vector3f(180.0f, 28.0f, 200.0f)); //
         //positions.add(new Vector3f(160.0f, 27.0f, 240.0f)); //

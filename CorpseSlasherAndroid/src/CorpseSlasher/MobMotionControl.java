@@ -38,7 +38,7 @@ public class MobMotionControl {
      * collision group and the group it does collid with.
      */
     private void initAggroGhost() {
-        aggroGhost = new GhostControl(new SphereCollisionShape(3.75f));
+        aggroGhost = new GhostControl(new SphereCollisionShape(2.75f));
         aggroGhost.setCollisionGroup(6);
         aggroGhost.setCollideWithGroups(8);
     }
@@ -58,19 +58,19 @@ public class MobMotionControl {
             point.subtract(mob.getLocalTranslation(), motionDirection);
             motionDirection.y = 0.0f;
 
-            if (mob.getLocalTranslation().distance(point) > 5.0f) {
+            if (mob.getLocalTranslation().distance(point) > 1.25f) {
                 characterControl.setViewDirection(motionDirection.normalize().multLocal(runSpeed).negate());
                 characterControl.setWalkDirection(motionDirection.normalize().multLocal(runSpeed)); 
             }
 
-            if (mob.getLocalTranslation().distance(point) < 4.0f) {
+            if (mob.getLocalTranslation().distance(point) < 1.0f) {
                 attack = true;
                 walkAttack = false;
                 walk = false;
-            } else if (mob.getLocalTranslation().distance(point) < 8.0f) {
+            } else if (mob.getLocalTranslation().distance(point) < 2.0f) {
                 walkAttack = true;
                 walk = true;
-            } else if (passivePosition.distance(mob.getLocalTranslation()) > 25.0f) {
+            } else if (passivePosition.distance(mob.getLocalTranslation()) > 6.25f) {
                 aggro = false;
                 attack = false;
                 walkAttack = false;
@@ -84,14 +84,14 @@ public class MobMotionControl {
             if (!passive) {
                 for (int i = 0; i < aggroGhost.getOverlappingObjects().size(); i++) {
                     if (aggroGhost.getOverlapping(i).getCollisionGroup() == 8 &&
-                            passivePosition.distance(mob.getLocalTranslation()) < 20.0f) {
+                            passivePosition.distance(mob.getLocalTranslation()) < 5.0f) {
                         aggro = true;
                         passive = false;
                         return;
                     }
                 }
 
-                if (passivePosition.distance(mob.getLocalTranslation()) > 3.0f) {
+                if (passivePosition.distance(mob.getLocalTranslation()) > 0.75f) {
                   passivePosition.subtract(mob.getLocalTranslation(), motionDirection);
                   motionDirection.y = 0.0f;
                   walk = true;

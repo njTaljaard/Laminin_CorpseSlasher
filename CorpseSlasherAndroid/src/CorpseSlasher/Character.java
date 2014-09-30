@@ -101,7 +101,7 @@ public class Character {
      * motion and forces control.
      */
     private void initControl() {
-        characterControl = new BetterCharacterControl(0.2f, 0.85f, 12.5f);
+        characterControl = new BetterCharacterControl(0.2f, 0.85f, 13.5f);
         characterControl.setGravity(new Vector3f(0, -200, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);
@@ -233,17 +233,19 @@ public class Character {
      */
     public void processKnocks(ArrayList<String> knocks) {
         if (alive) {
-            for (int i = 0; i < knocks.size(); i++) {
-                health -= 10;
-                //System.out.println("Player : ive been slapped by " + knocks.get(i) 
-                //        + ". Health is " + health);
-                
-                if (health <= 0) {
-                    health = 0;
-                    alive = false;
-                    deathTime = System.nanoTime();
-                    //System.out.println("You were killed by : " + knocks.get(i));
-                    //swapControllers();
+            if (knocks != null) {
+                for (int i = 0; i < knocks.size(); i++) {
+                    health -= 10;
+                    //System.out.println("Player : ive been slapped by " + knocks.get(i) 
+                    //        + ". Health is " + health);
+
+                    if (health <= 0) {
+                        health = 0;
+                        alive = false;
+                        deathTime = System.nanoTime();
+                        //System.out.println("You were killed by : " + knocks.get(i));
+                        //swapControllers();
+                    }
                 }
             }
         }

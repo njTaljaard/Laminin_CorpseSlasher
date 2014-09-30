@@ -97,7 +97,6 @@ public class CharacterCameraControl {
      */
     private void initTouchListener() {
         touchListener = new TouchListener() {
-
             @Override
             public void onTouch(String name, TouchEvent event, float tpf) {
                 turn = new Quaternion();

@@ -286,10 +286,11 @@ public class BasicScene {
      * update runs tests is skycontrol and post water is rendering. Updates of 
      * sky control. Sets the new position of the sun and star system with light.
      * @param tod - Time of day.
-     * @param tpf - Time per frame.
+     * @param tpf - Time per frame.w
      */
     public void update(TimeOfDay tod, float tpf, Vector3f position) {
         for (Spatial tree : treeList) {
+            position.y = tree.getLocalTranslation().y;
             tree.lookAt(position, Vector3f.UNIT_Y);
         }
     }

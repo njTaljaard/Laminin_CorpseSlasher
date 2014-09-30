@@ -90,29 +90,7 @@ public class Mob extends Thread {
      * name it acordingly.
      */
     private void initMob() {
-        mob = (Node) assetManager.loadModel("Models/ZombieMobile/bunnett.j3o");
-        
-        /*List<Spatial> geoms = ((Node) ((Node) ((Node)mob.getChild("metarig")).getChild("bennettzombie_body.001"))).getChildren();
-        Material mat = new Material(assetManager, "Textures/ZombieTextures/bennetzombie_body.png");
-        Geometry geo = (Geometry) geoms.get(0);
-        geo.setMaterial(mat);
-        
-        mat = new Material(assetManager, "Textures/ZombieTextures/bennetzombie_arm.png");
-        geo = (Geometry) geoms.get(1);
-        geo.setMaterial(mat);
-        
-        mat = new Material(assetManager, "Textures/ZombieTextures/bennetzombie_eyes.png");
-        geo = (Geometry) geoms.get(2);
-        geo.setMaterial(mat);
-        
-        mat = new Material(assetManager, "Textures/ZombieTextures/bennetzombie_teeth.png");
-        geo = (Geometry) geoms.get(3);
-        geo.setMaterial(mat);
-        
-        mat = new Material(assetManager, "Textures/ZombieTextures/bennetzombie_face.png");
-        geo = (Geometry) geoms.get(4);
-        geo.setMaterial(mat);*/
-        
+        mob = (Node) assetManager.loadModel("Models/ZombieMobile/bunnett.j3o");        
         mob.setLocalTranslation(passivePosition);
         mob.setName(mobName);
     }
@@ -122,7 +100,7 @@ public class Mob extends Thread {
      * motion and forces control.
      */
     private void initControl() {
-        characterControl = new BetterCharacterControl(0.2f, 0.85f, 12.5f);
+        characterControl = new BetterCharacterControl(0.2f, 0.85f, 13.5f);
         characterControl.setGravity(new Vector3f(0, -200, 0));
         characterControl.setJumpForce(new Vector3f(0, 4, 0));
         characterControl.setApplyPhysicsLocal(true);

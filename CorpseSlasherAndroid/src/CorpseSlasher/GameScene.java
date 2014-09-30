@@ -146,19 +146,19 @@ public class GameScene {
      */
     public void update(TimeOfDay tod, float tpf, Camera cam) {
         basicScene.update(tod, tpf, cam.getLocation());
-        playerAttacking = character.updateCharacterPostion(0, tpf, false);
+        //playerAttacking = character.updateCharacterPostion(0, tpf, false);
         playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), 
                 tpf, mobHandler.getAggroState());
         
         if (playerAttacking) {
-            mobHits= mobHandler.updateMobs(character.getPosition(), 
-                    collController.getPlayerHits(), collController.getMobHits(), tpf);
+            //mobHits= mobHandler.updateMobs(character.getPosition(), 
+            //        collController.getPlayerHits(), collController.getMobHits(), tpf);
         } else {
-            mobHits = mobHandler.updateMobs(character.getPosition(), 
-                    new ArrayList<String>(), collController.getMobHits(), tpf);
+            //mobHits = mobHandler.updateMobs(character.getPosition(), 
+            //        new ArrayList<String>(), collController.getMobHits(), tpf);
         }
-        //character.processKnocks(mobHits);
-        //collController.attacksProcessed();
+        character.processKnocks(mobHits);
+        collController.attacksProcessed();
     }
     
     /**
