@@ -73,42 +73,10 @@ public class Leaderboard extends Screens {
                         panel(new PanelBuilder("Settings") {
                             {
                                 font("Interface/Fonts/zombie.fnt");
-                                childLayoutVertical();
-                                control(new ButtonBuilder("", "Display Settings") {
-                                    {
-                                        marginTop("42%");
-                                        marginLeft("5%");
-                                        height("50px");
-                                        width("150px");
-                                        align(Align.Left);
-                                        font("Interface/Fonts/zombie.fnt");
-                                        interactOnClick("goTo(Display_Settings)");
-                                    }
-                                });
-                                control(new ButtonBuilder("", "Difficulty Settings") {
-                                    {
-                                        marginTop("2%");
-                                        marginLeft("5%");
-                                        height("50px");
-                                        width("150px");
-                                        align(Align.Left);
-                                        font("Interface/Fonts/zombie.fnt");
-                                    }
-                                });
-                                control(new ButtonBuilder("", "Graphics Settings") {
-                                    {
-                                        marginTop("2%");
-                                        marginLeft("5%");
-                                        height("50px");
-                                        width("150px");
-                                        align(Align.Left);
-                                        font("Interface/Fonts/zombie.fnt");
-                                        interactOnClick("goTo(Graphics_Extension)");
-                                    }
-                                });
+                                childLayoutVertical();                               
                                 control(new ButtonBuilder("", "Sound Settings") {
                                     {
-                                        marginTop("2%");
+                                        marginTop("30%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -118,18 +86,19 @@ public class Leaderboard extends Screens {
                                 });
                                 control(new ButtonBuilder("", "Leaderboard") {
                                     {
-                                        marginTop("2%");
+                                        marginTop("5%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(Leader_Board)");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Logout") {
                                     {
                                         controller((ScreenController) app);
-                                        marginTop("2%");
+                                        marginTop("5%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -140,7 +109,7 @@ public class Leaderboard extends Screens {
                                 });
                                 control(new ButtonBuilder("", "Quit Game") {
                                     {
-                                        marginTop("2%");
+                                        marginTop("5%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -195,7 +164,7 @@ public class Leaderboard extends Screens {
                                         showVerticalScrollbar();
                                         hideHorizontalScrollbar();
                                         selectionModeDisabled();
-                                        width("50%");
+                                        width("70%");
                                         marginLeft("25%");
                                         height("15%");
                                         marginTop("15%");
