@@ -134,6 +134,9 @@
 			10/09/2014	\> Version 1.0	\> Update patterns \& strategies				\> Gerhard Smit \\
 			10/09/2014	\> Version 1.0	\> Simpe UI use case							\> Gerhard Smit \\
 			11/09/2014	\> Version 1.0	\> Spacing changes								\> Nico Taljaard \\
+			01/10/2014	\> Version 2.0	\> Extended frameworks used.					\> Nico Taljaard \\
+			01/10/2014	\> Version 2.0	\> Added community contribution.				\> Nico Taljaard \\
+			01/10/2014	\> Version 2.0	\> Added technology limitations.				\> Nico Taljaard \\
 		\end{tabbing}
 		
 	\newpage
@@ -477,7 +480,7 @@
 		\vspace{0.1in}
 			
 			\begin{itemize}
-				\item jMonkeyEngine is a Java SDK framework that is used as our game engine. The engine is in control of communications to OpenGL for rendering, frame updates, loading required assets, accessing model animations to be ran through programming.
+				\item jMonkeyEngine is a Java SDK framework that is used as our game engine. The engine is in control of communications to OpenGL for rendering, frame updates, loading required assets, accessing model animations to be ran through programming. This framework was chosen for it use of Java which is known by all group members, the ease of use and stability of Java over C++ We did not want to go for a well known open source game engine to have a bit of a challenge also to have a chance to contribute to the community.
 				\item BulletPhysics used for game physics, it will control the world gravity, world collision, custom collision defined for each model, ghost collision for proximity detection, attack collision for player sword and model hand to be able to detect when an attack has successfully landed, rag doll physics for death scene.
 				\item OAuth as a standard for connection to social media. It insurers a secure connection to login using your social login to obtain data and post data on behalf of the user. This is needed to add the users to the database who wish to login via social media to keep track of their experience.
 				\item NiftyGUI is an easy library for creating and updating the user-interface aspect of the game. It has built in functionality for creating the interfaces and action listeners for user interaction.
@@ -555,4 +558,40 @@
 			\end{itemize}
 			
 		\vspace{0.2in}
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Technology Limitations }}}
+		\addcontentsline{toc}{section}{Technology Limitations}
+		\vspace{0.1in}
+				
+			\begin{enumerate}
+				\item jMonkey to desktop:
+					\begin{itemize}
+						\item jMonkey does not use all available graphics processing power. This results in lower frames per second then expected.
+						\item Support for positional audio, to change volumes depending on player position. \\
+					\end{itemize}
+				
+				\item jMonkey to Android:
+					\begin{itemize}
+						\item Creating a scene in the scene composer and loading into Android does not load textures with.
+						\item Textures do not load correctly with models.
+						\item Ghost collision boxes does not detect any collision or overlapping of other collision boxes.
+						\item JoyStick events are not created to be used for Android requires TouchEvent to processes camera and movement.
+						\item Frame limitation of 60 frames per second. \\
+					\end{itemize}
+				
+				\item Nifty GUI when using Java:
+					\begin{itemize}
+						\item Can not change text sizes but is available through XML.
+						\item Can not change fonts but is available through XML.
+					\end{itemize}
+			\end{enumerate}
+				
+		\vspace{0.2in}
+		\section*{\colorbox{blue}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{white} Community contribution }}}
+		\addcontentsline{toc}{section}{Community contribution}
+		\vspace{0.1in}
+			
+			\begin{itemize}
+				\item A null pointer that can exist at not expected moments when using the build in Ragdoll class. When using the Ragdoll in combination with BetterCharacter control you can not use all the facets of the Ragdoll which caused this problem. This was solved by removing unwanted functionality when using the BetterCharacter control for motion control.
+				\item No support exists for automatic detection of the SkeletonController or AnimationController when it does not reside in the root node of the used model. A recursive function was created that will traverse the children nodes until the required controller is found. This removes the need of hard coding where to find the controllers for each model used.
+			\end{itemize}
 \end{document}
