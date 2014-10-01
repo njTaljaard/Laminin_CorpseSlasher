@@ -99,8 +99,8 @@ public class Main extends SimpleApplication implements ScreenController {
         this.setSettings(gSettings);
         restart();
         inputManager.setCursorVisible(true);
-        UI.loginScreen();
-        //loadGame();
+        //UI.loginScreen();
+        loadGame();
     }
 
     @Override
@@ -159,7 +159,7 @@ public class Main extends SimpleApplication implements ScreenController {
             }
         }
         UI.updateRes(width, height);
-        gSettings.setFullscreen(true);
+        gSettings.setFullscreen(false);
         gSettings.setResolution(width, height);
         this.setSettings(gSettings);
         UI.setSettings(gSettings);
@@ -184,7 +184,7 @@ public class Main extends SimpleApplication implements ScreenController {
         timeOfDay.setRate(350f);
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.changeState();
-        nifty.setIgnoreKeyboardEvents(true);
+        //nifty.setIgnoreKeyboardEvents(true);
         inputManager.setCursorVisible(false);
         guiNode.setQueueBucket(Bucket.Gui);
         healthBorder = new Picture("Health Bar");
