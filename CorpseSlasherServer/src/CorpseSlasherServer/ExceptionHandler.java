@@ -16,17 +16,25 @@ public final class ExceptionHandler {
     private ExceptionHandler() {
     }
     
+    
+    /**
+     * catchException - takes an error and calls the writeError function in main,
+     * so that the error can be written to the error log.
+     * 
+     * 
+     * @param class_ - Class name of the class that contains the error.
+     * @param func - Function name of the function that contains the error.
+     * @param error - the error details.
+     */
+    
     public static void catchException(String class_, String func, String error)
     {
         //Error log
         try{
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
-            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("errorLog.txt", true)));
-            out.println("Date: " + dateFormat.format(date) + ", Class: " + class_ + ", Function: " + func + ", Error: " + error);
-            out.flush();
-            out.close();
-        }catch (IOException e) {
+            Main.writeError("Date: " + dateFormat.format(date) + ", Class: " + class_ + ", Function: " + func + ", Error: " + error);
+        }catch (Exception e) {
             System.out.println("Error in ExceptionHandler when writing to error log: " + e.toString());
         }
     }

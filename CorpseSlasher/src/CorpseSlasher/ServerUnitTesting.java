@@ -20,7 +20,10 @@ public class ServerUnitTesting {
     public static boolean test() {
         System.out.println("Start of server unit test.");
         System.out.println("/////////////////////////////////////////////");
-        ClientConnection.StartClientConnection();
+        if (!ClientConnection.StartClientConnection())
+        {
+            System.out.println("Can't connect to server");
+        }
         //user one
         String username1 = "u10651994";
         String password1 = "9876543210";
