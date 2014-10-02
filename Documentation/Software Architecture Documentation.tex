@@ -137,6 +137,8 @@
 			01/10/2014	\> Version 2.0	\> Extended frameworks used.					\> Nico Taljaard \\
 			01/10/2014	\> Version 2.0	\> Added community contribution.				\> Nico Taljaard \\
 			01/10/2014	\> Version 2.0	\> Added technology limitations.				\> Nico Taljaard \\
+			02/10/2014	\> Version 2.0	\> Added java server limitations.				\> Martin Schoeman\\
+			02/10/2014	\> Version 2.0	\> Added overcoming server limitations.			\> Martin Schoeman\\
 		\end{tabbing}
 		
 	\newpage
@@ -583,6 +585,15 @@
 						\item Can not change text sizes but is available through XML.
 						\item Can not change fonts but is available through XML.
 					\end{itemize}
+					
+					\item Java Server and client connection:
+					\begin{itemize}
+						\item Server can only communicate with client and vice versa using string values. 
+					\end{itemize}
+					\item Java threads writing to file:
+					\begin{itemize}
+						\item When threads write to the audit and error logs, only one thread can write to the file at a time. That causes a bottle neck. 
+					\end{itemize}
 			\end{enumerate}
 				
 		\vspace{0.2in}
@@ -596,7 +607,12 @@
 				\item UI:
 				
 				\item Server:
-				
+					\begin{itemize}
+						\item Format the string values to a JSON object(which is a normal string that is in the JSON format). All passwords are encrypted that is sent from client to server.
+					\end{itemize}
+					\begin{itemize}
+						\item Use the main class to write to the audit and error log files. Because the main class is a static class and only uses one thread, all the threads can call the main's functions to write to the logs for them. Seeing as the main class is the only one writing to the files, the main can keep the files open and does not have to worry about other threads wanting access to the files. You can see this method as making your main class the "queue" for all the thread's errors and audits that needs to be written to the files. 
+					\end{itemize}
 			\end{enumerate}
 				
 		\vspace{0.2in}
