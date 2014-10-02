@@ -5,8 +5,6 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -44,7 +42,17 @@ public class MobsHandler {
         positions = new ArrayList<>();
         landedAttacks = new ArrayList<>();
         blockingQueue  = new ArrayBlockingQueue<>(20);
+        
+        if (blockingQueue == null) {
+            ExceptionHandler.throwError("BlockingQueue not created succesfully.", "MobsHandler - MobsHandler");
+        }
+        
         pool = new ThreadPoolExecutor(8, 12, Long.MAX_VALUE, TimeUnit.SECONDS, blockingQueue);
+        
+        if (pool == null) {
+            ExceptionHandler.throwError("ThreadPoolExecutor not initialized succesfylly.", "MobsHandler - MobsHandler");
+        }
+        
         this.assetManager = assMan;
         this.bullet = bullet;
         

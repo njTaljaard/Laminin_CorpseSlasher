@@ -62,6 +62,10 @@ public class CharacterAnimControl {
             @Override
             public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {}
         };
+        
+        if (animationListener == null) {
+            ExceptionHandler.throwError("AnimationListener not initialized sucessfully.", "CharacterAnimControl - AnimEventListener");
+        }
     }
     
     /**

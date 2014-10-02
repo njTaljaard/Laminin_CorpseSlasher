@@ -39,8 +39,13 @@ public class MobMotionControl {
      */
     private void initAggroGhost() {
         aggroGhost = new GhostControl(new SphereCollisionShape(15f));
-        aggroGhost.setCollisionGroup(6);
-        aggroGhost.setCollideWithGroups(8);
+        
+        if (aggroGhost != null) {
+            aggroGhost.setCollisionGroup(6);
+            aggroGhost.setCollideWithGroups(8);
+        } else {
+            ExceptionHandler.throwError("Aggro ghost not initialized succesfully.", "MobMotionControl - AggroGhost");
+        }
     }
     
     /**

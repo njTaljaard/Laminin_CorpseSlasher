@@ -36,11 +36,11 @@ public class GameScene {
      * @param viewPort - ViewPort required for water, contains position of camara.
      */
     public GameScene(int selectedMap, AssetManager assestManager, ViewPort viewPort, 
-            Camera cam, BulletAppState bullet, InputManager inMan, /*LoadingScreen ui,*/ GameSettings settings) {
+            Camera cam, BulletAppState bullet, InputManager inMan) {
         sceneNode = new Node("GameScene");
         
         initCameraPosition(cam, selectedMap);
-        initScene(assestManager, viewPort, cam, bullet, selectedMap,/* ui,*/ settings);
+        initScene(assestManager, viewPort, cam, bullet, selectedMap);
         initMainCharacter(assestManager, inMan, bullet, cam);
         initMobs(bullet, assestManager);
         initAudio();
@@ -78,11 +78,11 @@ public class GameScene {
      * @param settings - GameSettings.
      */
     private void initScene(AssetManager assestManager, ViewPort viewPort, Camera cam,
-            BulletAppState bullet, int map, /*LoadingScreen ui,*/GameSettings settings) {
+            BulletAppState bullet, int map) {
         switch(map) {
             case(0) :   
                 basicScene = new BasicScene("ZombieScene1");
-                basicScene.createScene(assestManager, viewPort, cam, bullet, /*ui,*/settings);
+                basicScene.createScene(assestManager, viewPort, cam, bullet);
                 sceneNode = basicScene.retrieveSceneNode();
                 break;
             default :

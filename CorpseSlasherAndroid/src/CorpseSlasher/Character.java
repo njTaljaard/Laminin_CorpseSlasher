@@ -90,9 +90,14 @@ public class Character {
      */
     private void initModel() {
         player = (Node) assetManager.loadModel("Models/cyborg/cyborg.j3o");
-        player.setName("Player");
-        player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, -6.2f));
-        player.lookAt(cam.getDirection(), cam.getUp());
+        
+        if (player != null) {
+            player.setName("Player");
+            player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, -6.2f));
+            player.lookAt(cam.getDirection(), cam.getUp());
+        } else {
+            ExceptionHandler.throwError("Model was not succesfully loaded.", "Character - Model");
+        }
     }
     
     /**
@@ -101,10 +106,15 @@ public class Character {
      */
     private void initControl() {
         characterControl = new BetterCharacterControl(0.8f, 4.85f, 50);
-        characterControl.setGravity(new Vector3f(0, -800, 0));
-        characterControl.setJumpForce(new Vector3f(0, 4, 0));
-        characterControl.setApplyPhysicsLocal(true);
-        characterControl.setJumpForce(new Vector3f(0,0,0));
+        
+        if (characterControl != null) {
+            characterControl.setGravity(new Vector3f(0, -800, 0));
+            characterControl.setJumpForce(new Vector3f(0, 4, 0));
+            characterControl.setApplyPhysicsLocal(true);
+            characterControl.setJumpForce(new Vector3f(0,0,0));
+        } else {
+            ExceptionHandler.throwError("BetterCharacterControl was not succesfully initailized.", "Character - Control");
+        }
     }
     
     /*
@@ -113,26 +123,32 @@ public class Character {
      */
     private void initRagdoll() {
         ragdoll = new ModelRagdoll(0.5f, "Cube-ogremesh");
-        ragdoll.addBoneName("spine1");
-        ragdoll.addBoneName("spine2");
-        ragdoll.addBoneName("spine3");
-        ragdoll.addBoneName("spine4");
-        ragdoll.addBoneName("spine5");
-        ragdoll.addBoneName("neck");
-        ragdoll.addBoneName("head");
-        ragdoll.addBoneName("upper_arm.r");
-        ragdoll.addBoneName("upper_arm.l");
-        ragdoll.addBoneName("lower_arm.r");
-        ragdoll.addBoneName("lower_arm.l");
-        ragdoll.addBoneName("hand.r");
-        ragdoll.addBoneName("hand.l");
-        ragdoll.addBoneName("upper_leg.r");
-        ragdoll.addBoneName("upper_leg.l");
-        ragdoll.addBoneName("lower_leg.r");
-        ragdoll.addBoneName("lower_leg.l");
-        ragdoll.addBoneName("foot.r");
-        ragdoll.addBoneName("foot.l");
-        ragdoll.setEnabled(false);
+        
+        if (ragdoll != null) {
+            ragdoll.addBoneName("spine1");
+            ragdoll.addBoneName("spine2");
+            ragdoll.addBoneName("spine3");
+            ragdoll.addBoneName("spine4");
+            ragdoll.addBoneName("spine5");
+            ragdoll.addBoneName("neck");
+            ragdoll.addBoneName("head");
+            ragdoll.addBoneName("upper_arm.r");
+            ragdoll.addBoneName("upper_arm.l");
+            ragdoll.addBoneName("lower_arm.r");
+            ragdoll.addBoneName("lower_arm.l");
+            ragdoll.addBoneName("hand.r");
+            ragdoll.addBoneName("hand.l");
+            ragdoll.addBoneName("upper_leg.r");
+            ragdoll.addBoneName("upper_leg.l");
+            ragdoll.addBoneName("lower_leg.r");
+            ragdoll.addBoneName("lower_leg.l");
+            ragdoll.addBoneName("foot.r");
+            ragdoll.addBoneName("foot.l");
+            ragdoll.addBoneName("Sword");
+            ragdoll.setEnabled(false);
+        } else { 
+            ExceptionHandler.throwError("Ragdoll was not succesfully initialized.", "Character - Ragdoll");
+        }
     }
     
     /**
@@ -142,8 +158,13 @@ public class Character {
      */
     private void initSwordGhost() {
         swordControl = new GhostControl(new BoxCollisionShape(new Vector3f(0.05f, 1.65f, 0.15f)));
-        swordControl.setCollisionGroup(8);
-        swordControl.setCollideWithGroups(6);
+        
+        if (swordControl != null) {
+            swordControl.setCollisionGroup(8);
+            swordControl.setCollideWithGroups(6);
+        } else {
+            ExceptionHandler.throwError("Sword ghost controller was not succesfully initialized.", "Character - Sword ghost");
+        }
     }
     
     /**
@@ -172,10 +193,21 @@ public class Character {
      */
     private void initAnim() {
         control = player.getChild("Cube-ogremesh").getControl(AnimControl.class);
-        control.addListener(animController.getAnimationListener());
+        
+        if (control != null) {
+            control.addListener(animController.getAnimationListener());
+        } else {
+            ExceptionHandler.throwInformation("Could not locate AnimController.", "Character - Anim");
+        }
+        
         channel = control.createChannel();
-        channel.setAnim("Stand");
-        channel.setLoopMode(LoopMode.Cycle);        
+        
+        if (channel != null) {
+            channel.setAnim("Stand");
+            channel.setLoopMode(LoopMode.Cycle);        
+        } else {
+            ExceptionHandler.throwError("Could not initialize AnimChannel from AnimControl.", "Character - Anim");
+        }
     }
     
     /**
@@ -225,18 +257,22 @@ public class Character {
      */
     public void processKnocks(ArrayList<String> knocks) {
         if (alive) {
-            for (int i = 0; i < knocks.size(); i++) {
-                health -= 10;
-                System.out.println("Player : ive been slapped by " + knocks.get(i) 
-                        + ". Health is " + health);
-                
-                if (health <= 0) {
-                    health = 0;
-                    alive = false;
-                    deathTime = System.nanoTime();
-                    System.out.println("You were killed by : " + knocks.get(i));
-                    swapControllers();
+            if (knocks != null) {
+                for (int i = 0; i < knocks.size(); i++) {
+                    health -= 10;
+                    System.out.println("Player : ive been slapped by " + knocks.get(i) 
+                            + ". Health is " + health);
+
+                    if (health <= 0) {
+                        health = 0;
+                        alive = false;
+                        deathTime = System.nanoTime();
+                        System.out.println("You were killed by : " + knocks.get(i));
+                        swapControllers();
+                    }
                 }
+            } else {
+                ExceptionHandler.throwInformation("Enemy hits on player not initialized.", "Character - ProcessKnocks");
             }
         }
     }
@@ -246,33 +282,37 @@ public class Character {
      * will ghost boxes for alive and ragdoll for death.
      */
     private void swapControllers() {
-        if (alive) {            
-            cam.setLocation(new Vector3f(195.0f, 36.0f, -225.0f));
-            player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, -6.2f));
-            ragdoll.setKinematicMode();
-            ragdoll.setEnabled(false);
-            player.removeControl(ModelRagdoll.class);
-            bullet.getPhysicsSpace().remove(ragdoll);
-            player.addControl(characterControl);
-            player.getChild("Cube-ogremesh").getControl(SkeletonControl.class).getAttachmentsNode("Sword").addControl(swordControl);
-            bullet.getPhysicsSpace().add(characterControl);
-            bullet.getPhysicsSpace().add(swordControl);
-            characterControl.setEnabled(true);
-        } else {
-            characterControl.setEnabled(false);
-            player.removeControl(BetterCharacterControl.class);
-            player.removeControl(GhostControl.class);
-            bullet.getPhysicsSpace().remove(characterControl);
-            bullet.getPhysicsSpace().remove(swordControl);
-            player.addControl(ragdoll);
-            ragdoll.setJointLimit("spine1", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
-            ragdoll.setJointLimit("spine2", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
-            ragdoll.setJointLimit("spine3", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
-            ragdoll.setJointLimit("spine4", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
-            ragdoll.setJointLimit("spine5", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
-            ragdoll.setEnabled(true);
-            ragdoll.setRagdollMode();
-            bullet.getPhysicsSpace().add(ragdoll);
+        try {
+            if (alive) {            
+                cam.setLocation(new Vector3f(195.0f, 36.0f, -225.0f));
+                player.setLocalTranslation(cam.getLocation().add(0.8f, -5.5f, -6.2f));
+                ragdoll.setKinematicMode();
+                ragdoll.setEnabled(false);
+                player.removeControl(ModelRagdoll.class);
+                bullet.getPhysicsSpace().remove(ragdoll);
+                player.addControl(characterControl);
+                player.getChild("Cube-ogremesh").getControl(SkeletonControl.class).getAttachmentsNode("Sword").addControl(swordControl);
+                bullet.getPhysicsSpace().add(characterControl);
+                bullet.getPhysicsSpace().add(swordControl);
+                characterControl.setEnabled(true);
+            } else {
+                characterControl.setEnabled(false);
+                player.removeControl(BetterCharacterControl.class);
+                player.removeControl(GhostControl.class);
+                bullet.getPhysicsSpace().remove(characterControl);
+                bullet.getPhysicsSpace().remove(swordControl);
+                player.addControl(ragdoll);
+                ragdoll.setJointLimit("spine1", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
+                ragdoll.setJointLimit("spine2", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
+                ragdoll.setJointLimit("spine3", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
+                ragdoll.setJointLimit("spine4", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
+                ragdoll.setJointLimit("spine5", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi);
+                ragdoll.setEnabled(true);
+                ragdoll.setRagdollMode();
+                bullet.getPhysicsSpace().add(ragdoll);
+            }
+        } catch (Exception e) {
+            ExceptionHandler.throwError("Error while swapping controller.", "Character - SwapControllers");
         }
     }
     
@@ -282,29 +322,33 @@ public class Character {
      * when pressed.
      */
     private void initKeys(InputManager inMan) {
-        inMan.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
-        inMan.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-        inMan.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
-        inMan.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
-        inMan.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
-        
-        inMan.addMapping("Slash", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));        
-        inMan.addMapping("TurnLeft", new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        inMan.addMapping("TurnRight", new MouseAxisTrigger(MouseInput.AXIS_X, false));      
-        inMan.addMapping("LookUp", new MouseAxisTrigger(MouseInput.AXIS_Y, false));
-        inMan.addMapping("LookDown", new MouseAxisTrigger(MouseInput.AXIS_Y, true));
-        
-        inMan.addListener(motionController.getMotionController(), "Left");
-        inMan.addListener(motionController.getMotionController(), "Right");
-        inMan.addListener(motionController.getMotionController(), "Up");
-        inMan.addListener(motionController.getMotionController(), "Down");
-        inMan.addListener(motionController.getMotionController(), "Jump");
-        
-        inMan.addListener(motionController.getMotionController(), "Slash");
-        inMan.addListener(cameraController.getAnalogListener(), "TurnLeft");
-        inMan.addListener(cameraController.getAnalogListener(), "TurnRight");
-        inMan.addListener(cameraController.getAnalogListener(), "LookUp");
-        inMan.addListener(cameraController.getAnalogListener(), "LookDown");
+        try {
+            inMan.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
+            inMan.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
+            inMan.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
+            inMan.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
+            inMan.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+
+            inMan.addMapping("Slash", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));        
+            inMan.addMapping("TurnLeft", new MouseAxisTrigger(MouseInput.AXIS_X, true));
+            inMan.addMapping("TurnRight", new MouseAxisTrigger(MouseInput.AXIS_X, false));      
+            inMan.addMapping("LookUp", new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+            inMan.addMapping("LookDown", new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+
+            inMan.addListener(motionController.getMotionController(), "Left");
+            inMan.addListener(motionController.getMotionController(), "Right");
+            inMan.addListener(motionController.getMotionController(), "Up");
+            inMan.addListener(motionController.getMotionController(), "Down");
+            inMan.addListener(motionController.getMotionController(), "Jump");
+
+            inMan.addListener(motionController.getMotionController(), "Slash");
+            inMan.addListener(cameraController.getAnalogListener(), "TurnLeft");
+            inMan.addListener(cameraController.getAnalogListener(), "TurnRight");
+            inMan.addListener(cameraController.getAnalogListener(), "LookUp");
+            inMan.addListener(cameraController.getAnalogListener(), "LookDown");
+        } catch (Exception e) {
+            ExceptionHandler.throwInformation("Could not assign key bindings to InputManager.", "Character - Keys");
+        }
     }
     
     /**

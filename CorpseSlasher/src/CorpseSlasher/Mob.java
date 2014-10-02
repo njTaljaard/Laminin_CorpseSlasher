@@ -39,7 +39,7 @@ public class Mob extends Thread {
     private Vector3f point;
     private float health, eighth_pi, tpf;
     private boolean alive, mobHit, playerHit;
-    private long deathTime, spawnTime, regenTime, regenInterval;
+    private int deathTime, spawnTime, regenTime, regenInterval;
     
     /**
      * Mob creates a basic mob the required functionality.
@@ -60,8 +60,8 @@ public class Mob extends Thread {
         health = 100;
         eighth_pi = FastMath.PI * 0.125f;
         attackLanded = "";
-        this.spawnTime = new Long("10000000000");
-        this.regenInterval = new Long("2000000000");
+        this.spawnTime = 100000;
+        this.regenInterval = 20000;
         
         createMob();
     }
@@ -88,8 +88,13 @@ public class Mob extends Thread {
      */
     private void initMob() {
         mob = (Node) assetManager.loadModel("Models/Zombie/bunnett.j3o");
-        mob.setLocalTranslation(passivePosition);
-        mob.setName(mobName);
+        
+        if (mob != null) {
+            mob.setLocalTranslation(passivePosition);
+            mob.setName(mobName);
+        } else {
+            ExceptionHandler.throwError("Model was not loaded succesfully.", "Mob - Mob");
+        }
     }
     
     /**
@@ -98,10 +103,15 @@ public class Mob extends Thread {
      */
     private void initControl() {
         characterControl = new BetterCharacterControl(0.45f, 5.0f, 1);
-        characterControl.setGravity(new Vector3f(0, -800, 0));
-        characterControl.setJumpForce(new Vector3f(0, 4, 0));
-        characterControl.setApplyPhysicsLocal(true);
-        characterControl.setEnabled(true);
+        
+        if (characterControl != null) {
+            characterControl.setGravity(new Vector3f(0, -800, 0));
+            characterControl.setJumpForce(new Vector3f(0, 4, 0));
+            characterControl.setApplyPhysicsLocal(true);
+            characterControl.setEnabled(true);
+        } else {
+            ExceptionHandler.throwError("BetterCharacterControl not initialized succesfully.", "Mob - Control");
+        }
     }
     
     /**
@@ -110,27 +120,32 @@ public class Mob extends Thread {
      */
     private void initRagdoll() {
         ragdoll = new ModelRagdoll(0.01f, "bennettzombie_body.001-ogremesh");
-        ragdoll.addBoneName("hips");
-        ragdoll.addBoneName("spine");
-        ragdoll.addBoneName("chest");
-        ragdoll.addBoneName("neck");
-        ragdoll.addBoneName("head");
-        ragdoll.addBoneName("shoulder.L");
-        ragdoll.addBoneName("shoulder.R");
-        ragdoll.addBoneName("upper_arm.L");
-        ragdoll.addBoneName("upper_arm.R");
-        ragdoll.addBoneName("forearm.L");
-        ragdoll.addBoneName("forearm.R");
-        ragdoll.addBoneName("hand.L");
-        ragdoll.addBoneName("hand.R");
-        ragdoll.addBoneName("thigh.L");
-        ragdoll.addBoneName("thigh.R");
-        ragdoll.addBoneName("shin.L");
-        ragdoll.addBoneName("shin.R");
-        ragdoll.addBoneName("foot.L");
-        ragdoll.addBoneName("foot.R");
-        ragdoll.setEnabled(false);
-        ragdoll.addCollisionListener(ragdoll);
+        
+        if (ragdoll != null) {
+            ragdoll.addBoneName("hips");
+            ragdoll.addBoneName("spine");
+            ragdoll.addBoneName("chest");
+            ragdoll.addBoneName("neck");
+            ragdoll.addBoneName("head");
+            ragdoll.addBoneName("shoulder.L");
+            ragdoll.addBoneName("shoulder.R");
+            ragdoll.addBoneName("upper_arm.L");
+            ragdoll.addBoneName("upper_arm.R");
+            ragdoll.addBoneName("forearm.L");
+            ragdoll.addBoneName("forearm.R");
+            ragdoll.addBoneName("hand.L");
+            ragdoll.addBoneName("hand.R");
+            ragdoll.addBoneName("thigh.L");
+            ragdoll.addBoneName("thigh.R");
+            ragdoll.addBoneName("shin.L");
+            ragdoll.addBoneName("shin.R");
+            ragdoll.addBoneName("foot.L");
+            ragdoll.addBoneName("foot.R");
+            ragdoll.setEnabled(false);
+            ragdoll.addCollisionListener(ragdoll);
+        } else {
+            ExceptionHandler.throwError("Ragdoll not initialized succesfully.", "Mob - Ragdoll");
+        }
     }
     
     /**
@@ -140,8 +155,13 @@ public class Mob extends Thread {
      */
     private void initAttackGhost() {
         attackGhost = new GhostControl(new BoxCollisionShape(new Vector3f(0.15f, 0.45f, 0.05f)));
-        attackGhost.setCollisionGroup(handColliosionGroup);
-        attackGhost.setCollideWithGroups(1);
+        
+        if (attackGhost != null) {
+            attackGhost.setCollisionGroup(handColliosionGroup);
+            attackGhost.setCollideWithGroups(1);
+        } else {
+            ExceptionHandler.throwError("Attack ghost not created succesfully.", "Mob - AttackGhost");
+        }
     }
 
     /**
@@ -165,10 +185,21 @@ public class Mob extends Thread {
      */
     private void initAnim() {
         control = mob.getChild("bennettzombie_body.001-ogremesh").getControl(AnimControl.class);
-        control.addListener(animControl.getAnimationListener());
+        
+        if (control != null) {
+            control.addListener(animControl.getAnimationListener());
+        } else {
+            ExceptionHandler.throwInformation("AnimControl could not be found within model.", "Mob - Anim");
+        }
+        
         channel = control.createChannel();
-        channel.setAnim("Stand");
-        channel.setLoopMode(LoopMode.Cycle); 
+        
+        if (channel != null) {
+            channel.setAnim("Stand");
+            channel.setLoopMode(LoopMode.Cycle); 
+        } else {
+            ExceptionHandler.throwError("AnimChannel could not be created from AnimControl.", "Mob - Anim");
+        }
     }
     
     /**
@@ -214,7 +245,7 @@ public class Mob extends Thread {
                 if (health <= 0) {
                     health = 0;
                     alive = false;
-                    deathTime = System.nanoTime();
+                    deathTime = (int) (System.nanoTime() / 100000);
                     motionControl.death(characterControl);
                     //System.out.println("You killed : " + mobName);
                     swapControllers = true;
@@ -225,11 +256,11 @@ public class Mob extends Thread {
                 damageAudio = false;
             }
             
-            if (!motionControl.aggro && regenTime == new Long("0")) {
-                regenTime = System.nanoTime();
-            } else if (System.nanoTime() - regenTime > regenInterval && health != 100 && !motionControl.aggro) {
+            if (!motionControl.aggro && regenTime == 0) {
+                regenTime = (int) (System.nanoTime() / 100000);
+            } else if ((int) System.nanoTime() / 100000 - regenTime > regenInterval && health != 100 && !motionControl.aggro) {
                 health += 5;
-                regenTime = new Long("0");
+                regenTime = 0;
                 //System.out.println("Regen time, health is : " + health);
             }
 
@@ -239,7 +270,7 @@ public class Mob extends Thread {
             }
         } else {
             ragdoll.update(tpf);
-            if (System.nanoTime() - deathTime > spawnTime) {
+            if ((int) (System.nanoTime() / 100000) - deathTime > spawnTime) {
                 alive = true;
                 health = 100;
                 swapControllers = true;
@@ -252,39 +283,43 @@ public class Mob extends Thread {
      * will ghost boxes for alive and ragdoll for death.
      */
     protected void swapControllers() {
-        walkAudio = false;
-        attackAudio = false;
-        damageAudio = false;
-        swapControllers = false;
-        
-        if (alive) { //Swap to character control
-            mob.setLocalTranslation(passivePosition);
-            ragdoll.setKinematicMode();
-            bullet.getPhysicsSpace().removeAll(mob);
-            
-            ragdoll.setEnabled(false);
-            mob.removeControl(ModelRagdoll.class);
-            
-            characterControl.setEnabled(true);
-            motionControl.getAggroGhost().setEnabled(true);
-            attackGhost.setEnabled(true);
-            
-            assembleMob();
-        } else { //Swap to ragdoll control
-            characterControl.setEnabled(false);
-            motionControl.getAggroGhost().setEnabled(false);
-            attackGhost.setEnabled(false);
-            ragdoll.setEnabled(true);
-            
-            mob.removeControl(BetterCharacterControl.class);
-            mob.removeControl(GhostControl.class);
-            mob.addControl(ragdoll);
-            
-            ragdoll.setJointLimit("hips", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
-            ragdoll.setJointLimit("spine", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
-            ragdoll.setJointLimit("chest", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi); 
-            bullet.getPhysicsSpace().add(ragdoll);
-            ragdoll.setRagdollMode();            
+        try {
+            walkAudio = false;
+            attackAudio = false;
+            damageAudio = false;
+            swapControllers = false;
+
+            if (alive) { //Swap to character control
+                mob.setLocalTranslation(passivePosition);
+                ragdoll.setKinematicMode();
+                bullet.getPhysicsSpace().removeAll(mob);
+
+                ragdoll.setEnabled(false);
+                mob.removeControl(ModelRagdoll.class);
+
+                characterControl.setEnabled(true);
+                motionControl.getAggroGhost().setEnabled(true);
+                attackGhost.setEnabled(true);
+
+                assembleMob();
+            } else { //Swap to ragdoll control
+                characterControl.setEnabled(false);
+                motionControl.getAggroGhost().setEnabled(false);
+                attackGhost.setEnabled(false);
+                ragdoll.setEnabled(true);
+
+                mob.removeControl(BetterCharacterControl.class);
+                mob.removeControl(GhostControl.class);
+                mob.addControl(ragdoll);
+
+                ragdoll.setJointLimit("hips", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
+                ragdoll.setJointLimit("spine", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
+                ragdoll.setJointLimit("chest", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi); 
+                bullet.getPhysicsSpace().add(ragdoll);
+                ragdoll.setRagdollMode();            
+            }
+        } catch (Exception e) {
+            ExceptionHandler.throwInformation("An unknown problem existed while swapping controllers.", "Mob - SwapControllers");
         }
     }
     

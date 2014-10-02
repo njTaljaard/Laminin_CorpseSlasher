@@ -7,9 +7,7 @@ import GUI.UserInterfaceManager;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
-import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 
@@ -172,14 +170,13 @@ public class Main extends SimpleApplication implements ScreenController {
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);       
-        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager/*, UI.getLoadingScreen()*/,
-                settingsF);
+        gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager);
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
 
         SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
 
         skyControl.setEnabled(true);
-        timeOfDay = new TimeOfDay(5.5f);
+        timeOfDay = new TimeOfDay(2.5f);
         stateManager.attach(timeOfDay);
         timeOfDay.setRate(350f);
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
