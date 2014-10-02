@@ -507,7 +507,7 @@ public final class ClientConnection {
     {
         try
         {
-        URL whatismyip = new URL(" http://checkip.amazonaws.com");
+        URL whatismyip = new URL("http://checkip.amazonaws.com");
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 whatismyip.openStream()));
 
