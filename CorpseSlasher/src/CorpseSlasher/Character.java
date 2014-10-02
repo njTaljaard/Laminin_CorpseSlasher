@@ -176,7 +176,7 @@ public class Character {
         bullet.getPhysicsSpace().addAll(player);
         player.addControl(characterControl);
         playerNode.attachChild(player); 
-        player.getChild("Cube-ogremesh").getControl(SkeletonControl.class).getAttachmentsNode("Sword").addControl(swordControl);
+        GameWorld.getSkeletonControl(player).getAttachmentsNode("Sword").addControl(swordControl);
     }
     
     /**
@@ -192,7 +192,7 @@ public class Character {
      * of trigger at the end of a animations cycle.
      */
     private void initAnim() {
-        control = player.getChild("Cube-ogremesh").getControl(AnimControl.class);
+        control = GameWorld.getAnimationControl(player);
         
         if (control != null) {
             control.addListener(animController.getAnimationListener());

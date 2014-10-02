@@ -21,13 +21,11 @@ public final class ExceptionHandler {
         dialog = new JOptionPane(message, JOptionPane.ERROR_MESSAGE,JOptionPane.DEFAULT_OPTION).createDialog(title);
         dialog.setAlwaysOnTop(true); 
         dialog.setVisible(true); 
-        dialog.dispose();
     }
     
     public static void throwError(String message, String title) {
         dialog = new JOptionPane(message, JOptionPane.ERROR_MESSAGE,JOptionPane.DEFAULT_OPTION).createDialog(title);
         dialog.setAlwaysOnTop(true); 
         dialog.setVisible(true); 
-        dialog.dispose();
     }
 }

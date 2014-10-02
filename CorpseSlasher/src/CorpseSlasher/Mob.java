@@ -70,7 +70,6 @@ public class Mob extends Thread {
      * createMob will create all the sub sections of the mob and assemble it.
      */
     private void createMob() {
-        //audio = new MobAudioControl(assetManager);
         animControl = new MobAnimControl();
         motionControl = new MobMotionControl();
         
@@ -170,8 +169,7 @@ public class Mob extends Thread {
     private void assembleMob() {
         mob.addControl(motionControl.getAggroGhost());
         mob.addControl(characterControl);
-        mob.getChild("bennettzombie_body.001-ogremesh").getControl(SkeletonControl.class)
-                .getAttachmentsNode("hand.R").addControl(attackGhost);
+        GameWorld.getSkeletonControl(mob).getAttachmentsNode("hand.R").addControl(attackGhost);
         bullet.getPhysicsSpace().add(characterControl);
         bullet.getPhysicsSpace().add(attackGhost);
         bullet.getPhysicsSpace().add(motionControl.getAggroGhost());
@@ -184,7 +182,7 @@ public class Mob extends Thread {
      * of trigger at the end of a animations cycle.
      */
     private void initAnim() {
-        control = mob.getChild("bennettzombie_body.001-ogremesh").getControl(AnimControl.class);
+        control = GameWorld.getAnimationControl(mob);
         
         if (control != null) {
             control.addListener(animControl.getAnimationListener());
@@ -239,7 +237,6 @@ public class Mob extends Thread {
             
             if (playerHit) {
                 health -= 15;
-                //System.out.println(mobName + " i have been hit!!!! My health is " + health);
                 damageAudio = true;
                 
                 if (health <= 0) {
@@ -247,7 +244,6 @@ public class Mob extends Thread {
                     alive = false;
                     deathTime = (int) (System.nanoTime() / 100000);
                     motionControl.death(characterControl);
-                    //System.out.println("You killed : " + mobName);
                     swapControllers = true;
                     ClientConnection.AddOneKill();
                     return;
@@ -261,7 +257,6 @@ public class Mob extends Thread {
             } else if ((int) System.nanoTime() / 100000 - regenTime > regenInterval && health != 100 && !motionControl.aggro) {
                 health += 5;
                 regenTime = 0;
-                //System.out.println("Regen time, health is : " + health);
             }
 
             if (animControl.attacking && mobHit) {
