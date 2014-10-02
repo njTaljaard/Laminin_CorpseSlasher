@@ -99,8 +99,8 @@ public class Main extends SimpleApplication implements ScreenController {
         this.setSettings(gSettings);
         restart();
         inputManager.setCursorVisible(true);
-        //UI.loginScreen();
-        loadGame();
+        UI.loginScreen();
+        //loadGame();
     }
 
     @Override
