@@ -139,6 +139,8 @@
 			01/10/2014	\> Version 2.0	\> Added technology limitations.				\> Nico Taljaard \\
 			02/10/2014	\> Version 2.0	\> Added java server limitations.				\> Martin Schoeman\\
 			02/10/2014	\> Version 2.0	\> Added overcoming server limitations.			\> Martin Schoeman\\
+			03/10/2014	\> Version 2.0	\> Added Nifty GUI limitations.				\> Gerhard Smit\\
+			03/10/2014	\> Version 2.0	\> Added overcoming Nifty GUI limitations.			\> Gerhard Smit\\
 		\end{tabbing}
 		
 	\newpage
@@ -485,7 +487,7 @@
 				\item jMonkeyEngine is a Java SDK framework that is used as our game engine. The engine is in control of communications to OpenGL for rendering, frame updates, loading required assets, accessing model animations to be ran through programming. This framework was chosen for it use of Java which is known by all group members, the ease of use and stability of Java over C++ We did not want to go for a well known open source game engine to have a bit of a challenge also to have a chance to contribute to the community.
 				\item BulletPhysics used for game physics, it will control the world gravity, world collision, custom collision defined for each model, ghost collision for proximity detection, attack collision for player sword and model hand to be able to detect when an attack has successfully landed, rag doll physics for death scene.
 				\item OAuth as a standard for connection to social media. It insurers a secure connection to login using your social login to obtain data and post data on behalf of the user. This is needed to add the users to the database who wish to login via social media to keep track of their experience.
-				\item NiftyGUI is an easy library for creating and updating the user-interface aspect of the game. It has built in functionality for creating the interfaces and action listeners for user interaction.
+				\item NiftyGUI is an easy library for creating and updating the user-interface aspect of the game. It has built in functionality for creating the interfaces and action listeners for user interaction. This library was used as it was easy to learn and it was widely supported, it also had multiple ways of creating GUIs through the use of the Java API or through an XML document.
 			\end{itemize}
 			
 		\vspace{0.2in}
@@ -604,7 +606,7 @@
 			\begin{enumerate}
 				\item Game:
 				
-				\item UI:
+				\item UI: \item There is no work around for this issue of the font and text size not being adjustable through Java, a look at moving over to another Library in the future is the best solution.
 				
 				\item Server:
 					\begin{itemize}
