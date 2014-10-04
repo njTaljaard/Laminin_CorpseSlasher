@@ -4,7 +4,6 @@ import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 
 /**
  * @author Laminin
@@ -21,6 +20,8 @@ public class MobMotionControl {
     private Vector3f motionDirection;
     private GhostControl aggroGhost;
     protected boolean alive = true;
+    private float distanceFromPlayer;
+    private float distanceToPassive;
     
     public MobMotionControl() {
         passive = true;
@@ -57,25 +58,28 @@ public class MobMotionControl {
      * @param  characterControl - BetterCharacterControl, model controller of mob.
      * @param  passivePosition - Vector3f postion where mob spawn point is.
      */
-    protected void updateMobPhase(Vector3f point, Spatial mob, BetterCharacterControl
-            characterControl, Vector3f passivePosition) {
-        if (aggro) {
-            point.subtract(mob.getLocalTranslation(), motionDirection);
-            motionDirection.y = 0.0f;
+    protected void updateMobPhase(BetterCharacterControl characterControl, 
+            Vector3f passivePosition, Vector3f mobPosition) {
+        distanceFromPlayer = mobPosition.distance(GameWorld.playerPosition);
+        distanceToPassive = mobPosition.distance(passivePosition);
 
-            if (mob.getLocalTranslation().distance(point) > 5.0f) {
+        if (aggro) {
+            GameWorld.playerPosition.subtract(mobPosition, motionDirection);
+            motionDirection.y = 0.0f;
+        
+            if (distanceFromPlayer > 5.0f) {
                 characterControl.setViewDirection(motionDirection.normalize().multLocal(runSpeed).negate());
                 characterControl.setWalkDirection(motionDirection.normalize().multLocal(runSpeed)); 
             }
 
-            if (mob.getLocalTranslation().distance(point) < 4.0f) {
+            if (distanceFromPlayer < 4.0f) {
                 attack = true;
                 walkAttack = false;
                 walk = false;
-            } else if (mob.getLocalTranslation().distance(point) < 8.0f) {
+            } else if (distanceFromPlayer < 8.0f) {
                 walkAttack = true;
                 walk = true;
-            } else if (passivePosition.distance(mob.getLocalTranslation()) > 25.0f) {
+            } else if (distanceToPassive > 25.0f) {
                 aggro = false;
                 attack = false;
                 walkAttack = false;
@@ -89,15 +93,15 @@ public class MobMotionControl {
             if (!passive) {
                 for (int i = 0; i < aggroGhost.getOverlappingObjects().size(); i++) {
                     if (aggroGhost.getOverlapping(i).getCollisionGroup() == 8 &&
-                            passivePosition.distance(mob.getLocalTranslation()) < 20.0f) {
+                            distanceToPassive < 20.0f) {
                         aggro = true;
                         passive = false;
                         return;
                     }
                 }
-
-                if (passivePosition.distance(mob.getLocalTranslation()) > 3.0f) {
-                  passivePosition.subtract(mob.getLocalTranslation(), motionDirection);
+                
+                if (distanceToPassive > 2.0f) {
+                  passivePosition.subtract(mobPosition, motionDirection);
                   motionDirection.y = 0.0f;
                   walk = true;
 

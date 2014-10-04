@@ -215,7 +215,7 @@ public class Mob extends Thread {
             
             GameWorld.updateAggro(motionControl.aggro);
             characterControl.update(tpf);
-            motionControl.updateMobPhase(GameWorld.playerPosition, mob, characterControl, passivePosition);
+            motionControl.updateMobPhase(characterControl, passivePosition, mob.getLocalTranslation());
             
             if (motionControl.walk) {
                 walkAudio = true;
