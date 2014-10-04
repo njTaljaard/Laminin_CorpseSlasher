@@ -1,7 +1,5 @@
 package CorpseSlasher;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.AmbientLight;
@@ -56,8 +54,6 @@ public class BasicScene {
     private DirectionalLight sun;
     private WaterFilter postWater;
     private SimpleWaterProcessor simpleWater;
-    private AssetManager assetManager;
-    private BulletAppState bullet;
     private ViewPort vp;
     private Camera cam;
         
@@ -91,17 +87,14 @@ public class BasicScene {
      * @param ui - SimpleApplication to retrieve camera positions.
      * @param settings - GameSettings.
      */
-    public void createScene(AssetManager assMan, ViewPort vp, Camera cam, 
-            BulletAppState bullet) {
-        this.assetManager = assMan;
+    public void createScene(ViewPort vp, Camera cam) {
         this.cam = cam;
         this.vp = vp;
-        this.bullet = bullet;
         this.simpleWater = null;
         this.postWater = null;
         this.skyControl = null;
         this.skybox = null;
-        fpp = new FilterPostProcessor(assMan);
+        fpp = new FilterPostProcessor(GameWorld.assetManager);
         
         initAmbientLight();
         initSunLight();
@@ -177,7 +170,7 @@ public class BasicScene {
      */
     private void initTerrain() {
         try {
-            sceneModel = (Node) assetManager.loadModel("Scenes/" + sceneName + ".j3o");
+            sceneModel = (Node) GameWorld.assetManager.loadModel("Scenes/" + sceneName + ".j3o");
             
             if (sceneModel != null) {
                 sceneModel.setName("Terrian");     
@@ -186,7 +179,7 @@ public class BasicScene {
                 if (terrain != null) {
                     terrain.addControl(new RigidBodyControl(0));
                     terrain.getControl(RigidBodyControl.class).setCollisionGroup(1);
-                    bullet.getPhysicsSpace().add(terrain);
+                    GameWorld.bullet.getPhysicsSpace().add(terrain);
                 } else {
                     ExceptionHandler.throwError("Could not retrieve terrain node from scene", "BasicScene - Terrain");
                 }
@@ -202,7 +195,7 @@ public class BasicScene {
                         rig.setCollisionGroup(1);
 
                         treeList.get(i).addControl(rig);
-                        bullet.getPhysicsSpace().add(treeList.get(i));
+                        GameWorld.bullet.getPhysicsSpace().add(treeList.get(i));
                     }
                 } else {
                     ExceptionHandler.throwError("Could not retrieve tree node from scene.", "BasiceScene - Terrain");
@@ -234,7 +227,7 @@ public class BasicScene {
      */
     private void initBasicWater() {
         try {
-            simpleWater = new SimpleWaterProcessor(assetManager);
+            simpleWater = new SimpleWaterProcessor(GameWorld.assetManager);
 
             if (simpleWater != null) {
                 simpleWater.setReflectionScene(sceneNode);
@@ -295,7 +288,7 @@ public class BasicScene {
 
                 if (GameSettings.waterFoam) {
                     postWater.setFoamExistence(new Vector3f(2.5f, 2.0f, 3.0f)); 
-                    postWater.setFoamTexture((Texture2D) assetManager.loadTexture("Common/MatDefs/Water/Textures/foam2.jpg"));  
+                    postWater.setFoamTexture((Texture2D) GameWorld.assetManager.loadTexture("Common/MatDefs/Water/Textures/foam2.jpg"));  
                 }
 
                 fpp.addFilter(postWater); 
@@ -325,7 +318,7 @@ public class BasicScene {
      */
     private void initBasicSky() {
         try {
-            skybox = SkyFactory.createSky(assetManager, "Textures/Skybox/ZombieScene1.dds", true);
+            skybox = SkyFactory.createSky(GameWorld.assetManager, "Textures/Skybox/ZombieScene1.dds", true);
 
             if (skybox != null) {
                 skybox.setName("skybox");
@@ -350,7 +343,7 @@ public class BasicScene {
             /*
              *  AssetManager, Camera, Cloud Flattening, Star motion, Bottom dome
              */
-            skyControl = new SkyControl(assetManager, cam, 0.7f, GameSettings.starMotion, true);
+            skyControl = new SkyControl(GameWorld.assetManager, cam, 0.7f, GameSettings.starMotion, true);
             skyControl.setCloudModulation(GameSettings.cloudMotion);
             skyControl.setCloudiness(0.6f);
             skyControl.setCloudYOffset(0.5f);
@@ -388,7 +381,7 @@ public class BasicScene {
         BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
         bloom.setBlurScale(2.5f);
         bloom.setExposurePower(1f);
-        Misc.getFpp(vp, assetManager).addFilter(bloom);
+        Misc.getFpp(vp, GameWorld.assetManager).addFilter(bloom);
         
         return bloom;
     }

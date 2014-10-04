@@ -3,11 +3,8 @@ package CorpseSlasher;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
-import com.jme3.animation.SkeletonControl;
 import com.jme3.scene.Node;
 import com.jme3.math.Vector3f;
-import com.jme3.asset.AssetManager;
-import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
@@ -26,8 +23,6 @@ public class Mob extends Thread {
     protected int handColliosionGroup;
     protected boolean swapControllers, attackAudio, walkAudio, damageAudio;
     private Node mob;
-    private AssetManager assetManager;
-    private BulletAppState bullet;
     private AnimChannel channel;
     private AnimControl control;
     private Vector3f passivePosition;
@@ -36,10 +31,9 @@ public class Mob extends Thread {
     private BetterCharacterControl characterControl;
     private ModelRagdoll ragdoll;
     private GhostControl attackGhost;
-    private Vector3f point;
-    private float health, eighth_pi, tpf;
+    private float health, tpf;
     private boolean alive, mobHit, playerHit;
-    private int deathTime, spawnTime, regenTime, regenInterval;
+    private int deathTime, regenTime;
     
     /**
      * Mob creates a basic mob the required functionality.
@@ -49,19 +43,13 @@ public class Mob extends Thread {
      * @param mName - String that defines the name assosiated to this mob required
      * for collision detection.
      */
-    public Mob(Vector3f position, BulletAppState bullet, AssetManager assetManager, 
-            String mName) {
+    public Mob(Vector3f position, String mName) {
         mobName = mName;
-        this.assetManager = assetManager;
-        this.bullet = bullet;
         handColliosionGroup = Integer.parseInt(mobName.substring(3));
         passivePosition = position;
         alive = true;
         health = 100;
-        eighth_pi = FastMath.PI * 0.125f;
         attackLanded = "";
-        this.spawnTime = 100000;
-        this.regenInterval = 20000;
         
         createMob();
     }
@@ -86,7 +74,7 @@ public class Mob extends Thread {
      * name it acordingly.
      */
     private void initMob() {
-        mob = (Node) assetManager.loadModel("Models/Zombie/bunnett.j3o");
+        mob = (Node) GameWorld.assetManager.loadModel("Models/Zombie/bunnett.j3o");
         
         if (mob != null) {
             mob.setLocalTranslation(passivePosition);
@@ -170,10 +158,10 @@ public class Mob extends Thread {
         mob.addControl(motionControl.getAggroGhost());
         mob.addControl(characterControl);
         GameWorld.getSkeletonControl(mob).getAttachmentsNode("hand.R").addControl(attackGhost);
-        bullet.getPhysicsSpace().add(characterControl);
-        bullet.getPhysicsSpace().add(attackGhost);
-        bullet.getPhysicsSpace().add(motionControl.getAggroGhost());
-        bullet.getPhysicsSpace().addAll(mob);  
+        GameWorld.bullet.getPhysicsSpace().add(characterControl);
+        GameWorld.bullet.getPhysicsSpace().add(attackGhost);
+        GameWorld.bullet.getPhysicsSpace().add(motionControl.getAggroGhost());
+        GameWorld.bullet.getPhysicsSpace().addAll(mob);  
     }
     
     /**
@@ -208,8 +196,7 @@ public class Mob extends Thread {
      * @param mobHit - boolean if mob has attacked player.
      * @param tpf - Time per frame required for updating ragdoll. 
      */
-    public void set(Vector3f point, boolean playerHit, boolean mobHit, float tpf) {
-        this.point = point;
+    public void set(boolean playerHit, boolean mobHit, float tpf) {
         this.playerHit = playerHit;
         this.mobHit = mobHit;
         this.tpf = tpf;
@@ -222,8 +209,13 @@ public class Mob extends Thread {
     @Override
     public void run() {
         if (alive) {
+            if (!GameWorld.alive) {
+                motionControl.aggro = false;
+            }
+            
+            GameWorld.updateAggro(motionControl.aggro);
             characterControl.update(tpf);
-            motionControl.updateMobPhase(point, mob, characterControl, passivePosition);
+            motionControl.updateMobPhase(GameWorld.playerPosition, mob, characterControl, passivePosition);
             
             if (motionControl.walk) {
                 walkAudio = true;
@@ -254,7 +246,7 @@ public class Mob extends Thread {
             
             if (!motionControl.aggro && regenTime == 0) {
                 regenTime = (int) (System.nanoTime() / 100000);
-            } else if ((int) System.nanoTime() / 100000 - regenTime > regenInterval && health != 100 && !motionControl.aggro) {
+            } else if ((int) System.nanoTime() / 100000 - regenTime > GameWorld.mobRegenInterval && health != 100 && !motionControl.aggro) {
                 health += 5;
                 regenTime = 0;
             }
@@ -265,7 +257,7 @@ public class Mob extends Thread {
             }
         } else {
             ragdoll.update(tpf);
-            if ((int) (System.nanoTime() / 100000) - deathTime > spawnTime) {
+            if ((int) (System.nanoTime() / 100000) - deathTime > GameWorld.mobRespawnTimer) {
                 alive = true;
                 health = 100;
                 swapControllers = true;
@@ -287,7 +279,7 @@ public class Mob extends Thread {
             if (alive) { //Swap to character control
                 mob.setLocalTranslation(passivePosition);
                 ragdoll.setKinematicMode();
-                bullet.getPhysicsSpace().removeAll(mob);
+                GameWorld.bullet.getPhysicsSpace().removeAll(mob);
 
                 ragdoll.setEnabled(false);
                 mob.removeControl(ModelRagdoll.class);
@@ -307,10 +299,10 @@ public class Mob extends Thread {
                 mob.removeControl(GhostControl.class);
                 mob.addControl(ragdoll);
 
-                ragdoll.setJointLimit("hips", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
-                ragdoll.setJointLimit("spine", eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi, eighth_pi);
-                ragdoll.setJointLimit("chest", eighth_pi, eighth_pi, 0, 0, eighth_pi, eighth_pi); 
-                bullet.getPhysicsSpace().add(ragdoll);
+                ragdoll.setJointLimit("hips", GameWorld.eighth_pi, GameWorld.eighth_pi, GameWorld.eighth_pi, GameWorld.eighth_pi, GameWorld.eighth_pi, GameWorld.eighth_pi);
+                ragdoll.setJointLimit("spine", GameWorld.eighth_pi, GameWorld.eighth_pi, GameWorld.eighth_pi, GameWorld.eighth_pi, GameWorld.eighth_pi, GameWorld.eighth_pi);
+                ragdoll.setJointLimit("chest", GameWorld.eighth_pi, GameWorld.eighth_pi, 0, 0, GameWorld.eighth_pi, GameWorld.eighth_pi); 
+                GameWorld.bullet.getPhysicsSpace().add(ragdoll);
                 ragdoll.setRagdollMode();            
             }
         } catch (Exception e) {

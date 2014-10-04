@@ -22,8 +22,6 @@ import java.util.concurrent.TimeUnit;
 public class MobsHandler {
     
     private Node mobNode;
-    private AssetManager assetManager;
-    private BulletAppState bullet;
     private ArrayList<Mob> mobs;
     private ArrayList<Vector3f> positions;
     private ArrayList<String> landedAttacks;
@@ -36,7 +34,7 @@ public class MobsHandler {
      * the physics domain.
      * @param assMan - AssetManager to load model into engine.
      */
-    public MobsHandler(BulletAppState bullet, AssetManager assMan) {
+    public MobsHandler() {
         mobNode = new Node("Mobs");
         mobs = new ArrayList<>();
         positions = new ArrayList<>();
@@ -53,9 +51,6 @@ public class MobsHandler {
             ExceptionHandler.throwError("ThreadPoolExecutor not initialized succesfylly.", "MobsHandler - MobsHandler");
         }
         
-        this.assetManager = assMan;
-        this.bullet = bullet;
-        
         initPositions();
         createMobs();
     }
@@ -68,7 +63,7 @@ public class MobsHandler {
         int size = positions.size();
         
         for (int i = 0; i < size; i++) {
-            mobs.add(new Mob(positions.get(i), bullet, assetManager, "mob"+(i+10)));
+            mobs.add(new Mob(positions.get(i), "mob"+(i+10)));
             mobNode.attachChild(mobs.get(i).retrieveMob());
         }
     }
@@ -80,24 +75,24 @@ public class MobsHandler {
      * @param mobHits - Collision groups of mobs that have hit player.
      * @param tpf - Time per frame to update ragdoll.
      */
-    public ArrayList<String> updateMobs(Vector3f point, ArrayList<String> playerHits, 
+    public ArrayList<String> updateMobs(ArrayList<String> playerHits, 
             ArrayList<Integer> mobHits, float tpf) {
         landedAttacks.clear();
         
         for (Mob mob : mobs) {  
-            if (mob.getPosition().distance(point) < 100) {
+            if (mob.getPosition().distance(GameWorld.playerPosition) < 100) {
                 if (mob.alive()) {
                     if (playerHits.contains(mob.mobName)) {
                         if (mobHits.contains(mob.handColliosionGroup)) {
-                            mob.set(point, true, true, tpf);
+                            mob.set(true, true, tpf);
                         } else {
-                            mob.set(point, true, false, tpf);
+                            mob.set(true, false, tpf);
                         }
                     } else {
                         if (mobHits.contains(mob.handColliosionGroup)) {
-                            mob.set(point, false, true, tpf);
+                            mob.set(false, true, tpf);
                         } else {
-                            mob.set(point, false, false, tpf);
+                            mob.set(false, false, tpf);
                         }
                     }
 
