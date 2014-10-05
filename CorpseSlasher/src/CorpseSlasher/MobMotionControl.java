@@ -110,7 +110,7 @@ public class MobMotionControl {
                 } else {
                     passive = true;
                     walk = false;
-                    characterControl.setViewDirection(new Vector3f(0, 0, 0));
+                    characterControl.setViewDirection(GameWorld.getLookAt());
                     characterControl.setWalkDirection(new Vector3f(0, 0, 0));
                     //set animation channel to passive animation.
                 }

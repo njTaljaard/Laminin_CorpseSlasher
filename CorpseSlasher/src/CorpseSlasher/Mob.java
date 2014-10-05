@@ -96,6 +96,7 @@ public class Mob extends Thread {
             characterControl.setJumpForce(new Vector3f(0, 4, 0));
             characterControl.setApplyPhysicsLocal(true);
             characterControl.setEnabled(true);
+            characterControl.setViewDirection(GameWorld.getLookAt());
         } else {
             ExceptionHandler.throwError("BetterCharacterControl not initialized succesfully.", "Mob - Control");
         }
@@ -285,6 +286,7 @@ public class Mob extends Thread {
                 mob.removeControl(ModelRagdoll.class);
 
                 characterControl.setEnabled(true);
+                characterControl.setViewDirection(GameWorld.getLookAt());
                 motionControl.getAggroGhost().setEnabled(true);
                 attackGhost.setEnabled(true);
 

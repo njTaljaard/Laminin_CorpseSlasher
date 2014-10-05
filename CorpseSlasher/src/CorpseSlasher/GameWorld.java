@@ -12,6 +12,8 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.util.Random;
+import java.util.Vector;
 
 /**
  * @author Laminin
@@ -40,6 +42,7 @@ public final class GameWorld {
     public static final float mobRunSpeed = 8.0f;
     
     public static final float eighth_pi = FastMath.PI * 0.125f;
+    public static final Random rand = new Random();
     
     public static SkeletonControl getSkeletonControl(Node model) {
         SkeletonControl control = null;
@@ -85,6 +88,19 @@ public final class GameWorld {
         return control;
     }
     
+    /**
+     * 
+     */
+    public static Vector3f getLookAt() {
+        Vector3f lookAt = new Vector3f();
+        
+        lookAt.y = 0.0f;
+        lookAt.x = (float) (rand.nextGaussian() * 1000.0);
+        lookAt.z = (float) (rand.nextGaussian() * 1000.0);
+        
+        return lookAt;
+    }
+        
     public static synchronized void updateAggro(boolean agg) {
         if (!agg) {
             aggro = agg;
