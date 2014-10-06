@@ -81,6 +81,10 @@ public class CharacterMotionControl {
                 }
             }
         };
+        
+        if (actionListener == null) {
+            ExceptionHandler.throwError("ActionListener not initialized succesfully.", "CharacterMotionControl - MotionController");
+        }
     }
     
     /**

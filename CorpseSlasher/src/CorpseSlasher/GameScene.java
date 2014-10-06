@@ -36,13 +36,15 @@ public class GameScene {
      * @param viewPort - ViewPort required for water, contains position of camara.
      */
     public GameScene(int selectedMap, AssetManager assestManager, ViewPort viewPort, 
-            Camera cam, BulletAppState bullet, InputManager inMan, /*LoadingScreen ui,*/ GameSettings settings) {
+            Camera cam, BulletAppState bullet, InputManager inMan) {
         sceneNode = new Node("GameScene");
+        GameWorld.assetManager = assestManager;
+        GameWorld.bullet = bullet;
         
         initCameraPosition(cam, selectedMap);
-        initScene(assestManager, viewPort, cam, bullet, selectedMap,/* ui,*/ settings);
-        initMainCharacter(assestManager, inMan, bullet, cam);
-        initMobs(bullet, assestManager);
+        initScene(viewPort, cam, selectedMap);
+        initMainCharacter(inMan, cam);
+        initMobs();
         initAudio();
         
         collController = new CollisionController();
@@ -77,12 +79,11 @@ public class GameScene {
      * @param ui - SimpleApplication to retrieve camera positions.
      * @param settings - GameSettings.
      */
-    private void initScene(AssetManager assestManager, ViewPort viewPort, Camera cam,
-            BulletAppState bullet, int map, /*LoadingScreen ui,*/GameSettings settings) {
+    private void initScene(ViewPort viewPort, Camera cam, int map) {
         switch(map) {
             case(0) :   
                 basicScene = new BasicScene("ZombieScene1");
-                basicScene.createScene(assestManager, viewPort, cam, bullet, /*ui,*/settings);
+                basicScene.createScene(viewPort, cam);
                 sceneNode = basicScene.retrieveSceneNode();
                 break;
             default :
@@ -100,9 +101,8 @@ public class GameScene {
      * @param bullet - BulletAppState to add the model to the physics handler.
      * @param cam - Camera to be bound to player model.
      */
-    private void initMainCharacter(AssetManager assMan, InputManager inMan, 
-            BulletAppState bullet, Camera cam) {
-        character = new Character(assMan, inMan, bullet, cam);
+    private void initMainCharacter(InputManager inMan, Camera cam) {
+        character = new Character(inMan, cam);
         sceneNode.attachChild(character.retrievePlayerNode());
     }
     
@@ -112,8 +112,8 @@ public class GameScene {
      * @param bullet - BulletAppState for add collision boxes and controllers.
      * @param assMan - AssetManager for loading the model.
      */
-    private void initMobs(BulletAppState bullet, AssetManager assMan) {
-        mobHandler = new MobsHandler(bullet, assMan);
+    private void initMobs() {
+        mobHandler = new MobsHandler();
         sceneNode.attachChild(mobHandler.retrieveMobs());
     }
     
@@ -153,15 +153,14 @@ public class GameScene {
      */
     public void update(TimeOfDay tod, float tpf) {
         basicScene.update(tod, tpf);
-        playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), 
-                tpf, mobHandler.getAggroState());
+        playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), tpf);
+        
+        GameWorld.updateAggro(false);
         
         if (playerAttacking) {
-            mobHits= mobHandler.updateMobs(character.getPosition(), 
-                    collController.getPlayerHits(), collController.getMobHits(), tpf);
+            mobHits= mobHandler.updateMobs(collController.getPlayerHits(), collController.getMobHits(), tpf);
         } else {
-            mobHits = mobHandler.updateMobs(character.getPosition(), 
-                    new ArrayList<String>(), collController.getMobHits(), tpf);
+            mobHits = mobHandler.updateMobs(new ArrayList<String>(), collController.getMobHits(), tpf);
         }
         
         character.processKnocks(mobHits);

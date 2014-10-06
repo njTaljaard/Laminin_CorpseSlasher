@@ -64,6 +64,10 @@ public class MobAnimControl {
             @Override
             public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {}
         };
+        
+        if (animationListener == null) {
+            ExceptionHandler.throwError("AnimEventListener not created succesfully.", "MobAnimControl - AnimEventListener");
+        }
     }
     
     /**

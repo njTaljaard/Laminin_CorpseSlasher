@@ -301,12 +301,13 @@ public class SettingsController implements ScreenController {
         System.exit(0);
      }
     public void goTo(String screen) {
-         if(screen.equals("#Login_Screen")){
-             System.out.println("back to login screen");
-         }
+        if (screen.equals("#Login_Screen")) {
+            System.out.println("back to login screen");
+            ClientConnection.loggedIn = false;
+            ClientConnection.relog = true;
+            UserInterfaceManager.changeState();
+        }
         nifty.gotoScreen(screen);
-        ClientConnection.loggedIn = false;
-        ClientConnection.relog = true;
         Audio.pauseAmbient();
     }
      @NiftyEventSubscriber(id = "#Master_Volume")

@@ -1,8 +1,6 @@
 package GUI;
 
 //~--- non-JDK imports --------------------------------------------------------
-
-import CorpseSlasher.ClientConnection;
 import CorpseSlasher.GameScene;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
@@ -25,9 +23,9 @@ import com.jme3.ui.Picture;
  */
 public final class UserInterfaceManager {
     private boolean         menuOpen    = false;
-    private boolean         loginScreen = true;
+    private static boolean         loginScreen = true;
     private AssetManager    assetManager;
-    private InputManager    inputManager;
+    private static InputManager    inputManager;
     private AudioRenderer   audioRenderer;
     private ViewPort        guiViewPort;
     private AppStateManager appState;
@@ -55,7 +53,7 @@ public final class UserInterfaceManager {
     public void init(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
                      ViewPort guiViewPort, AppStateManager appState, Application app,GameScene scene) {
         this.assetManager  = assetManager;
-        this.inputManager  = inputManager;
+        UserInterfaceManager.inputManager  = inputManager;
         this.audioRenderer = audioRenderer;
         this.guiViewPort   = guiViewPort;
         this.app           = app;
@@ -121,9 +119,15 @@ public final class UserInterfaceManager {
     /**
      * Updates the state of the game so that settings menu can be called after login only
      */
-    public void changeState() {
+    public static void changeState() {
         loginScreen = !loginScreen;
+        /*if(loginScreen){
+            inputManager.setCursorVisible(true);
+        }
+        else {
         inputManager.setCursorVisible(false);
+        }*/
+        inputManager.setCursorVisible(loginScreen);
     }
     /**
      * Adds the mapping of the ESC_KEY to the settings screen, so that it will be called
@@ -191,6 +195,11 @@ public final class UserInterfaceManager {
      */
     public void goTo(String _screen) {        
         guiScreens[3].goTo(_screen);
+    }
+    public void destroyLogin(){
+        guiScreens[0].screen.getNifty().exit();
+        guiScreens[1].screen.getNifty().exit();
+        guiScreens[2].screen.getNifty().exit();
     }
 }
 

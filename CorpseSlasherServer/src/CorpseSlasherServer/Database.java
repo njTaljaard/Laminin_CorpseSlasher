@@ -399,7 +399,7 @@ public class Database {
             }
             else
             {
-                return false;
+                return true;
             }
         } catch (Exception exc) {
             ExceptionHandler.catchException("Database", "availableUsername", exc.toString());

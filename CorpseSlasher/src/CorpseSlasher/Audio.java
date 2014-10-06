@@ -18,10 +18,7 @@ public final class Audio {
     protected static AudioRenderer audioRenderer;
     protected static AssetManager assetManager;
     
-    private static AudioNode wave1;
-    private static AudioNode wave2;
-    private static AudioNode wave3;
-    private static AudioNode wave4;
+    private static AudioNode wave;
     
     private static int playerAttackCount;
     private static AudioNode playerAttack1;
@@ -42,7 +39,7 @@ public final class Audio {
     private static Environment env;
     
     public static void updateVolume() {
-        wave1.setVolume(GameSettings.mVol / 200 + GameSettings.aVol / 200);
+        wave.setVolume(GameSettings.mVol / 200 + GameSettings.aVol / 200);
         playerAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
         playerAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
         playerAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
@@ -71,89 +68,96 @@ public final class Audio {
     }
     
     public static void loadOcean() {
-       wave1 = new AudioNode(assetManager, "Audio/waves_sound.ogg", false);
-        wave1.setLocalTranslation(1000, 10, 1000);
-        wave1.setPositional(true);
-        wave1.setLooping(true);
-        wave1.setDirectional(true);
-        wave1.setMaxDistance(200.0f);
-        wave1.setRefDistance(100f);
-        wave1.setVolume(GameSettings.mVol / 200 + GameSettings.aVol / 200);
-        wave1.setDirection(new Vector3f(0,90,0));
-        
-        /*wave2 = new AudioNode(assetManager, "Audio/waves_sound.ogg", false);
-        wave2.setLocalTranslation(-1000, 10, 1000);
-        wave2.setMaxDistance(700.0f);
-        wave2.setPositional(true);
-        wave2.setRefDistance(400f);
-        wave2.setVolume(0.1f);
-        wave2.setDirection(Vector3f.ZERO);
-        wave2.setLooping(true);
-        
-        wave3 = new AudioNode(assetManager, "Audio/waves_sound.ogg", false);
-        wave3.setLocalTranslation(1000, 10, -1000);
-        wave3.setMaxDistance(700.0f);
-        wave3.setPositional(true);
-        wave3.setRefDistance(400f);
-        wave3.setVolume(0.1f);
-        wave3.setDirection(Vector3f.ZERO);
-        wave3.setLooping(true);
-        
-        wave4 = new AudioNode(assetManager, "Audio/waves_sound.ogg", false);
-        wave4.setLocalTranslation(-1000, 10, -1000);
-        wave4.setMaxDistance(700.0f);
-        wave4.setPositional(true);
-        wave4.setRefDistance(400f);
-        wave4.setVolume(0.1f);
-        wave4.setDirection(Vector3f.ZERO);
-        wave4.setLooping(true);*/
-        
-        /*wave2.play();
-        wave3.play();
-        wave4.play();*/
+        try {
+            wave = new AudioNode(assetManager, "Audio/waves_sound.ogg", false);
+
+            if (wave != null) {
+                wave.setLocalTranslation(1000, 10, 1000);
+                wave.setPositional(true);
+                wave.setLooping(true);
+                wave.setDirectional(true);
+                wave.setMaxDistance(200.0f);
+                wave.setRefDistance(100f);
+                wave.setVolume(GameSettings.mVol / 200 + GameSettings.aVol / 200);
+                wave.setDirection(new Vector3f(0,90,0));
+            } else {
+                ExceptionHandler.throwError("AudioNode not created.", "Audio - Ocean");
+            }
+        } catch (Exception e) {
+            ExceptionHandler.throwError("Could not find/load audio file.", "Audio - Ocean");
+        }
     }
     
     public static void playAmbient() {
-        wave1.play();
+        wave.play();
     }
     
     public static void pauseAmbient() {
-        wave1.pause();
+        wave.pause();
     }
     
     public static void loadCharacterAudio() {
-        playerAttack1 = new AudioNode(assetManager, "Audio/playerAttack1.ogg", false);
-        playerAttack1.setTimeOffset(125.0f);
-        playerAttack1.setMaxDistance(10);
-        playerAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        playerAttack1.setLooping(false);
-        playerAttack1.setPositional(false);
-        
-        playerAttack2 = new AudioNode(assetManager, "Audio/playerAttack2.ogg", false);
-        playerAttack2.setTimeOffset(125.0f);
-        playerAttack2.setMaxDistance(10);
-        playerAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        playerAttack2.setLooping(false);   
-        playerAttack2.setPositional(false);     
-        
-        playerAttack3 = new AudioNode(assetManager, "Audio/playerAttack3.ogg", false);
-        playerAttack3.setTimeOffset(125.0f);
-        playerAttack3.setMaxDistance(10);
-        playerAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        playerAttack3.setLooping(false);
-        playerAttack3.setPositional(false);
-        
-        playerDamage = new AudioNode(assetManager, "Audio/mobHitPlayer.ogg", false);
-        playerDamage.setMaxDistance(10);
-        playerDamage.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        playerDamage.setLooping(false);
-        playerDamage.setPositional(false);
-        
-        playerWalk = new AudioNode(assetManager, "Audio/walk_l.ogg", false);
-        playerWalk.setMaxDistance(10);
-        playerWalk.setVolume(GameSettings.mVol / 200 + GameSettings.fVol / 200);
-        playerWalk.setLooping(false);
-        playerWalk.setPositional(false);
+        try {
+            playerAttack1 = new AudioNode(assetManager, "Audio/playerAttack1.ogg", false);
+            
+            if (playerAttack1 != null) {
+                playerAttack1.setTimeOffset(125.0f);
+                playerAttack1.setMaxDistance(10);
+                playerAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                playerAttack1.setLooping(false);
+                playerAttack1.setPositional(false);
+            } else {
+                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+            }
+                
+            playerAttack2 = new AudioNode(assetManager, "Audio/playerAttack2.ogg", false);
+            
+            if (playerAttack2 != null) {
+                playerAttack2.setTimeOffset(125.0f);
+                playerAttack2.setMaxDistance(10);
+                playerAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                playerAttack2.setLooping(false);   
+                playerAttack2.setPositional(false);     
+            } else {
+                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+            }
+            
+            playerAttack3 = new AudioNode(assetManager, "Audio/playerAttack3.ogg", false);
+            
+            if (playerAttack3 != null) {
+                playerAttack3.setTimeOffset(125.0f);
+                playerAttack3.setMaxDistance(10);
+                playerAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                playerAttack3.setLooping(false);
+                playerAttack3.setPositional(false);
+            } else {
+                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+            }
+                
+            playerDamage = new AudioNode(assetManager, "Audio/mobHitPlayer.ogg", false);
+            
+            if (playerDamage != null) {
+                playerDamage.setMaxDistance(10);
+                playerDamage.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                playerDamage.setLooping(false);
+                playerDamage.setPositional(false);
+            } else {
+                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+            }
+
+            playerWalk = new AudioNode(assetManager, "Audio/walk_l.ogg", false);
+            
+            if (playerWalk != null) {
+                playerWalk.setMaxDistance(10);
+                playerWalk.setVolume(GameSettings.mVol / 200 + GameSettings.fVol / 200);
+                playerWalk.setLooping(false);
+                playerWalk.setPositional(false);
+            } else {
+                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+            }
+        } catch (Exception e) {
+            ExceptionHandler.throwError("Could not find/load audio file.", "Audio - Ocean");
+        }
     }
     
     public static void playCharacterAttack() {
@@ -186,52 +190,91 @@ public final class Audio {
     }
     
     public static void loadMobAudio() {
-        mobAttack1 = new AudioNode(assetManager, "Audio/zombieAttack1.ogg", false);
-        mobAttack1.setTimeOffset(125.0f);
-        mobAttack1.setMaxDistance(10);
-        mobAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        mobAttack1.setLooping(false);
-        mobAttack1.setPositional(false);
-        
-        mobAttack2 = new AudioNode(assetManager, "Audio/zombieAttack2.ogg", false);
-        mobAttack2.setTimeOffset(125.0f);
-        mobAttack2.setMaxDistance(10);
-        mobAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        mobAttack2.setLooping(false);   
-        mobAttack2.setPositional(false);     
-        
-        mobAttack3 = new AudioNode(assetManager, "Audio/zombieAttack3.ogg", false);
-        mobAttack3.setTimeOffset(125.0f);
-        mobAttack3.setMaxDistance(10);
-        mobAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        mobAttack3.setLooping(false);
-        mobAttack3.setPositional(false);
-        
-        mobAttack4 = new AudioNode(assetManager, "Audio/zombieAttack4.ogg", false);
-        mobAttack4.setTimeOffset(125.0f);
-        mobAttack4.setMaxDistance(10);
-        mobAttack4.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        mobAttack4.setLooping(false);   
-        mobAttack4.setPositional(false);     
-        
-        mobAttack5 = new AudioNode(assetManager, "Audio/zombieAttack5.ogg", false);
-        mobAttack5.setTimeOffset(125.0f);
-        mobAttack5.setMaxDistance(10);
-        mobAttack5.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        mobAttack5.setLooping(false);
-        mobAttack5.setPositional(false);
-        
-        mobDamage = new AudioNode(assetManager, "Audio/playerHitMob.ogg", false);
-        mobDamage.setMaxDistance(10);
-        mobDamage.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        mobDamage.setLooping(false);
-        mobDamage.setPositional(false);
-        
-        mobWalk = new AudioNode(assetManager, "Audio/walk_r.ogg", false);
-        mobWalk.setMaxDistance(10);
-        mobWalk.setVolume(GameSettings.mVol / 200 + GameSettings.fVol / 200);
-        mobWalk.setLooping(false);
-        mobWalk.setPositional(true);
+        try {
+            mobAttack1 = new AudioNode(assetManager, "Audio/zombieAttack1.ogg", false);
+            
+            if (mobAttack1 != null) {
+                mobAttack1.setTimeOffset(125.0f);
+                mobAttack1.setMaxDistance(10);
+                mobAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                mobAttack1.setLooping(false);
+                mobAttack1.setPositional(false);
+            } else {
+                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+            }
+
+            mobAttack2 = new AudioNode(assetManager, "Audio/zombieAttack2.ogg", false);
+            
+            if (mobAttack2 != null) {
+                mobAttack2.setTimeOffset(125.0f);
+                mobAttack2.setMaxDistance(10);
+                mobAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                mobAttack2.setLooping(false);   
+                mobAttack2.setPositional(false);     
+            } else {
+                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+            }
+
+            mobAttack3 = new AudioNode(assetManager, "Audio/zombieAttack3.ogg", false);
+            
+            if (mobAttack3 != null) {
+                mobAttack3.setTimeOffset(125.0f);
+                mobAttack3.setMaxDistance(10);
+                mobAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                mobAttack3.setLooping(false);
+                mobAttack3.setPositional(false);
+            } else {
+                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+            }
+
+            mobAttack4 = new AudioNode(assetManager, "Audio/zombieAttack4.ogg", false);
+            
+            if (mobAttack4 != null) {
+                mobAttack4.setTimeOffset(125.0f);
+                mobAttack4.setMaxDistance(10);
+                mobAttack4.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                mobAttack4.setLooping(false);   
+                mobAttack4.setPositional(false);     
+            } else {
+                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+            }
+
+            mobAttack5 = new AudioNode(assetManager, "Audio/zombieAttack5.ogg", false);
+            
+            if (mobAttack5 != null) {
+                mobAttack5.setTimeOffset(125.0f);
+                mobAttack5.setMaxDistance(10);
+                mobAttack5.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                mobAttack5.setLooping(false);
+                mobAttack5.setPositional(false);
+            } else {
+                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+            }
+
+            mobDamage = new AudioNode(assetManager, "Audio/playerHitMob.ogg", false);
+            
+            if (mobDamage != null) {
+                mobDamage.setMaxDistance(10);
+                mobDamage.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                mobDamage.setLooping(false);
+                mobDamage.setPositional(false);
+            } else {
+                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+            }
+
+            mobWalk = new AudioNode(assetManager, "Audio/walk_r.ogg", false);
+            
+            if (mobWalk != null) {
+                mobWalk.setMaxDistance(10);
+                mobWalk.setVolume(GameSettings.mVol / 200 + GameSettings.fVol / 200);
+                mobWalk.setLooping(false);
+                mobWalk.setPositional(true);
+            } else {
+                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+            }
+        } catch (Exception e) {
+            ExceptionHandler.throwError("Could not find/load audio file.", "Audio - Ocean");
+        }
     }
     
     public synchronized static void playMobAttack(Vector3f position) {
