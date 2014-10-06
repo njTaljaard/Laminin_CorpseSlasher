@@ -5,6 +5,11 @@ import com.jme3.app.AndroidHarness;
 import com.jme3.system.android.AndroidConfigChooser.ConfigType;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
+import com.jme3.input.event.TouchEvent;
+import com.jme3.input.controls.TouchTrigger;
+import com.jme3.input.controls.TouchListener;
+import com.jme3.input.TouchInput;
+
  
 public class MainActivity extends AndroidHarness{
  
@@ -14,15 +19,20 @@ public class MainActivity extends AndroidHarness{
      * Install the 'Android' plugin under Tools->Plugins->Available Plugins
      * to get error checks and code completion for the Android project files.
      */
- 
+    final private String ESCAPE_EVENT = "TouchEscape";
     public MainActivity(){
+        app.initialize();
+        if(handleExitHook){
+            app.getInputManager().addMapping(ESCAPE_EVENT,new TouchTrigger(TouchInput.KEYCODE_BACK));
+            app.getInputManager().addListener(this, new String[]{ESCAPE_EVENT});
+        }
         // Set the application class to run
         appClass = "CorpseSlasher.Main";
         // Try ConfigType.FASTEST; or ConfigType.LEGACY if you have problems
         eglConfigType = ConfigType.BEST;
         // Exit Dialog title & message
-        exitDialogTitle = "Exit?";
-        exitDialogMessage = "Press Yes";
+        //exitDialogTitle = "Exit?";
+        //exitDialogMessage = "Press Yes";
         // Enable verbose logging
         eglConfigVerboseLogging = false;
         // Choose screen orientation
@@ -31,6 +41,12 @@ public class MainActivity extends AndroidHarness{
         mouseEventsEnabled = true;
         // Set the default logging level (default=Level.INFO, Level.ALL=All Debug Info)
         LogManager.getLogManager().getLogger("").setLevel(Level.INFO);
+    }
+    @Override
+    public void onTouch(String name, TouchEvent evt, float tpf){
+       if(name.equals(ESCAPE_EVENT)){
+           System.out.println("here here");
+       } 
     }
  
 }
