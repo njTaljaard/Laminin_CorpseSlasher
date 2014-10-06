@@ -252,7 +252,12 @@ public class SettingsController implements ScreenController {
      public void quitGame(){
          System.exit(0);
      }
-     public void goTo(String _screen){
-         nifty.gotoScreen(_screen);
-     }
+    public void goTo(String screen) {
+        if (screen.equals("#Login_Screen")) {
+            
+        }
+        else{
+            nifty.gotoScreen(screen);
+        }
+    }
 }

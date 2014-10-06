@@ -20,11 +20,7 @@ import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
-import de.lessvoid.nifty.controls.checkbox.builder.CheckboxBuilder;
-import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
-import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
 import de.lessvoid.nifty.screen.ScreenController;
-import java.awt.Toolkit;
 
 /**
  *
@@ -34,26 +30,11 @@ import java.awt.Toolkit;
 public class SettingsScreen extends Screens {
 
     private Nifty nifty;
-    private int sHeight;
-    private int sWidth;
-    private boolean isWide;
-    private UserInterfaceManager UI;
-    private GameScene scene;
-
     SettingsScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
             ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay Screen, UserInterfaceManager UI,GameScene scene) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
-        this.UI = UI;
-        this.scene = scene;
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        sHeight = (int) toolkit.getScreenSize().getHeight();
-        sWidth = (int) toolkit.getScreenSize().getWidth();
-        if ((sWidth / sHeight) == (16 / 9)) {
-            isWide = true;
-        } else {
-            isWide = false;
-        }
         buildGui();
+        this.nifty = Screen.getNifty();
     }
 
     /**
@@ -115,6 +96,17 @@ public class SettingsScreen extends Screens {
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
                                         interactOnClick("goTo(#Login_Screen)");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Return to game") {
+                                    {
+                                        marginTop("5%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("returnGame()");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Quit Game") {

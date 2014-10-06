@@ -28,11 +28,9 @@ import de.lessvoid.nifty.screen.ScreenController;
  * see all the users scores and see where they lie on the list
  */
 public class Leaderboard extends Screens {
-    private static ClientConnection client;
 
-    Leaderboard(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen,ClientConnection client) {
+    Leaderboard(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
-        Leaderboard.client = client;
     }
 
     /**
@@ -57,7 +55,7 @@ public class Leaderboard extends Screens {
         nifty.loadControlFile("nifty-default-controls.xml");
         nifty.addScreen("Leader_Board", new ScreenBuilder("Leaderboard") {
             {
-                controller(new LeaderBoardController(client,assetManager));
+                controller(new LeaderBoardController(guiViewPort));
                 layer(new LayerBuilder("background") {
                     {
                         font("Interface/Fonts/zombie.fnt");
@@ -105,6 +103,17 @@ public class Leaderboard extends Screens {
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
                                         interactOnClick("goTo(#Login_Screen)");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Return to game") {
+                                    {
+                                        marginTop("5%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("returnGame()");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Quit Game") {

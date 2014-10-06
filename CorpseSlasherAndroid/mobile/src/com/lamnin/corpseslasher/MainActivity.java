@@ -1,18 +1,15 @@
 package com.lamnin.corpseslasher;
- 
+
 import android.content.pm.ActivityInfo;
 import com.jme3.app.AndroidHarness;
 import com.jme3.system.android.AndroidConfigChooser.ConfigType;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import com.jme3.input.event.TouchEvent;
-import com.jme3.input.controls.TouchTrigger;
-import com.jme3.input.controls.TouchListener;
-import com.jme3.input.TouchInput;
+import GUI.UserInterfaceManager;
 
- 
-public class MainActivity extends AndroidHarness{
- 
+public class MainActivity extends AndroidHarness {
+
     /*
      * Note that you can ignore the errors displayed in this file,
      * the android project will build regardless.
@@ -20,12 +17,8 @@ public class MainActivity extends AndroidHarness{
      * to get error checks and code completion for the Android project files.
      */
     final private String ESCAPE_EVENT = "TouchEscape";
-    public MainActivity(){
-        app.initialize();
-        if(handleExitHook){
-            app.getInputManager().addMapping(ESCAPE_EVENT,new TouchTrigger(TouchInput.KEYCODE_BACK));
-            app.getInputManager().addListener(this, new String[]{ESCAPE_EVENT});
-        }
+
+    public MainActivity() {
         // Set the application class to run
         appClass = "CorpseSlasher.Main";
         // Try ConfigType.FASTEST; or ConfigType.LEGACY if you have problems
@@ -42,11 +35,12 @@ public class MainActivity extends AndroidHarness{
         // Set the default logging level (default=Level.INFO, Level.ALL=All Debug Info)
         LogManager.getLogManager().getLogger("").setLevel(Level.INFO);
     }
+
     @Override
-    public void onTouch(String name, TouchEvent evt, float tpf){
-       if(name.equals(ESCAPE_EVENT)){
-           System.out.println("here here");
-       } 
+    public void onTouch(String name, TouchEvent evt, float tpf) {
+        if (name.equals(ESCAPE_EVENT)) {
+            UserInterfaceManager.openSettings();
+        }
+
     }
- 
 }
