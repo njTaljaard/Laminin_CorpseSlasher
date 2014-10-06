@@ -17,6 +17,12 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.json.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * @author Laminin
@@ -41,7 +47,6 @@ public class OAuth {
     private static String acceptCode() {
         try {
             ServerSocket serverSocket = new ServerSocket(8080, 0, InetAddress.getByName("localhost"));
-
             //while (true) {
             Socket socialSocket = serverSocket.accept();
             in = new BufferedReader(new InputStreamReader(
@@ -68,14 +73,12 @@ public class OAuth {
      * @throws IOException throws an exception if there is and IO error.
      */
     public static boolean facebookLogin() throws OAuthSystemException, IOException {
-
         try {
             OAuthClientRequest request = OAuthClientRequest
                     .authorizationProvider(OAuthProviderType.FACEBOOK)
                     .setClientId("131804060198305")
                     .setRedirectURI("http://localhost:8080/")
                     .buildQueryMessage();
-
             try {
                 URI domain = new URI(request.getLocationUri());
                 java.awt.Desktop.getDesktop().browse(domain);
@@ -83,9 +86,7 @@ public class OAuth {
                 System.out.println("URI error: " + exc.toString());
                 return false;
             }
-
             String code = acceptCode();
-
             request = OAuthClientRequest
                     .tokenProvider(OAuthProviderType.FACEBOOK)
                     .setGrantType(GrantType.AUTHORIZATION_CODE)
@@ -94,18 +95,29 @@ public class OAuth {
                     .setRedirectURI("http://localhost:8080/")
                     .setCode(code)
                     .buildBodyMessage();
-
             OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
-
             //Facebook is not fully compatible with OAuth 2.0 draft 10, access token response is
             //application/x-www-form-urlencoded, not json encoded so we use dedicated response class for that
             //Own response class is an easy way to deal with oauth providers that introduce modifications to
             //OAuth specification
             GitHubTokenResponse oAuthResponse = oAuthClient.accessToken(request, GitHubTokenResponse.class);
-
             System.out.println(
                     "Access Token: " + oAuthResponse.getAccessToken() + ", Expires in: " + oAuthResponse
                     .getExpiresIn());
+            //get user facebook detail.
+            try {
+                URL url = new URL("https://graph.facebook.com/me?access_token=" + oAuthResponse.getAccessToken());
+                URLConnection conn = url.openConnection();
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = reader.readLine()) != null) {
+                    System.out.println("FB: " + line);
+                }
+                reader.close();
+            } catch (Exception e) {
+                System.out.println("Facebook retrieve user details error: " + e.toString());
+                return false;
+            }
             //Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
             return true;
         } catch (OAuthProblemException e) {
@@ -127,8 +139,6 @@ public class OAuth {
      * @throws IOException throws an exception if there is and IO error.
      */
     public static boolean googleLogin() throws OAuthSystemException, IOException {
-
-
         try {
             URI domain = new URI("https://accounts.google.com/o/oauth2/auth?scope=email%20profile&redirect_uri=http://localhost:8080&response_type=code&client_id=505441356969-kqpsidp2kfv0udl5vopauroupumm7401.apps.googleusercontent.com");
             java.awt.Desktop.getDesktop().browse(domain);
@@ -136,45 +146,84 @@ public class OAuth {
             System.out.println("URI error: " + exc.toString());
             return false;
         }
-
         String code = acceptCode();
-
         if (code.compareTo("access_denied") == 0) {
             //Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
             return false;
         }
-
         //Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
         System.out.println(code);
-
-        //bug fix
+        
+        //bug fix: Code is to old and that is why it is not working.
         /*String url = "https://accounts.google.com/o/oauth2/token";
-        String in = "";
+         String in = "";
+        
+         try {       
+         HttpClient client = new HttpClient();
+         System.out.println("test");
+         PostMethod method = new PostMethod(url);
+            
+         method.addParameter("code", code);
+         method.addParameter("client_id", "505441356969-kqpsidp2kfv0udl5vopauroupumm7401.apps.googleusercontent.com");
+         method.addParameter("client_secret", "WJHODsVIxt1-aqQpx_rHxf04");
+         method.addParameter("redirect_uri", "http://localhost:8080");
+         method.addParameter("grant_type", "authorization_code");
+            
+         int statusCode = client.executeMethod(method);
+            
+         if (statusCode != -1) {
 
+         in = method.getResponseBodyAsString();
+
+         }
+
+         System.out.println("Access Token: " + in);
+
+         } catch (Exception e) {
+         System.out.println("Google login error: " + e.toString());
+         return false;
+         }*/
+
+        //Newer working code to get access token
+        JSONObject userDetailsObj;
         try {
-            HttpClient client = new HttpClient();
-            PostMethod method = new PostMethod(url);
+            URL url = new URL("https://accounts.google.com/o/oauth2/token");
+            URLConnection conn = url.openConnection();
+            conn.setDoOutput(true);
+            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
 
-            method.addParameter("code", code);
-            method.addParameter("client_id", "505441356969-kqpsidp2kfv0udl5vopauroupumm7401.apps.googleusercontent.com");
-            method.addParameter("client_secret", "WJHODsVIxt1-aqQpx_rHxf04");
-            method.addParameter("redirect_uri", "http://localhost:8080");
-            method.addParameter("grant_type", "authorization_code");
-
-            int statusCode = client.executeMethod(method);
-
-            if (statusCode != -1) {
-
-                in = method.getResponseBodyAsString();
-
+            writer.write("code=" + code + "&client_id=505441356969-kqpsidp2kfv0udl5vopauroupumm7401.apps.googleusercontent.com&client_secret=WJHODsVIxt1-aqQpx_rHxf04&redirect_uri=http://localhost:8080&grant_type=authorization_code");
+            writer.flush();
+            String line;
+            String userDetails = "";
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            while ((line = reader.readLine()) != null) {
+                userDetails+= line;
             }
-
-            System.out.println(in);
+            userDetailsObj = new JSONObject(userDetails);
+            writer.close();
+            reader.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Google login error: " + e.toString());
             return false;
-        }*/
+        }
+        
+        //get user google+ detail.
+            try {
+                URL url = new URL("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + userDetailsObj.get("access_token"));
+                URLConnection conn = url.openConnection();
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = reader.readLine()) != null) {
+                    System.out.println("Google+: " + line);
+                }
+                reader.close();
+            } catch (Exception e) {
+                System.out.println("Facebook retrieve user details error: " + e.toString());
+                return false;
+            }
+
         return true;
     }
     //Could not get Twitter Oauth working
