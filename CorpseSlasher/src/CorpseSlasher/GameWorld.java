@@ -13,7 +13,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.Random;
-import java.util.Vector;
 
 /**
  * @author Laminin
@@ -26,8 +25,7 @@ public final class GameWorld {
     protected static AssetManager assetManager;
     protected static BulletAppState bullet;
     protected static boolean aggro = false;
-    protected static boolean alive = true;
-    
+    protected static boolean alive = true;    
     protected static Vector3f playerPosition = new Vector3f();
     
     public static final int mobRespawnTimer = 100000;
@@ -43,6 +41,10 @@ public final class GameWorld {
     
     public static final float eighth_pi = FastMath.PI * 0.125f;
     public static final Random rand = new Random();
+    
+    public static final int dialogInterval = 90000;
+    public static int dialogPlayed;
+    public static int systemTime;
     
     public static SkeletonControl getSkeletonControl(Node model) {
         SkeletonControl control = null;
@@ -95,14 +97,18 @@ public final class GameWorld {
         Vector3f lookAt = new Vector3f();
         
         lookAt.y = 0.0f;
-        lookAt.x = (float) (rand.nextGaussian() * 1000.0);
-        lookAt.z = (float) (rand.nextGaussian() * 1000.0);
+        lookAt.x = getNextGaussian(1000);
+        lookAt.z = getNextGaussian(1000);
         
         return lookAt;
     }
+    
+    public static float getNextGaussian(int range) {
+        return (float) rand.nextGaussian() * range;
+    }
         
     public static synchronized void updateAggro(boolean agg) {
-        if (!agg) {
+        if (agg) {
             aggro = agg;
         }
     }

@@ -1,7 +1,5 @@
 package CorpseSlasher;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import java.util.ArrayList;
@@ -117,7 +115,7 @@ public class MobsHandler {
                 }
 
                 if (mob.damageAudio) {
-                    Audio.playMobDamage(mob.getPosition());
+                    Audio.playMobDamage();
                 }
 
                 mob.walkAudio = false;

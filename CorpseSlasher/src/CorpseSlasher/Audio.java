@@ -5,6 +5,7 @@ import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.audio.Environment;
 import com.jme3.math.Vector3f;
+import java.util.ArrayList;
 
 /**
  * @author Laminin
@@ -26,6 +27,8 @@ public final class Audio {
     private static AudioNode playerAttack3;
     private static AudioNode playerDamage;
     private static AudioNode playerWalk;
+    private static AudioNode lowHealth;
+    private static ArrayList<AudioNode> dialog;
     
     private static int mobAttackCount;
     private static AudioNode mobAttack1;
@@ -36,35 +39,26 @@ public final class Audio {
     private static AudioNode mobDamage;
     private static AudioNode mobWalk;
     
-    private static Environment env;
-    
     public static void updateVolume() {
-        wave.setVolume(GameSettings.mVol / 200 + GameSettings.aVol / 200);
-        playerAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        playerAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        playerAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        playerDamage.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        playerWalk.setVolume(GameSettings.mVol / 200 + GameSettings.fVol / 200);
-        mobAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        mobAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        mobAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        mobAttack4.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        mobAttack5.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        mobDamage.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
-        mobWalk.setVolume(GameSettings.mVol / 200 + GameSettings.fVol / 200);
-    }
-    
-    public static void initAmbient() {
-        /*
-         * density, diffusion, gain, gainHF, decayTime, decayHF, reflGain, reflDelay, lateGain, lateDelay
-         */
-        float[] eax = new float[]{5, 38.0f, 0.300f, -1000, -3300, 0,
-            1.49f, 0.54f, 1.00f, -2560, 0.162f, 0.00f, 0.00f,
-            0.00f, -229, 0.088f, 0.00f, 0.00f, 0.00f, 0.125f, 1.000f,
-            0.250f, 0.000f, -5.0f, 5000.0f, 250.0f, 0.00f, 0x3f};
-        env = new Environment(eax);
-        audioRenderer.setEnvironment(env);
-        playerAttackCount = 1;
+        wave.setVolume(GameSettings.mVol / 100 * (GameSettings.aVol / 100));
+        playerAttack1.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
+        playerAttack2.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
+        playerAttack3.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
+        playerDamage.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
+        playerWalk.setVolume(GameSettings.mVol / 100 * (GameSettings.fVol / 100));
+        lowHealth.setVolume(GameSettings.mVol / 100 * (GameSettings.dVol / 100));
+        
+        for (AudioNode node : dialog) {
+            node.setVolume(GameSettings.mVol / 100 * (GameSettings.dVol / 100));
+        }
+        
+        mobAttack1.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
+        mobAttack2.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
+        mobAttack3.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
+        mobAttack4.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
+        mobAttack5.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
+        mobDamage.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
+        mobWalk.setVolume(GameSettings.mVol / 100 * (GameSettings.fVol / 100));
     }
     
     public static void loadOcean() {
@@ -78,7 +72,7 @@ public final class Audio {
                 wave.setDirectional(true);
                 wave.setMaxDistance(200.0f);
                 wave.setRefDistance(100f);
-                wave.setVolume(GameSettings.mVol / 200 + GameSettings.aVol / 200);
+                wave.setVolume(GameSettings.mVol / 100 * (GameSettings.aVol / 100));
                 wave.setDirection(new Vector3f(0,90,0));
             } else {
                 ExceptionHandler.throwError("AudioNode not created.", "Audio - Ocean");
@@ -103,11 +97,11 @@ public final class Audio {
             if (playerAttack1 != null) {
                 playerAttack1.setTimeOffset(125.0f);
                 playerAttack1.setMaxDistance(10);
-                playerAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                playerAttack1.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
                 playerAttack1.setLooping(false);
                 playerAttack1.setPositional(false);
             } else {
-                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+                ExceptionHandler.throwError("playerAttack1 not created succefully.", "Audio - loadPlayer");
             }
                 
             playerAttack2 = new AudioNode(assetManager, "Audio/playerAttack2.ogg", false);
@@ -115,11 +109,11 @@ public final class Audio {
             if (playerAttack2 != null) {
                 playerAttack2.setTimeOffset(125.0f);
                 playerAttack2.setMaxDistance(10);
-                playerAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                playerAttack2.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
                 playerAttack2.setLooping(false);   
                 playerAttack2.setPositional(false);     
             } else {
-                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+                ExceptionHandler.throwError("playerAttack2 not created succefully.", "Audio - loadPlayer");
             }
             
             playerAttack3 = new AudioNode(assetManager, "Audio/playerAttack3.ogg", false);
@@ -127,37 +121,79 @@ public final class Audio {
             if (playerAttack3 != null) {
                 playerAttack3.setTimeOffset(125.0f);
                 playerAttack3.setMaxDistance(10);
-                playerAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                playerAttack3.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
                 playerAttack3.setLooping(false);
                 playerAttack3.setPositional(false);
             } else {
-                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+                ExceptionHandler.throwError("playerAttack3 not created succefully.", "Audio - loadPlayer");
             }
                 
             playerDamage = new AudioNode(assetManager, "Audio/mobHitPlayer.ogg", false);
             
             if (playerDamage != null) {
                 playerDamage.setMaxDistance(10);
-                playerDamage.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                playerDamage.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
                 playerDamage.setLooping(false);
                 playerDamage.setPositional(false);
             } else {
-                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+                ExceptionHandler.throwError("playerDamage not created succefully.", "Audio - loadPlayer");
             }
 
             playerWalk = new AudioNode(assetManager, "Audio/walk_l.ogg", false);
             
             if (playerWalk != null) {
                 playerWalk.setMaxDistance(10);
-                playerWalk.setVolume(GameSettings.mVol / 200 + GameSettings.fVol / 200);
+                playerWalk.setVolume(GameSettings.mVol / 100 * (GameSettings.fVol / 100));
                 playerWalk.setLooping(false);
                 playerWalk.setPositional(false);
             } else {
-                ExceptionHandler.throwError("AudioNode not created succesfully.", "Audio - Ocean");
+                ExceptionHandler.throwError("playerWalk not created succefully.", "Audio - loadPlayer");
+            }
+            
+            dialog = new ArrayList<>();
+            
+            if (dialog != null) {
+                AudioNode dio;
+                for (int i = 0; i < 13; i++) {
+                    dio = new AudioNode(assetManager, "Audio/dialog_" + i + ".ogg");
+                    
+                    dio.setMaxDistance(10);
+                    dio.setVolume(GameSettings.mVol / 100 * (GameSettings.dVol / 100));
+                    dio.setLooping(false);
+                    dio.setPositional(false);
+                    dialog.add(dio);
+                }
+            } else {
+                ExceptionHandler.throwError("Dialog arraylist not initialized.", "Audio - loadPlayer");
+            }
+            
+            lowHealth = new AudioNode(assetManager, "Audio/lowhealth.ogg");
+            
+            if (lowHealth != null) {
+                lowHealth.setMaxDistance(10);
+                lowHealth.setVolume(GameSettings.mVol / 100 * (GameSettings.dVol / 100));
+                lowHealth.setLooping(false);
+                lowHealth.setPositional(false);
+            } else {
+                ExceptionHandler.throwError("lowHealth not created succefully.", "Audio - loadPlayer");
             }
         } catch (Exception e) {
-            ExceptionHandler.throwError("Could not find/load audio file.", "Audio - Ocean");
+            ExceptionHandler.throwError("Could not find/load audio file. " + e.getMessage(), "Audio - Ocean");
         }
+    }
+    
+    public static void playerCharacterDialog() {
+        int rand = Math.abs((int) GameWorld.getNextGaussian(dialog.size()-1));
+        
+        while (rand > dialog.size()-1) {
+            rand = Math.abs((int) GameWorld.getNextGaussian(dialog.size())-1);
+        }
+        
+        dialog.get(rand).play();
+    }
+    
+    public static void playLowHealth() {
+        lowHealth.play();
     }
     
     public static void playCharacterAttack() {
@@ -196,7 +232,7 @@ public final class Audio {
             if (mobAttack1 != null) {
                 mobAttack1.setTimeOffset(125.0f);
                 mobAttack1.setMaxDistance(10);
-                mobAttack1.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                mobAttack1.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
                 mobAttack1.setLooping(false);
                 mobAttack1.setPositional(false);
             } else {
@@ -208,7 +244,7 @@ public final class Audio {
             if (mobAttack2 != null) {
                 mobAttack2.setTimeOffset(125.0f);
                 mobAttack2.setMaxDistance(10);
-                mobAttack2.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                mobAttack2.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
                 mobAttack2.setLooping(false);   
                 mobAttack2.setPositional(false);     
             } else {
@@ -220,7 +256,7 @@ public final class Audio {
             if (mobAttack3 != null) {
                 mobAttack3.setTimeOffset(125.0f);
                 mobAttack3.setMaxDistance(10);
-                mobAttack3.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                mobAttack3.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
                 mobAttack3.setLooping(false);
                 mobAttack3.setPositional(false);
             } else {
@@ -232,7 +268,7 @@ public final class Audio {
             if (mobAttack4 != null) {
                 mobAttack4.setTimeOffset(125.0f);
                 mobAttack4.setMaxDistance(10);
-                mobAttack4.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                mobAttack4.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
                 mobAttack4.setLooping(false);   
                 mobAttack4.setPositional(false);     
             } else {
@@ -244,7 +280,7 @@ public final class Audio {
             if (mobAttack5 != null) {
                 mobAttack5.setTimeOffset(125.0f);
                 mobAttack5.setMaxDistance(10);
-                mobAttack5.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                mobAttack5.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
                 mobAttack5.setLooping(false);
                 mobAttack5.setPositional(false);
             } else {
@@ -255,7 +291,7 @@ public final class Audio {
             
             if (mobDamage != null) {
                 mobDamage.setMaxDistance(10);
-                mobDamage.setVolume(GameSettings.mVol / 200 + GameSettings.cVol / 200);
+                mobDamage.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
                 mobDamage.setLooping(false);
                 mobDamage.setPositional(false);
             } else {
@@ -266,7 +302,7 @@ public final class Audio {
             
             if (mobWalk != null) {
                 mobWalk.setMaxDistance(10);
-                mobWalk.setVolume(GameSettings.mVol / 200 + GameSettings.fVol / 200);
+                mobWalk.setVolume(GameSettings.mVol / 100 * (GameSettings.fVol / 100));
                 mobWalk.setLooping(false);
                 mobWalk.setPositional(true);
             } else {
@@ -307,8 +343,7 @@ public final class Audio {
         } 
     }
     
-    public synchronized static void playMobDamage(Vector3f position) {
-       mobDamage.setLocalTranslation(position);
+    public synchronized static void playMobDamage() {
        mobDamage.playInstance();
     }
     

@@ -8,7 +8,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.GhostControl;
-import com.jme3.math.FastMath;
 
 /**
  * @author Laminin
@@ -235,7 +234,7 @@ public class Mob extends Thread {
                 if (health <= 0) {
                     health = 0;
                     alive = false;
-                    deathTime = (int) (System.nanoTime() / 100000);
+                    deathTime = GameWorld.systemTime;
                     motionControl.death(characterControl);
                     swapControllers = true;
                     ClientConnection.AddOneKill();
@@ -246,8 +245,8 @@ public class Mob extends Thread {
             }
             
             if (!motionControl.aggro && regenTime == 0) {
-                regenTime = (int) (System.nanoTime() / 100000);
-            } else if ((int) System.nanoTime() / 100000 - regenTime > GameWorld.mobRegenInterval && health != 100 && !motionControl.aggro) {
+                regenTime = GameWorld.systemTime;
+            } else if (GameWorld.systemTime - regenTime > GameWorld.mobRegenInterval && health != 100 && !motionControl.aggro) {
                 health += 5;
                 regenTime = 0;
             }
@@ -258,7 +257,7 @@ public class Mob extends Thread {
             }
         } else {
             ragdoll.update(tpf);
-            if ((int) (System.nanoTime() / 100000) - deathTime > GameWorld.mobRespawnTimer) {
+            if (GameWorld.systemTime - deathTime > GameWorld.mobRespawnTimer) {
                 alive = true;
                 health = 100;
                 swapControllers = true;

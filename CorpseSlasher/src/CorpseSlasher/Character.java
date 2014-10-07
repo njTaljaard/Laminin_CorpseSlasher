@@ -59,6 +59,7 @@ public class Character {
         this.health = 100;
         this.regenTime = 0;
         this.cam = cam;
+        GameWorld.dialogPlayed = (int) (System.nanoTime() / 100000);
         
         initModel();
         initControl();
@@ -221,11 +222,16 @@ public class Character {
                     motionController.slash, motionController.walk, GameWorld.alive);
             
             if (!GameWorld.aggro && regenTime == 0) {
-                regenTime = (int) (System.nanoTime() / 100000);
-            } else if ((int) (System.nanoTime() / 100000) - regenTime > GameWorld.playerRegenInterval && health != 100 && !GameWorld.aggro) {
+                regenTime = GameWorld.systemTime;
+            } else if (GameWorld.systemTime - regenTime > GameWorld.playerRegenInterval && health != 100 && !GameWorld.aggro) {
                 health += 5;
                 regenTime = 0;
                 //System.out.println("Regen time, health is : " + health);
+            }
+                        
+            if (GameWorld.systemTime - GameWorld.dialogPlayed > GameWorld.dialogInterval) {
+                Audio.playerCharacterDialog();
+                GameWorld.dialogPlayed = GameWorld.systemTime;
             }
             
             if (animController.attacking && playerHits > 0) {
@@ -267,6 +273,10 @@ public class Character {
                             swapControllers();
                         }
                     }
+                }
+                
+                if (health <= 30) {
+                    Audio.playLowHealth();
                 }
             } else {
                 ExceptionHandler.throwError("Enemy knocks to player not initialized.", "Character - ProcessKnocks");

@@ -1,6 +1,5 @@
 package CorpseSlasher;
 
-import GUI.LoadingScreen;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.input.InputManager;
@@ -152,6 +151,7 @@ public class GameScene {
      * @param tpf - Update value of time between frames.
      */
     public void update(TimeOfDay tod, float tpf) {
+        GameWorld.systemTime = (int) (System.nanoTime() / 100000);
         basicScene.update(tod, tpf);
         playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), tpf);
         
