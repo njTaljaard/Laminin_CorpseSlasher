@@ -1,11 +1,12 @@
 
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+* To change this template, choose Tools | Templates
+* and open the template in the editor.
  */
 package GUI;
 
 //~--- non-JDK imports --------------------------------------------------------
+
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -20,6 +21,7 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
+import de.lessvoid.nifty.controls.messagebox.builder.MessageBoxBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
@@ -30,9 +32,8 @@ import de.lessvoid.nifty.tools.Color;
  * new custom accounts
  */
 public class NewAccount extends Screens {
-
     NewAccount(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort,
-            AppStateManager appState, Application app, NiftyJmeDisplay screen) {
+               AppStateManager appState, Application app, NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
     }
 
@@ -41,8 +42,8 @@ public class NewAccount extends Screens {
      */
     public void build() {
         Nifty nifty = screen.getNifty();
-        nifty.setIgnoreKeyboardEvents(true);
 
+        nifty.setIgnoreKeyboardEvents(true);
         guiViewPort.addProcessor(screen);
         buildGui(nifty);
         nifty.gotoScreen("New_Account_Screen");
@@ -237,7 +238,7 @@ public class NewAccount extends Screens {
                                         marginBottom("15%");
                                         height("5%");
                                         width("15%");
-                                        interactOnClick("goTo(#Login_Screen)");
+                                        interactOnClick("goBack()");
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });

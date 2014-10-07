@@ -1,8 +1,11 @@
+
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+* To change this template, choose Tools | Templates
+* and open the template in the editor.
  */
 package GUI;
+
+//~--- non-JDK imports --------------------------------------------------------
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
@@ -11,6 +14,7 @@ import com.jme3.audio.AudioRenderer;
 import com.jme3.input.InputManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -27,8 +31,8 @@ import de.lessvoid.nifty.tools.Color;
  * retrieve lost or forgotten passwords via the use of his account username.
  */
 public class RetrievePassword extends Screens {
-
-    RetrievePassword(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
+    RetrievePassword(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
+                     ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
     }
 
@@ -38,8 +42,8 @@ public class RetrievePassword extends Screens {
     @Override
     public void build() {
         Nifty nifty = screen.getNifty();
-        nifty.setIgnoreKeyboardEvents(true);
 
+        nifty.setIgnoreKeyboardEvents(true);
         guiViewPort.addProcessor(screen);
         buildGui(nifty);
         nifty.gotoScreen("Retrieve_Password");
@@ -112,7 +116,7 @@ public class RetrievePassword extends Screens {
                                         marginBottom("15%");
                                         height("5%");
                                         width("15%");
-                                        interactOnClick("goTo(#Login_Screen)");
+                                        interactOnClick("goBack()");
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
@@ -124,3 +128,6 @@ public class RetrievePassword extends Screens {
         }.build(nifty));
     }
 }
+
+
+//~ Formatted by Jindent --- http://www.jindent.com
