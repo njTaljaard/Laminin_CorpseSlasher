@@ -188,9 +188,10 @@ public class BasicScene {
                 
                 if (treeNode != null) {
                     List<Spatial> treeList = treeNode.getChildren();
-
+                    BoxCollisionShape treeCol;
+                    
                     for (int i = 0; i < treeList.size(); i++) {
-                        BoxCollisionShape treeCol = new BoxCollisionShape(new Vector3f(3.5f, 15, 3.5f));
+                        treeCol = new BoxCollisionShape(new Vector3f(3.5f, 15, 3.5f));
                         RigidBodyControl rig = new RigidBodyControl(treeCol,0);
                         rig.setCollisionGroup(1);
 
@@ -199,6 +200,24 @@ public class BasicScene {
                     }
                 } else {
                     ExceptionHandler.throwError("Could not retrieve tree node from scene.", "BasiceScene - Terrain");
+                }
+                
+                Spatial fire = sceneModel.getChild("Models/campfire/campfire.j3o");
+                if (fire != null) {
+                    fire.addControl(new RigidBodyControl(0));
+                    fire.getControl(RigidBodyControl.class).setCollisionGroup(1);
+                    GameWorld.bullet.getPhysicsSpace().add(fire);
+                } else {
+                    ExceptionHandler.throwError("Could not retrieve fire model from scene.", "BasicScene - Terrain");
+                }
+                
+                Spatial tent = sceneModel.getChild("Models/Tent/Tent_1.j3o");
+                if (tent != null) {
+                    tent.addControl(new RigidBodyControl(0));
+                    tent.getControl(RigidBodyControl.class).setCollisionGroup(1);
+                    GameWorld.bullet.getPhysicsSpace().add(tent);
+                } else {
+                    ExceptionHandler.throwError("Could not retrieve tent model from scene.", "BasicScene - Terrain");
                 }
                 
                 sceneNode.attachChild(sceneModel);
