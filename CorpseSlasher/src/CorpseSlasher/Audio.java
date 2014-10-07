@@ -3,7 +3,6 @@ package CorpseSlasher;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioRenderer;
-import com.jme3.audio.Environment;
 import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 
@@ -28,6 +27,7 @@ public final class Audio {
     private static AudioNode playerDamage;
     private static AudioNode playerWalk;
     private static AudioNode lowHealth;
+    public static boolean played = false;
     private static ArrayList<AudioNode> dialog;
     
     private static int mobAttackCount;
@@ -46,7 +46,7 @@ public final class Audio {
         playerAttack3.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
         playerDamage.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
         playerWalk.setVolume(GameSettings.mVol / 100 * (GameSettings.fVol / 100));
-        lowHealth.setVolume(GameSettings.mVol / 100 * ((GameSettings.dVol / 100)*2));
+        lowHealth.setVolume(GameSettings.mVol / 100 * ((GameSettings.dVol / 100)*4));
         
         for (AudioNode node : dialog) {
             node.setVolume(GameSettings.mVol / 100 * (GameSettings.dVol / 100));
@@ -171,7 +171,7 @@ public final class Audio {
             
             if (lowHealth != null) {
                 lowHealth.setMaxDistance(10);
-                lowHealth.setVolume(GameSettings.mVol / 100 * ((GameSettings.dVol / 100)*2));
+                lowHealth.setVolume(GameSettings.mVol / 100 * ((GameSettings.dVol / 100)*5));
                 lowHealth.setLooping(false);
                 lowHealth.setPositional(false);
             } else {
@@ -193,7 +193,10 @@ public final class Audio {
     }
     
     public static void playLowHealth() {
-        lowHealth.play();
+        if (!played) {
+            lowHealth.play();
+            played = true;
+        }
     }
     
     public static void playCharacterAttack() {

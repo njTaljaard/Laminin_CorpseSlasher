@@ -291,6 +291,7 @@ public class Mob extends Thread {
 
                 assembleMob();
             } else { //Swap to ragdoll control
+                GUI.UserInterfaceManager.guiNode.detachChildNamed("aggroImage");
                 characterControl.setEnabled(false);
                 motionControl.getAggroGhost().setEnabled(false);
                 attackGhost.setEnabled(false);

@@ -221,13 +221,18 @@ public class Character {
             motionController.slash = animController.updateCharacterAnimations(channel, 
                     motionController.slash, motionController.walk, GameWorld.alive);
             
-            if (!GameWorld.aggro && regenTime == 0) {
-                regenTime = GameWorld.systemTime;
-            } else if (GameWorld.systemTime - regenTime > GameWorld.playerRegenInterval && health != 100 && !GameWorld.aggro) {
-                health += 5;
-                regenTime = 0;
-                //System.out.println("Regen time, health is : " + health);
-            }
+            if (!GameWorld.aggro) {
+                if (regenTime == 0) {
+                    regenTime = GameWorld.systemTime;
+                } else if (GameWorld.systemTime - regenTime > GameWorld.playerRegenInterval && health != 100) {
+                    health += 5;
+                    regenTime = 0;
+                    
+                    if (health > 50) {
+                        Audio.played = false;
+                    }
+                }
+            } 
                         
             if (GameWorld.systemTime - GameWorld.dialogPlayed > GameWorld.dialogInterval) {
                 Audio.playerCharacterDialog();
