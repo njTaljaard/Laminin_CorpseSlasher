@@ -15,7 +15,7 @@ import com.jme3.scene.Spatial;
  */
 public class MobMotionControl {
     
-    protected boolean aggro, walkAttack, attack, passive;
+    protected boolean aggro, walkAttack, attack, passive, walk;
     private final float runSpeed = 8.0f;
     private final float walkSpeed = 6.0f;
     private Vector3f motionDirection;
@@ -27,6 +27,7 @@ public class MobMotionControl {
         aggro = false;
         walkAttack = false;
         attack = false;
+        walk = false;
         motionDirection = new Vector3f();
         initAggroGhost();
     }
@@ -37,7 +38,7 @@ public class MobMotionControl {
      * collision group and the group it does collid with.
      */
     private void initAggroGhost() {
-        aggroGhost = new GhostControl(new SphereCollisionShape(15f));
+        aggroGhost = new GhostControl(new SphereCollisionShape(2.75f));
         aggroGhost.setCollisionGroup(6);
         aggroGhost.setCollideWithGroups(8);
     }
@@ -57,43 +58,49 @@ public class MobMotionControl {
             point.subtract(mob.getLocalTranslation(), motionDirection);
             motionDirection.y = 0.0f;
 
-            if (mob.getLocalTranslation().distance(point) > 4.5f) {
+            if (mob.getLocalTranslation().distance(point) > 1.25f) {
                 characterControl.setViewDirection(motionDirection.normalize().multLocal(runSpeed).negate());
                 characterControl.setWalkDirection(motionDirection.normalize().multLocal(runSpeed)); 
             }
 
-            if (mob.getLocalTranslation().distance(point) < 4.0f) {
+            if (mob.getLocalTranslation().distance(point) < 1.0f) {
                 attack = true;
                 walkAttack = false;
-            } else if (mob.getLocalTranslation().distance(point) < 8.0f) {
+                walk = false;
+            } else if (mob.getLocalTranslation().distance(point) < 2.0f) {
                 walkAttack = true;
-            } else if (passivePosition.distance(mob.getLocalTranslation()) > 25.0f) {
+                walk = true;
+            } else if (passivePosition.distance(mob.getLocalTranslation()) > 6.25f) {
                 aggro = false;
                 attack = false;
                 walkAttack = false;
+                walk = false;
             } else {
                 attack = false;
                 walkAttack = false;
+                walk = true;
             }
         } else { 
             if (!passive) {
                 for (int i = 0; i < aggroGhost.getOverlappingObjects().size(); i++) {
                     if (aggroGhost.getOverlapping(i).getCollisionGroup() == 8 &&
-                            passivePosition.distance(mob.getLocalTranslation()) < 20.0f) {
+                            passivePosition.distance(mob.getLocalTranslation()) < 5.0f) {
                         aggro = true;
                         passive = false;
                         return;
                     }
                 }
 
-                if (passivePosition.distance(mob.getLocalTranslation()) > 3.0f) {
+                if (passivePosition.distance(mob.getLocalTranslation()) > 0.75f) {
                   passivePosition.subtract(mob.getLocalTranslation(), motionDirection);
                   motionDirection.y = 0.0f;
+                  walk = true;
 
                   characterControl.setViewDirection(motionDirection.normalize().multLocal(walkSpeed).negate());
                   characterControl.setWalkDirection(motionDirection.normalize().multLocal(walkSpeed));
                 } else {
                     passive = true;
+                    walk = false;
                     characterControl.setViewDirection(new Vector3f(0, 0, 0));
                     characterControl.setWalkDirection(new Vector3f(0, 0, 0));
                     //set animation channel to passive animation.

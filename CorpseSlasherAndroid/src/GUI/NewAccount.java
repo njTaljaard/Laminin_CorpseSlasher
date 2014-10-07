@@ -1,4 +1,4 @@
-
+    
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -80,10 +80,10 @@ public class NewAccount extends Screens {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
-                                        marginLeft("31%");
+                                        marginLeft("16%");
                                         marginTop("22%");
                                         height("5%");
-                                        width("15%");
+                                        width("20%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -95,7 +95,7 @@ public class NewAccount extends Screens {
                                         valign(VAlign.Top);
                                         marginTop("22%");
                                         height("5%");
-                                        width("15%");
+                                        width("25%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -106,10 +106,10 @@ public class NewAccount extends Screens {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
-                                        marginLeft("31%");
+                                        marginLeft("16%");
                                         marginTop("30%");
                                         height("5%");
-                                        width("15%");
+                                        width("20%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -121,7 +121,7 @@ public class NewAccount extends Screens {
                                         valign(VAlign.Top);
                                         marginTop("30%");
                                         height("5%");
-                                        width("15%");
+                                        width("25%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -134,7 +134,7 @@ public class NewAccount extends Screens {
                                         valign(VAlign.Top);
                                         marginTop("38%");
                                         height("5%");
-                                        width("15%");
+                                        width("25%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -145,10 +145,10 @@ public class NewAccount extends Screens {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
-                                        marginLeft("31%");
+                                        marginLeft("16%");
                                         marginTop("38%");
                                         height("5%");
-                                        width("15%");
+                                        width("20%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -158,10 +158,10 @@ public class NewAccount extends Screens {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
-                                        marginLeft("31%");
+                                        marginLeft("16%");
                                         marginTop("46%");
                                         height("5%");
-                                        width("15%");
+                                        width("20%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -173,7 +173,7 @@ public class NewAccount extends Screens {
                                         valign(VAlign.Top);
                                         marginTop("46%");
                                         height("5%");
-                                        width("15%");
+                                        width("25%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -184,10 +184,10 @@ public class NewAccount extends Screens {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
-                                        marginLeft("31%");
+                                        marginLeft("16%");
                                         marginTop("54%");
                                         height("5%");
-                                        width("15%");
+                                        width("20%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -199,7 +199,7 @@ public class NewAccount extends Screens {
                                         valign(VAlign.Top);
                                         marginTop("54%");
                                         height("5%");
-                                        width("15%");
+                                        width("25%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -211,10 +211,10 @@ public class NewAccount extends Screens {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
-                                        marginLeft("31%");
+                                        marginLeft("16%");
                                         marginTop("62%");
                                         height("5%");
-                                        width("15%");
+                                        width("20%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -226,7 +226,7 @@ public class NewAccount extends Screens {
                                         valign(VAlign.Top);
                                         marginTop("62%");
                                         height("5%");
-                                        width("15%");
+                                        width("25%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -238,9 +238,9 @@ public class NewAccount extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Bottom);
-                                        marginBottom("25%");
-                                        height("5%");
-                                        width("15%");
+                                        marginBottom("20%");
+                                        height("10%");
+                                        width("25%");
                                         interactOnClick("createNewAccount()");
                                         font("Interface/Fonts/zombie.fnt");
                                     }
@@ -249,9 +249,9 @@ public class NewAccount extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Bottom);
-                                        marginBottom("15%");
-                                        height("5%");
-                                        width("15%");
+                                        marginBottom("5%");
+                                        height("10%");
+                                        width("25%");
                                         interactOnClick("goTo(#Login_Screen)");
                                         font("Interface/Fonts/zombie.fnt");
                                     }

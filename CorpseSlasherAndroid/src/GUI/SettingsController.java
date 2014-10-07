@@ -115,12 +115,14 @@ public class SettingsController implements ScreenController {
 
     @Override
     public void onStartScreen() {
-       nifty.setIgnoreKeyboardEvents(false);
+       nifty.setIgnoreKeyboardEvents(false); 
+        nifty.setIgnoreMouseEvents(false);
     }
 
     @Override
     public void onEndScreen() { 
-       nifty.setIgnoreKeyboardEvents(true);      
+       nifty.setIgnoreKeyboardEvents(true);  
+        nifty.setIgnoreMouseEvents(true);     
     }
     /**
      * 
@@ -248,9 +250,14 @@ public class SettingsController implements ScreenController {
       * Quits the game
       */
      public void quitGame(){
-         System.exit(1);
+         System.exit(0);
      }
-     public void goTo(String _screen){
-         nifty.gotoScreen(_screen);
-     }
+    public void goTo(String screen) {
+        if (screen.equals("#Login_Screen")) {
+            
+        }
+        else{
+            nifty.gotoScreen(screen);
+        }
+    }
 }

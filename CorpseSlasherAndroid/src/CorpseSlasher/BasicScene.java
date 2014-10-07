@@ -1,15 +1,12 @@
 package CorpseSlasher;
 
-import GUI.LoadingScreen;
 import com.jme3.asset.AssetManager;
-import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
-import com.jme3.light.Light;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -24,24 +21,13 @@ import com.jme3.water.WaterFilter;
 import com.jme3.math.FastMath;
 import com.jme3.math.Plane;
 import com.jme3.math.Quaternion;
-import com.jme3.post.filters.BloomFilter;
-import com.jme3.post.filters.DepthOfFieldFilter;
-import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
-import com.jme3.terrain.geomipmap.TerrainLodControl;
-import com.jme3.terrain.geomipmap.TerrainQuad;
-import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
-import com.jme3.terrain.heightmap.AbstractHeightMap;
-import com.jme3.terrain.heightmap.HeightMap;
-import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.SimpleWaterProcessor;
 import java.util.List;
-import jme3utilities.Misc;
 import jme3utilities.TimeOfDay;
 
 /**
@@ -62,6 +48,7 @@ public class BasicScene {
     private Spatial skybox;
     private SkyControl skyControl;
     private String sceneName;
+    private List<Spatial> treeList;
     private FilterPostProcessor fpp;
     private AmbientLight ambient;
     private WaterFilter postWater;
@@ -107,8 +94,8 @@ public class BasicScene {
         fpp = new FilterPostProcessor(assMan);
         initAmbientLight();
         initSunLight();
-        //initWater();
-        //initSkyBox();
+        initSkybox();
+        initWater();
         initTerrain();
     }
     
@@ -124,16 +111,6 @@ public class BasicScene {
             simpleWater = null;
         }
         initWater();
-        
-        if (skybox == null) {
-            sceneNode.removeControl(SkyControl.class);
-            skyControl = null;
-        } else {
-            sceneNode.detachChildNamed("skybox");
-            skybox = null;
-        }
-        sceneNode.detachChildAt(2);
-        initSkyBox();
     }
     
     /**
@@ -181,52 +158,66 @@ public class BasicScene {
      * it to the basic scene node. Add collision detection to the terrain.
      */
     private void initTerrain() {
-        //sceneModel = (Node) assetManager.loadModel("Scenes/" + sceneName + ".j3o");
-        Spatial trrn = assetManager.loadModel("Scenes/ZombieAndroidScene.j3o");
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrian/ground.png"));
-        //mat.getAdditionalRenderState().setWireframe(true);
-        //mat.setColor("Color", ColorRGBA.Green);
-        trrn.setMaterial(mat);
-        sceneModel = (Node) trrn;
-        sceneModel.setName("Terrian");
+        sceneModel = (Node) assetManager.loadModel("Scenes/ZombieAndroidScene.j3o");
+                            
+        if (sceneModel != null) {
+            sceneModel.setName("Terrian");
         
-        sceneNode.attachChild(sceneModel);
-                    
-        /*if (sceneModel != null) {
-            sceneModel.setName("Terrian");        
-            Spatial terrain = sceneModel.getChild("terrain-ZombieAndroidScene");
-            terrain.addControl(new RigidBodyControl(0));
-            terrain.getControl(RigidBodyControl.class).setCollisionGroup(1);
-            bullet.getPhysicsSpace().add(terrain);
+            Spatial trrn = sceneModel.getChild("terrain-ZombieAndroidScene");
+            Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            mat.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrian/Terrain.png"));
+            trrn.setMaterial(mat);
+            
+            trrn.addControl(new RigidBodyControl(0));
+            trrn.getControl(RigidBodyControl.class).setCollisionGroup(1);
+            bullet.getPhysicsSpace().add(trrn);
             
             Node treeNode = (Node) sceneModel.getChild("Tree");
-            List<Spatial> treeList = treeNode.getChildren();
+            treeList = treeNode.getChildren();
+            
+            Material treeMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            Texture treeTex = assetManager.loadTexture("Textures/treeTexture.png");
+            
+            treeMat.setTexture("ColorMap", treeTex);
+            treeMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
             
             for (int i = 0; i < treeList.size(); i++) {
-                BoxCollisionShape treeCol = new BoxCollisionShape(new Vector3f(0.875f, 3.75f, 0.875f));
+                System.out.println("Tree  :  " + i);
+                ((Geometry) ((Node) treeList.get(i)).getChild("Tree-3d-geom-0")).setMaterial(treeMat);                
+                /*BoxCollisionShape treeCol = new BoxCollisionShape(new Vector3f(0.875f, 3.75f, 0.875f));
                 RigidBodyControl rig = new RigidBodyControl(treeCol,0);
                 rig.setCollisionGroup(1);
                 
                 treeList.get(i).addControl(rig);
-                bullet.getPhysicsSpace().add(treeList.get(i));
+                bullet.getPhysicsSpace().add(treeList.get(i));*/
             }
             
             sceneNode.attachChild(sceneModel);
         } else {
             System.out.println("I am not loaded - terrain");
-        }*/
+        }
+    }
+    
+    private void initSkybox() {
+        Texture north = assetManager.loadTexture("Textures/Skybox/negative_z.png");
+        Texture south = assetManager.loadTexture("Textures/Skybox/positive_z.png");
+        Texture east  = assetManager.loadTexture("Textures/Skybox/positive_x.png");
+        Texture west  = assetManager.loadTexture("Textures/Skybox/negative_x.png");
+        Texture top   = assetManager.loadTexture("Textures/Skybox/positive_y.png");
+        Texture down  = assetManager.loadTexture("Textures/Skybox/negative_y.png");
+        Spatial sky   = SkyFactory.createSky(assetManager, west, east, north, south, top, down);
+        sceneNode.attachChild(sky);
     }
     
     /**
      * initWater determine if post processing water or simple water should be used.
      */
     private void initWater() {
-        if (settings.postWater) {
+        /* if (settings.postWater) {
              initPostProcessWater();
-         } else {
+         } else { */
              initBasicWater();
-         }
+         // }
     }
     
     /**
@@ -235,22 +226,22 @@ public class BasicScene {
      */
     private void initBasicWater() {
         simpleWater = new SimpleWaterProcessor(assetManager);
-        //simpleWater.setReflectionScene(sceneNode);
-        simpleWater.setWaterDepth(80);         // transparency of water
+        simpleWater.setReflectionScene(sceneNode);
+        simpleWater.setWaterDepth(20);         // transparency of water
         simpleWater.setDistortionScale(0.02f); // strength of waves
         simpleWater.setWaveSpeed(0.02f);       // speed of waves
         simpleWater.setDebug(false);
-        simpleWater.setWaterTransparency(0.3f);
-        Vector3f waterLocation=new Vector3f(0,20,0);
+        simpleWater.setWaterTransparency(2.0f);
+        Vector3f waterLocation=new Vector3f(0,5,0);
         simpleWater.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation.dot(Vector3f.UNIT_Y)));
         vp.addProcessor(simpleWater);
         
-        Quad quad = new Quad(2000,2000);
-        quad.scaleTextureCoordinates(new Vector2f(16f,16f));
+        Quad quad = new Quad(500,500);
+        quad.scaleTextureCoordinates(new Vector2f(4f,4f));
         
         Geometry waterPlane = new Geometry("water", quad);
         waterPlane.setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X));
-        waterPlane.setLocalTranslation(-1000, 20, 1000);
+        waterPlane.setLocalTranslation(-250, 5, 250);
         waterPlane.setShadowMode(ShadowMode.Receive);
         waterPlane.setMaterial(simpleWater.getMaterial());
         
@@ -290,108 +281,18 @@ public class BasicScene {
         fpp.addFilter(postWater); 
         vp.addProcessor(fpp);
     }
-    
-    /**
-     * initSkyBox determine if a basic skybox with textures should be create or
-     * a day night system with a moving sun and moon.
-     */
-    private void initSkyBox() {
-        if (settings.skyDome) {
-            initSkyControl();
-        } else {
-            initBasicSky();
-        }
-    }
-     
-    /**
-     * initBasicSky creates a basic sky box for lower performance.
-     */
-    private void initBasicSky() {
-        skybox = SkyFactory.createSky(assetManager, "Textures/Skybox/ZombieScene1.dds", true);
-        skybox.setName("skybox");
-        skybox.setCullHint(Spatial.CullHint.Never);
-        skybox.setQueueBucket(Bucket.Sky);
-        skybox.setLocalTranslation(0.0f, 2000.0f, 0.0f);
-        sceneNode.attachChild(skybox);
-    }
-
-    /**
-     * initSkyControl will create a day night system skybox consisting of a moving 
-     * sun and moon, a rotating star system and a changing day night sky.
-     */
-    private void initSkyControl() {
-        /*
-         *  AssetManager, Camera, Cloud Flattening, Star motion, Bottom dome
-         */
-        skyControl = new SkyControl(assetManager, cam, 0.7f, settings.starMotion, true);
-        skyControl.setCloudModulation(settings.cloudMotion);
-        skyControl.setCloudiness(0.6f);
-        skyControl.setCloudYOffset(0.5f);
-        skyControl.setTopVerticalAngle(1.65f);
-        skyControl.getSunAndStars().setObserverLatitude(37.4046f * FastMath.DEG_TO_RAD);
-        
-        //Add scene light to skycontrol
-        for (Light light : sceneNode.getLocalLightList()) {
-            switch (light.getName()) {
-                case "Ambient":
-                    skyControl.getUpdater().setAmbientLight((AmbientLight) light);
-                    break;
-                case "Sun":
-                    skyControl.getUpdater().setMainLight((DirectionalLight) light);
-                    break;
-            }
-        }
-        
-        /**
-         * @TODO Test setting if bloom is activated
-         */
-        //skyControl.getUpdater().addBloomFilter(initBloomLight(assMan, vp));
-        
-        sceneNode.addControl(skyControl);
-    }
-    
-    /**
-     * initBloomLight will create bloom lighting effect and add it to the skybox
-     * day night system controler.
-     */
-    private BloomFilter initBloomLight() {
-        BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
-        bloom.setBlurScale(2.5f);
-        bloom.setExposurePower(1f);
-        Misc.getFpp(vp, assetManager).addFilter(bloom);
-        
-        return bloom;
-    }
-    
-    /**
-     * 
-     */
-    private void initDepthOfField() {
-        DepthOfFieldFilter dofFilter = new DepthOfFieldFilter();
-        dofFilter.setFocusDistance(50);
-        dofFilter.setFocusRange(100);
-        dofFilter.setBlurScale(1.15f);
-        fpp.addFilter(dofFilter);
-        vp.addProcessor(fpp);
-    }
-        
+            
     /**
      * update runs tests is skycontrol and post water is rendering. Updates of 
      * sky control. Sets the new position of the sun and star system with light.
      * @param tod - Time of day.
-     * @param tpf - Time per frame.
+     * @param tpf - Time per frame.w
      */
-    public void update(TimeOfDay tod, float tpf) {
-        /*if (settings.skyDome) {
-            skyControl.update(tpf);
-            skyControl.getSunAndStars().setHour(tod.getHour());
-            sun.setDirection(skyControl.getUpdater().getDirection());
-            if (settings.postWater) {
-                postWater.setLightDirection(sun.getDirection());
-            } else {
-                simpleWater.setLightPosition(sun.getDirection());
-            }
-        }*/
+    public void update(TimeOfDay tod, float tpf, Vector3f position) {
+        for (Spatial tree : treeList) {
+            position.y = tree.getLocalTranslation().y;
+            tree.lookAt(position, Vector3f.UNIT_Y);
+        }
     }
     
     /**

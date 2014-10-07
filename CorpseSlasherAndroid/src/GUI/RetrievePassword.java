@@ -77,10 +77,10 @@ public class RetrievePassword extends Screens {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
-                                        marginLeft("31%");
-                                        marginTop("50%");
-                                        height("5%");
-                                        width("15%");
+                                        marginLeft("16%");
+                                        marginTop("40%");
+                                        height("10%");
+                                        width("25%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -90,9 +90,9 @@ public class RetrievePassword extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
-                                        marginTop("50%");
-                                        height("5%");
-                                        width("15%");
+                                        marginTop("40%");
+                                        height("10%");
+                                        width("25%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -103,9 +103,9 @@ public class RetrievePassword extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Bottom);
-                                        marginBottom("25%");
-                                        height("5%");
-                                        width("15%");
+                                        marginBottom("30%");
+                                        height("10%");
+                                        width("25%");
                                         interactOnClick("retrievePasswordAndGoBack()");
                                         font("Interface/Fonts/zombie.fnt");
                                     }
@@ -114,9 +114,9 @@ public class RetrievePassword extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Bottom);
-                                        marginBottom("15%");
-                                        height("5%");
-                                        width("15%");
+                                        marginBottom("10%");
+                                        height("10%");
+                                        width("25%");
                                         interactOnClick("goTo(#Login_Screen)");
                                         font("Interface/Fonts/zombie.fnt");
                                     }

@@ -41,7 +41,7 @@ public class LoginScreen extends Screens {
      */
     public void build() {
         nifty = screen.getNifty();
-        nifty.enableAutoScaling(1920, 1080);
+        nifty.enableAutoScaling(800, 600);
         nifty.setIgnoreKeyboardEvents(true);
         guiViewPort.addProcessor(screen);
         buildGui(nifty);
@@ -72,7 +72,6 @@ public class LoginScreen extends Screens {
                         font("Interface/Fonts/zombie.fnt");
                         visibleToMouse(true);
                         childLayoutVertical();
-                        backgroundColor(new Color(.3f, .3f, .3f, .5f));
                         panel(new PanelBuilder("#Main_Login_Panel") {
                             {
                                 childLayoutCenter();
@@ -81,9 +80,9 @@ public class LoginScreen extends Screens {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
-                                        marginLeft("31%");
-                                        marginTop("54%");
-                                        height("5%");
+                                        marginLeft("21%");
+                                        marginTop("26%");
+                                        height("15%");
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
@@ -94,9 +93,9 @@ public class LoginScreen extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
-                                        marginTop("54%");
-                                        height("5%");
-                                        width("15%");
+                                        marginTop("26%");
+                                        height("10%");
+                                        width("25%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -107,9 +106,9 @@ public class LoginScreen extends Screens {
                                     {
                                         align(Align.Left);
                                         valign(VAlign.Top);
-                                        marginLeft("31%");
-                                        marginTop("62%");
-                                        height("5%");
+                                        marginLeft("21%");
+                                        marginTop("44%");
+                                        height("15%");
                                         width("15%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
@@ -120,9 +119,9 @@ public class LoginScreen extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Top);
-                                        marginTop("62%");
-                                        height("5%");
-                                        width("15%");
+                                        marginTop("44%");
+                                        height("10%");
+                                        width("25%");
                                         visibleToMouse(true);
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -134,19 +133,19 @@ public class LoginScreen extends Screens {
                                     {
                                         alignCenter();
                                         valign(VAlign.Bottom);
-                                        marginBottom("13%");
-                                        height("5%");
-                                        width("15%");
+                                        marginBottom("11%");
+                                        height("10%");
+                                        width("25%");
                                         interactOnClick("loadingScreen()");
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new LabelBuilder("#New_Account_ID", "Create New Account") {
                                     {
-                                        marginLeft("-8%");
-                                        marginBottom("-44%");
-                                        height("5%");
-                                        width("15%");
+                                        marginLeft("-25%");
+                                        marginBottom("-50%");
+                                        height("10%");
+                                        width("25%");
                                         interactOnClick("newAccount()");
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -154,10 +153,10 @@ public class LoginScreen extends Screens {
                                 });
                                 control(new LabelBuilder("#Retrieve_Password_ID", "Retrieve Password") {
                                     {
-                                        marginLeft("8%");
-                                        marginBottom("-44%");
-                                        height("5%");
-                                        width("15%");
+                                        marginLeft("25%");
+                                        marginBottom("-50%");
+                                        height("10%");
+                                        width("25%");
                                         interactOnClick("retrievePassword()");
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -171,9 +170,9 @@ public class LoginScreen extends Screens {
                                 childLayoutHorizontal();
                                 align(Align.Left);
                                 valign(VAlign.Top);
-                                marginLeft("47%");
-                                marginTop("-25%");
-                                height("5%");
+                                marginLeft("34%");
+                                marginTop("-33%");
+                                height("10%");
                                 width("15%");
                                 paddingLeft("7px");
                                 paddingRight("7px");
@@ -186,7 +185,7 @@ public class LoginScreen extends Screens {
                                     {
                                         childLayoutHorizontal();
                                         backgroundImage("Icons/fb.jpg");
-                                        width("40px");
+                                        width("70px");
                                         interactOnClick("socialLogin(1)");
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -195,9 +194,9 @@ public class LoginScreen extends Screens {
                                 panel(new PanelBuilder() {
                                     {
                                         childLayoutHorizontal();
-                                        marginLeft("7%");
+                                        marginLeft("94%");
                                         backgroundImage("Icons/google+.jpg");
-                                        width("40px");
+                                        width("70px");
                                         interactOnClick("socialLogin(2)");
                                         font("Interface/Fonts/zombie.fnt");
                                         color("#ff0000");
@@ -207,11 +206,11 @@ public class LoginScreen extends Screens {
                         });
                         control(new ButtonBuilder("", "Quit Game") {
                             {
-                                width("80px");
-                                height("30px");
+                                width("100px");
+                                height("50px");
                                 interactOnClick("quitGame()");
                                 alignCenter();
-                                marginTop("20%");
+                                marginTop("23%");
                             }
                         });
                     }

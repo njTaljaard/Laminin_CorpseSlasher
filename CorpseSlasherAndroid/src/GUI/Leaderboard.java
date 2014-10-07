@@ -20,6 +20,7 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
+import de.lessvoid.nifty.screen.ScreenController;
 
 /**
  *
@@ -27,11 +28,9 @@ import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
  * see all the users scores and see where they lie on the list
  */
 public class Leaderboard extends Screens {
-    private static ClientConnection client;
 
-    Leaderboard(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen,ClientConnection client) {
+    Leaderboard(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
-        Leaderboard.client = client;
     }
 
     /**
@@ -56,7 +55,7 @@ public class Leaderboard extends Screens {
         nifty.loadControlFile("nifty-default-controls.xml");
         nifty.addScreen("Leader_Board", new ScreenBuilder("Leaderboard") {
             {
-                controller(new LeaderBoardController(client,assetManager));
+                controller(new LeaderBoardController(guiViewPort));
                 layer(new LayerBuilder("background") {
                     {
                         font("Interface/Fonts/zombie.fnt");
@@ -72,42 +71,10 @@ public class Leaderboard extends Screens {
                         panel(new PanelBuilder("Settings") {
                             {
                                 font("Interface/Fonts/zombie.fnt");
-                                childLayoutVertical();
-                                control(new ButtonBuilder("", "Display Settings") {
-                                    {
-                                        marginTop("48%");
-                                        marginLeft("5%");
-                                        height("50px");
-                                        width("150px");
-                                        align(Align.Left);
-                                        font("Interface/Fonts/zombie.fnt");
-                                        interactOnClick("goTo(Display_Settings)");
-                                    }
-                                });
-                                control(new ButtonBuilder("", "Difficulty Settings") {
-                                    {
-                                        marginTop("2%");
-                                        marginLeft("5%");
-                                        height("50px");
-                                        width("150px");
-                                        align(Align.Left);
-                                        font("Interface/Fonts/zombie.fnt");
-                                    }
-                                });
-                                control(new ButtonBuilder("", "Graphics Settings") {
-                                    {
-                                        marginTop("2%");
-                                        marginLeft("5%");
-                                        height("50px");
-                                        width("150px");
-                                        align(Align.Left);
-                                        font("Interface/Fonts/zombie.fnt");
-                                        interactOnClick("goTo(Graphics_Extension)");
-                                    }
-                                });
+                                childLayoutVertical();                               
                                 control(new ButtonBuilder("", "Sound Settings") {
                                     {
-                                        marginTop("2%");
+                                        marginTop("30%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -117,17 +84,41 @@ public class Leaderboard extends Screens {
                                 });
                                 control(new ButtonBuilder("", "Leaderboard") {
                                     {
-                                        marginTop("2%");
+                                        marginTop("5%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(Leader_Board)");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Logout") {
+                                    {
+                                        controller((ScreenController) app);
+                                        marginTop("5%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("goTo(#Login_Screen)");
+                                    }
+                                });
+                                control(new ButtonBuilder("", "Return to game") {
+                                    {
+                                        marginTop("5%");
+                                        marginLeft("5%");
+                                        height("50px");
+                                        width("150px");
+                                        align(Align.Left);
+                                        font("Interface/Fonts/zombie.fnt");
+                                        interactOnClick("returnGame()");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Quit Game") {
                                     {
-                                        marginTop("2%");
+                                        marginTop("5%");
                                         marginLeft("5%");
                                         height("50px");
                                         width("150px");
@@ -182,7 +173,7 @@ public class Leaderboard extends Screens {
                                         showVerticalScrollbar();
                                         hideHorizontalScrollbar();
                                         selectionModeDisabled();
-                                        width("50%");
+                                        width("70%");
                                         marginLeft("25%");
                                         height("15%");
                                         marginTop("15%");

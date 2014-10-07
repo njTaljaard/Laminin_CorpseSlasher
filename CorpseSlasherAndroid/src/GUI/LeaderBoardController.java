@@ -2,6 +2,7 @@ package GUI;
 
 import CorpseSlasher.ClientConnection;
 import com.jme3.asset.AssetManager;
+import com.jme3.renderer.ViewPort;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.screen.Screen;
@@ -17,11 +18,9 @@ public class LeaderBoardController implements ScreenController {
     private Nifty nifty;
     private Screen screen;
     private static boolean init = true;
-    private static ClientConnection client;
-    private AssetManager assMan;
-    public LeaderBoardController(ClientConnection client,AssetManager assManager){
-        LeaderBoardController.client = client;
-        assMan = assManager;
+    private ViewPort guiViewPort;
+    public LeaderBoardController(ViewPort guiViewPort){
+        this.guiViewPort = guiViewPort;
     }
     @Override
     public void bind(Nifty nifty, Screen screen) {
@@ -33,9 +32,10 @@ public class LeaderBoardController implements ScreenController {
      */
     @Override
     public void onStartScreen() { 
-       nifty.setIgnoreKeyboardEvents(false);
+       nifty.setIgnoreKeyboardEvents(false); 
+        nifty.setIgnoreMouseEvents(false);
        ListBox listBox = screen.findNiftyControl("#scorebar", ListBox.class);
-       String leaderboard = client.retrieveLeaderBoard();
+      String leaderboard = ClientConnection.retrieveLeaderBoard();
        Scanner scLine = new Scanner(leaderboard).useDelimiter(",");
        while(scLine.hasNext()){
            String name = scLine.next();
@@ -62,21 +62,31 @@ public class LeaderBoardController implements ScreenController {
     }
     @Override
     public void onEndScreen() {
-       nifty.setIgnoreKeyboardEvents(true);        
+       nifty.setIgnoreKeyboardEvents(true);   
+        nifty.setIgnoreMouseEvents(true);      
     }
     /**
      * 
      * @param _screen screen to change to
      * Changes the nifty gui screen based on the input
      */
-    public void goTo(String _screen){
-        nifty.gotoScreen(_screen);
+    public void goTo(String screen) {
+        if (screen.equals("#Login_Screen")) {
+            
+        }
+        else{
+            nifty.gotoScreen(screen);
+        }
     }
     /**
      * Quits the game
      */
     public void quitGame(){
         System.exit(1);
+    }
+    
+    public void returnGame() {
+        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
     }
     
 }

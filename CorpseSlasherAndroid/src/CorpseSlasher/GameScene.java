@@ -41,12 +41,12 @@ public class GameScene {
         
         initCameraPosition(cam, selectedMap);
         initScene(assestManager, viewPort, cam, bullet, selectedMap,/* ui,*/ settings);
-        //initMainCharacter(assestManager, inMan, bullet, cam);
-        //initMobs(bullet, assestManager);
-        //initAudio();
+        initMainCharacter(assestManager, inMan, bullet, cam);
+        initMobs(bullet, assestManager);
+        initAudio();
         
-        //collController = new CollisionController();
-        //bullet.getPhysicsSpace().addCollisionListener(collController);
+        collController = new CollisionController();
+        bullet.getPhysicsSpace().addCollisionListener(collController);
         //bullet.getPhysicsSpace().enableDebug(assestManager);
     }
     
@@ -120,7 +120,7 @@ public class GameScene {
     private void initCameraPosition(Camera cam, int map) {
         switch(map) {
             case(0) :
-                cam.setLocation(new Vector3f(88.0f, 19.0f, 96.0f));
+                cam.setLocation(new Vector3f(88.0f, 17.0f, 96.0f));
                 cam.lookAt(new Vector3f(-150, 7, -125), cam.getUp());
                 break;
             default :
@@ -134,6 +134,8 @@ public class GameScene {
     private void initAudio() {
         Audio.initAmbient();
         Audio.loadOcean();
+        Audio.loadCharacterAudio();
+        Audio.loadMobAudio();
     }
     
     /**
@@ -142,20 +144,21 @@ public class GameScene {
      * @param tod - TimeOfDay to update the skycontrol time of day.
      * @param tpf - Update value of time between frames.
      */
-    public void update(TimeOfDay tod, float tpf) {
-        basicScene.update(tod, tpf);
-        /*playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), 
+    public void update(TimeOfDay tod, float tpf, Camera cam) {
+        basicScene.update(tod, tpf, cam.getLocation());
+        //playerAttacking = character.updateCharacterPostion(0, tpf, false);
+        playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), 
                 tpf, mobHandler.getAggroState());
         
         if (playerAttacking) {
-            mobHits= mobHandler.updateMobs(character.getPosition(), 
-                    collController.getPlayerHits(), collController.getMobHits(), tpf);
+            //mobHits= mobHandler.updateMobs(character.getPosition(), 
+            //        collController.getPlayerHits(), collController.getMobHits(), tpf);
         } else {
-            mobHits = mobHandler.updateMobs(character.getPosition(), 
-                    new ArrayList<String>(), collController.getMobHits(), tpf);
+            //mobHits = mobHandler.updateMobs(character.getPosition(), 
+            //        new ArrayList<String>(), collController.getMobHits(), tpf);
         }
         character.processKnocks(mobHits);
-        collController.attacksProcessed();*/
+        collController.attacksProcessed();
     }
     
     /**
