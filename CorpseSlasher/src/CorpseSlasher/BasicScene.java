@@ -2,9 +2,12 @@ package CorpseSlasher;
 
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.ParticleMesh;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -207,6 +210,27 @@ public class BasicScene {
                     fire.addControl(new RigidBodyControl(0));
                     fire.getControl(RigidBodyControl.class).setCollisionGroup(1);
                     GameWorld.bullet.getPhysicsSpace().add(fire);
+                    
+                    ParticleEmitter particle = 
+                            new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 90);
+                    Material mat_red = new Material(GameWorld.assetManager, 
+                            "Common/MatDefs/Misc/Particle.j3md");
+                    mat_red.setTexture("Texture", GameWorld.assetManager.loadTexture(
+                            "Effects/effect-fire.png"));
+                    particle.setLocalTranslation(fire.getLocalTranslation().add(0.0f, 1.0f,0.0f));
+                    particle.setMaterial(mat_red);
+                    particle.setImagesX(1); 
+                    particle.setImagesY(1); // 2x2 texture animation
+                    particle.setEndColor(  new ColorRGBA(1f, 0f, 0f, 1f));   // red
+                    particle.setStartColor(new ColorRGBA(1f, 1f, 0f, 0.5f)); // yellow
+                    particle.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 2, 0));
+                    particle.setStartSize(1.5f);
+                    particle.setEndSize(0.05f);
+                    particle.setGravity(0, 0, 0);
+                    particle.setLowLife(1.2f);
+                    particle.setHighLife(1.8f);
+                    particle.getParticleInfluencer().setVelocityVariation(0.1f);
+                    sceneNode.attachChild(particle);
                 } else {
                     ExceptionHandler.throwError("Could not retrieve fire model from scene.", "BasicScene - Terrain");
                 }

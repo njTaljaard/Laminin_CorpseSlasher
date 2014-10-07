@@ -95,7 +95,7 @@ public class Character {
         characterControl = new BetterCharacterControl(0.8f, 4.85f, 50);
         
         if (characterControl != null) {
-            characterControl.setGravity(new Vector3f(0, -800, 0));
+            characterControl.setGravity(new Vector3f(0, -2000, 0));
             characterControl.setJumpForce(new Vector3f(0, 4, 0));
             characterControl.setApplyPhysicsLocal(true);
             characterControl.setJumpForce(new Vector3f(0,0,0));
