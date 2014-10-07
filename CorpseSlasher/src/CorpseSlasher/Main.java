@@ -71,9 +71,11 @@ public class Main extends SimpleApplication implements ScreenController {
     Picture                           splatter;
     Picture                           aggro;
     int                               width, height;
+    String                            message;
 
     public static void main(String[] args) {
         Main app = new Main();
+
         app.setShowSettings(false);
         app.setDisplayFps(false);
         app.setDisplayStatView(false);
@@ -222,14 +224,10 @@ public class Main extends SimpleApplication implements ScreenController {
         aggro.setWidth(gSettings.getWidth() / 1f);
         aggro.setHeight(gSettings.getHeight() / 1f);
         aggro.setPosition(0, 0);
-
-        // guiNode.attachChild(aggro);
         splatter.setImage(assetManager, "Aggro/splatter.png", true);
         splatter.setWidth(gSettings.getWidth() / 1f);
         splatter.setHeight(gSettings.getHeight() / 1f);
         splatter.setPosition(0, 0);
-
-        // guiNode.attachChild(splatter);
     }
 
     public void relog() {
@@ -279,8 +277,6 @@ public class Main extends SimpleApplication implements ScreenController {
      * to load
      */
     public void loadingScreen() {
-
-        // System.out.println(selectedButton.getSelectedId() + " was chosen");
         boolean success  = ClientConnection.Login(usernameTxt.getRealText(), passwordTxt.getRealText());
         String  username = usernameTxt.getRealText();
 
@@ -288,39 +284,37 @@ public class Main extends SimpleApplication implements ScreenController {
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
             inputManager.setCursorVisible(false);
 
-            // UI.loadingScreen();
             if (ClientConnection.relog) {
                 relog();
                 ClientConnection.setUsername(username);
+                UI.destroyLogin();
+                return;
             } else {
                 loadGame();
                 ClientConnection.setUsername(username);
                 UI.destroyLogin();
+                return;
             }
         } else {
-            System.out.println("Username or password incorrect");
+            message = "Username or password incorrect";
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
             inputManager.setCursorVisible(false);
 
-            // UI.loadingScreen();
             if (ClientConnection.relog) {
                 relog();
-
-                // ClientConnection.setUsername(username);
             } else {
                 loadGame();
                 UI.destroyLogin();
-
-                // ClientConnection.setUsername(username);
             }
         }
+        TextField tf = nifty.getScreen("#Login_Screen").findNiftyControl("#ErrorMessage", TextField.class);
+        tf.setText(message);
     }
 
     /**
      * Changes the screen to the new account screen
      */
     public void newAccount() {
-        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.newAccount();
     }
 
@@ -330,7 +324,6 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public void createNewAccount() {
         String username = accUser.getRealText();
-
         if (accPassword.getRealText().equals(accPasswordRE.getRealText())) {
             if (!username.contains("@") &&!username.contains("!") &&!username.contains("#") &&!username.contains("$")
                     &&!username.contains("%") &&!username.contains("^") &&!username.contains("&")
@@ -341,35 +334,35 @@ public class Main extends SimpleApplication implements ScreenController {
 
                     if (success) {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-
-                        // loginScreen();
                         loadGame();
                         UI.destroyLogin();
+                        return;
                     } else {
-                        System.out.println("Failed adding user");
+                        message = "Failed adding user";
                     }
                 } else {
-                    System.out.println("Username already exists please try again");
+                    message = "Username already exists please try again";
                 }
             } else {
-                System.out.println("Usernames may only contain Alphanumeric values and _ - ( )");
+                message = "Usernames may only contain Alphanumeric values and _ - ( )";
             }
         } else {
-            System.out.println("Missmatch password");
+            message = "Missmatch password";
         }
+        TextField tf = nifty.getScreen("#Login_Screen").findNiftyControl("#ErrorMessage", TextField.class);
+        tf.setText(message);
+        goBack();
     }
 
     /**
      * Goes to the retrieve password screen
      */
     public void retrievePassword() {
-        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.retrievePassword();
     }
 
     public void erase(String id) {
         TextField text = screen.findNiftyControl(id, TextField.class);
-
         text.setText("");
     }
 
@@ -399,7 +392,6 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public void goTo(String screen) {
         if (screen.equals("#Login_Screen")) {
-            System.out.println("back to login screen");
             ClientConnection.loggedIn = false;
             ClientConnection.relog    = true;
             UserInterfaceManager.changeState();
@@ -426,13 +418,13 @@ public class Main extends SimpleApplication implements ScreenController {
                 boolean success = OAuth.facebookLogin();
 
                 if (success) {
-                    guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
                     loadGame();
+                    return;
                 } else {
-                    System.out.println("Incorrect details");
+                    message = "Incorrect details";
                 }
             } catch (OAuthSystemException | IOException ex) {
-                System.out.println("Error occurred (1FB)");
+                message = "Error occurred (1FB)";
             }
 
             break;
@@ -442,19 +434,21 @@ public class Main extends SimpleApplication implements ScreenController {
                 boolean success = OAuth.googleLogin();
 
                 if (success) {
-                    guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
                     loadGame();
+                    return;
                 } else {
-                    System.out.println("Incorrect details");
+                    message = "Incorrect details";
                 }
             } catch (OAuthSystemException | IOException ex) {
-                System.out.println("Error occurred (2G+)");
+                message = "Error occurred (2G+)";
             }
 
             break;
 
         default :
         }
+        TextField tf = nifty.getScreen("#Login_Screen").findNiftyControl("#ErrorMessage", TextField.class);
+        tf.setText(message);
     }
 }
 

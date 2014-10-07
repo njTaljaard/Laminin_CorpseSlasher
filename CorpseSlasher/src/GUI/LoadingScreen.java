@@ -35,10 +35,11 @@ public class LoadingScreen extends Screens {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
         build(0.0f);
     }
+
     /**
-     * 
+     *
      * @param value starting value of progress bar
-     * Just instantiates the builing of the GUI 
+     * Just instantiates the builing of the GUI
      */
     private void build(float value) {
         nifty = screen.getNifty();
@@ -47,8 +48,9 @@ public class LoadingScreen extends Screens {
         buildGui(nifty, value);
         nifty.gotoScreen("Loading");
     }
+
     /**
-     * 
+     *
      * @param nifty the nifty object that has to be designed
      * @param value the starting value of the progress bar
      * Helper function to build, adding buttons and labels
@@ -105,8 +107,9 @@ public class LoadingScreen extends Screens {
             }
         }.build(nifty));
     }
+
     /**
-     * 
+     *
      * @param value updates the the loading bar to the value
      * Updates the loading bar as the graphics and game is being loaded into memory
      */
@@ -121,9 +124,11 @@ public class LoadingScreen extends Screens {
         System.out.println(pixelWidth + "px");
         nifty.gotoScreen("Loading");
     }
+
     @Override
-    public void updateRes(int width, int height){
+    public void updateRes(int width, int height) {
         AppSettings settings = new AppSettings(true);
+
         settings.setResolution(width, height);
         nifty.render(true);
         screen.reshape(guiViewPort, width, width);

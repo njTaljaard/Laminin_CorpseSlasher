@@ -1,6 +1,7 @@
 package GUI;
 
 //~--- non-JDK imports --------------------------------------------------------
+
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -15,6 +16,7 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
+import de.lessvoid.nifty.controls.messagebox.builder.MessageBoxBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
@@ -27,18 +29,17 @@ import de.lessvoid.nifty.tools.Color;
  * password
  */
 public class LoginScreen extends Screens {
-
     private Nifty nifty;
 
     public LoginScreen(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
-            ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
+                       ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
-
     }
 
     /**
      * Buiilds the NiftyGui
      */
+    @Override
     public void build() {
         nifty = screen.getNifty();
         nifty.setIgnoreKeyboardEvents(true);
@@ -63,13 +64,21 @@ public class LoginScreen extends Screens {
                         font("Interface/Fonts/zombie.fnt");
                         childLayoutCenter();
                         backgroundImage("Backgrounds/ZOMBIE1.jpg");
+                        control(new TextFieldBuilder("#ErrorMessage"){
+                            {
+                                marginTop("-10%");
+                                focusable(false);
+                                width("25%");
+                                height("5%");
+                            }
+                        });
                     }
                 });
                 layer(new LayerBuilder("#foreground") {
                     {
                         font("Interface/Fonts/zombie.fnt");
                         childLayoutVertical();
-                        //backgroundColor(new Color(.3f, .3f, .3f, .5f));
+
                         panel(new PanelBuilder("#Main_Login_Panel") {
                             {
                                 childLayoutCenter();
@@ -157,7 +166,7 @@ public class LoginScreen extends Screens {
                                     }
                                 });
                             }
-                        ;
+                            ;
                         });
                         panel(new PanelBuilder("#Button_Panel") {
                             {
@@ -172,7 +181,6 @@ public class LoginScreen extends Screens {
                                 paddingRight("7px");
                                 paddingTop("4px");
                                 paddingBottom("4px");
-
                                 font("Interface/Fonts/zombie.fnt");
                                 panel(new PanelBuilder() {
                                     {
@@ -212,7 +220,6 @@ public class LoginScreen extends Screens {
         }.build(nifty));
     }
 }
-
 
 
 //~ Formatted by Jindent --- http://www.jindent.com

@@ -1,10 +1,14 @@
+
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+* To change this template, choose Tools | Templates
+* and open the template in the editor.
  */
 package GUI;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import CorpseSlasher.ClientConnection;
+
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -13,6 +17,7 @@ import com.jme3.font.BitmapFont;
 import com.jme3.input.InputManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -29,9 +34,11 @@ import de.lessvoid.nifty.screen.ScreenController;
  */
 public class Leaderboard extends Screens {
     private LeaderBoardController control;
-    Leaderboard(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer, ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
+
+    Leaderboard(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
+                ViewPort guiViewPort, AppStateManager appState, Application app, NiftyJmeDisplay screen) {
         super(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, screen);
-        control = new LeaderBoardController(assetManager,app);
+        control = new LeaderBoardController(assetManager, app);
     }
 
     /**
@@ -39,8 +46,8 @@ public class Leaderboard extends Screens {
      */
     public void build() {
         Nifty nifty = screen.getNifty();
-        nifty.setIgnoreKeyboardEvents(true);
 
+        nifty.setIgnoreKeyboardEvents(true);
         guiViewPort.addProcessor(screen);
         buildGui(nifty);
     }
@@ -51,7 +58,8 @@ public class Leaderboard extends Screens {
      * build, adding buttons and labels
      */
     private void buildGui(Nifty nifty) {
-       BitmapFont myFont = assetManager.loadFont("Interface/Fonts/Monospaced.fnt");
+        BitmapFont myFont = assetManager.loadFont("Interface/Fonts/Monospaced.fnt");
+
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
         nifty.addScreen("Leader_Board", new ScreenBuilder("Leaderboard") {
@@ -209,3 +217,6 @@ public class Leaderboard extends Screens {
         }.build(nifty));
     }
 }
+
+
+//~ Formatted by Jindent --- http://www.jindent.com
