@@ -72,6 +72,8 @@ public class Main extends SimpleApplication implements ScreenController {
     Picture                           aggro;
     int                               width, height;
     String                            message;
+    Element                           ele;
+    boolean                           errorFound = false;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -262,7 +264,13 @@ public class Main extends SimpleApplication implements ScreenController {
 
     @Override
     public void onStartScreen() {
-        nifty.setIgnoreKeyboardEvents(false);
+        nifty.setIgnoreKeyboardEvents(false);        
+        ele = nifty.getScreen("#Login_Screen").findElementByName("#ErrorMessage");
+        if(!errorFound){
+            ele.hide();
+        } else {
+            errorFound = false;
+        }
     }
 
     @Override
@@ -286,11 +294,13 @@ public class Main extends SimpleApplication implements ScreenController {
                 relog();
                 ClientConnection.setUsername(username);
                 UI.destroyLogin();
+
                 return;
             } else {
                 loadGame();
                 ClientConnection.setUsername(username);
                 UI.destroyLogin();
+
                 return;
             }
         } else {
@@ -305,7 +315,10 @@ public class Main extends SimpleApplication implements ScreenController {
                 UI.destroyLogin();
             }
         }
+
+        ele.show();
         TextField tf = nifty.getScreen("#Login_Screen").findNiftyControl("#ErrorMessage", TextField.class);
+        errorFound = true;
         tf.setText(message);
     }
 
@@ -322,6 +335,7 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public void createNewAccount() {
         String username = accUser.getRealText();
+
         if (accPassword.getRealText().equals(accPasswordRE.getRealText())) {
             if (!username.contains("@") &&!username.contains("!") &&!username.contains("#") &&!username.contains("$")
                     &&!username.contains("%") &&!username.contains("^") &&!username.contains("&")
@@ -334,6 +348,7 @@ public class Main extends SimpleApplication implements ScreenController {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
                         loadGame();
                         UI.destroyLogin();
+
                         return;
                     } else {
                         message = "Failed adding user";
@@ -347,8 +362,10 @@ public class Main extends SimpleApplication implements ScreenController {
         } else {
             message = "Missmatch password";
         }
+        ele.show();
         TextField tf = nifty.getScreen("#Login_Screen").findNiftyControl("#ErrorMessage", TextField.class);
         tf.setText(message);
+        errorFound = true;
         goBack();
     }
 
@@ -361,6 +378,7 @@ public class Main extends SimpleApplication implements ScreenController {
 
     public void erase(String id) {
         TextField text = screen.findNiftyControl(id, TextField.class);
+
         text.setText("");
     }
 
@@ -417,6 +435,7 @@ public class Main extends SimpleApplication implements ScreenController {
 
                 if (success) {
                     loadGame();
+
                     return;
                 } else {
                     message = "Incorrect details";
@@ -433,6 +452,7 @@ public class Main extends SimpleApplication implements ScreenController {
 
                 if (success) {
                     loadGame();
+
                     return;
                 } else {
                     message = "Incorrect details";
@@ -445,8 +465,11 @@ public class Main extends SimpleApplication implements ScreenController {
 
         default :
         }
+        ele.show();
         TextField tf = nifty.getScreen("#Login_Screen").findNiftyControl("#ErrorMessage", TextField.class);
+
         tf.setText(message);
+        errorFound = true;
     }
 }
 
