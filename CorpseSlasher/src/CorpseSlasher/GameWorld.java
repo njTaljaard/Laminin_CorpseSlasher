@@ -102,9 +102,13 @@ public final class GameWorld {
     }
         
     public static synchronized void updateAggro(boolean agg) {
-        if (!agg) {
+        if (agg) {
             aggro = agg;
         }
+    }
+    
+    public static void removeAggro(){
+        aggro = false;
     }
     
     public static void setAlive(boolean alv) {

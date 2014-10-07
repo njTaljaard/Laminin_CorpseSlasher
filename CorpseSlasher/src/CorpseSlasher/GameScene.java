@@ -155,7 +155,7 @@ public class GameScene {
         basicScene.update(tod, tpf);
         playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), tpf);
         
-        GameWorld.updateAggro(false);
+        GameWorld.removeAggro();
         
         if (playerAttacking) {
             mobHits= mobHandler.updateMobs(collController.getPlayerHits(), collController.getMobHits(), tpf);
