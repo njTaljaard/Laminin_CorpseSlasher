@@ -105,8 +105,6 @@ public class Main extends SimpleApplication implements ScreenController {
         restart();
         inputManager.setCursorVisible(true);
         UI.loginScreen();
-
-        // loadGame();
     }
 
     @Override
