@@ -264,7 +264,7 @@ public class Character {
                         //System.out.println("Player : ive been slapped by " + knocks.get(i) 
                         //        + ". Health is " + health);
                         Audio.playCharacterDamage();
-
+                        
                         if (health <= 0) {
                             health = 0;
                             GameWorld.setAlive(false);

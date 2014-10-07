@@ -1,7 +1,9 @@
 package CorpseSlasher;
 
 //~--- non-JDK imports --------------------------------------------------------
+
 import GUI.OAuth.OAuth;
+
 import GUI.UserInterfaceManager;
 
 import com.jme3.app.SimpleApplication;
@@ -23,6 +25,8 @@ import jme3utilities.TimeOfDay;
 
 import jme3utilities.sky.SkyControl;
 
+import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.FileNotFoundException;
@@ -30,7 +34,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import java.util.Scanner;
-import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 
 /**
  * @author normenhansen
@@ -41,36 +44,37 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
  * is reached.
  */
 public class Main extends SimpleApplication implements ScreenController {
-    
-    static int byPass = 0;
-    UserInterfaceManager UI = new UserInterfaceManager();
-    GameScene gameScene;
-    BulletAppState bulletAppState;
-    TimeOfDay timeOfDay;
-    TextField usernameTxt;
-    TextField passwordTxt;
-    TextField accUser;
-    TextField accEmail;
-    TextField accSurname;
-    TextField accName;
-    TextField accPassword;
-    TextField accPasswordRE;
+    static int                        byPass = 0;
+    UserInterfaceManager              UI     = new UserInterfaceManager();
+    GameScene                         gameScene;
+    BulletAppState                    bulletAppState;
+    TimeOfDay                         timeOfDay;
+    TextField                         usernameTxt;
+    TextField                         passwordTxt;
+    TextField                         accUser;
+    TextField                         accEmail;
+    TextField                         accSurname;
+    TextField                         accName;
+    TextField                         accPassword;
+    TextField                         accPasswordRE;
     RadioButtonGroupStateChangedEvent selectedButton;
-    TextField retUser;
-    TextRenderer textRenderer;
-    Element progressBarElement;
-    AppSettings gSettings;
-    Nifty nifty;
-    GameSettings settingsF;
-    Screen screen;
-    Picture healthBorder;
-    Picture health;
-    int width, height;
-    
+    TextField                         retUser;
+    TextRenderer                      textRenderer;
+    Element                           progressBarElement;
+    AppSettings                       gSettings;
+    Nifty                             nifty;
+    GameSettings                      settingsF;
+    Screen                            screen;
+    Picture                           healthBorder;
+    Picture                           health;
+    Picture                           splatter;
+    Picture                           aggro;
+    int                               width, height;
+
     public static void main(String[] args) {
         Main app = new Main();
         app.setShowSettings(false);
-        app.setDisplayFps(true);
+        app.setDisplayFps(false);
         app.setDisplayStatView(false);
         System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
         app.start();
@@ -82,10 +86,10 @@ public class Main extends SimpleApplication implements ScreenController {
      * screen.
      */
     @Override
-    public void simpleInitApp() {        
-        width = 1920;
-        height = 1080;
-        Audio.assetManager = assetManager;
+    public void simpleInitApp() {
+        width               = 1920;
+        height              = 1080;
+        Audio.assetManager  = assetManager;
         Audio.audioRenderer = audioRenderer;
         ClientConnection.StartClientConnection();
         gSettings = new AppSettings(true);
@@ -98,9 +102,10 @@ public class Main extends SimpleApplication implements ScreenController {
         restart();
         inputManager.setCursorVisible(true);
         UI.loginScreen();
-        //loadGame();
+
+        // loadGame();
     }
-    
+
     @Override
     public void simpleUpdate(float tpf) {
         if (ClientConnection.loggedIn) {
@@ -108,9 +113,10 @@ public class Main extends SimpleApplication implements ScreenController {
             health.setWidth((gameScene.getHealth() / 100f) * (gSettings.getWidth() / 2.1f));
         }
     }
-    
+
     @Override
     public void simpleRender(RenderManager rm) {
+
         // TODO: add render code
     }
 
@@ -121,31 +127,34 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public GameSettings loadSettings() {
         GameSettings _settings = new GameSettings();
+
         try {
             try (Scanner in = new Scanner(new FileReader("GameSettings.ini"))) {
                 while (in.hasNextLine()) {
                     String nextLine = in.nextLine();
-                    String parts[] = nextLine.split("=");
-                    String set = parts[0];
-                    String value = parts[1];
+                    String parts[]  = nextLine.split("=");
+                    String set      = parts[0];
+                    String value    = parts[1];
+
                     if (value.equals("true")) {
                         _settings.updateSettings(set, value);
                     }
-                    
+
                     if (value.equals("false")) {
                         _settings.updateSettings(set, value);
                     }
+
                     if (set.equals("width")) {
                         width = Integer.parseInt(parts[1]);
                         _settings.updateSettings(set, "" + width);
                     }
+
                     if (set.equals("height")) {
                         height = Integer.parseInt(parts[1]);
                         _settings.updateSettings(set, "" + height);
                     }
                 }
             }
-            
         } catch (FileNotFoundException | NumberFormatException ex) {
             if (ex instanceof NumberFormatException) {
                 width = 800;
@@ -156,36 +165,47 @@ public class Main extends SimpleApplication implements ScreenController {
                 ex.printStackTrace();
             }
         }
+
         UI.updateRes(width, height);
         gSettings.setFullscreen(false);
         gSettings.setResolution(width, height);
         this.setSettings(gSettings);
         UI.setSettings(gSettings);
         restart();
+
         return _settings;
     }
-    
+
     public void loadGame() {
-        settingsF = loadSettings();
+        settingsF      = loadSettings();
         bulletAppState = new BulletAppState();
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
-        stateManager.attach(bulletAppState);        
+        stateManager.attach(bulletAppState);
         gameScene = new GameScene(0, assetManager, viewPort, cam, bulletAppState, inputManager);
         rootNode.attachChildAt(gameScene.retrieveSceneNode(), 0);
-        
+
         SkyControl skyControl = rootNode.getChild("BasicScene").getControl(SkyControl.class);
-        
+
         skyControl.setEnabled(true);
         timeOfDay = new TimeOfDay(2.5f);
         stateManager.attach(timeOfDay);
         timeOfDay.setRate(350f);
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-        UI.changeState();
-        //nifty.setIgnoreKeyboardEvents(true);
+        UserInterfaceManager.changeState();
+        nifty.setIgnoreKeyboardEvents(true);
         inputManager.setCursorVisible(false);
         guiNode.setQueueBucket(Bucket.Gui);
+        buildPictures();
+        UI.setGuis(healthBorder, health, splatter, aggro, guiNode);
+        ClientConnection.loggedIn = true;
+        UI.destroyLogin();
+    }
+
+    public void buildPictures() {
         healthBorder = new Picture("Health Bar");
-        health = new Picture("Health");
+        health       = new Picture("Health");
+        aggro        = new Picture("Agro Detection");
+        splatter     = new Picture("Blood Splatter");
         healthBorder.setImage(assetManager, "HUD/Healthbar.png", true);
         healthBorder.setWidth(gSettings.getWidth() / 2);
         healthBorder.setHeight(gSettings.getHeight() / 10);
@@ -196,11 +216,20 @@ public class Main extends SimpleApplication implements ScreenController {
         health.setHeight(gSettings.getHeight() / 12);
         health.setPosition(gSettings.getWidth() / 3.83f, gSettings.getHeight() / 1.109f);
         guiNode.attachChild(health);
-        UI.setGuis(healthBorder, health, guiNode);
-        ClientConnection.loggedIn = true;
-        UI.destroyLogin();
+        aggro.setImage(assetManager, "Aggro/frame.png", true);
+        aggro.setWidth(gSettings.getWidth() / 1f);
+        aggro.setHeight(gSettings.getHeight() / 1f);
+        aggro.setPosition(0, 0);
+
+        // guiNode.attachChild(aggro);
+        splatter.setImage(assetManager, "Aggro/splatter.png", true);
+        splatter.setWidth(gSettings.getWidth() / 1f);
+        splatter.setHeight(gSettings.getHeight() / 1f);
+        splatter.setPosition(0, 0);
+
+        // guiNode.attachChild(splatter);
     }
-    
+
     public void relog() {
         gameScene.relog(cam, 0);
         ClientConnection.loggedIn = true;
@@ -219,25 +248,25 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void bind(Nifty nifty, Screen screen) {
-        this.nifty = nifty;
+        this.nifty  = nifty;
         this.screen = screen;
         nifty.setIgnoreKeyboardEvents(true);
-        usernameTxt = screen.findNiftyControl("#Username_Input_ID", TextField.class);
-        passwordTxt = screen.findNiftyControl("#Password_Input_ID", TextField.class);
-        accUser = screen.findNiftyControl("#Username_Input_ID_2", TextField.class);
-        accEmail = screen.findNiftyControl("#Email_Input_ID", TextField.class);
-        accSurname = screen.findNiftyControl("#Surname_Input_ID", TextField.class);
-        accName = screen.findNiftyControl("#Name_Input_ID", TextField.class);
-        accPassword = screen.findNiftyControl("#Password_Input_ID_2", TextField.class);
+        usernameTxt   = screen.findNiftyControl("#Username_Input_ID", TextField.class);
+        passwordTxt   = screen.findNiftyControl("#Password_Input_ID", TextField.class);
+        accUser       = screen.findNiftyControl("#Username_Input_ID_2", TextField.class);
+        accEmail      = screen.findNiftyControl("#Email_Input_ID", TextField.class);
+        accSurname    = screen.findNiftyControl("#Surname_Input_ID", TextField.class);
+        accName       = screen.findNiftyControl("#Name_Input_ID", TextField.class);
+        accPassword   = screen.findNiftyControl("#Password_Input_ID_2", TextField.class);
         accPasswordRE = screen.findNiftyControl("#Password_Input_ID_2_2", TextField.class);
-        retUser = screen.findNiftyControl("#Username_Input_ID_3", TextField.class);
+        retUser       = screen.findNiftyControl("#Username_Input_ID_3", TextField.class);
     }
-    
+
     @Override
     public void onStartScreen() {
         nifty.setIgnoreKeyboardEvents(false);
     }
-    
+
     @Override
     public void onEndScreen() {
         nifty.setIgnoreKeyboardEvents(true);
@@ -250,12 +279,13 @@ public class Main extends SimpleApplication implements ScreenController {
     public void loadingScreen() {
 
         // System.out.println(selectedButton.getSelectedId() + " was chosen");
-        boolean success = ClientConnection.Login(usernameTxt.getRealText(), passwordTxt.getRealText());
-        String username = usernameTxt.getRealText();
-        
+        boolean success  = ClientConnection.Login(usernameTxt.getRealText(), passwordTxt.getRealText());
+        String  username = usernameTxt.getRealText();
+
         if (success) {
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
             inputManager.setCursorVisible(false);
+
             // UI.loadingScreen();
             if (ClientConnection.relog) {
                 relog();
@@ -269,14 +299,17 @@ public class Main extends SimpleApplication implements ScreenController {
             System.out.println("Username or password incorrect");
             guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
             inputManager.setCursorVisible(false);
+
             // UI.loadingScreen();
             if (ClientConnection.relog) {
                 relog();
-                //ClientConnection.setUsername(username);
+
+                // ClientConnection.setUsername(username);
             } else {
                 loadGame();
                 UI.destroyLogin();
-                //ClientConnection.setUsername(username);
+
+                // ClientConnection.setUsername(username);
             }
         }
     }
@@ -295,15 +328,19 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public void createNewAccount() {
         String username = accUser.getRealText();
+
         if (accPassword.getRealText().equals(accPasswordRE.getRealText())) {
-            if (!username.contains("@") && !username.contains("!") && !username.contains("#") && !username.contains("$") && !username.contains("%") && !username.contains("^") && !username.contains("&") && !username.contains("*")) {
+            if (!username.contains("@") &&!username.contains("!") &&!username.contains("#") &&!username.contains("$")
+                    &&!username.contains("%") &&!username.contains("^") &&!username.contains("&")
+                    &&!username.contains("*")) {
                 if (ClientConnection.CheckUsernameAvailable(accUser.getRealText())) {
                     boolean success = ClientConnection.AddUser(accUser.getRealText(), accPassword.getRealText(),
-                            accName.getRealText(), accSurname.getRealText(), accEmail.getRealText());
-                    
+                                          accName.getRealText(), accSurname.getRealText(), accEmail.getRealText());
+
                     if (success) {
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                        //loginScreen();
+
+                        // loginScreen();
                         loadGame();
                         UI.destroyLogin();
                     } else {
@@ -327,9 +364,10 @@ public class Main extends SimpleApplication implements ScreenController {
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         UI.retrievePassword();
     }
-    
+
     public void erase(String id) {
         TextField text = screen.findNiftyControl(id, TextField.class);
+
         text.setText("");
     }
 
@@ -361,9 +399,10 @@ public class Main extends SimpleApplication implements ScreenController {
         if (screen.equals("#Login_Screen")) {
             System.out.println("back to login screen");
             ClientConnection.loggedIn = false;
-            ClientConnection.relog = true;
+            ClientConnection.relog    = true;
             UserInterfaceManager.changeState();
         }
+
         nifty.gotoScreen(screen);
         Audio.pauseAmbient();
     }
@@ -380,33 +419,39 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public void socialLogin(String type) {
         switch (type) {
-            case "1":
-                try {
-                    boolean success = OAuth.facebookLogin();
-                    if (success) {
-                        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                        loadGame();
-                    } else {
-                        System.out.println("Incorrect details");
-                    }
-                } catch (OAuthSystemException | IOException ex) {
-                    System.out.println("Error occurred (1FB)");
+        case "1" :
+            try {
+                boolean success = OAuth.facebookLogin();
+
+                if (success) {
+                    guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+                    loadGame();
+                } else {
+                    System.out.println("Incorrect details");
                 }
-                break;
-            case "2":
-                try {
-                    boolean success = OAuth.googleLogin();
-                    if (success) {
-                        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                        loadGame();
-                    } else {
-                        System.out.println("Incorrect details");
-                    }
-                } catch (OAuthSystemException | IOException ex) {
-                    System.out.println("Error occurred (2G+)");
+            } catch (OAuthSystemException | IOException ex) {
+                System.out.println("Error occurred (1FB)");
+            }
+
+            break;
+
+        case "2" :
+            try {
+                boolean success = OAuth.googleLogin();
+
+                if (success) {
+                    guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+                    loadGame();
+                } else {
+                    System.out.println("Incorrect details");
                 }
-                break;
-            default:
+            } catch (OAuthSystemException | IOException ex) {
+                System.out.println("Error occurred (2G+)");
+            }
+
+            break;
+
+        default :
         }
     }
 }

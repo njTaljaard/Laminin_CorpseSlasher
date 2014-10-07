@@ -113,6 +113,10 @@ public final class GameWorld {
         }
     }
     
+    public static void removeAggro(){
+        aggro = false;
+    }
+    
     public static void setAlive(boolean alv) {
         alive = alv;
     }
