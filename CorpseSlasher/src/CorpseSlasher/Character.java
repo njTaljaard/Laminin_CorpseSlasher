@@ -222,7 +222,7 @@ public class Character {
             
             if (!GameWorld.aggro && regenTime == 0) {
                 regenTime = (int) (System.nanoTime() / 100000);
-            } else if ((int) (System.nanoTime() / 100000) - regenTime > GameWorld.playerRegenInterval && health != 100 && !GameWorld.aggro) {
+            } else if ((int) (System.nanoTime() / 100000) - regenTime > GameWorld.playerRegenInterval && health != 100 && !GameWorld.aggro) {                
                 health += 5;
                 regenTime = 0;
                 //System.out.println("Regen time, health is : " + health);
@@ -258,7 +258,7 @@ public class Character {
                         //System.out.println("Player : ive been slapped by " + knocks.get(i) 
                         //        + ". Health is " + health);
                         Audio.playCharacterDamage();
-
+                        
                         if (health <= 0) {
                             health = 0;
                             GameWorld.setAlive(false);

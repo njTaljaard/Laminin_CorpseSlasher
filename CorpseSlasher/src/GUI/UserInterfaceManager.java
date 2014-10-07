@@ -38,7 +38,9 @@ public final class UserInterfaceManager {
     private int height;
     private Picture healthBorder;
     private Picture health;
-    private Node guiNode;
+    public static Picture aggro;
+    public static Picture splatter;
+    public static Node guiNode;
     private AppSettings settings;
     /**
      * 
@@ -62,9 +64,11 @@ public final class UserInterfaceManager {
         Screen = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
         guiScreens = new Screens[6];
     }
-    public void setGuis(Picture border,Picture health,Node guiNode){
-        this.guiNode = guiNode;
+    public void setGuis(Picture border,Picture health,Picture splatter,Picture aggro,Node guiNode){
+        UserInterfaceManager.guiNode = guiNode;
         this.healthBorder = border;
+        UserInterfaceManager.aggro = aggro;
+        UserInterfaceManager.splatter = splatter;
         this.health = health;
     }
     public void setRes(int width, int height){        
@@ -121,12 +125,6 @@ public final class UserInterfaceManager {
      */
     public static void changeState() {
         loginScreen = !loginScreen;
-        /*if(loginScreen){
-            inputManager.setCursorVisible(true);
-        }
-        else {
-        inputManager.setCursorVisible(false);
-        }*/
         inputManager.setCursorVisible(loginScreen);
     }
     /**
@@ -147,13 +145,11 @@ public final class UserInterfaceManager {
                             leaderBoard();
                         }
                         inputManager.setCursorVisible(true);
-                        guiNode.detachChild(healthBorder);
-                        guiNode.detachChild(health);
+                        guiNode.detachAllChildren();
                         guiScreens[3].goTo("Option_Screen");  
-                        //state.setEnabled(false);
                         guiScreens[3].updateRes(width, height);
                     } else {
-                       // state.setEnabled(true);
+                       //state.setEnabled(true);
                         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
                         guiNode.attachChild(healthBorder);
                         guiNode.attachChild(health);
@@ -201,6 +197,7 @@ public final class UserInterfaceManager {
         guiScreens[1].screen.getNifty().exit();
         guiScreens[2].screen.getNifty().exit();
     }
+    
 }
 
 
