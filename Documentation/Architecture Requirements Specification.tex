@@ -84,8 +84,8 @@
 
 \noindent
 \titlefont Laminin \par
-\epigraph{XGame - Derivco \\ Architecture Requirements Specification.}%
-{\textit{ 23/05/2014 }\\ \textsc{ }}
+\epigraph{XGame - Derivco \\ Corpse Slasher \\ Architecture Requirements Specification.}%
+{\textit{ 01/08/2014 }\\ \textsc{ }}
 \null\vfill
 \vspace*{4cm}
 \noindent
@@ -117,7 +117,6 @@
 			17/05/2014	\> Version 1.0	\> Access channel \& Quality requirements		\> Nico Taljaard \\
 			18/05/2014	\> Version 1.0	\> Integration requirements, Architectural constraints \\
 						\>				\>	\& added quality requirements 				\> Nico Taljaard \\
-			23/05/2014 \> Version 1.1 \> API Specification was added \> Gerhard Smit			
 		\end{tabbing}
 		
 	\newpage
@@ -264,7 +263,7 @@
 			\subsection*{API specification}
 			\addcontentsline{toc}{subsection}{API specification}
 			\vspace{0.1in}
-			\begin{enumerate}
+						\begin{enumerate}
 			\item \textbf{Client Connection}
 			\\This will create a connection object that will be sent to the listening server checking the validity of the connection such as username and password, or if they chose one of the other options such as logging in through social media checking if that user has an account there, if successful returns success and allows the user to continue. The user can also choose to create an account and then the client sends a request object and allows the user to fill in all appropriate details and an account is made. If the user forgot his password they will have the ability to request it from the server.
 			\item \textbf{Server}
@@ -300,7 +299,7 @@
 					\\The desktop \& mobile application as well as the server will be implemented using JavaSE.
 					
 					\item \textbf{LDAP integration}
-					\\SocialAuth is a Java implemented OAuth library that will be the used to communicate with external LDAP servers.
+					\\Apache oltu is a Java implemented OAuth library that will be the used to communicate with external LDAP servers.
 					
 					\item \textbf{Networking}
 					\\jSpiderMonkey will be used to handle client side networking within the jMonkeyEngine framework.
