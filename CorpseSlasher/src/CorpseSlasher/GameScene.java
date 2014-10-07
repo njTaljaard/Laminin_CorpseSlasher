@@ -7,6 +7,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import jme3utilities.TimeOfDay;
 
@@ -152,6 +153,7 @@ public class GameScene {
      */
     public void update(TimeOfDay tod, float tpf) {
         GameWorld.systemTime = (int) (System.nanoTime() / 100000);
+                
         basicScene.update(tod, tpf);
         playerAttacking = character.updateCharacterPostion(collController.getPlayerHitSize(), tpf);
         
@@ -165,6 +167,10 @@ public class GameScene {
         
         character.processKnocks(mobHits);
         collController.attacksProcessed();
+        
+        if (GameWorld.aggro && !GUI.UserInterfaceManager.guiNode.hasChild(GUI.UserInterfaceManager.aggro)) {
+            GUI.UserInterfaceManager.guiNode.attachChild(GUI.UserInterfaceManager.aggro);
+        }
     }
     
     /**

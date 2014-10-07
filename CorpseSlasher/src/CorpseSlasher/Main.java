@@ -10,6 +10,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 
@@ -217,6 +218,7 @@ public class Main extends SimpleApplication implements ScreenController {
         health.setPosition(gSettings.getWidth() / 3.83f, gSettings.getHeight() / 1.109f);
         guiNode.attachChild(health);
         aggro.setImage(assetManager, "Aggro/frame.png", true);
+        aggro.setName("aggroImage");
         aggro.setWidth(gSettings.getWidth() / 1f);
         aggro.setHeight(gSettings.getHeight() / 1f);
         aggro.setPosition(0, 0);

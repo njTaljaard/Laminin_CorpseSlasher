@@ -46,7 +46,7 @@ public final class Audio {
         playerAttack3.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
         playerDamage.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
         playerWalk.setVolume(GameSettings.mVol / 100 * (GameSettings.fVol / 100));
-        lowHealth.setVolume(GameSettings.mVol / 100 * (GameSettings.dVol / 100));
+        lowHealth.setVolume(GameSettings.mVol / 100 * ((GameSettings.dVol / 100)*2));
         
         for (AudioNode node : dialog) {
             node.setVolume(GameSettings.mVol / 100 * (GameSettings.dVol / 100));
@@ -171,7 +171,7 @@ public final class Audio {
             
             if (lowHealth != null) {
                 lowHealth.setMaxDistance(10);
-                lowHealth.setVolume(GameSettings.mVol / 100 * (GameSettings.dVol / 100));
+                lowHealth.setVolume(GameSettings.mVol / 100 * ((GameSettings.dVol / 100)*2));
                 lowHealth.setLooping(false);
                 lowHealth.setPositional(false);
             } else {

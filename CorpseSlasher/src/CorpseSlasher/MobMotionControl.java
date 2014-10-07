@@ -84,6 +84,7 @@ public class MobMotionControl {
                 attack = false;
                 walkAttack = false;
                 walk = false;
+                GUI.UserInterfaceManager.guiNode.detachChildNamed("aggroImage");
             } else {
                 attack = false;
                 walkAttack = false;
@@ -94,6 +95,10 @@ public class MobMotionControl {
                 for (int i = 0; i < aggroGhost.getOverlappingObjects().size(); i++) {
                     if (aggroGhost.getOverlapping(i).getCollisionGroup() == 8 &&
                             distanceToPassive < 20.0f) {
+                        if (!GUI.UserInterfaceManager.guiNode.hasChild(GUI.UserInterfaceManager.aggro)) {
+                            GUI.UserInterfaceManager.guiNode.attachChild(GUI.UserInterfaceManager.aggro);
+                        }
+                        
                         aggro = true;
                         passive = false;
                         return;
@@ -117,6 +122,10 @@ public class MobMotionControl {
             } else {
                 for (int i = 0; i < aggroGhost.getOverlappingObjects().size(); i++) {
                     if (aggroGhost.getOverlappingObjects().get(i).getCollisionGroup() == 8) {
+                        if (!GUI.UserInterfaceManager.guiNode.hasChild(GUI.UserInterfaceManager.aggro)) {
+                            GUI.UserInterfaceManager.guiNode.attachChild(GUI.UserInterfaceManager.aggro);
+                        }
+                        
                         aggro = true;
                         passive = false;
                     }

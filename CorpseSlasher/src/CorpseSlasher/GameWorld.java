@@ -46,6 +46,9 @@ public final class GameWorld {
     public static int dialogPlayed;
     public static int systemTime;
     
+    public static int hitSplahsInterval = 5000;
+    public static int hitSplash = 0;
+    
     public static SkeletonControl getSkeletonControl(Node model) {
         SkeletonControl control = null;
         

@@ -257,6 +257,10 @@ public class Character {
      */
     public void processKnocks(ArrayList<String> knocks) {
         if (GameWorld.alive) {
+            if (GameWorld.systemTime - GameWorld.hitSplash > GameWorld.hitSplahsInterval) {
+                GUI.UserInterfaceManager.guiNode.detachChild(GUI.UserInterfaceManager.splatter);
+            }
+            
             if (knocks != null) {
                 for (String knock : knocks) {
                     if (!knock.equals("")) {
@@ -264,6 +268,11 @@ public class Character {
                         //System.out.println("Player : ive been slapped by " + knocks.get(i) 
                         //        + ". Health is " + health);
                         Audio.playCharacterDamage();
+                        
+                        if (!GUI.UserInterfaceManager.guiNode.hasChild(GUI.UserInterfaceManager.splatter)) {
+                            GUI.UserInterfaceManager.guiNode.attachChild(GUI.UserInterfaceManager.splatter);
+                            GameWorld.hitSplash = GameWorld.systemTime;
+                        }
                         
                         if (health <= 0) {
                             health = 0;
