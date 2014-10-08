@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package CorpseSlasher;
 
 import com.jme3.animation.AnimControl;
@@ -49,6 +45,12 @@ public final class GameWorld {
     public static int hitSplahsInterval = 5000;
     public static int hitSplash = 0;
     
+    /**
+     * getSkeletonControl - Recursive search to find a skeleton controller of the
+     * required model.
+     * @param model - Model to be searched.
+     * @return SkeletonControl of model if found.
+     */
     public static SkeletonControl getSkeletonControl(Node model) {
         SkeletonControl control = null;
         
@@ -71,6 +73,12 @@ public final class GameWorld {
         return control;
     }
     
+    /**
+     * getAnimCOntrol - Recursive search to find an animation controller of the 
+     * required model.
+     * @param model - Model to be searched.
+     * @return AnimControl of model if found.
+     */
     public static AnimControl getAnimationControl(Node model) {
         AnimControl control = null;
         
@@ -94,7 +102,9 @@ public final class GameWorld {
     }
     
     /**
-     * 
+     * getLookAt - Generates a random direction for a mob to look at, at spawn,
+     * respawn and aggro loss.
+     * @return lookAt - Vector3f to set lookAt of model.
      */
     public static Vector3f getLookAt() {
         Vector3f lookAt = new Vector3f();
@@ -106,24 +116,45 @@ public final class GameWorld {
         return lookAt;
     }
     
+    /**
+     * getNextGaussian - Generates a random value from Random.
+     * @param range - The range to create a value within.
+     * @return random number - float.
+     */
     public static float getNextGaussian(int range) {
         return (float) rand.nextGaussian() * range;
     }
-        
+    
+    /**
+     * updateAggro - During mob concurrent update each mob updates its own aggro
+     * state to set overall aggro to true is so.
+     * @param agg - Mob aggro state.
+     */
     public static synchronized void updateAggro(boolean agg) {
         if (agg) {
             aggro = agg;
         }
     }
     
+    /**
+     * removeAggro - Player removes aggro after update, mobs update after.
+     */
     public static void removeAggro(){
         aggro = false;
     }
     
+    /**
+     * setAlive - Player updates alive or death at each update.
+     * @param alv - Players alive.
+     */
     public static void setAlive(boolean alv) {
         alive = alv;
     }
     
+    /**
+     * setPlayerPosition - Player updates its current position at each udpate.
+     * @param vec - Player position.
+     */
     public static void setPlayerPosition(Vector3f vec) {
         playerPosition = vec;
     }

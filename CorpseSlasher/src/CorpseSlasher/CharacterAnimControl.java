@@ -10,7 +10,7 @@ import com.jme3.animation.LoopMode;
  * @param  Derivco
  * @param  University of Pretoria
  * @param  COS301
- * CharacterAnimControl handles the player character animation updates and cycle
+ * CharacterAnimControl - handles the player character animation updates and cycle
  * loops.
  */
 public class CharacterAnimControl {
@@ -19,7 +19,7 @@ public class CharacterAnimControl {
     protected boolean attacking;
     
     /**
-     * CharacterAnimControl will initailize the animation event listener.
+     * CharacterAnimControl - will initailize the animation event listener.
      */
     public CharacterAnimControl() {
         initAnimEventListener();
@@ -27,7 +27,7 @@ public class CharacterAnimControl {
     }
     
     /**
-     * initAminEventListener will trigger on animation change as well as when a 
+     * initAminEventListener - will trigger on animation change as well as when a 
      * cycle of an animations if completed to run it again.
      */
     private void initAnimEventListener() {
@@ -69,7 +69,7 @@ public class CharacterAnimControl {
     }
     
     /**
-     * handleAnimations updates animations where required.
+     * handleAnimations - updates animations where required.
      * @param channel - AnimChannel controls the animation currently being used.
      * @param slash - If player is attacking.
      * @param walk - If player is currently walking.

@@ -45,11 +45,11 @@ public class Character {
     private int deathTime, regenTime;
     
     /**
-     * Character will consist of loading the model with its materials and rigging,
+     * Character - will consist of loading the model with its materials and rigging,
      * add physics to the model and bind the camera to the model.
-     * @param assMan - AssetManager required to load model and material.
      * @param inMan - InputManager required to set up key bindings.
-     * @param bullet - BulletAppState required to add physics to player and camera.
+     * @param cam - Camera use for camera movement and attacking the player model 
+     * to move with camera.
      */
     public Character(InputManager inMan, Camera cam) {
         this.playerNode = new Node("Player");
@@ -72,7 +72,7 @@ public class Character {
     }
     
     /**
-     * initModel loads the model and sets it to the specified position.
+     * initModel - loads the model and sets it to the specified position.
      */
     private void initModel() {
         player = (Node) GameWorld.assetManager.loadModel("Models/cyborg/cyborg.j3o");
@@ -88,7 +88,7 @@ public class Character {
     }
     
     /**
-     * initControl sets up the character controller responsible for collision,
+     * initControl - sets up the character controller responsible for collision,
      * motion and forces control.
      */
     private void initControl() {
@@ -105,7 +105,7 @@ public class Character {
     }
     
     /*
-     * initRagdoll will create the ragdoll required for death animation and assign
+     * initRagdoll - will create the ragdoll required for death animation and assign
      * the required limbs.
      */
     private void initRagdoll() {
@@ -139,7 +139,7 @@ public class Character {
     }
     
     /**
-     * initSwordGhost sets up the collision box that will be bound to the players
+     * initSwordGhost - sets up the collision box that will be bound to the players
      * sword in order to determine if any collision has occured with the sword
      * and a mob.
      */
@@ -155,7 +155,7 @@ public class Character {
     }
     
     /**
-     * assemblePlayer add the controllers to the player and to the physics handler.
+     * assemblePlayer - add the controllers to the player and to the physics handler.
      */
     private void assemblePlayer() {
         GameWorld.bullet.getPhysicsSpace().add(characterControl);
@@ -167,14 +167,14 @@ public class Character {
     }
     
     /**
-     * initCamera will attach the camera to the player for motion control.
+     * initCamera - will attach the camera to the player for motion control.
      */
     private void initCamera() {
         cameraController = new CharacterCameraControl("3rdCam", cam, player, characterControl);
     }
     
     /**
-     * initAnim creates the controller and animations channel required to
+     * initAnim - creates the controller and animations channel required to
      * access all available animations, set the current animation and the type
      * of trigger at the end of a animations cycle.
      */
@@ -198,7 +198,7 @@ public class Character {
     }
     
     /**
-     * updateCharacterPosition will be called from the main game update function 
+     * updateCharacterPosition - will be called from the main game update function 
      * on every frame update, where this will call the motion and animation
      * updater separetly.
      * @param playerHits - number of mobs hit, to check if player is currently in
@@ -257,7 +257,7 @@ public class Character {
     }
     
     /**
-     * processKnocks will process all the landed attacks from mobs.
+     * processKnocks - will process all the landed attacks from mobs.
      * @param knocks - ArraysList of mob names that have hit player.
      */
     public void processKnocks(ArrayList<String> knocks) {
@@ -270,8 +270,6 @@ public class Character {
                 for (String knock : knocks) {
                     if (!knock.equals("")) {
                         health -= 10;
-                        //System.out.println("Player : ive been slapped by " + knocks.get(i) 
-                        //        + ". Health is " + health);
                         Audio.playCharacterDamage();
                         
                         if (!GUI.UserInterfaceManager.guiNode.hasChild(GUI.UserInterfaceManager.splatter)) {
@@ -282,8 +280,7 @@ public class Character {
                         if (health <= 0) {
                             health = 0;
                             GameWorld.setAlive(false);
-                            deathTime = (int) (System.nanoTime() / 100000);
-                            //System.out.println("You were killed by : " + knocks.get(i));
+                            deathTime = GameWorld.systemTime;
                             swapControllers();
                         }
                     }
@@ -299,7 +296,7 @@ public class Character {
     }
         
     /**
-     * swapControllers will swap between controllers from BetterCharacterControl
+     * swapControllers - will swap between controllers from BetterCharacterControl
      * will ghost boxes for alive and ragdoll for death.
      */
     private void swapControllers() {
@@ -338,7 +335,7 @@ public class Character {
     }
     
     /**
-     * initKeys sets up the key bindings that will be used to control the player model.
+     * initKeys - sets up the key bindings that will be used to control the player model.
      * @param inMan - InputManager add all the required key mappings to be triggered
      * when pressed.
      */
@@ -373,15 +370,7 @@ public class Character {
     }
     
     /**
-     * getPosition accessor to player model locations.
-     * @return location - Vector3f
-     */
-    public Vector3f getPosition() {
-        return player.getLocalTranslation();
-    }
-    
-    /**
-     * 
+     * setPosition - Used to move player to new position after relog.
      */
     public void setPosition(Camera cam) {
         characterControl.setEnabled(false);
@@ -391,8 +380,8 @@ public class Character {
     }
     
     /**
-     * 
-     * @return 
+     * getHealth - Accessor to players health to update healthbar.
+     * @return float health
      */
     public float getHealth() {
         return health;

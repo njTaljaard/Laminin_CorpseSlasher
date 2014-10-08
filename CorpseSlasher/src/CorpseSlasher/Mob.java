@@ -35,10 +35,8 @@ public class Mob extends Thread {
     private int deathTime, regenTime;
     
     /**
-     * Mob creates a basic mob the required functionality.
+     * Mob - creates a basic mob the required functionality.
      * @param position - Vector3f the position to place the mob at.
-     * @param bullet - BulletAppState to add controllers to physics space.
-     * @param assMan - AssetManager to load required model.
      * @param mName - String that defines the name assosiated to this mob required
      * for collision detection.
      */
@@ -54,7 +52,7 @@ public class Mob extends Thread {
     }
     
     /**
-     * createMob will create all the sub sections of the mob and assemble it.
+     * createMob - will create all the sub sections of the mob and assemble it.
      */
     private void createMob() {
         animControl = new MobAnimControl();
@@ -69,7 +67,7 @@ public class Mob extends Thread {
     }
     
     /**
-     * initMob will load the required asset, set it to the required position and
+     * initMob - will load the required asset, set it to the required position and
      * name it acordingly.
      */
     private void initMob() {
@@ -84,7 +82,7 @@ public class Mob extends Thread {
     }
     
     /**
-     * initControl creates the character controller responsible for collision,
+     * initControl - creates the character controller responsible for collision,
      * motion and forces control.
      */
     private void initControl() {
@@ -102,7 +100,7 @@ public class Mob extends Thread {
     }
     
     /**
-     * initRagdoll will create the ragdoll required for death animation and assign
+     * initRagdoll - will create the ragdoll required for death animation and assign
      * the required limbs.
      */
     private void initRagdoll() {
@@ -136,7 +134,7 @@ public class Mob extends Thread {
     }
     
     /**
-     * initHandGhost sets up the collision box that will be bound to the mobs
+     * initHandGhost - sets up the collision box that will be bound to the mobs
      * arm in order to determine if any collision has occured with the hand
      * and the player.
      */
@@ -152,7 +150,7 @@ public class Mob extends Thread {
     }
 
     /**
-     * assembleMob add the controllers to the mob and to the physics handler.
+     * assembleMob - add the controllers to the mob and to the physics handler.
      */
     private void assembleMob() {
         mob.addControl(motionControl.getAggroGhost());
@@ -165,7 +163,7 @@ public class Mob extends Thread {
     }
     
     /**
-     * initAnim creates the controller and animations channel required to
+     * initAnim - creates the controller and animations channel required to
      * access all available animations, set the current animation and the type
      * of trigger at the end of a animations cycle.
      */
@@ -189,7 +187,8 @@ public class Mob extends Thread {
     }
     
     /**
-     * 
+     * set - From MobsHandler these values are set before the mob thread is sent
+     * of for update.
      * @param point - Vector3f the direction of the player required in 
      * the attack phase to move the mobs towards the player.
      * @param playerHit - boolean if the player hit this mob.
@@ -313,29 +312,21 @@ public class Mob extends Thread {
     }
     
     /**
-     * 
-     * @return 
+     * getPosition - Accessor to mobs current position.
+     * @return Vector3f mob position.
      */
     public Vector3f getPosition() {
         return mob.getLocalTranslation();
     }
     
     /**
-     * 
-     * @return 
-     */
-    public boolean getAggro() {
-        return motionControl.aggro;
-    }
-    
-    /**
-     * isAlive to determine if the mob is alive.
-     * @return alive state.
+     * alive - Accessor to mobs alive state.
+     * @return boolean of mobs alive state.
      */
     public boolean alive() {
         return alive;
     }
-    
+        
     /**
      * retrieveMob to access the node containing the single mob.
      * @return mob - Node this mob.

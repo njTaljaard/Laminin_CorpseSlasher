@@ -10,7 +10,7 @@ import com.jme3.math.Vector3f;
  * @param  Derivco
  * @param  University of Pretoria
  * @param  COS301
- * MobMotionControl the control of motion for the mods character control.
+ * MobMotionControl - the control of motion for the mods character control.
  */
 public class MobMotionControl {
     
@@ -23,6 +23,9 @@ public class MobMotionControl {
     private float distanceFromPlayer;
     private float distanceToPassive;
     
+    /**
+     * MobMotionControl - initializes all required variables.
+     */
     public MobMotionControl() {
         passive = true;
         aggro = false;
@@ -34,7 +37,7 @@ public class MobMotionControl {
     }
     
     /**
-     * initGhost creates the GhostControl collision sphere that will double as
+     * initGhost - creates the GhostControl collision sphere that will double as
      * the player detection bounds for changing to attack phase. Also sets the
      * collision group and the group it does collid with.
      */
@@ -50,13 +53,11 @@ public class MobMotionControl {
     }
     
     /**
-     * updateMobPhase will determine in which phase the mob is: attack, return, passive.
-     * Update the mobs actions to its position and animation.
-     * @param point - Vector3f the direction of the player required in 
-     * the attack phase to move the mobs towards the player.
-     * @param  mob - Mob physical object.
+     * updateMobPhase - will determine in which phase the mob is: attack, return, passive.
+     * Update the mobs actions to its position and animation
      * @param  characterControl - BetterCharacterControl, model controller of mob.
      * @param  passivePosition - Vector3f postion where mob spawn point is.
+     * @param  mobPosition - Vector3f of mobs current position.
      */
     protected void updateMobPhase(BetterCharacterControl characterControl, 
             Vector3f passivePosition, Vector3f mobPosition) {
@@ -135,7 +136,7 @@ public class MobMotionControl {
     }
     
     /**
-     * death will turn of motion control so that mob will remain dead.
+     * death - will turn of motion control so that mob will remain dead.
      * @param characterControl - BetterCharacterControl of mob.
      */
     public void death(BetterCharacterControl characterControl) {

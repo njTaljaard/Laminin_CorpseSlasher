@@ -61,7 +61,7 @@ public class BasicScene {
     private Camera cam;
         
     /**
-     * BasicScene will create the scene attached to sceneNode.
+     * BasicScene - will create the scene attached to sceneNode and light direction.
      * @param mapName - Map that you desire to load.
      */
     public BasicScene(String mapName) {
@@ -80,15 +80,11 @@ public class BasicScene {
     }
     
     /**
-     * createScene will call the appopriate functions to create the scene and
+     * createScene - will call the appopriate functions to assemble the scene and
      * attached it to sceneNode, which will be added to rootNode higher up to
      * be able to draw.
-     * @param assMan - Assetmanager passed through from main game.
      * @param vp - ViewPort required for water, contains position of camara.
      * @param cam - Camera required to create a day night skybox system.
-     * @param bullet - BulletAppState which controls the physics of the scene.
-     * @param ui - SimpleApplication to retrieve camera positions.
-     * @param settings - GameSettings.
      */
     public void createScene(ViewPort vp, Camera cam) {
         this.cam = cam;
@@ -107,7 +103,7 @@ public class BasicScene {
     }
     
     /**
-     * 
+     * reloadScene - Called after graphics settings have been changed and applied.
      */
     public void reloadScene() {
         if (simpleWater == null) {
@@ -131,7 +127,7 @@ public class BasicScene {
     }
     
     /**
-     * initAmbientLight will crreate the basic ambient light to be able to see 
+     * initAmbientLight - will crreate the basic ambient light to be able to see 
      * within the scene.
      */
     private void initAmbientLight() {
@@ -149,7 +145,7 @@ public class BasicScene {
     }
     
     /**
-     * initSunLight will create the scenes sunlight with a given direction and
+     * initSunLight - will create the scenes sunlight with a given direction and
      * color.
      */
     private void initSunLight() {
@@ -168,8 +164,9 @@ public class BasicScene {
     }
     
     /**
-     * initTerrain will load the Scene j3o for the appropriate scene and attach
-     * it to the basic scene node. Add collision detection to the terrain.
+     * initTerrain - will load the Scene j3o for the appropriate scene and attach
+     * it to the basic scene node, which contains the terrain, trees and camp site. 
+     * Add collision detection to all object to create a realistic scene.
      */
     private void initTerrain() {
         try {
@@ -220,7 +217,7 @@ public class BasicScene {
                     particle.setLocalTranslation(fire.getLocalTranslation().add(0.0f, 1.0f,0.0f));
                     particle.setMaterial(mat_red);
                     particle.setImagesX(1); 
-                    particle.setImagesY(1); // 2x2 texture animation
+                    particle.setImagesY(1);
                     particle.setEndColor(  new ColorRGBA(1f, 0f, 0f, 1f));   // red
                     particle.setStartColor(new ColorRGBA(1f, 1f, 0f, 0.5f)); // yellow
                     particle.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 2, 0));
@@ -254,7 +251,7 @@ public class BasicScene {
     }
     
     /**
-     * initWater determine if post processing water or simple water should be used.
+     * initWater - determine if post processing water or simple water should be used.
      */
     private void initWater() {
         if (GameSettings.postWater) {
@@ -265,7 +262,7 @@ public class BasicScene {
     }
     
     /**
-     * initBasicWater will create a basic water system that does not require 
+     * initBasicWater - will create a basic water system that does not require 
      * any post processing.
      */
     private void initBasicWater() {
@@ -302,7 +299,7 @@ public class BasicScene {
     }
     
     /**
-     * initPostProcessWater will create post processing water for a more realistic
+     * initPostProcessWater - will create post processing water for a more realistic
      * viewing effect.
      */
     private void initPostProcessWater() {
@@ -345,7 +342,7 @@ public class BasicScene {
     }
     
     /**
-     * initSkyBox determine if a basic skybox with textures should be create or
+     * initSkyBox - determine if a basic skybox with textures should be create or
      * a day night system with a moving sun and moon.
      */
     private void initSkyBox() {
@@ -357,7 +354,7 @@ public class BasicScene {
     }
      
     /**
-     * initBasicSky creates a basic sky box for lower performance.
+     * initBasicSky - creates a basic sky box for lower performance. A cube with static textures.
      */
     private void initBasicSky() {
         try {
@@ -378,7 +375,7 @@ public class BasicScene {
     }
 
     /**
-     * initSkyControl will create a day night system skybox consisting of a moving 
+     * initSkyControl - will create a day night system skybox consisting of a moving 
      * sun and moon, a rotating star system and a changing day night sky.
      */
     private void initSkyControl() {
@@ -417,7 +414,7 @@ public class BasicScene {
     }
     
     /**
-     * initBloomLight will create bloom lighting effect and add it to the skybox
+     * initBloomLight - will create bloom lighting effect and add it to the skybox
      * day night system controler.
      */
     private BloomFilter initBloomLight() {
@@ -442,7 +439,7 @@ public class BasicScene {
     }
         
     /**
-     * update runs tests is skycontrol and post water is rendering. Updates of 
+     * update - Tests if skycontrol and post water is rendering. Updates of 
      * sky control. Sets the new position of the sun and star system with light.
      * @param tod - Time of day.
      * @param tpf - Time per frame.
@@ -461,6 +458,7 @@ public class BasicScene {
     }
     
     /**
+     * retrieveSceneNode - used to retrieve the scene node to be set as root node.
      * @return the basic scene node to be added to the game node.
      */
     public Node retrieveSceneNode() {

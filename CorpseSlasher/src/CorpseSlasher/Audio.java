@@ -11,7 +11,8 @@ import java.util.ArrayList;
  * @param  Derivco
  * @param  University of Pretoria
  * @param  COS301
- * Audio
+ * Audio has the responsibility of loading audio files, updating volumes, playing 
+ * and pausing when required.
  */
 public final class Audio {
     
@@ -39,6 +40,10 @@ public final class Audio {
     private static AudioNode mobDamage;
     private static AudioNode mobWalk;
     
+    /**
+     * updateVolume - After new sound settings is applied each audio node needs
+     * to be updated to the new volume.
+     */
     public static void updateVolume() {
         wave.setVolume(GameSettings.mVol / 100 * (GameSettings.aVol / 100));
         playerAttack1.setVolume(GameSettings.mVol / 100 * (GameSettings.cVol / 100));
@@ -61,6 +66,9 @@ public final class Audio {
         mobWalk.setVolume(GameSettings.mVol / 100 * (GameSettings.fVol / 100));
     }
     
+    /**
+     * loadOcean - Creates wave audio node, loading file and assigns settings.
+     */
     public static void loadOcean() {
         try {
             wave = new AudioNode(assetManager, "Audio/waves_sound.ogg", false);
@@ -82,14 +90,24 @@ public final class Audio {
         }
     }
     
+    /**
+     * playAmbient - Starts playing wave audio node.
+     */
     public static void playAmbient() {
         wave.play();
     }
     
+    /**
+     * pauseAmbient - Pauses wave audio node.
+     */
     public static void pauseAmbient() {
         wave.pause();
     }
     
+    /**
+     * loadCharacterAudio - Loads and assigns required setting for the following
+     * audio nodes : Attacks, damage, footsteps, dialog and lowhealth.
+     */
     public static void loadCharacterAudio() {
         try {
             playerAttack1 = new AudioNode(assetManager, "Audio/playerAttack1.ogg", false);
@@ -182,6 +200,10 @@ public final class Audio {
         }
     }
     
+    /**
+     * playerCharacterDialog - Select a random audio node from the list through 
+     * gaussian and plays the selected audio.
+     */
     public static void playerCharacterDialog() {
         int rand = Math.abs((int) GameWorld.getNextGaussian(dialog.size()-1));
         
@@ -192,6 +214,10 @@ public final class Audio {
         dialog.get(rand).play();
     }
     
+    /**
+     * playLowHealt - Will play low health audio when the players health hits 30%
+     * and will be playable after it has regenerated to 50% when out of combat.
+     */
     public static void playLowHealth() {
         if (!played) {
             lowHealth.play();
@@ -199,6 +225,9 @@ public final class Audio {
         }
     }
     
+    /**
+     * playCharacterAttack - Select the next attack audio node it.
+     */
     public static void playCharacterAttack() {
         switch (playerAttackCount) {
             case 1  :
@@ -216,18 +245,32 @@ public final class Audio {
         }
     }
     
+    /**
+     * playCharacterDamage - While be played when the player takes damage from
+     * a mob.
+     */
     public static void playCharacterDamage() {
        playerDamage.play();
     }
     
+    /**
+     * playCharacterWalk - Starts playing audio when charater is in movement.
+     */
     public static void playCharacterWalk() {
         playerWalk.play();
     }
 
+    /**
+     * pauseCharacterWalk - Pauses walk audio once player stops moving.
+     */
     public static void pauseCharacterWalk() {
         playerWalk.pause();
     }
     
+    /**
+     * loadMobAudio - Loads and assigns required setting for the following
+     * audio nodes : Attacks, damage, footsteps.
+     */
     public static void loadMobAudio() {
         try {
             mobAttack1 = new AudioNode(assetManager, "Audio/zombieAttack1.ogg", false);
@@ -316,7 +359,12 @@ public final class Audio {
         }
     }
     
-    public synchronized static void playMobAttack(Vector3f position) {
+    /**
+     * playMobAttack - Selects the current attack audio and plays and instance
+     * at the location of the mob.
+     * @param position - Vector3f location of the current mob.
+     */
+    public static void playMobAttack(Vector3f position) {
         switch (mobAttackCount) {
             case 1  :
                 mobAttack1.setLocalTranslation(position);
@@ -346,15 +394,24 @@ public final class Audio {
         } 
     }
     
-    public synchronized static void playMobDamage() {
+    /**
+     * playMobDamage - Plays an instance of player damage audio.
+     */
+    public static void playMobDamage() {
        mobDamage.playInstance();
     }
     
-    public synchronized static void playMobWalk() {
+    /**
+     * playMobWalk - Starts playing walk audio when a mob is in motion.
+     */
+    public static void playMobWalk() {
        mobWalk.play();
     }
     
-    public synchronized static void pauseMobWalk() {
+    /**
+     * pauseMobWalk - Pauses walk audio when no mobs are in motion.
+     */
+    public static void pauseMobWalk() {
        mobWalk.pause();
     }
 }

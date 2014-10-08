@@ -15,7 +15,7 @@ import com.jme3.scene.control.CameraControl;
  * @param  Derivco
  * @param  University of Pretoria
  * @param  COS301
- * CharacterCameraControl will control the pivot around the camera when looking 
+ * CharacterCameraControl - will control the pivot around the camera when looking 
  * up or down.
  */
 public class CharacterCameraControl {
@@ -30,7 +30,7 @@ public class CharacterCameraControl {
     private float minVerticalAngle = -25 * FastMath.DEG_TO_RAD;
  
     /**
-     * CharacterCameraControl will create the functionality that will enable the
+     * CharacterCameraControl - will create the functionality that will enable the
      * user to move the camera left and right.
      * @param name - Name of camera node.
      * @param cam - Camera as to add to the camera node to control the camera.
@@ -54,7 +54,7 @@ public class CharacterCameraControl {
     }
     
     /**
-     * initActionListener to update the mouse motion.
+     * initActionListener - to update the mouse motion. Triggers on key press.
      */
     private void initActionListener() {
         analogListener = new AnalogListener() {
@@ -82,7 +82,7 @@ public class CharacterCameraControl {
     }
  
     /**
-     * verticalRotate will update the vertical rotation of the camera according
+     * verticalRotate - will update the vertical rotation of the camera according
      * to the maximum and minimum rotation specified.
      * @param angle - Mouse motion converted to an angle to update the direction.
      */
@@ -103,7 +103,7 @@ public class CharacterCameraControl {
     }
     
     /**
-     * getAnalogListener is the accessor for the mouse motion Analog Listener.
+     * getAnalogListener - is the accessor for the mouse motion Analog Listener.
      * @return analogListener.
      */
     public AnalogListener getAnalogListener() {

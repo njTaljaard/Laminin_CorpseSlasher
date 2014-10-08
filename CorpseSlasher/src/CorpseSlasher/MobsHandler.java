@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * @param  Derivco
  * @param  University of Pretoria
  * @param  COS301
- * MobHandler controls create and access all mobs through a single channel to
+ * MobHandler - controls create and access all mobs through a single channel to
  * be able to handle the updates required. Including the aggro detection & control,
  * motion and animations.
  */
@@ -27,7 +27,7 @@ public class MobsHandler {
     private BlockingQueue<Runnable> blockingQueue;
     
     /**
-     * MobHandler will be in control of create mobs at the predefined positions.
+     * MobHandler - will be in control of create mobs at the predefined positions.
      * @param bullet - BulletAppState so be able to add model and collision to 
      * the physics domain.
      * @param assMan - AssetManager to load model into engine.
@@ -54,7 +54,7 @@ public class MobsHandler {
     }
     
     /**
-     * createMobs creates each mob and adds it to the list of mobs as well as the
+     * createMobs - creates each mob and adds it to the list of mobs as well as the
      * scene node.
      */
     private void createMobs() {    
@@ -67,8 +67,7 @@ public class MobsHandler {
     }
     
     /**
-     * updateMobs will update each of the mobs individually.
-     * @param point - Vector3f with is the direction towards the player.
+     * updateMobs - will update each of the mobs individually.
      * @param playerHits - ArrayList containing the mob name that player has hit.
      * @param mobHits - Collision groups of mobs that have hit player.
      * @param tpf - Time per frame to update ragdoll.
@@ -133,18 +132,9 @@ public class MobsHandler {
         
         return landedAttacks;
     }
-    
-    public boolean getAggroState() {
-        for (Mob mob : mobs) {
-            if (mob.getAggro())
-                return true;
-        }
         
-        return false;
-    }
-    
     /**
-     * retrieveMobs to attach all mobs to rootNode.
+     * retrieveMobs - to attach all mobs to rootNode.
      * @return mobNode - Node contains all the mobs in the scene.
      */
     public Node retrieveMobs() {
@@ -152,7 +142,7 @@ public class MobsHandler {
     }
     
     /**
-     * initPositions initialize a list of positions where mobs are to be spawned.
+     * initPositions - initialize a list of positions where mobs are to be spawned.
      */
     private void initPositions() {
         //Quad 1 ++

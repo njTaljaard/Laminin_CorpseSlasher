@@ -25,7 +25,7 @@ public class MobAnimControl {
     }
     
     /**
-     * initAminEventListener will trigger on animation change as well as when a 
+     * initAminEventListener - will trigger on animation change as well as when a 
      * cycle of an animations if completed to run it again.
      */
     private void initAnimEventListener() {

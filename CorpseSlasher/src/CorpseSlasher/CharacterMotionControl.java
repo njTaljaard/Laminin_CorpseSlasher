@@ -9,7 +9,7 @@ import com.jme3.renderer.Camera;
  * @param  Derivco
  * @param  University of Pretoria
  * @param  COS301
- * CharacterMotionControl will be the controller for the keyboard functionality
+ * CharacterMotionControl - will be the controller for the keyboard functionality
  * bounded to the character model.
  */
 public class CharacterMotionControl {
@@ -21,7 +21,7 @@ public class CharacterMotionControl {
     private boolean left, right, up, down;
     
     /**
-     * CharacterMotionControl will set all the values and initialize the Action
+     * CharacterMotionControl - will set all the values and initialize the Action
      * Listener for the key bindings.
      * @param cam - Camera to retrieve position and direction.
      */
@@ -34,7 +34,7 @@ public class CharacterMotionControl {
     }
     
     /**
-     * initMotionController will create the Action Listener which will trigger
+     * initMotionController - will create the Action Listener which will trigger
      * when a butten is pressed and released, updating the corrisponding values
      * to be able to calulate the resulting motion and required animation.
      */
@@ -88,8 +88,9 @@ public class CharacterMotionControl {
     }
     
     /**
-     * updateCharacterMotion will calulate the resulting directional vector from
+     * updateCharacterMotion - will calulate the resulting directional vector from
      * the keys pressed.
+     * @return  walkDirection - Vector3f
      */
     public Vector3f updateCharacterMotion() {
         Vector3f camDir = cam.getDirection().clone();

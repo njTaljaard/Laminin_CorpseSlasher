@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package CorpseSlasher;
 
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
@@ -27,7 +23,7 @@ public class CollisionController implements PhysicsCollisionListener {
     }
     
     /**
-     * collisio processes every collision that occures throughout the scene.
+     * collision - processes every collision that occures throughout the scene.
      * @param event - PhysicsCollisionEvent
      */
     @Override
