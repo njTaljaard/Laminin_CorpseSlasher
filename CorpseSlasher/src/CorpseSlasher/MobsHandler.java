@@ -5,8 +5,12 @@ import com.jme3.scene.Node;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Laminin
@@ -23,8 +27,9 @@ public class MobsHandler {
     private ArrayList<Mob> mobs;
     private ArrayList<Vector3f> positions;
     private ArrayList<String> landedAttacks;
-    private ThreadPoolExecutor  pool;
-    private BlockingQueue<Runnable> blockingQueue;
+    //private ThreadPoolExecutor  pool;
+    //private BlockingQueue<Runnable> blockingQueue;
+    private ExecutorService threadExecutors;
     
     /**
      * MobHandler - will be in control of create mobs at the predefined positions.
@@ -36,18 +41,8 @@ public class MobsHandler {
         mobNode = new Node("Mobs");
         mobs = new ArrayList<>();
         positions = new ArrayList<>();
-        landedAttacks = new ArrayList<>();
-        blockingQueue  = new ArrayBlockingQueue<>(20);
-        
-        if (blockingQueue == null) {
-            ExceptionHandler.throwError("BlockingQueue not created succesfully.", "MobsHandler - MobsHandler");
-        }
-        
-        pool = new ThreadPoolExecutor(8, 12, Long.MAX_VALUE, TimeUnit.SECONDS, blockingQueue);
-        
-        if (pool == null) {
-            ExceptionHandler.throwError("ThreadPoolExecutor not initialized succesfylly.", "MobsHandler - MobsHandler");
-        }
+        landedAttacks = new ArrayList<>();        
+        threadExecutors = Executors.newFixedThreadPool(6);
         
         initPositions();
         createMobs();
@@ -74,63 +69,68 @@ public class MobsHandler {
      */
     public ArrayList<String> updateMobs(ArrayList<String> playerHits, 
             ArrayList<Integer> mobHits, float tpf) {
-        landedAttacks.clear();
-        
-        for (Mob mob : mobs) {  
-            if (mob.getPosition().distance(GameWorld.playerPosition) < 100) {
-                if (mob.alive()) {
-                    if (playerHits.contains(mob.mobName)) {
-                        if (mobHits.contains(mob.handColliosionGroup)) {
-                            mob.set(true, true, tpf);
+        try {
+            landedAttacks.clear();
+            
+            for (Mob mob : mobs) {  
+                if (mob.getPosition().distance(GameWorld.playerPosition) < 100) {
+                    if (mob.alive()) {
+                        if (playerHits.contains(mob.mobName)) {
+                            if (mobHits.contains(mob.handColliosionGroup)) {
+                                mob.set(true, true, tpf);
+                            } else {
+                                mob.set(true, false, tpf);
+                            }
                         } else {
-                            mob.set(true, false, tpf);
+                            if (mobHits.contains(mob.handColliosionGroup)) {
+                                mob.set(false, true, tpf);
+                            } else {
+                                mob.set(false, false, tpf);
+                            }
                         }
-                    } else {
-                        if (mobHits.contains(mob.handColliosionGroup)) {
-                            mob.set(false, true, tpf);
-                        } else {
-                            mob.set(false, false, tpf);
-                        }
+
                     }
 
+                    threadExecutors.execute(mob);
                 }
-
-                pool.execute(mob);
-            }
-        }
-        
-        while (pool.getActiveCount() > 0){}
-        
-        for (Mob mob : mobs) {
-            if (mob.alive()) {
-                if (mob.walkAudio) {
-                    Audio.playMobWalk();
-                } else {
-                    Audio.pauseMobWalk();
-                }
-
-                if (mob.attackAudio) {
-                    Audio.playMobAttack(mob.getPosition());
-                }
-
-                if (mob.damageAudio) {
-                    Audio.playMobDamage();
-                }
-
-                mob.walkAudio = false;
-                mob.attackAudio = false;
-                mob.damageAudio = false;
-            }  
-
-            if (mob.swapControllers) {
-                mob.swapControllers();
             }
             
-            landedAttacks.add(mob.attackLanded);
-            mob.attackLanded = "";
+            while (threadExecutors.awaitTermination(10, TimeUnit.MILLISECONDS)) {}
+            
+            for (Mob mob : mobs) {
+                if (mob.alive()) {
+                    if (mob.walkAudio) {
+                        Audio.playMobWalk();
+                    } else {
+                        Audio.pauseMobWalk();
+                    }
+
+                    if (mob.attackAudio) {
+                        Audio.playMobAttack(mob.getPosition());
+                    }
+
+                    if (mob.damageAudio) {
+                        Audio.playMobDamage();
+                    }
+
+                    mob.walkAudio = false;
+                    mob.attackAudio = false;
+                    mob.damageAudio = false;
+                }  
+
+                if (mob.swapControllers) {
+                    mob.swapControllers();
+                }
+                
+                landedAttacks.add(mob.attackLanded);
+                mob.attackLanded = "";
+            }
+            
+            return landedAttacks;
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MobsHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return landedAttacks;
         }
-        
-        return landedAttacks;
     }
         
     /**
