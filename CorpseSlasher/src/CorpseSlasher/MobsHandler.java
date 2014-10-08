@@ -178,7 +178,7 @@ public class MobsHandler {
         //positions.add(new Vector3f(41.0f, 64.0f, 95.0f)); // 
         //Quad 2 +-
         //positions.add(new Vector3f(180.0f, 33.0f, -200.0f)); //
-        positions.add(new Vector3f(160.0f, 27.0f, -240.0f)); //
+        positions.add(new Vector3f(160.0f, 28.0f, -240.0f)); //
         //positions.add(new Vector3f(235.0f, 29.0f, -222.0f)); //
         positions.add(new Vector3f(180.0f, 12.0f, -310.0f)); //
         //positions.add(new Vector3f(145.0f, 25.0f, -280.0f)); //
