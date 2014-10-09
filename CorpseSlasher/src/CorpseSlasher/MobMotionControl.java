@@ -15,8 +15,6 @@ import com.jme3.math.Vector3f;
 public class MobMotionControl {
     
     protected boolean aggro, walkAttack, attack, passive, walk;
-    private final float runSpeed = 8.0f;
-    private final float walkSpeed = 6.0f;
     private Vector3f motionDirection;
     private GhostControl aggroGhost;
     protected boolean alive = true;
@@ -69,8 +67,8 @@ public class MobMotionControl {
             motionDirection.y = 0.0f;
         
             if (distanceFromPlayer > 5.0f) {
-                characterControl.setViewDirection(motionDirection.normalize().multLocal(runSpeed).negate());
-                characterControl.setWalkDirection(motionDirection.normalize().multLocal(runSpeed)); 
+                characterControl.setViewDirection(motionDirection.normalize().multLocal(GameWorld.mobRunSpeed).negate());
+                characterControl.setWalkDirection(motionDirection.normalize().multLocal(GameWorld.mobRunSpeed)); 
             }
 
             if (distanceFromPlayer < 4.0f) {
@@ -111,8 +109,8 @@ public class MobMotionControl {
                   motionDirection.y = 0.0f;
                   walk = true;
 
-                  characterControl.setViewDirection(motionDirection.normalize().multLocal(walkSpeed).negate());
-                  characterControl.setWalkDirection(motionDirection.normalize().multLocal(walkSpeed));
+                  characterControl.setViewDirection(motionDirection.normalize().multLocal(GameWorld.mobWalkSpeed).negate());
+                  characterControl.setWalkDirection(motionDirection.normalize().multLocal(GameWorld.mobWalkSpeed));
                 } else {
                     passive = true;
                     walk = false;

@@ -119,6 +119,7 @@
 			31/07/2014  \> Version 1.1  \> Added code documentation						\> Nico Taljaard\\
 			20/08/2014  \> Version 2.0  \> Updated game code documentation				\> Nico Taljaard\\
 			22/08/2014  \> Version 2.0  \> Added unit testing code documentation.		\> Martin Schoeman\\
+			09/10/2014	\> Version 3.0	\> Updated game code documentation.				\> Nico Taljaard\\
 		\end{tabbing}
 		
 	\newpage
@@ -273,51 +274,49 @@
 											\item	private MobsHandler	mobHandler 
 											\item	private java.util.ArrayList<java.lang.String>	mobHits 
 											\item	private boolean	playerAttacking 
-											\item	private com.jme3.scene.Node	sceneNode  
+											\item	private com.jme3.scene.Node	sceneNode 
 										\end{itemize}
 								\item	Constructor Detail \\
-										public GameScene(int selectedMap, \\ com.jme3.asset.AssetManager assestManager, com.jme3.renderer.ViewPort viewPort, \\ com.jme3.renderer.Camera cam, com.jme3.bullet.BulletAppState bullet, \\ com.jme3.input.InputManager inMan, \\ LoadingScreen ui, \\ GameSettings settings) \\ \\
+										public GameScene(int selectedMap, com.jme3.asset.AssetManager assestManager,\\
+										         com.jme3.renderer.ViewPort viewPort,
+										         com.jme3.renderer.Camera cam, \\
+										         com.jme3.bullet.BulletAppState bullet,
+										         com.jme3.input.InputManager inMan) \\ \\
 										GameScene will combine all the entities of the entire game into a node for a reverance point for the game engine. \\ \\
 										Parameters: \\
 										selectedMap - - the desired map to load. \\
 										assetManager - - Assetmanager passed through from main game. \\
-										viewPort - - ViewPort required for water, contains position of camara.
+										viewPort - - ViewPort required for water, contains position of camara. \\
+										cam - - Camera to assign to player and mouse motion.
 								\item	Method Detail
 										\begin{itemize}
 											\item	reloadScene() \\
-													reloadScene is required for when the game settings is changed so that the required assets are reloaded or replaced. \\
+													reloadScene - After graphic settings was changed. \\
+											\item	relog \\
+													relog(com.jme3.renderer.Camera cam, int selectedMap) \\ \\
+													relog - After game was logged out and back in to reset to starting position. \\ \\
+													Parameters: \\
+													cam - - Replace player. \\
+													selectedMap - - Determine camera location. \\
 											\item	initScene \\
-													private void initScene(com.jme3.asset.AssetManager assestManager, \\
-				             com.jme3.renderer.ViewPort viewPort, \\
-				             com.jme3.renderer.Camera cam, \\
-				             com.jme3.bullet.BulletAppState bullet, \\
-				             int map, \\
-				             LoadingScreen ui, \\
-				             GameSettings settings) \\ \\
+													private void initScene(com.jme3.renderer.ViewPort viewPort,
+													             com.jme3.renderer.Camera cam, \\
+													             int map) \\ \\
 													initScene will retrieve and combine all the variase assets that will make up the entire scene. \\ \\
 													Parameters: \\
-													assestManager - - AssestManager for loading all required models and textures. \\
 													viewPort - - ViewPort required for post processing filter: Water. \\
 													cam - - Camera required for the sky controller to update the postion of assets. \\
-													bullet - - BulletAppState to add collision detection to the terrain and its added assest. \\
 													map - - Corresponding scene number to assign the required terrain. \\
 											\item	initMainCharacter \\
-													private void initMainCharacter(com.jme3.asset.AssetManager assMan, \\
-				                     com.jme3.input.InputManager inMan, \\
-				                     com.jme3.bullet.BulletAppState bullet, \\
-				                     com.jme3.renderer.Camera cam) \\ \\
+													private void initMainCharacter(com.jme3.input.InputManager inMan, \\
+													                     com.jme3.renderer.Camera cam) \\ \\
 													initMainCharacter will load the main player model, add it to a character handler to be able to add gravity and move it around, also add the key and mouse functionality to control and update it the model and camera positions. \\ \\
 													Parameters: \\
-													assMan - - AssetManager to be able to load models and textures. \\
 													inMan - - InputManager for adding key and mouse binding to be triggered. \\
-													bullet - - BulletAppState to add the model to the physics handler.
+													cam - - Camera to be bound to player model.\\
 											\item	initMobs \\
-													private void initMobs(com.jme3.bullet.BulletAppState bullet, \\
-				            com.jme3.asset.AssetManager assMan) \\ \\
+													private void initMobs() \\ \\
 													initMobs will be responsible for creating all the mobs at specified positions also update its position, animation and aggression control. \\ \\
-													Parameters: \\
-													bullet - - BulletAppState for add collision boxes and controllers. \\
-													assMan - - AssetManager for loading the model. \\
 											\item	initCameraPosition \\
 													private void initCameraPosition(com.jme3.renderer.Camera cam, \\
 				                      int map) \\ \\
@@ -325,6 +324,9 @@
 													Parameters: \\
 													cam - - Camera from main game. \\
 													map - - The scene to be loaded. \\
+											\item	initAudio \\
+													private void initAudio() \\ \\
+													initAudio - Loads all audio nodes required. \\ \\
 											\item	update \\
 													public void update(jme3utilities.TimeOfDay tod, \\
 				          float tpf) \\ \\
@@ -348,17 +350,13 @@
 								\item	Field Summary
 										\begin{itemize}
 											\item	private com.jme3.light.AmbientLight	ambient 
-											\item	private com.jme3.asset.AssetManager	assetManager 
-											\item	private com.jme3.bullet.BulletAppState	bullet 
 											\item	private com.jme3.renderer.Camera	cam 
 											\item	private com.jme3.post.FilterPostProcessor	fpp 
 											\item	private com.jme3.math.Vector3f	lightDir 
 											\item	private com.jme3.water.WaterFilter	postWater 
 											\item	private com.jme3.scene.Node	sceneModel
-											\item	All global variables required to initialize each scene element.
 											\item	private java.lang.String	sceneName 
 											\item	private com.jme3.scene.Node	sceneNode 
-											\item	private GameSettings	settings 
 											\item	private com.jme3.water.SimpleWaterProcessor	simpleWater 
 											\item	private com.jme3.scene.Spatial	skybox 
 											\item	private jme3utilities.sky.SkyControl	skyControl 
@@ -373,8 +371,15 @@
 								\item	Method Detail
 										\begin{itemize}
 											\item	createScene \\
-													public void createScene() \\ \\
-													createScene will call the appopriate functions to create the scene and attached it to sceneNode, which will be added to rootNode higher up to be able to draw. \\
+													public void createScene(com.jme3.renderer.ViewPort vp,
+													               com.jme3.renderer.Camera cam) \\ \\
+													createScene will call the appopriate functions to create the scene and attached it to sceneNode, which will be added to rootNode higher up to be able to draw. \\ \\
+													Parameters: \\
+													vp - - ViewPort required for water, contains position of camara. \\
+													cam - - Camera required to create a day night skybox system. \\
+											\item	reloadScene \\
+													public void reloadScene() \\ \\
+													reloadScene - Called after graphics settings have been changed and applied.
 											\item	initAmbientLight \\
 													private void initAmbientLight() \\ \\
 													initAmbientLight will crreate the basic ambient light to be able to see within the scene. \\
@@ -383,7 +388,7 @@
 													initSunLight will create the scenes sunlight with a given direction and color.
 											\item	initTerrain \\
 													private void initTerrain() \\
-													initTerrain will load the Scene j3o for the appropriate scene and attach it to the basic scene node. Add collision detection to the terrain.. \\
+													initTerrain - will load the Scene j3o for the appropriate scene and attach it to the basic scene node, which contains the terrain, trees and camp site. Add collision detection to all object to create a realistic scene. \\
 											\item	initWater \\
 													private void initWater() \\ \\
 													initWater will determine which water needs to be load from settings.
@@ -420,42 +425,113 @@
 						\subsubsection*{Character:}
 						\addcontentsline{toc}{subsubsection}{Character}
 						\vspace{0.1in}
+						
 							\begin{itemize}
 								\item	Field Summary
 										\begin{itemize}
-											\item	private boolean	alive 
+											\item	protected static boolean	aggro 
+											\item	protected static boolean	alive 
+											\item	protected static com.jme3.asset.AssetManager	assetManager 
+											\item	protected static com.jme3.bullet.BulletAppState	bullet 
+											\item	static int	dialogInterval 
+											\item	static int	dialogPlayed 
+											\item	static float	eighth\_pi 
+											\item	static int	hitSplahsInterval 
+											\item	static int	hitSplash 
+											\item	static int	mobRegenInterval 
+											\item	static int	mobRespawnTimer 
+											\item	static float	mobRunSpeed 
+											\item	static float	mobWalkSpeed 
+											\item	static float	playerCameraXSpeed 
+											\item	static float	playerCameraYSpeed 
+											\item	protected static com.jme3.math.Vector3f	playerPosition 
+											\item	static int	playerRegenInterval 
+											\item	static int	playerRespwanTime 
+											\item	static float	playerWalkSpeed 
+											\item	static java.util.Random	rand 
+											\item	static int	systemTime 
+										\end{itemize}
+								\item	Constructor Detail \\
+										public GameWorld() \\ \\
+								\item	Method Detail \\
+										\begin{itemize}
+											\item	getSkeletonControl \\
+													public static com.jme3.animation.SkeletonControl \\ getSkeletonControl(com.jme3.scene.Node model) \\ \\
+													getSkeletonControl - Recursive search to find a skeleton controller of the required model. \\ \\
+													Parameters: \\
+													model - - Model to be searched. \\
+													Returns: \\
+													SkeletonControl of model if found.
+											\item	getAnimationControl \\
+													public static com.jme3.animation.AnimControl getAnimationControl(com.jme3.scene.Node model) \\ \\
+													getAnimCOntrol - Recursive search to find an animation controller of the required model. \\ \\
+													Parameters: \\
+													model - - Model to be searched. \\
+													Returns: \\
+													AnimControl of model if found. \\
+											\item	getLookAt \\
+													public static com.jme3.math.Vector3f getLookAt() \\ \\
+													getLookAt - Generates a random direction for a mob to look at, at spawn, respawn and aggro loss. \\ \\
+													Returns: \\
+													lookAt - Vector3f to set lookAt of model. \\
+											\item	getNextGaussian \\
+													public static float getNextGaussian(int range) \\ \\
+													getNextGaussian - Generates a random value from Random. \\ \
+													Parameters: \\
+													range - - The range to create a value within. \\
+													Returns: \\
+													random number - float. \\
+											\item	updateAggro \\
+													public static void updateAggro(boolean agg) \\ \\
+													updateAggro - During mob concurrent update each mob updates its own aggro state to set overall aggro to true is so. \\ \\
+													Parameters: \\
+													agg - - Mob aggro state. \\
+											\item	removeAggro \\
+													public static void removeAggro() \\ \\
+													removeAggro - Player removes aggro after update, mobs update after. \\
+											\item	setAlive \\
+													public static void setAlive(boolean alv) \\ \\
+													setAlive - Player updates alive or death at each update. \\ \\
+													Parameters: \\
+													alv - - Players alive state.
+											\item	setPlayerPosition \\
+													public static void setPlayerPosition(com.jme3.math.Vector3f vec) \\ \\
+													setPlayerPosition - Player updates its current position at each udpate. \\ \\
+													Parameters: \\
+													vec - - Player position.
+										\end{itemize}
+							\end{itemize}
+						
+						\vspace{0.2in}
+						\subsubsection*{Character:}
+						\addcontentsline{toc}{subsubsection}{Character}
+						\vspace{0.1in}
+							\begin{itemize}
+								\item	Field Summary
+										\begin{itemize}
 											\item	private CharacterAnimControl	animController 
-											\item	private com.jme3.asset.AssetManager	assetManager 
-											\item	private com.jme3.bullet.BulletAppState	bullet 
 											\item	private com.jme3.renderer.Camera	cam 
 											\item	private CharacterCameraControl	cameraController 
 											\item	private com.jme3.animation.AnimChannel	channel 
 											\item	private com.jme3.bullet.control.BetterCharacterControl	characterControl 
 											\item	private com.jme3.animation.AnimControl	control 
-											\item	private long	deathTime 
-											\item	private float	eighth\_pi 
+											\item	private int	deathTime 
 											\item	private float	health 
 											\item	private CharacterMotionControl	motionController 
 											\item	private com.jme3.scene.Node	player 
 											\item	private com.jme3.scene.Node	playerNode 
 											\item	private ModelRagdoll	ragdoll 
-											\item	private long	regenInterval 
-											\item	private long	regenTime 
-											\item	private long	spawnTime 
+											\item	private int	regenTime 
 											\item	private com.jme3.bullet.control.GhostControl	swordControl 
-											\item	private com.jme3.math.Vector3f	walkDirection 
-											\item	private float	walkSpeed 
+											\item	private com.jme3.math.Vector3f	walkDirection  
 										\end{itemize}
 								\item	Constructor Detail \\
-										public Character(com.jme3.asset.AssetManager assMan, \\
-		        com.jme3.input.InputManager inMan, \\
-		        com.jme3.bullet.BulletAppState bullet, \\
+										public Character(com.jme3.input.InputManager inMan, \\
 		        com.jme3.renderer.Camera cam) \\ \\
 										Character will consist of loading the model with its materials and rigging, add physics to the model and bind the camera to the model. \\ \\
-										Parameters: \\
-										assMan - - AssetManager required to load model and material. \\
+										Parameters: \\ \\
 										inMan - - InputManager required to set up key bindings. \\
-										bullet - - BulletAppState required to add physics to player and camera.
+										cam - - Camera use for camera movement and attacking the player model to move with camera. \\
 								\item	Method Detail 
 										\begin{itemize}
 											\item	initModel \\
@@ -480,8 +556,7 @@
 													initAnim creates the controller and animations channel required to access all available animations, set the current animation and the type of trigger at the end of a animations cycle.
 											\item	updateCharacterPostion \\
 													public boolean updateCharacterPostion(int playerHits,
-													                             float tpf,
-													                             boolean aggro) \\ \\
+													                             float tpf) \\ \\
 													updateCharacterPosition will be called from the main game update function on every frame update, where this will call the motion and animation updater separetly. \\ \\
 													Parameters: \\
 													playerHits - - number of mobs hit, to check if player is currently in an attacking position. \\
@@ -499,9 +574,6 @@
 													initKeys sets up the key bindings that will be used to control the player model. \\ \\
 													Parameters: \\
 													inMan - - InputManager add all the required key mappings to be triggered when pressed.
-											\item	getPosition \\
-													public com.jme3.math.Vector3f getPosition() \\ \\
-													Retrieve player world position.
 											\item	retrievePlayerNode \\
 													public com.jme3.scene.Node retrievePlayerNode() \\ \\
 													retrievePlayerNode an accessor to the game node containing the player model. \\ \\
@@ -518,6 +590,7 @@
 								\item	Field Summary
 										\begin{itemize}
 											\item	private com.jme3.input.controls.ActionListener	actionListener 
+											\item	private com.jme3.renderer.Camera	cam 
 											\item	private boolean	down 
 											\item	protected boolean	jump 
 											\item	private boolean	left 
@@ -525,7 +598,7 @@
 											\item	protected boolean	slash 
 											\item	private boolean	up 
 											\item	protected boolean	walk 
-											\item	private com.jme3.math.Vector3f	walkDirection 
+											\item	private com.jme3.math.Vector3f	walkDirection  
 										\end{itemize}
 								\item	Constructor Detail \\
 										public CharacterMotionControl() \\ \\
@@ -636,22 +709,15 @@
 							\begin{itemize}
 								\item	Field Summary
 										\begin{itemize}
-											\item	private com.jme3.asset.AssetManager	assetManager 
-											\item	private com.jme3.bullet.BulletAppState	bullet 
 											\item	private java.util.ArrayList<java.lang.String>	landedAttacks 
-											\item	private boolean	mobHit 
 											\item	private com.jme3.scene.Node	mobNode 
 											\item	private java.util.ArrayList<Mob>	mobs 
-											\item	private boolean	playerHit 
 											\item	private java.util.ArrayList<com.jme3.math.Vector3f>	positions 
+											\item	private java.util.concurrent.ExecutorService	threadExecutors 
 										\end{itemize}
 								\item	Constructor Detail
-										public MobsHandler(com.jme3.bullet.BulletAppState bullet, \\
-		          com.jme3.asset.AssetManager assMan) \\ \\
+										public MobsHandler(n) \\ \\
 										MobHandler will be in control of create mobs at the predefined positions. \\ \\
-										Parameters: \\
-										bullet - - BulletAppState so be able to add model and collision to the physics domain. \\
-										assMan - - AssetManager to load model into engine.
 								\item	Method Detail
 										\begin{itemize}
 											\item	initPositions \\
@@ -661,18 +727,14 @@
 													private void createMobs() \\ \\
 													createMobs creates each mob and adds it to the list of mobs as well as the scene node. \\
 											\item	updateMobs \\
-													public java.util.ArrayList<java.lang.String> updateMobs(com.jme3.math.Vector3f point,
-													                                               java.util.ArrayList<java.lang.String> playerHits,
-													                                               java.util.ArrayList<java.lang.Integer> mobHits,
-													                                               float tpf) \\ \\
+													public java.util.ArrayList<java.lang.String> updateMobs(java.util.ArrayList<java.lang.String> playerHits,
+													java.util.ArrayList<java.lang.Integer> mobHits,
+													float tpf) \\ \\
 													updateMobs will update each of the mobs individually. \\ \\
 													Parameters: \\
-													point - - Vector3f with is the direction towards the player. \\
 													playerHits - - ArrayList containing the mob name that player has hit. \\
 													mobHits - - Collision groups of mobs that have hit player. \\
 													tpf - - Time per frame to update ragdoll. \\
-											\item	getAggroState \\
-													public boolean getAggroState() \\
 											\item	retrieveMobs \\
 													public com.jme3.scene.Node retrieveMobs() \\ \\
 													retrieveMobs to attach all mobs to rootNode. \\ \\
@@ -686,37 +748,40 @@
 						\addcontentsline{toc}{subsubsection}{Mob}
 						\vspace{0.1in}
 							\begin{itemize}
+								\item 	extends java.lang.Thread\\
+										All implemented interface: \\
+										java.lang.Runnable \\	
 								\item	Field Summary
 										\begin{itemize}
 											\item	private boolean	alive 
 											\item	private MobAnimControl	animControl 
-											\item	private com.jme3.asset.AssetManager	assetManager 
+											\item	protected boolean	attackAudio 
 											\item	private com.jme3.bullet.control.GhostControl	attackGhost 
-											\item	private com.jme3.bullet.BulletAppState	bullet 
+											\item	protected java.lang.String	attackLanded 
 											\item	private com.jme3.animation.AnimChannel	channel 
 											\item	private com.jme3.bullet.control.BetterCharacterControl	characterControl 
 											\item	private com.jme3.animation.AnimControl	control 
-											\item	private long	deathTime 
-											\item	private float	eighth\_pi 
+											\item	protected boolean	damageAudio 
+											\item	private int	deathTime 
 											\item	protected int	handColliosionGroup 
 											\item	private float	health 
 											\item	private com.jme3.scene.Node	mob 
+											\item	private boolean	mobHit 
 											\item	protected java.lang.String	mobName 
 											\item	private MobMotionControl	motionControl 
 											\item	private com.jme3.math.Vector3f	passivePosition 
+											\item	private boolean	playerHit 
 											\item	private ModelRagdoll	ragdoll 
-											\item	private long	spawnTime 
+											\item	private int	regenTime 
+											\item	protected boolean	swapControllers 
+											\item	private float	tpf 
+											\item	protected boolean	walkAudio 
 										\end{itemize}
 								\item	Constructor Detail \\
-										public Mob(com.jme3.math.Vector3f position, \\
-		  com.jme3.bullet.BulletAppState bullet, \\
-		  com.jme3.asset.AssetManager assMan, \\
-		  java.lang.String mName) \\ \\ 
+										public Mob(com.jme3.math.Vector3f position, java.lang.String mName) \\ \\ 
 										Mob creates a basic mob the required functionality. \\ \\
 										Parameters: \\
 										position - - Vector3f the position to place the mob at. \\
-										bullet - - BulletAppState to add controllers to physics space. \\
-										assMan - - AssetManager to load required model. \\
 										mName - - String that defines the name assosiated to this mob required for collision detection.
 								\item	Method Detail
 										\begin{itemize}
@@ -726,6 +791,9 @@
 											\item	initControl \\
 													private void initControl() \\ \\
 													initControl creates the character controller responsible for collision, motion and forces control.
+											\item	initRagdoll \\
+													private void initRagdoll() \\ \\
+													initRagdoll - will create the ragdoll required for death animation and assign the required limbs.
 											\item	initAttackGhost \\
 													private void initAttackGhost() \\ \\
 													initAttackGhost sets up the collision box that will be bound to the mobs arm in order to determine if any collision has occured with the hand and the player.
@@ -735,27 +803,34 @@
 											\item	initAnim \\
 													private void initAnim() \\ \\
 													initAnim creates the controller and animations channel required to access all available animations, set the current animation and the type of trigger at the end of a animations cycle.
-											\item	updateMob \\
-													public java.lang.String updateMob(com.jme3.math.Vector3f point,
-													                         boolean playerHit,
-													                         boolean mobHit,
-													                         float tpf) \\ \\
-													updateMob will update the mobs phase according to if aggro was triggers and animations that is required for that phase. \\ \\
+											\item	set \\
+													public void set(boolean playerHit, boolean mobHit, float tpf) \\ \\
+													set - From MobsHandler these values are set before the mob thread is sent of for update. \\ \\
 													Parameters: \\
 													point - - Vector3f the direction of the player required in the attack phase to move the mobs towards the player. \\
 													playerHit - - boolean if the player hit this mob. \\
 													mobHit - - boolean if mob has attacked player. \\
-													tpf - - Time per frame required for updating ragdoll. \\
+													tpf - - Time per frame required for updating ragdoll.
+											\item	run \\
+													public void run() \\ \\
+													updateMob will update the mobs phase according to if aggro was triggers and animations that is required for that phase. \\ \\
+													Specified by: \\
+													run in interface java.lang.Runnable \\
+													Overrides: \\
+													run in class java.lang.Thread \\
 											\item	swapControllers \\
 													private void swapControllers() \\ \\
 													swapControllers will swap between controllers from BetterCharacterControl will ghost boxes for alive and ragdoll for death. \\
-											\item	getAggro \\
-													public boolean getAggro() \\
-											\item	isAlive \\
-													public boolean isAlive() \\ \\
-													isAlive to determine if the mob is alive. \\ \\
+											\item	getPosition \\
+													public com.jme3.math.Vector3f getPosition() \\ \\
+													getPosition - Accessor to mobs current position. \\ \\
 													Returns: \\
-													alive state. \\
+													Vector3f mob position.
+											\item	alive \\
+													public boolean isAlive() \\ \\
+													alive - Accessor to mobs alive state. \\ \\
+													Returns: \\
+													boolean of mobs alive state. \\
 											\item	retrieveMob \\
 													public com.jme3.scene.Node retrieveMob() \\ \\
 													retrieveMob to access the node containing the single mob. \\ \\
@@ -812,37 +887,29 @@
 											\item	private com.jme3.bullet.control.GhostControl	aggroGhost 
 											\item	protected boolean	alive 
 											\item	protected boolean	attack 
+											\item	private float	distanceFromPlayer 
+											\item	private float	distanceToPassive 
 											\item	private com.jme3.math.Vector3f	motionDirection 
 											\item	protected boolean	passive 
-											\item	private float	runSpeed 
-											\item	protected boolean	walkAttack 
-											\item	private float	walkSpeed 
+											\item	protected boolean	walk 
+											\item	protected boolean	walkAttack  
 										\end{itemize}
 								\item	Constructor Detail \\
-										public MobCollisionControl(java.lang.String mob) \\ \\ \\
+										public MobCollisionControl() \\ \\ 
+										MobMotionControl - initializes all required variables. \\
 								\item	Method Detail
 										\begin{itemize}
-											\item	collision \\
-													public void collision(com.jme3.bullet.collision.PhysicsCollisionEvent event) \\ \\
-													collision handles when a collision occurs between the ghost controller and another collidable object in the scene. It will determine if the player was detected and trigger to approach and attack the player. \\ \\
-													Specified by: \\
-													collision in interface com.jme3.bullet.collision.PhysicsCollisionListener \\ \\
-													Parameters: \\
-													event - - PhysicsCollisionEvent containing all the data in relation to the collision that has occured. \\
 											\item	initGhost \\
 													private void initGhost() \\ \\
 													initGhost creates the GhostControl collision sphere that will double as the player detection bounds for changing to attack phase. Also sets the collision group and the group it does collid with.
 											\item	updateMobPhase \\
-													protected void updateMobPhase(com.jme3.math.Vector3f point, \\
-				                  com.jme3.scene.Spatial mob, \\
-				                  com.jme3.bullet.control.BetterCharacterControl characterControl, \\
-				                  com.jme3.math.Vector3f passivePosition) \\ \\
+													protected void updateMobPhase(com.jme3.bullet.control.BetterCharacterControl \\ characterControl, com.jme3.math.Vector3f passivePosition, \\
+													com.jme3.math.Vector3f mobPosition) \\ \\
 													updateMobPhase will determine in which phase the mob is: attack, return, passive. Update the mobs actions to its position and animation. \\ \\
 													Parameters: \\
-													point - - Vector3f the direction of the player required in the attack phase to move the mobs towards the player. \\
-													mob - - Mob physical object. \\
-													characterControl - - BetterCharacterControl, model controller of mob. \\
-													passivePosition - - Vector3f postion where mob spawn point is.
+													characterControl - - BetterCharacterControl, model controller of mob
+													passivePosition - - Vector3f postion where mob spawn point is. \\
+													mobPosition - - Vector3f of mobs current position.
 											\item	getAggroGhost \\
 													public com.jme3.bullet.control.GhostControl getAggroGhost() \\ \\
 													getAggroGhost gives access to the aggro ghost controller. \\ \\
