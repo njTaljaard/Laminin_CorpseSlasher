@@ -22,86 +22,88 @@
 
 \DeclareFixedFont{\titlefont}{T1}{ppl}{b}{it}{1.0in}
 
-\makeatletter
 \def\printauthor{%
     {\large \@author}}
 \makeatother
 \author{%
     Nico Taljaard \\
-    10153285 \vspace{20pt} \\
+    10153285 \\%vspace{20pt} \\
     Gerhard Smit \\
-    12282945 \vspace{20pt} \\
+    12282945 \\%vspace{20pt} \\
     Martin Schoeman \\
     10651994 \\
-}
-
-% The following code is borrowed from: http://tex.stackexchange.com/a/86310/10898
-
-\newcommand\titlepagedecoration{%
-	\begin{tikzpicture}[remember picture,overlay,shorten >= -10pt]
-	
-		\coordinate (aux1) at ([yshift=-15pt]current page.north east);
-		\coordinate (aux2) at ([yshift=-410pt]current page.north east);
-		\coordinate (aux3) at ([xshift=-4.5cm]current page.north east);
-		\coordinate (aux4) at ([yshift=-150pt]current page.north east);
-		
-		\begin{scope}[titlepagecolor!40,line width=12pt,rounded corners=12pt]
-			\draw
-			  (aux1) -- coordinate (a)
-			  ++(225:5) --
-			  ++(-45:5.1) coordinate (b);
-			\draw[shorten <= -10pt]
-			  (aux3) --
-			  (a) --
-			  (aux1);
-			\draw[opacity=0.6,titlepagecolor,shorten <= -10pt]
-			  (b) --
-			  ++(225:2.2) --
-			  ++(-45:2.2);
-		\end{scope}
-			\draw[titlepagecolor,line width=8pt,rounded corners=8pt,shorten <= -10pt]
-			  (aux4) --
-			  ++(225:0.8) --
-			  ++(-45:0.8);
-		\begin{scope}[titlepagecolor!70,line width=6pt,rounded corners=8pt]
-			\draw[shorten <= -10pt]
-			  (aux2) --
-			  ++(225:3) coordinate[pos=0.45] (c) --
-			  ++(-45:3.1);
-			\draw
-			  (aux2) --
-			  (c) --
-			  ++(135:2.5) --
-			  ++(45:2.5) --
-			  ++(-45:2.5) coordinate[pos=0.3] (d);   
-			\draw 
-			  (d) -- +(45:1);
-		\end{scope}
-	\end{tikzpicture}
 }
 
 \begin{document}
 
 \begin{titlepage}
 
-\noindent
-\titlefont Laminin \par
-\epigraph{ XGame - Derivco \\ Corspe Slasher \\ Software Architecture Specification}%
-{\textit{ 01/08/2014 }\\ \textsc{ }}
-\null\vfill
-\vspace*{4cm}
-\noindent
-\hfill
-\begin{minipage}{0.35\linewidth}
-    \begin{flushright}
-        \printauthor
-    \end{flushright}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\begin{center} % Center everything on the page
+ 
+%----------------------------------------------------------------------------------------
+%   HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+%\textsc{\LARGE University Name}\\[1.5cm] % Name of your university/college
+\includegraphics[width=50mm]{laminin.png} \\
+\textsc{\Large University of Pretoria}\\[0.2cm] % Major heading such as course name
+\textsc{\large Derivco - Rodney Pillay}\\[0.2cm] % Minor heading such as course title
+
+%----------------------------------------------------------------------------------------
+%   TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm]
+{ \huge \bfseries Corpse Slasher by Laminin}\\[0.4cm] % Title of your document
+\HRule \\[0.5cm]
+ 
+%----------------------------------------------------------------------------------------
+%   AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{COS 301 Software Engineering}\\
+\vspace{1cm}
+Software Architecture Documentation
+\end{flushleft}
 \end{minipage}
-%
-\begin{minipage}{0.02\linewidth}
-    \rule{1pt}{125pt}
-\end{minipage}
-\titlepagedecoration
+~
+\begin{minipage}{0.4\textwidth}
+	\begin{flushright} \large
+	\emph{Developers:} \\
+		%\printauthor % Supervisor's Name
+		NJ \textsc{Taljaard} \\
+			\begin{small}
+				10153285
+			\end{small} \\
+		M  \textsc{Schoeman} \\
+			\begin{small}
+				10651994 \\
+			\end{small}
+		G  \textsc{Smith} \\
+			\begin{small}
+				12282945
+			\end{small}
+	\end{flushright}
+\end{minipage}\\
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+%\Large \emph{Author:}\\
+%John \textsc{Smith}\\[3cm] % Your name
+
+%----------------------------------------------------------------------------------------
+%   LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+\includegraphics[width=60mm, height=80mm]{corpseslasher.png}\\ % Include a department/university logo - this will require the graphicx package
+ 
+%----------------------------------------------------------------------------------------
+\end{center}
+\vfill % Fill the rest of the page with whitespace
+
 \end{titlepage}
 
 % % % % % % % % % % % % % % %
