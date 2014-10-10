@@ -1,5 +1,7 @@
 package GUI.OAuth;
 
+import CorpseSlasher.ClientConnection;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +25,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.io.DataOutputStream;
 
 /**
  * @author Laminin
@@ -101,24 +105,59 @@ public class OAuth {
             //Own response class is an easy way to deal with oauth providers that introduce modifications to
             //OAuth specification
             GitHubTokenResponse oAuthResponse = oAuthClient.accessToken(request, GitHubTokenResponse.class);
-            System.out.println(
+            /*System.out.println(
                     "Access Token: " + oAuthResponse.getAccessToken() + ", Expires in: " + oAuthResponse
-                    .getExpiresIn());
+                    .getExpiresIn());*/
             //get user facebook detail.
+            JSONObject userProfileObj;
             try {
                 URL url = new URL("https://graph.facebook.com/me?access_token=" + oAuthResponse.getAccessToken());
                 URLConnection conn = url.openConnection();
                 String line;
+                String userProfile = "";
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 while ((line = reader.readLine()) != null) {
-                    System.out.println("FB: " + line);
+                    userProfile += line;
                 }
+                userProfileObj = new JSONObject(userProfile);
+                System.out.println("Facebook user id and name: " + userProfileObj.get("id") + " " + userProfileObj.get("name"));
+                //add to database
+                ClientConnection.StartClientConnection();
+                if (ClientConnection.checkOauthIdAvailable(userProfileObj.get("id").toString()))
+                {
+                    ClientConnection.AddOAuthUser(userProfileObj.get("id").toString(), userProfileObj.get("name").toString());
+                }
+                ClientConnection.userId = userProfileObj.get("id").toString();
+                
                 reader.close();
             } catch (Exception e) {
                 System.out.println("Facebook retrieve user details error: " + e.toString());
                 return false;
             }
             //Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
+            
+            //test code for wall post
+            /*try
+            {
+            String data = URLEncoder.encode("access_token", "UTF-8") + "=" + URLEncoder.encode(oAuthResponse.getAccessToken(), "UTF-8");
+            data += "&" + URLEncoder.encode("message", "UTF-8") + "=" + URLEncoder.encode("finally", "UTF-8");
+            System.out.println("data is\n"+data);
+            // Send data
+           URLConnection connection = new URL("https://graph.facebook.com/me/feed").openConnection();
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+            out.writeBytes(data);
+            out.flush();
+            out.close();
+            }
+            catch (Exception exc)
+            {
+                System.out.println("Wall port error: " + exc.toString());
+            }*/
+            
+            
             return true;
         } catch (OAuthProblemException e) {
             System.out.println("OAuth error: " + e.getError());
@@ -152,7 +191,7 @@ public class OAuth {
             return false;
         }
         //Runtime.getRuntime().exec("taskkill /F /IM chrome.exe");
-        System.out.println(code);
+        //System.out.println(code);
         
         //bug fix: Code is to old and that is why it is not working.
         /*String url = "https://accounts.google.com/o/oauth2/token";
@@ -209,21 +248,33 @@ public class OAuth {
             return false;
         }
         
-        //get user google+ detail.
+        //get user google+ Profile.
+        JSONObject userProfileObj;
             try {
                 URL url = new URL("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + userDetailsObj.get("access_token"));
                 URLConnection conn = url.openConnection();
                 String line;
+                String userProfile = "";
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 while ((line = reader.readLine()) != null) {
-                    System.out.println("Google+: " + line);
+                    userProfile += line;
                 }
+                userProfileObj = new JSONObject(userProfile);
+                System.out.print("Google+ user id and name: " + userProfileObj.get("id") + " " + userProfileObj.get("name"));
+                
+                //add to database
+            if (ClientConnection.checkOauthIdAvailable(userProfileObj.get("id").toString()))
+                {
+                    ClientConnection.AddOAuthUser(userProfileObj.get("id").toString(), userProfileObj.get("name").toString());
+                }
+                ClientConnection.userId = userProfileObj.get("id").toString();
+                
                 reader.close();
             } catch (Exception e) {
-                System.out.println("Facebook retrieve user details error: " + e.toString());
+                System.out.println("Google+ retrieve user details error: " + e.toString());
                 return false;
             }
-
+            
         return true;
     }
     //Could not get Twitter Oauth working

@@ -45,16 +45,16 @@ public class DatabaseUpdate {
     }
     
     /**
-     * setOAuthNewUser sends a new OAuth user's username to the database class.
+     * setOAuthNewUser sends a new OAuth user's id to the database class.
      *
-     * @param JSONObj - has the new OAuth user's username.
+     * @param JSONObj - has the new OAuth user's id and username.
      * @return - returns true if user details was sent to the Database class or
      * returns false if failed.
      */
     public boolean setOAuthNewUser(JSONObject JSONObj) {
         try {
             db.connect();
-            db.addOAuthUser(JSONObj.get("username").toString());
+            db.addOAuthUser(JSONObj.get("id").toString(),JSONObj.get("username").toString());
             return true;
         } catch (Exception exc) {
             ExceptionHandler.catchException("DatabaseUpdate", "setOAuthNewUser", exc.toString());
@@ -105,6 +105,28 @@ public class DatabaseUpdate {
             return false;
         }
     }
+    
+    /**
+     * checkOauthIdAvailable - sends to id to the database in a JSON
+     * object to check for availability.
+     *
+     * @param JSONObj - JSON object containing the client's id.
+     *
+     * @return - returns true is id is available and false if not.
+     */
+    public boolean checkOauthIdAvailable(JSONObject JSONObj) {
+        try {
+            db.connect();
+            if (db.oauthIdExist(JSONObj.get("id").toString())) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception exc) {
+            ExceptionHandler.catchException("DatabaseUpdate", "checkOauthIdAvailable", exc.toString());
+            return false;
+        }
+    }
 
     /**
      *
@@ -129,13 +151,13 @@ public class DatabaseUpdate {
      * getOAuthKills returns the zombie kills of the client by receiving it from the
      * Database class.
      *
-     * @param JSONObj - JSON object containing the client username.
+     * @param JSONObj - JSON object containing the client id.
      * @return - return the client zombie kills.
      */
     public int getOAuthKills(JSONObject JSONObj) {
         try {
             db.connect();
-            return db.getOAuthZombieKills(JSONObj.get("username").toString());
+            return db.getOAuthZombieKills(JSONObj.get("id").toString());
         } catch (Exception exc) {
             ExceptionHandler.catchException("DatabaseUpdate", "getOAuthKills", exc.toString());
             return -1;
@@ -169,7 +191,7 @@ public class DatabaseUpdate {
      *
      * setOAuthKills sends the zombie kills of a client to the Database class.
      *
-     * @param JSONObj - JSON object containing the client username and zombie
+     * @param JSONObj - JSON object containing the client id and zombie
      * kills.
      * @return - return true if the zombie kills where sent to the Database
      * class or false if it failed.
@@ -177,7 +199,7 @@ public class DatabaseUpdate {
     public boolean setOAuthKills(JSONObject JSONObj) {
         try {
             db.connect();
-            if (db.setOAuthZombieKills(JSONObj.get("username").toString(), Integer.parseInt(JSONObj.get("zombieKills").toString()))) {
+            if (db.setOAuthZombieKills(JSONObj.get("id").toString(), Integer.parseInt(JSONObj.get("zombieKills").toString()))) {
                 return true;
             } else {
                 return false;
@@ -214,14 +236,14 @@ public class DatabaseUpdate {
      *
      * increaseOAuthKillsByOne sends the client username to the Database class.
      *
-     * @param JSONObj - JSON object containing the client username.
+     * @param JSONObj - JSON object containing the client id.
      * @return returns true if client username was sent successfully to the
      * Database class or false if it failed.
      */
     public boolean increaseOAuthKillsByOne(JSONObject JSONObj) {
         try {
             db.connect();
-            if (db.increaseOAuthZombieKillsByOne(JSONObj.get("username").toString())) {
+            if (db.increaseOAuthZombieKillsByOne(JSONObj.get("id").toString())) {
                 return true;
             } else {
                 return false;

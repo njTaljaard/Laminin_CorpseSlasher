@@ -34,6 +34,7 @@ public final class ClientConnection {
     private static final String hostAddress = "localhost";
     private static final int hostPortNumber = 32323;
     private static String username_ = "";
+    public static String userId = "";
     public static boolean loggedIn = false;
     public static boolean relog = false;
     /**
@@ -133,15 +134,17 @@ public final class ClientConnection {
      * AddOAuthUser - sends a JSON object with the OAuth clients username to the server,
      * to add new user to database.
      *
+     * @param id - client's id
      * @param username - client's username
      *
      * @return returns what ever boolean value the server returns, true if the
      * user was added to database and false if it failed.
      */
-    public static boolean AddOAuthUser(String username) {
+    public static boolean AddOAuthUser(String id, String username) {
         JSONObject obj = new JSONObject();
         try {
             obj.put("type", "addOAuthUser");
+            obj.put("id", id);
             obj.put("username", username);
             outWriter.println(obj);
             return Boolean.parseBoolean(inReader.readLine().toString());
@@ -248,15 +251,15 @@ public final class ClientConnection {
     /**
      * GetOAuthKills - get the number of client's zombie kills from the server.
      *
-     * @param username - client's username.
+     * @param id - client's id.
      *
      * @return - return the number of client's zombie kills or -1 if it failed.
      */
-    public static int GetOAuthKills(String username) {
+    public static int GetOAuthKills(String id) {
         JSONObject obj = new JSONObject();
         try {
             obj.put("type", "getOAuthKills");
-            obj.put("username", username);
+            obj.put("id", id);
             outWriter.println(obj);
             return Integer.parseInt(inReader.readLine().toString());
         } catch (Exception exc) {
@@ -295,17 +298,17 @@ public final class ClientConnection {
      * SetOAuthKills - send the number of client's zombie kills to the server to be
      * saved
      *
-     * @param username - client's username
+     * @param id - client's id
      * @param zombieKills - client's number of zombie kills.
      *
      * @return - returns true if the client's zombie kills was saved on the
      * server or false if it failed.
      */
-    public static boolean SetOAuthKills(String username, String zombieKills) {
+    public static boolean SetOAuthKills(String id, String zombieKills) {
         JSONObject obj = new JSONObject();
         try {
             obj.put("type", "setOAuthKills");
-            obj.put("username", username);
+            obj.put("id", id);
             obj.put("zombieKills", zombieKills);
             outWriter.println(obj);
             return Boolean.parseBoolean(inReader.readLine().toString());
@@ -369,16 +372,16 @@ public final class ClientConnection {
     /**
      * AddOAuthOneKill - adds one kill to the client's total number of kills.
      *
-     * @param username - client's username.
+     * @param id - client's id.
      *
      * @return - returns true if the one kill was added server side and false if
      * it failed.
      */
-    public static boolean AddOAuthOneKill(String username) {
+    public static boolean AddOAuthOneKill(String id) {
         JSONObject obj = new JSONObject();
         try {
             obj.put("type", "addOAuthOneKill");
-            obj.put("username", username);
+            obj.put("id", id);
             outWriter.println(obj);
             return Boolean.parseBoolean(inReader.readLine().toString());
         } catch (Exception exc) {
@@ -406,6 +409,28 @@ public final class ClientConnection {
         } catch (Exception exc) {
             //TODO: Raise exceptions through the ExceptionHandler class.
             System.out.println("Connection check username available error: " + exc.toString());
+        }
+        return false;
+    }
+    
+     /**
+     * checkOauthIdAvailable - checks is the id is available or already
+     * taken.
+     *
+     * @param id - client's id.
+     *
+     * @return - return true if id is available and false if not.
+     */
+    public static boolean checkOauthIdAvailable(String id) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("type", "checkOauthIdAvailable");
+            obj.put("id", id);
+            outWriter.println(obj);
+            return Boolean.parseBoolean(inReader.readLine().toString());
+        } catch (Exception exc) {
+            //TODO: Raise exceptions through the ExceptionHandler class.
+            System.out.println("Connection check id available error: " + exc.toString());
         }
         return false;
     }

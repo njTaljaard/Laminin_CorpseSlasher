@@ -27,7 +27,7 @@ public class Input {
             JSONObject obj = new JSONObject();
             DatabaseUpdate dbu = new DatabaseUpdate();
             String type = clientObj.get("type").toString();
-            if (type.equals("retrieveLeaderBoard") || type.equals("retrievePasswordInputEmail"))
+            if (type.equals("retrieveLeaderBoard") || type.equals("retrievePasswordInputEmail") || type.equals("getOAuthKills")|| type.equals("setOAuthKills")|| type.equals("addOAuthOneKill")|| type.equals("checkOauthIdAvailable"))
             {
                 AuditLog.writeAudit("unknown", type);
             }
@@ -58,6 +58,7 @@ public class Input {
                     }
                 }
                 case "addOAuthUser": {
+                    obj.put("id", clientObj.get("id").toString());
                     obj.put("username", clientObj.get("username").toString());
                     if (dbu.setOAuthNewUser(obj)) {
                         return "true";
@@ -70,7 +71,7 @@ public class Input {
                     return Integer.toString(dbu.getKills(obj));
                 }
                 case "getOAuthKills": {
-                    obj.put("username", clientObj.get("username").toString());
+                    obj.put("id", clientObj.get("id").toString());
                     return Integer.toString(dbu.getOAuthKills(obj));
                 }
                 case "setKills": {
@@ -83,7 +84,7 @@ public class Input {
                     }
                 }
                 case "setOAuthKills": {
-                    obj.put("username", clientObj.get("username").toString());
+                    obj.put("id", clientObj.get("id").toString());
                     obj.put("zombieKills", clientObj.get("zombieKills").toString());
                     if (dbu.setOAuthKills(obj)) {
                         return "true";
@@ -100,7 +101,7 @@ public class Input {
                     }
                 }
                 case "addOAuthOneKill": {
-                    obj.put("username", clientObj.get("username").toString());
+                    obj.put("id", clientObj.get("id").toString());
                     if (dbu.increaseOAuthKillsByOne(obj)) {
                         return "true";
                     } else {
@@ -143,14 +144,23 @@ public class Input {
                         return "false";
                     }
                 }  
-                    case "retrieveLeaderBoard": {
+                case "checkOauthIdAvailable": {
+                    obj.put("id", clientObj.get("id").toString());
+
+                    if (dbu.checkOauthIdAvailable(obj)) {
+                        return "true";
+                    } else {
+                        return "false";
+                    }
+                }
+                case "retrieveLeaderBoard": {
                     return dbu.retriveLeaderBoard();
                 }  
                 default:
                     return "";
             }
         } catch (Exception exc) {
-            ExceptionHandler.catchException("Input", "getInput", exc.toString());
+            //ExceptionHandler.catchException("Input", "getInput", exc.toString());
         }
         return "";
     }

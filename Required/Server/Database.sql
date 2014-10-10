@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 15, 2014 at 01:14 PM
+-- Generation Time: Oct 10, 2014 at 12:45 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
@@ -29,20 +29,21 @@ USE `corpseslasher`;
 --
 
 CREATE TABLE IF NOT EXISTS `oauth_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tableId` int(10) NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
   `zombieKills` int(11) NOT NULL,
   `experiencePoints` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+  `id` text NOT NULL,
+  PRIMARY KEY (`tableId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `oauth_user`
 --
 
-INSERT INTO `oauth_user` (`id`, `name`, `zombieKills`, `experiencePoints`) VALUES
-(1, 'facebook user1', 150, 1500),
-(4, 'google user', 23, 230);
+INSERT INTO `oauth_user` (`tableId`, `name`, `zombieKills`, `experiencePoints`, `id`) VALUES
+(1, 'Martin Schoeman', 0, 0, '100000068202419'),
+(3, 'Martin Schoeman', 0, 0, '111790131659551738379');
 
 -- --------------------------------------------------------
 
@@ -60,16 +61,14 @@ CREATE TABLE IF NOT EXISTS `user` (
   `zombieKills` int(11) NOT NULL,
   `experiencePoints` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 --
 -- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `name`, `surname`, `email`, `zombieKills`, `experiencePoints`) VALUES
-(6, 'u10651994', 'g&ﬁq)aZY\0ôø˜Å¯', 'Martin', 'Schoeman', 'firstnamemartins@yahoo.com', 0, 0),
-(7, 'test1', 'g&ﬁq)aZY\0ôø˜Å¯', 'one', 'one', 'm@s.com', 12, 120),
-(8, 'two', 'g&ﬁq)aZY\0ôø˜Å¯', 'two', 'two', 'test@non.valid', 111, 1110);
+(13, 'u10651994', 'ùÆ°—©¶Ê^∑∞aj8ôuóª)˚¡a¸Çºæ,…Úz”éÏ 6*Q‹/¿r\0‡…`', 'Martin', 'Schoeman', 'firstnamemartins@yahoo.com', 12, 0);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
