@@ -32,6 +32,24 @@ Supported operating systems:
   - Windows
   - Linux
   - Android
+  
+Installation:
+-----------
+
+>Getting started
+
+  - Ensure localhost:32323 is available for the Server connection.
+  - Create a MySQL connection on: localhost/corpseslasher.
+  
+>Running game
+
+  - jMonkey can create an executable
+  - Through IDE or using command line.
+  
+>Running server
+
+  - Run through IDE or using command line.
+  - Run MySQL connection through any service like MySQL-Workbench or XAMP.
 
 Developers:
 -----------
