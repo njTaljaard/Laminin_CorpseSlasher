@@ -45,18 +45,25 @@ abstract class Screens {
         this.app           = app;
         this.screen        = screen;
     }
-
+    /**
+     * Parent function to change to any screen from any other screen
+     * @param _screen the id of the screen to change to
+     */
     void goTo(String _screen) {
         guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
         screen.getNifty().gotoScreen(_screen);
     }
-
-    void build() {}
-
-    ;
+    /**
+     * Super function for building all the GUI screens
+     */
+    void build() {};
+    /**
+     * Super function for updating the res of a screen
+     * @param width new width for the screen to have
+     * @param height new height for the screen to have
+     */
     public void updateRes(int width, int height) {
         AppSettings settings = new AppSettings(true);
-
         settings.setResolution(width, height);
         screen.reshape(guiViewPort, width, height);
     }

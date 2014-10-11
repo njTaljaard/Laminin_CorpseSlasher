@@ -278,7 +278,7 @@ public class SettingsController implements ScreenController {
         settings.updateSettings(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10);
         settings.apply();
         //Still needs to be added
-        //scene.reload();
+        //scene.reloadScene();
      }
      /**
       * updates the display setting
@@ -291,7 +291,8 @@ public class SettingsController implements ScreenController {
          settings.updateSettings("width", width);         
          settings.updateSettings("height", height);
          settings.apply();
-         UI.updateRes(Integer.parseInt(width),Integer.parseInt(height));
+         UI.setRes(Integer.parseInt(width),Integer.parseInt(height));
+         UI.updateRes();
      }
      /**
       * Quits the game

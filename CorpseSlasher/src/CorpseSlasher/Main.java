@@ -168,8 +168,8 @@ public class Main extends SimpleApplication implements ScreenController {
                 ex.printStackTrace();
             }
         }
-
-        UI.updateRes(width, height);
+        UI.setRes(width, height);
+        UI.updateRes();
         gSettings.setFullscreen(false);
         gSettings.setResolution(width, height);
         this.setSettings(gSettings);

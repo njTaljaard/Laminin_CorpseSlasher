@@ -46,14 +46,13 @@ public final class UserInterfaceManager {
     private AppSettings         settings;
 
     /**
-     *
+     * initializes the user interface manager so it can interchange between different screens   
      * @param assetManager
      * @param inputManager
      * @param audioRenderer
      * @param guiViewPort
      * @param appState
      * @param app
-     * initializes the user interface manager so it can interchange between different screens
      */
     public void init(AssetManager assetManager, InputManager inputManager, AudioRenderer audioRenderer,
                      ViewPort guiViewPort, AppStateManager appState, Application app, GameScene scene) {
@@ -67,7 +66,14 @@ public final class UserInterfaceManager {
         Screen     = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
         guiScreens = new Screens[6];
     }
-
+    /**
+     * Allows the guis to be accessed from anywhere else.
+     * @param border the border around the health bar.
+     * @param health the health bar. 
+     * @param splatter the blood splatter that pops up when attacked.
+     * @param aggro the aggro border,
+     * @param guiNode the node that keeps all the pictures.
+     */
     public void setGuis(Picture border, Picture health, Picture splatter, Picture aggro, Node guiNode) {
         UserInterfaceManager.guiNode  = guiNode;
         this.healthBorder             = border;
@@ -75,15 +81,19 @@ public final class UserInterfaceManager {
         UserInterfaceManager.splatter = splatter;
         this.health                   = health;
     }
-
+    /**
+     * changes the width and the height of the screens to be updated    
+     * @param width new width of the screenss.
+     * @param height new height of the screens.
+     */
     public void setRes(int width, int height) {
         this.width  = width;
         this.height = height;
     }
-
-    public void updateRes(int width, int height) {
-        System.out.println(width + " : " + height);
-
+    /**
+     * Updates all the screens to the new set width and height
+     */
+    public void updateRes() {
         for (Screens screen_1 : guiScreens) {
             if (screen_1 != null) {
                 screen_1.updateRes(width, height);
@@ -91,11 +101,12 @@ public final class UserInterfaceManager {
 
             Screen.getNifty().enableAutoScaling(width, height);
         }
-
-        // settings.setResolution(width, height);
         app.restart();
     }
-
+    /**
+     * Allows the game settings to be updated from the manager.
+     * @param settings the game settings to be updated.
+     */
     public void setSettings(AppSettings settings) {
         this.settings = settings;
     }
@@ -128,6 +139,9 @@ public final class UserInterfaceManager {
         guiScreens[2].updateRes(width, height);
     }
 
+    /**
+     * Creates the leaderboard screen
+     */    
     public void leaderBoard() {
         guiScreens[5] = new Leaderboard(assetManager, inputManager, audioRenderer, guiViewPort, appState, app, Screen);
         guiScreens[5].build();
@@ -188,8 +202,6 @@ public final class UserInterfaceManager {
                                            Screen, this, scene);
     }
 
-    public void settings(String selection) {}
-
     /**
      * Creates a new loading screen object
      */
@@ -200,23 +212,23 @@ public final class UserInterfaceManager {
     }
 
     /**
-     *
+     * Returns the loading screen object to be updated as the game is being loaded    
      * @return the loading screen object
-     * Returns the loading screen object to be updated as the game is being loaded
      */
     public LoadingScreen getLoadingScreen() {
         return (LoadingScreen) guiScreens[4];
     }
 
     /**
-     *
-     * @param _screen the ID of the screen to be changed to
      * Changes to the screen ID coming in
+     * @param _screen the ID of the screen to be changed to
      */
     public void goTo(String _screen) {
         guiScreens[3].goTo(_screen);
     }
-
+    /**
+     * Closes all the login screens
+     */
     public void destroyLogin() {
         guiScreens[0].screen.getNifty().exit();
         guiScreens[1].screen.getNifty().exit();

@@ -83,7 +83,7 @@ Code Documentation
 			\begin{small}
 				10651994 \\
 			\end{small}
-		G  \textsc{Smith} \\
+		G  \textsc{Smit} \\
 			\begin{small}
 				12282945
 			\end{small}
@@ -984,18 +984,44 @@ Code Documentation
 							\begin{itemize}
 								\item	Field Summary
 										\begin{itemize}
-											\item	private com.jme3.input.controls.ActionListener	action 
-											\item	private com.jme3.app.Application	app 
-											\item	private com.jme3.app.state.AppStateManager	appState 
-											\item	private com.jme3.asset.AssetManager	assetManager 
-											\item	private com.jme3.audio.AudioRenderer	audioRenderer 
-											\item	private Screens[]	guiScreens 
-											\item	private com.jme3.renderer.ViewPort	guiViewPort 
-											\item	private com.jme3.input.InputManager	inputManager 
-											\item	private boolean	loginScreen 
-											\item	private boolean	menuOpen 
-											\item	private com.jme3.niftygui.NiftyJmeDisplay	Screen 
-										\end{itemize}
+											\item	private com.jme3.input.controls.ActionListener 	action 
+\item static com.jme3.ui.Picture 	aggro 
+ 
+\item private com.jme3.app.Application 	app 
+ 
+\item private com.jme3.app.state.AppStateManager 	appState 
+ 
+\item private com.jme3.asset.AssetManager 	assetManager 
+ 
+\item private com.jme3.audio.AudioRenderer 	audioRenderer 
+ 
+\item static com.jme3.scene.Node 	guiNode 
+ 
+\item private Screens[] 	guiScreens 
+ 
+\item private com.jme3.renderer.ViewPort 	guiViewPort 
+ 
+\item private com.jme3.ui.Picture 	health 
+ 
+\item private com.jme3.ui.Picture 	healthBorder 
+ 
+\item private int 	height 
+ 
+\item private static com.jme3.input.InputManager 	inputManager 
+ 
+\item private static boolean 	loginScreen 
+ 
+\item private boolean 	menuOpen 
+ 
+\item private GameScene 	scene 
+ 
+\item private com.jme3.niftygui.NiftyJmeDisplay 	Screen 
+ 
+\item private com.jme3.system.AppSettings 	settings 
+ 
+\item static com.jme3.ui.Picture 	splatter 
+ 
+\item private int 	width 										\end{itemize}
 								\item	Constructor Detail \\
 										public UserInterfaceManager()
 								\item	Method Detail
@@ -1006,44 +1032,84 @@ Code Documentation
 				        com.jme3.audio.AudioRenderer audioRenderer, \\
 				        com.jme3.renderer.ViewPort guiViewPort, \\
 				        com.jme3.app.state.AppStateManager appState, \\
-				        com.jme3.app.Application app) \\ \\
+				        com.jme3.app.Application app ) \\ \\
+				        initializes the user interface manager so it can interchange between different screens \\ \\
 													Parameters: \\
 													assetManager - \\
 													inputManager - \\
 													audioRenderer - \\
 													guiViewPort - \\
 													appState - \\
-													app - initializes the user interface manager so it can interchange between different screens
-											\item	loginScreen \\
+													app - initializes the user interface manager so it can interchange between different screens \\
+
+
+\item setGuis \\
+public void setGuis(com.jme3.ui.Picture border, \\
+com.jme3.ui.Picture health, \\
+com.jme3.ui.Picture splatter, \\
+com.jme3.ui.Picture aggro, \\
+com.jme3.scene.Node guiNode) \\ \\
+Allows the guis to be accessed from anywhere else.\\ \\
+Parameters: \\
+    border - the border around the health bar.\\
+    health - the health bar. \\
+    splatter - the blood splatter that pops up when attacked. \\
+    aggro - the aggro border. \\
+    guiNode - the node that keeps all the pictures.\\
+
+
+\item setRes \\
+public void setRes(int width, \\
+int height) \\ \\
+changes the width and the height of the screens to be updated \\ \\ \\
+Parameters: \\
+    width - new width of the screens. \\
+    height - new height of the screens. \\
+
+\item updateRes \\
+public void updateRes(int width, \\                 int height) \\ \\
+Updates all the screens to the new set width and height \\
+
+
+
+\item setSettings \\
+public void setSettings(com.jme3.system.AppSettings settings) \\ \\
+Allows the game settings to be updated from the manager. \\ 
+
+Parameters: \\
+    settings - the game settings to be updated.  \\
+
+
+
+\item	loginScreen \\
 													public void loginScreen() \\ \\
-													Creates the login screen	
+													Creates the login screen \\	
 											\item	newAccount \\
-													public void newAccount() \\ \\
-													Creates the new account account screen
+													public void newAccount() \\ \\ 
+													Creates the new account account screen \\
 											\item	retrievePassword \\
 													public void retrievePassword() \\ \\
-													Creates the retrieve password screen
+													Creates the retrieve password screen \\
 											\item	changeState \\
 													public void changeState() \\ \\
-													Updates the state of the game so that settings menu can be called after login only
+													Updates the state of the game so that settings menu can be called after login only \\
 											\item	settingsScreen \\
 													private void settingsScreen() \\ \\
-													Adds the mapping of the ESC\_KEY to the settings screen, so that it will be called when the ESC\_KEY is pressed
+													Adds the mapping of the ESC\_KEY to the settings screen, so that it will be called when the ESC\_KEY is pressed \\
 											\item	optionScreen \\
 													public void optionScreen() \\ \\
-													Creates a new settings screen
-											\item	settings \\
-													public void settings(java.lang.String selection)
+													Creates a new settings screen \\
 											\item	loadingScreen \\
 													public void loadingScreen() \\ \\
 													Creates a new loading screen object
 											\item	getLoadingScreen \\
 													public LoadingScreen getLoadingScreen() \\ \\
+													Creates the leaderboard screen \\ \\
 													Returns: \\
 													the loading screen object Returns the loading screen object to be updated as the game is being loaded
 											\item	goTo \\
 													public void goTo(java.lang.String \_screen) \\ \\
-													Parameters: \\
+													Parameters: \\ 
 													\_screen - the ID of the screen to be changed to Changes to the screen ID coming in
 										\end{itemize}
 							\end{itemize}
@@ -1080,10 +1146,28 @@ Code Documentation
 										screen - the main Nifty display objec shared between all the screens \\
 								\item	Method Detail
 										\begin{itemize}
-											\item	goTo \\
-													void goTo(java.lang.String \_screen)
-											\item	build \\
-													void build()
+\item goTo 
+void goTo(java.lang.String \_screen) \\
+Parent function to change to any screen from any other screen \\ \\
+Parameters: \\
+        \_screen - the id of the screen to change to \\
+
+
+											\item	
+    build \\
+    void build() \\
+
+    Super function for building all the GUI screens \\
+    \item updateRes
+    public void updateRes(int width, \\
+                 int height) \\
+    Super function for updating the res of a screen \\
+    Parameters: \\
+        width - new width for the screen to have \\
+        height - new height for the screen to have \\
+
+ 
+
 										\end{itemize}
 							\end{itemize}
 							
@@ -1350,6 +1434,105 @@ Code Documentation
 											\item	quitGame \\
 													public void quitGame() \\
 													Quits the game
+										\end{itemize}
+							\end{itemize}
+							\subsubsection*{Leaderboard:}
+						\addcontentsline{toc}{subsubsection}{Leaderboard}
+						\vspace{0.1in}	
+							\begin{itemize}
+								\item	Field Summary
+										\begin{itemize}
+		\item private LeaderBoardController 	control 
+		\item Fields inherited from class GUI.Screens
+app, appState, assetManager, audioRenderer, guiViewPort, inputManager, screen
+		\end{itemize}
+								\item	Constructor Detail \\
+								Leaderboard(com.jme3.asset.AssetManager assetManager,\\								 com.jme3.input.InputManager inputManager, \\ com.jme3.audio.AudioRenderer audioRenderer, \\ com.jme3.renderer.ViewPort guiViewPort, \\ com.jme3.app.state.AppStateManager appState, \\ com.jme3.app.Application app, \\ com.jme3.niftygui.NiftyJmeDisplay screen) \\
+								\item	Method Detail
+										\begin{itemize}
+						\item	
+    build
+
+    public void build() \\
+
+    Builds the leaderboard screen \\ 
+
+    Overrides: \\
+        build in class Screens \\
+											\item buildGui
+												private void buildGui(de.lessvoid.nifty.Nifty nifty) \\
+
+Parameters: \\
+    nifty - the nifty object that has to be designed Helper function to build, adding buttons and labels \\
+										\end{itemize}
+							\end{itemize}
+							\subsubsection*{Leaderboard Controller:}
+						\addcontentsline{toc}{subsubsection}{Leaderboard Controller}
+						\vspace{0.1in}	
+							\begin{itemize}
+								\item	Field Summary
+										\begin{itemize}
+\item private com.jme3.app.Application 	app 
+\item private com.jme3.asset.AssetManager 	assMan 
+\item private static boolean 	init 
+\item private de.lessvoid.nifty.Nifty 	nifty 
+\item private de.lessvoid.nifty.screen.Screen 	screen 
+		\end{itemize}
+								\item	Constructor Detail \\
+								public LeaderBoardController(com.jme3.asset.AssetManager assManager,\\
+com.jme3.app.Application app) \\
+								\item	Method Detail
+										\begin{itemize}
+						\item bind	
+public void bind(de.lessvoid.nifty.Nifty nifty,\\
+        de.lessvoid.nifty.screen.Screen screen) \\
+
+Specified by: \\
+    bind in interface \\ de.lessvoid.nifty.screen.ScreenController 
+											\item
+    onStartScreen
+
+    public void onStartScreen() \\
+
+    Builds the listbox displaying all the values of scoreboard \\
+
+    Specified by: \\
+        onStartScreen in interface de.lessvoid.nifty.screen.ScreenController
+
+\item addSpaces
+
+    private java.lang.String addSpaces(java.lang.String str,\\
+                             int spaces) \\
+
+    Parameters: \\
+        str - string to have spaces added \\
+        spaces - amount of spaces to strng coming in \\
+    Returns: \\
+        the string incoming with the added spaces \\
+        
+    \item onEndScreen
+
+    public void onEndScreen() \\
+
+    Specified by: \\
+        onEndScreen in interface \\ de.lessvoid.nifty.screen.ScreenController
+
+    \item goTo
+
+    public void goTo(java.lang.String screen) \\
+
+    Parameters: \\
+        screen - screen to change to Changes the nifty gui screen based on the input \\
+
+    \item quitGame
+
+    public void quitGame() \\
+
+    Quits the game \\
+
+
+
+
 										\end{itemize}
 							\end{itemize}
 					
