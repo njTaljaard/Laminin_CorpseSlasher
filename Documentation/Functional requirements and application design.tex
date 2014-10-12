@@ -152,6 +152,7 @@ Functional requirements and application design
 			11/09/2014	\> Version 3.0	\> Updated server classes diagram.				\> Martin Schoeman\\
 			01/10/2014  \> Version 4.0	\> Updated and added new screen shots.			\> Gerhard Smit \\
 			10/10/2014	\> Version 5.0	\> Changed title page							\> Nico Taljaard\\
+			12/10/2014	\> Version 5.0	\> Added descriptions to UI diagrams				\> Gerhard Smit \\
 			
 		\end{tabbing}
 		
@@ -681,6 +682,21 @@ Functional requirements and application design
 					\caption{User-Interface cycle}
 					\label{overflow}
 					\end{figure}
+					\begin{itemize}
+					\item 1 The game application starts up showing the login screen to the game. The user can quit the game from the login screen.
+					\item 1.1 The user has the option to create a new account via the login screen, creating a new screen where the user needs to add all details required.
+					\item 1.2 The account is not approved and the user is returned to the login screen with details to what is incorrect.
+					\item 1.3 The user is logged in and the game starts up if the account created is approved.
+					\item 2 The user has the option to retrieve their password based on their email address or username, the password is sent to their email address. 
+					\item 2.1 The user will be sent to the login screen after a request is sent, there is no message sent to the user if the email was sent or not, to keep the system secure of potential attackers. 
+					\item 2.2 If the user already has an account they can login and the game will start up, if the details are incorrect they will have to try again.
+					\item 3 The user can quit the game and return to the desktop.
+					
+					\item 4 The user can access the options screen from the game by pressing the escape key, which will create the options screen where the user can access multiple tabs to change various settings.
+					\item 4.1 The user can logout and is sent to the login screen again. All actions from 4.1.1 up till 7, excluding 4.2 \_& 4.3, are the same as mentioned above. 
+					\item 4.2 The user can quit the game from the options screen ending the application and returning to the desktop.
+					\item 4.3 The user can return to the game by pressing the escape key again. Allowing the user to carry on playing.
+					\end{itemize}
 					
 					\begin{figure}[H]
 					\centering
@@ -688,6 +704,7 @@ Functional requirements and application design
 					\caption{User-Interface cycle}
 					\label{overflow}
 					\end{figure}
+					This diagram displays all the multiple states that the user-interface can take on, from previously defined states, all the pre-conditions need to be fulfilled en-order for the new state to occur.
 					
 					\begin{figure}[H]
 					\centering
@@ -695,6 +712,7 @@ Functional requirements and application design
 					\caption{User-Interface login screen}
 					\label{overflow}
 					\end{figure}
+					This diagram shows how the login with all the possible actions are created and obtained at a higher level.
 					
 					\begin{figure}[H]
 					\centering
@@ -702,6 +720,7 @@ Functional requirements and application design
 					\caption{User-Interface sign up screen}
 					\label{overflow}
 					\end{figure}
+					This is a lower level diagram of how a signup is done, where the user is either successful or not, and in the latter the user needs to try again and the former the user is sent to the game.
 					
 					\begin{figure}[H]
 					\centering
@@ -709,6 +728,7 @@ Functional requirements and application design
 					\caption{User-Interface recover password screen}
 					\label{overflow}
 					\end{figure}
+					This is a lower level diagram of the recovery of the password system. A request is sent to the server the server accepts the request sending an email or does nothing, the user is then sent to the login screen, if the correct detail was given they are sent an email else they are sent nothing, either way there is no message given of which occurred to protect the users.
 					
 					\begin{figure}[H]
 					\centering
@@ -723,6 +743,7 @@ Functional requirements and application design
 					\caption{User-Interface options menu screen}
 					\label{overflow}
 					\end{figure}
+					This is a lower level diagram where the user has the ability to change the settings, logout or quit the game.
 				
 				\subsubsection*{Server Diagrams:}
 				\addcontentsline{toc}{subsubsection}{Server Diagrams}
