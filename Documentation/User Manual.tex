@@ -102,6 +102,39 @@
 \vfill % Fill the rest of the page with whitespace
 
 \end{titlepage}
+	\newpage
+	{\LARGE \bf Change Log}\\[2em]
+	
+	\begin{tabbing}
+		\hspace*{2.5cm}\=\hspace*{2.5cm}\=\hspace*{8cm}\=\hspace*{3cm} \kill
+		
+	\end{tabbing}
+	
+		\newpage
+		\renewcommand\contentsname{TABLE OF CONTENTS}
+		\newcommand\contentsnameLC{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} Table of Contents}}}
+		
+		\renewcommand{\cftdot}{}
+		\hypersetup{linktocpage}
+		\tableofcontents
+		
+		\begin{flushleft}
+			\LARGE\href{https://github.com/njTaljaard/Laminin_CorpseSlasher/}{Git repository: Laminin - Corpse Slasher}
+		\end{flushleft}
+		
+	\newpage
+		\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} Compiling }}} \addcontentsline{toc}{section}{Compiling}
+	\vspace{0.1in}
+	
+		\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} Installation }}} \addcontentsline{toc}{section}{Installation}
+	\vspace{0.1in}
+	
+		\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} How to use }}} \addcontentsline{toc}{section}{How to use}
+	\vspace{0.1in}
+	
+		\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} Maintainence }}} \addcontentsline{toc}{section}{Maintainence}
+	\vspace{0.1in}
+	
 
 % % % % % % % % % % % % % % %
 % 							%
