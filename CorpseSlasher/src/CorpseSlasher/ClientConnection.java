@@ -31,7 +31,7 @@ public final class ClientConnection {
     private static Socket clientSocket;
     private static BufferedReader inReader;
     private static PrintWriter outWriter;
-    private static final String hostAddress = "localhost";
+    private static final String hostAddress = "192.168.0.1";
     private static final int hostPortNumber = 32323;
     private static String username_ = "";
     public static String userId = "";

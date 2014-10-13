@@ -49,17 +49,17 @@ public class LeaderBoardController implements ScreenController {
 
         ListBox         listBox     = screen.findNiftyControl("#scorebar", ListBox.class);
         String          leaderboard = ClientConnection.retrieveLeaderBoard();
+        
         StringTokenizer details     = new StringTokenizer(leaderboard, ",");
-
-        for (int x = 0; x < details.countTokens(); x++) {
+        listBox.clear();
+        
+        while (details.hasMoreTokens()) {
             String name     = details.nextToken();
             String kills    = details.nextToken();
             String exp      = details.nextToken();
             String finalStr = addSpaces(name, 25) + "\t\t\t\t\t" + addSpaces(kills, 15) + "\t\t\t" + exp;
 
             listBox.addItem(finalStr);
-            System.out.println(finalStr);
-            listBox.setStyle("");
         }
     }
 

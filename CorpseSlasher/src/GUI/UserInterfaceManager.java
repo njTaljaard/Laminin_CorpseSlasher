@@ -230,8 +230,11 @@ public final class UserInterfaceManager {
      * Closes all the login screens
      */
     public void destroyLogin() {
+        if(guiScreens[0]!=null)
         guiScreens[0].screen.getNifty().exit();
+        if(guiScreens[1]!=null)
         guiScreens[1].screen.getNifty().exit();
+        if(guiScreens[2]!=null)
         guiScreens[2].screen.getNifty().exit();
     }
 }

@@ -77,7 +77,7 @@ public class Main extends SimpleApplication implements ScreenController {
 
     public static void main(String[] args) {
         Main app = new Main();
-
+        
         app.setShowSettings(false);
         app.setDisplayFps(false);
         app.setDisplayStatView(false);
@@ -92,8 +92,8 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     @Override
     public void simpleInitApp() {
-        width               = 1920;
-        height              = 1080;
+        width               = 1366;
+        height              = 768;
         Audio.assetManager  = assetManager;
         Audio.audioRenderer = audioRenderer;
         ClientConnection.StartClientConnection();
@@ -287,25 +287,21 @@ public class Main extends SimpleApplication implements ScreenController {
         String  username = usernameTxt.getRealText();
 
         if (success) {
-            guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
             inputManager.setCursorVisible(false);
-
             if (ClientConnection.relog) {
-                relog();
                 ClientConnection.setUsername(username);
                 UI.destroyLogin();
-
+                relog();
                 return;
             } else {
-                loadGame();
                 ClientConnection.setUsername(username);
                 UI.destroyLogin();
-
+                loadGame();
                 return;
             }
         } else {
             message = "Username or password incorrect";
-            guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+           /* guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
             inputManager.setCursorVisible(false);
 
             if (ClientConnection.relog) {
@@ -313,7 +309,7 @@ public class Main extends SimpleApplication implements ScreenController {
             } else {
                 loadGame();
                 UI.destroyLogin();
-            }
+            }*/
         }
 
         ele.show();
