@@ -76,13 +76,14 @@ public class Database {
      * addOAuthUser adds a new OAuth user to the database.
      *
      * @param username - client's username.
+     * @param id - client's id.
      * @return returns true if OAuth user was successfully added in database
      * or false if it failed.
      */
-    public boolean addOAuthUser(String username) {
+    public boolean addOAuthUser(String id, String username) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "INSERT INTO oauth_user (name,zombieKills,experiencePoints) VALUES ('" + username + "',0,0)";
+            String query = "INSERT INTO oauth_user (id,name,zombieKills,experiencePoints) VALUES ('" + id + "','" + username + "',0,0)";
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
@@ -161,13 +162,13 @@ public class Database {
      *
      * getOAuthZombieKills returns the number of zombie kills of a client.
      *
-     * @param username - client's username.
+     * @param id - client's id.
      * @return returns the client's number of zombie kills.
      */
-    public int getOAuthZombieKills(String username) {
+    public int getOAuthZombieKills(String id) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "SELECT zombieKills FROM oauth_user WHERE name = '" + username + "'";
+            String query = "SELECT zombieKills FROM oauth_user WHERE id = '" + id + "'";
             ResultSet rs = stmt.executeQuery(query);
             if (rs.next())
             {
@@ -212,15 +213,15 @@ public class Database {
      * setOAuthZombieKills stores the client's number of zombie kills in the
      * database.
      *
-     * @param username - client's username.
+     * @param id - client's id.
      * @param zombieKills - client's number of zombie kills.
      * @return - returns true if the client's number of zombie kills was stored
      * in the database or false if it failed.
      */
-    public boolean setOAuthZombieKills(String username, int zombieKills) {
+    public boolean setOAuthZombieKills(String id, int zombieKills) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "UPDATE oauth_user SET zombieKills = " + zombieKills + " WHERE name = '" + username + "'";
+            String query = "UPDATE oauth_user SET zombieKills = " + zombieKills + " WHERE id = '" + id + "'";
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
@@ -255,14 +256,14 @@ public class Database {
      * increaseOAuthZombieKillsByOne increases a client's number of zombie kills by
      * one.
      *
-     * @param username - client's username.
+     * @param id - client's id.
      * @return returns true if the client's number of zombie kills is increase
      * with one in the database or false if it fails.
      */
-    public boolean increaseOAuthZombieKillsByOne(String username) {
+    public boolean increaseOAuthZombieKillsByOne(String id) {
         try {
             Statement stmt = conn.createStatement();
-            String query = "UPDATE oauth_user SET zombieKills = zombieKills + 1 WHERE name = '" + username + "'";
+            String query = "UPDATE oauth_user SET zombieKills = zombieKills + 1 WHERE id = '" + id + "'";
             stmt.executeUpdate(query);
             return true;
         } catch (Exception exc) {
@@ -403,6 +404,38 @@ public class Database {
             }
         } catch (Exception exc) {
             ExceptionHandler.catchException("Database", "availableUsername", exc.toString());
+            return true; 
+        }
+    }
+    
+    /**
+     * oauthIdExist - check if the id does not already exist in the
+     * oauth_user table.
+     *
+     * @param id - client's id.
+     *
+     * @return - returns true if the oauth_user table does not contain the id and
+     * false if the oauth_user table does contain the id.
+     */
+    public boolean oauthIdExist(String id) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT id FROM oauth_user WHERE id = '" + id + "'";
+            ResultSet rs = stmt.executeQuery(query);
+            if (rs.next())
+            {
+                String result = rs.getString("id");
+                if (result.compareTo(id) == 0) {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                return true;
+            }
+        } catch (Exception exc) {
+            ExceptionHandler.catchException("Database", "oauthIdExist", exc.toString());
             return true; 
         }
     }
