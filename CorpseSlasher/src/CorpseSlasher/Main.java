@@ -233,6 +233,7 @@ public class Main extends SimpleApplication implements ScreenController {
     public void relog() {
         gameScene.relog(cam, 0);
         ClientConnection.loggedIn = true;
+        ClientConnection.relog = false;
         guiNode.attachChild(healthBorder);
         guiNode.attachChild(health);
         UserInterfaceManager.changeState();
@@ -408,7 +409,6 @@ public class Main extends SimpleApplication implements ScreenController {
             ClientConnection.relog    = true;
             UserInterfaceManager.changeState();
         }
-
         nifty.gotoScreen(screen);
         Audio.pauseAmbient();
     }
