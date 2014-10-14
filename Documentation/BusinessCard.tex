@@ -1,0 +1,69 @@
+%%%%
+%
+% ticket.sty example file for visiting cards
+%
+%%%%
+% use the corresponding paper size for your ticket definition
+\documentclass[a4paper,10pt]{letter}
+
+% load ticket.sty with the appropriate ticket definition
+\usepackage[zw32010,crossmark]{ticket}
+
+% load misc stuff
+\usepackage{graphicx}
+\usepackage{color}
+
+% define something
+\definecolor{uni}{rgb}{.3019,.7216,.7019}
+
+% make your default ticket. \ticketdefault is somewhat like a background
+% here it is empty, because we use different tickets for the front an
+% the back of our card
+\renewcommand{\ticketdefault}{%
+}
+
+% now what do you like to put in your ticket
+\newcommand{\vcardfront}[5]{\ticket{%
+    \put( 48, 3){\includegraphics[width=40mm,origin=bl]{corpseslasher.png}}
+    \put( 4, 30){\includegraphics[width=30mm,origin=bl]{laminin.png}}
+    %\put( 63.2, 2){\color{uni}your logo}
+    %\put( 5, 13){\color{uni}\line(1,0){56}}
+    \put( 7, 10){\small 3D hack \& slash zombie game!!!}
+    \put( 7,6.5){\small Visit our repository:}
+    \put( 7,  3){\small https://github.com/njTaljaard/Laminin\_CorpseSlasher/}
+    \put( 7, 24){\small}
+    \put( 7, 20){\small}
+    \put( 6,40){\bfseries\LARGE #1}
+    \put( 7,36){#2}
+    \put( 7,24){\small #3}
+    \put( 7,20){\small #4}
+    \put( 7,16){\small #5}
+ }}
+
+\newcommand{\vcardback}[1]{\ticket{%
+    \put( 7, 26){\small private:}
+    \put( 5, 23){\color{uni}\line(1,0){56}}
+    \put( 7,19){\small%
+        \begin{minipage}[t]{50mm}%
+          {#1}\hss%
+        \end{minipage}}%
+}}
+
+% a counter, which makes life easier...
+\newcounter{numcards}
+
+\begin{document}
+\sffamily
+
+% ten cards for the front
+\whiledo{\thenumcards<10}{%
+  \stepcounter{numcards}%
+  \vcardfront{}{}{Nico Taljaard}{Martin Schoeman}{Gerhard Smit}}
+
+\setcounter{numcards}{0}
+
+% and ten for the backside
+%\whiledo{\thenumcards<10}{%
+%  \stepcounter{numcards}%
+%  \vcardback{phone: ---/HH HH HHH\\fax: ---/HH HH HHH\\homestreet 7\\everywhere}}
+\end{document}
