@@ -27,10 +27,10 @@
     \put( 48, 3){\includegraphics[width=40mm,origin=bl]{corpseslasher.png}}
     \put( 1, 25){\includegraphics[width=40mm,origin=bl]{laminin.png}}
     %\put( 63.2, 2){\color{uni}your logo}
-    \put( 5, 13.5){\color{red}\line(5,0){50}}
-    \put( 7, 10){\small 3D hack \& slash zombie game!!!}
-    \put( 7,6.5){\small Visit our repository:}
-    \put( 7,  3){\small https://github.com/njTaljaard/Laminin\_CorpseSlasher/}
+    \put( 5, 14.5){\color{red}\line(5,0){50}}
+    \put( 7, 11.5){3D hack \& slash zombie game!!!}
+    \put( 7, 6.5){\Large University of Pretoria}
+    \put( 7, 2){\Large Derivco}
     \put( 7, 24){\small}
     \put( 7, 20){\small}
     \put( 6,40){\bfseries\LARGE #1}
@@ -41,8 +41,9 @@
  }}
 
 \newcommand{\vcardback}[1]{\ticket{%
-    \put( 7, 26){\small private:}
-    \put( 5, 23){\color{uni}\line(1,0){56}}
+    \put( 48, 3){\includegraphics[width=30mm,origin=bl]{qrCode.png}}
+    \put( 7, 40){It time to kill or \large \textbf{BE KILLED!!!}}
+    \put( 5, 37){\color{uni}\line(1,0){53}}
     \put( 7,19){\small%
         \begin{minipage}[t]{50mm}%
           {#1}\hss%
@@ -63,7 +64,7 @@
 \setcounter{numcards}{0}
 
 % and ten for the backside
-%\whiledo{\thenumcards<10}{%
-%  \stepcounter{numcards}%
-%  \vcardback{phone: ---/HH HH HHH\\fax: ---/HH HH HHH\\homestreet 7\\everywhere}}
+\whiledo{\thenumcards<10}{%
+  \stepcounter{numcards}%
+  \vcardback{Visit our git repository:}}
 \end{document}
