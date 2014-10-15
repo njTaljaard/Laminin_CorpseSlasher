@@ -139,9 +139,9 @@
 		\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} Access channel requirements }}} \addcontentsline{toc}{section}{Access channel requirements}
 		\vspace{0.1in}
 		
-		The system will be accessible by human users through the following channels:
+		The system will be accessible by users through the following channels:
 		\begin{itemize}
-			\item From a desktop application running on any Windows/Linux operating system.
+			\item From a desktop application running on Windows/Linux operating system.
 			\item From a mobile device running Android application clients.
 		\end{itemize}
 		
@@ -180,7 +180,7 @@
 						\item Should be able to handle at least 100 connections.
 						\item Should not use more then 10GB of system memory to handle connections.
 						\item Database updates should be complete within a 1 second time frame.
-						\item Database requests should be complete within 5 second time frame.
+						\item Database requests should be complete within a 5 second time frame.
 					\end{itemize}
 			\end{enumerate}
 			
@@ -199,7 +199,7 @@
 					\begin{itemize}
 						\item Should provide 99\% connection availability.
 						\item Should provide 99\% OAuth login availability.
-						\item Should not crash due to over welling client connections.
+						\item Should not crash due to over whelming client connections.
 						\item Should not crash due to undefined incoming data.
 					\end{itemize}
 			\end{enumerate}
@@ -209,8 +209,10 @@
 			\vspace{0.1in}
 			
 			\begin{enumerate}
-				\item The server should be able to add multiple servers to handle clients.
+				\item Multiple maps can be added by adding a scene .j3o file that contains the scene, and a number assignment with the file path.
+				\item Support can be added to run multiple servers to distribute client connections.
 				\item The server should scale to any amount of client connections.
+				\item Multi player functionality can be added using jSpiderMonkey library to have multiple players on the same map.
 			\end{enumerate}
 			
 			\subsection*{Security}
@@ -219,6 +221,7 @@
 			
 			General security conditions.
 			\begin{enumerate}
+				\item On login and account password encryption is added by retrieving the users network connection ip, adding it to the password and encrypt with AES.
 				\item Use OAuth LDAP for connection through social media e.g. Facebook, Twitter, Google+.
 				\item Clean up all incoming data on client and server for incorrect formats, data types \& lengths.
 				\item Test if the incoming data comes from authenticated user.
