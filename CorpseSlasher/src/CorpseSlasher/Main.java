@@ -343,11 +343,17 @@ public class Main extends SimpleApplication implements ScreenController {
                                           accName.getRealText(), accSurname.getRealText(), accEmail.getRealText());
 
                     if (success) {
-                        guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-                        loadGame();
-                        UI.destroyLogin();
-
-                        return;
+                 if (ClientConnection.relog) {
+                ClientConnection.setUsername(username);
+                UI.destroyLogin();
+                relog();
+                return;
+            } else {
+                ClientConnection.setUsername(username);
+                UI.destroyLogin();
+                loadGame();
+                return;
+            }
                     } else {
                         message = "Failed adding user";
                     }
@@ -432,9 +438,15 @@ public class Main extends SimpleApplication implements ScreenController {
                 boolean success = OAuth.facebookLogin();
 
                 if (success) {
-                    loadGame();
-
-                    return;
+            if (ClientConnection.relog) {
+                UI.destroyLogin();
+                relog();
+                return;
+            } else {
+                UI.destroyLogin();
+                loadGame();
+                return;
+            }
                 } else {
                     message = "Incorrect details";
                 }
@@ -449,9 +461,15 @@ public class Main extends SimpleApplication implements ScreenController {
                 boolean success = OAuth.googleLogin();
 
                 if (success) {
-                    loadGame();
-
-                    return;
+            if (ClientConnection.relog) {
+                UI.destroyLogin();
+                relog();
+                return;
+            } else {
+                UI.destroyLogin();
+                loadGame();
+                return;
+            }
                 } else {
                     message = "Incorrect details";
                 }

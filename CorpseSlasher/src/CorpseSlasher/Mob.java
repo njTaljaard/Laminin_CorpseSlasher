@@ -236,7 +236,13 @@ public class Mob extends Thread {
                     deathTime = GameWorld.systemTime;
                     motionControl.death(characterControl);
                     swapControllers = true;
-                    ClientConnection.AddOneKill();
+                    
+                    if (ClientConnection.getUserType().equals("oauth")) {
+                        ClientConnection.AddOAuthUser();
+                    } else if (ClientConnection.getUserType().equals("costume")) {
+                        ClientConnection.AddOneKill();
+                    }
+                    
                     return;
                 }
             } else {
