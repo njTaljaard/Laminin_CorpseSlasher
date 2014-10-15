@@ -35,6 +35,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 /**
  * @author normenhansen
@@ -96,7 +97,12 @@ public class Main extends SimpleApplication implements ScreenController {
         height              = 768;
         Audio.assetManager  = assetManager;
         Audio.audioRenderer = audioRenderer;
-        ClientConnection.StartClientConnection();
+        boolean success = ClientConnection.StartClientConnection();
+        if(!success){
+            ExceptionHandler.throwError("No client connection found", "There was an error establishing a connection to the server, please check your internet connection.");
+            stop(false);
+            System.exit(0);
+        }
         gSettings = new AppSettings(true);
         gSettings.setResolution(width, height);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene);
@@ -426,6 +432,7 @@ public class Main extends SimpleApplication implements ScreenController {
      * Quits the game
      */
     public void quitGame() {
+        ClientConnection.Logout();
         stop(false);
         System.exit(0);
     }
