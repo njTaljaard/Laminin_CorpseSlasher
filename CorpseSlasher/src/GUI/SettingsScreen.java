@@ -99,16 +99,6 @@ public class SettingsScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new ButtonBuilder("", "Difficulty Settings") {
-                                    {
-                                        marginTop("2%");
-                                        marginLeft("5%");
-                                        height("50px");
-                                        width("150px");
-                                        align(Align.Left);
-                                        font("Interface/Fonts/zombie.fnt");
-                                    }
-                                });
                                 control(new ButtonBuilder("", "Graphics Settings") {
                                     {
                                         marginTop("2%");
@@ -197,16 +187,6 @@ public class SettingsScreen extends Screens {
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
                                         interactOnClick("goTo(Display_Settings)");
-                                    }
-                                });
-                                control(new ButtonBuilder("", "Difficulty Settings") {
-                                    {
-                                        marginTop("2%");
-                                        marginLeft("5%");
-                                        height("50px");
-                                        width("150px");
-                                        align(Align.Left);
-                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Graphics Settings") {
@@ -498,16 +478,6 @@ public class SettingsScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new ButtonBuilder("", "Difficulty Settings") {
-                                    {
-                                        marginTop("2%");
-                                        marginLeft("5%");
-                                        height("50px");
-                                        width("150px");
-                                        align(Align.Left);
-                                        font("Interface/Fonts/zombie.fnt");
-                                    }
-                                });
                                 control(new ButtonBuilder("", "Graphics Settings") {
                                     {
                                         marginTop("2%");
@@ -640,16 +610,6 @@ public class SettingsScreen extends Screens {
                                         align(ElementBuilder.Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
                                         interactOnClick("goTo(Display_Settings)");
-                                    }
-                                });
-                                control(new ButtonBuilder("", "Difficulty Settings") {
-                                    {
-                                        marginTop("2%");
-                                        marginLeft("5%");
-                                        height("50px");
-                                        width("150px");
-                                        align(ElementBuilder.Align.Left);
-                                        font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
                                 control(new ButtonBuilder("", "Graphics Settings") {

@@ -298,6 +298,7 @@ public class SettingsController implements ScreenController {
       * Quits the game
       */
      public void quitGame(){
+        ClientConnection.Logout();
          app.stop(false);
         System.exit(0);
      }

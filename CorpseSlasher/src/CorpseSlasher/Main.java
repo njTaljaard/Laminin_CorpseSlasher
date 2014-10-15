@@ -45,8 +45,9 @@ import java.util.Scanner;
  * is reached.
  */
 public class Main extends SimpleApplication implements ScreenController {
-    static int                        byPass = 0;
-    UserInterfaceManager              UI     = new UserInterfaceManager();
+    static int                        byPass     = 0;
+    UserInterfaceManager              UI         = new UserInterfaceManager();
+    boolean                           errorFound = false;
     GameScene                         gameScene;
     BulletAppState                    bulletAppState;
     TimeOfDay                         timeOfDay;
@@ -73,11 +74,10 @@ public class Main extends SimpleApplication implements ScreenController {
     int                               width, height;
     String                            message;
     Element                           ele;
-    boolean                           errorFound = false;
 
     public static void main(String[] args) {
         Main app = new Main();
-        
+
         app.setShowSettings(false);
         app.setDisplayFps(false);
         app.setDisplayStatView(false);
@@ -168,6 +168,7 @@ public class Main extends SimpleApplication implements ScreenController {
                 ex.printStackTrace();
             }
         }
+
         UI.setRes(width, height);
         UI.updateRes();
         gSettings.setFullscreen(false);
@@ -234,7 +235,7 @@ public class Main extends SimpleApplication implements ScreenController {
         System.out.println("relog function");
         gameScene.relog(cam, 0);
         ClientConnection.loggedIn = true;
-        ClientConnection.relog = false;
+        ClientConnection.relog    = false;
         guiNode.attachChild(healthBorder);
         guiNode.attachChild(health);
         UserInterfaceManager.changeState();
@@ -257,9 +258,10 @@ public class Main extends SimpleApplication implements ScreenController {
 
     @Override
     public void onStartScreen() {
-        nifty.setIgnoreKeyboardEvents(false);        
+        nifty.setIgnoreKeyboardEvents(false);
         ele = nifty.getScreen("#Login_Screen").findElementByName("#ErrorMessage");
-        if(!errorFound){
+
+        if (!errorFound) {
             ele.hide();
         } else {
             errorFound = false;
@@ -275,41 +277,53 @@ public class Main extends SimpleApplication implements ScreenController {
      * After a successful login the loading screen is loaded and the game starts
      * to load
      */
-    public void loadingScreen() {        
-        usernameTxt   = nifty.getScreen("#Login_Screen").findNiftyControl("#Username_Input_ID", TextField.class);
-        passwordTxt   = nifty.getScreen("#Login_Screen").findNiftyControl("#Password_Input_ID", TextField.class);
-        boolean success  = ClientConnection.Login(usernameTxt.getRealText(), passwordTxt.getRealText());
-        System.out.println("loading screen - " + success + " " + usernameTxt.getRealText() + " " + passwordTxt.getRealText());
-        String  username = usernameTxt.getRealText();
+    public void loadingScreen() {
+        usernameTxt = nifty.getScreen("#Login_Screen").findNiftyControl("#Username_Input_ID", TextField.class);
+        passwordTxt = nifty.getScreen("#Login_Screen").findNiftyControl("#Password_Input_ID", TextField.class);
+
+        boolean success = ClientConnection.Login(usernameTxt.getRealText(), passwordTxt.getRealText());
+
+        System.out.println("loading screen - " + success + " " + usernameTxt.getRealText() + " "
+                           + passwordTxt.getRealText());
+
+        String username = usernameTxt.getRealText();
 
         if (success) {
             inputManager.setCursorVisible(false);
+
             if (ClientConnection.relog) {
                 ClientConnection.setUsername(username);
                 UI.destroyLogin();
                 relog();
+
                 return;
             } else {
                 ClientConnection.setUsername(username);
                 UI.destroyLogin();
                 loadGame();
+
                 return;
             }
         } else {
             message = "Username or password incorrect";
-           /* guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-            inputManager.setCursorVisible(false);
 
-            if (ClientConnection.relog) {
-                relog();
-            } else {
-                loadGame();
-                UI.destroyLogin();
-            }*/
+            /*
+             *  guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
+             * inputManager.setCursorVisible(false);
+             *
+             * if (ClientConnection.relog) {
+             *    relog();
+             * } else {
+             *    loadGame();
+             *    UI.destroyLogin();
+             * }
+             */
         }
 
         ele.show();
+
         TextField tf = nifty.getScreen("#Login_Screen").findNiftyControl("#ErrorMessage", TextField.class);
+
         errorFound = true;
         tf.setText(message);
     }
@@ -331,7 +345,9 @@ public class Main extends SimpleApplication implements ScreenController {
         accSurname    = nifty.getScreen("New_Account_Screen").findNiftyControl("#Surname_Input_ID", TextField.class);
         accName       = nifty.getScreen("New_Account_Screen").findNiftyControl("#Name_Input_ID", TextField.class);
         accPassword   = nifty.getScreen("New_Account_Screen").findNiftyControl("#Password_Input_ID_2", TextField.class);
-        accPasswordRE = nifty.getScreen("New_Account_Screen").findNiftyControl("#Password_Input_ID_2_2", TextField.class);        
+        accPasswordRE = nifty.getScreen("New_Account_Screen").findNiftyControl("#Password_Input_ID_2_2",
+                                        TextField.class);
+
         String username = accUser.getRealText();
 
         if (accPassword.getRealText().equals(accPasswordRE.getRealText())) {
@@ -343,17 +359,19 @@ public class Main extends SimpleApplication implements ScreenController {
                                           accName.getRealText(), accSurname.getRealText(), accEmail.getRealText());
 
                     if (success) {
-                 if (ClientConnection.relog) {
-                ClientConnection.setUsername(username);
-                UI.destroyLogin();
-                relog();
-                return;
-            } else {
-                ClientConnection.setUsername(username);
-                UI.destroyLogin();
-                loadGame();
-                return;
-            }
+                        if (ClientConnection.relog) {
+                            ClientConnection.setUsername(username);
+                            UI.destroyLogin();
+                            relog();
+
+                            return;
+                        } else {
+                            ClientConnection.setUsername(username);
+                            UI.destroyLogin();
+                            loadGame();
+
+                            return;
+                        }
                     } else {
                         message = "Failed adding user";
                     }
@@ -366,8 +384,11 @@ public class Main extends SimpleApplication implements ScreenController {
         } else {
             message = "Missmatch password";
         }
+
         ele.show();
+
         TextField tf = nifty.getScreen("#Login_Screen").findNiftyControl("#ErrorMessage", TextField.class);
+
         tf.setText(message);
         errorFound = true;
         goBack();
@@ -390,7 +411,8 @@ public class Main extends SimpleApplication implements ScreenController {
      * Goes to the login screen
      */
     public void retrievePasswordAndGoBack() {
-        retUser       = nifty.getScreen("Retrieve_Password").findNiftyControl("#Username_Input_ID_3", TextField.class);
+        retUser = nifty.getScreen("Retrieve_Password").findNiftyControl("#Username_Input_ID_3", TextField.class);
+
         if (retUser.getRealText().contains("@")) {
             ClientConnection.RetrievePasswordInputEmail(retUser.getRealText());
             nifty.gotoScreen("#Login_Screen");
@@ -417,6 +439,7 @@ public class Main extends SimpleApplication implements ScreenController {
             ClientConnection.relog    = true;
             UserInterfaceManager.changeState();
         }
+
         nifty.gotoScreen(screen);
         Audio.pauseAmbient();
     }
@@ -438,15 +461,17 @@ public class Main extends SimpleApplication implements ScreenController {
                 boolean success = OAuth.facebookLogin();
 
                 if (success) {
-            if (ClientConnection.relog) {
-                UI.destroyLogin();
-                relog();
-                return;
-            } else {
-                UI.destroyLogin();
-                loadGame();
-                return;
-            }
+                    if (ClientConnection.relog) {
+                        UI.destroyLogin();
+                        relog();
+
+                        return;
+                    } else {
+                        UI.destroyLogin();
+                        loadGame();
+
+                        return;
+                    }
                 } else {
                     message = "Incorrect details";
                 }
@@ -461,15 +486,17 @@ public class Main extends SimpleApplication implements ScreenController {
                 boolean success = OAuth.googleLogin();
 
                 if (success) {
-            if (ClientConnection.relog) {
-                UI.destroyLogin();
-                relog();
-                return;
-            } else {
-                UI.destroyLogin();
-                loadGame();
-                return;
-            }
+                    if (ClientConnection.relog) {
+                        UI.destroyLogin();
+                        relog();
+
+                        return;
+                    } else {
+                        UI.destroyLogin();
+                        loadGame();
+
+                        return;
+                    }
                 } else {
                     message = "Incorrect details";
                 }
@@ -481,7 +508,9 @@ public class Main extends SimpleApplication implements ScreenController {
 
         default :
         }
+
         ele.show();
+
         TextField tf = nifty.getScreen("#Login_Screen").findNiftyControl("#ErrorMessage", TextField.class);
 
         tf.setText(message);
