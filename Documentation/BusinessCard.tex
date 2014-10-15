@@ -43,11 +43,13 @@
 \newcommand{\vcardback}[1]{\ticket{%
     \put( 48, 3){\includegraphics[width=30mm,origin=bl]{qrCode.png}}
     \put( 7, 40){It time to kill or \large \textbf{BE KILLED!!!}}
-    \put( 5, 37){\color{uni}\line(1,0){53}}
-    \put( 7,19){\small%
-        \begin{minipage}[t]{50mm}%
-          {#1}\hss%
-        \end{minipage}}%
+    \put( 7, 39){\color{uni}\line(1,0){52}}
+    \put( 7,27){Visit our git repository: }
+    \put( 5,18){\small Contract information}
+    \put( 5, 17){\color{uni}\line(1,0){28.5}}
+    \put( 5,14){\tiny N Taljaard: 082 732 3108, taljaard.nj@gmail.com}
+    \put( 5,10){\tiny M Schoeman: 072 997 2698, mjschoeman69@gmail.com}
+    \put( 5, 6){\tiny G Smit    : 078 893 6745, gsmit16@gmail.com}
 }}
 
 % a counter, which makes life easier...
@@ -66,5 +68,5 @@
 % and ten for the backside
 \whiledo{\thenumcards<10}{%
   \stepcounter{numcards}%
-  \vcardback{Visit our git repository:}}
+  \vcardback{}}
 \end{document}
