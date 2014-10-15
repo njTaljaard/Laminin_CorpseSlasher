@@ -34,6 +34,8 @@ public final class ClientConnection {
     private static final String hostAddress = "192.168.0.1";
     private static final int hostPortNumber = 32323;
     private static String username_ = "";
+    private static String userType= "";
+    private static String oauthID;
     public static String userId = "";
     public static boolean loggedIn = false;
     public static boolean relog = false;
@@ -79,7 +81,12 @@ public final class ClientConnection {
             obj.put("username", username);
             obj.put("password", encrypt(getIP() + "/" + password));
             outWriter.println(obj);
-            return Boolean.parseBoolean(inReader.readLine().toString());
+            boolean returnValue = Boolean.parseBoolean(inReader.readLine().toString());
+            if (returnValue)
+            {
+                userType = "custom";
+            }
+            return returnValue;
         } catch (Exception exc) {
             //TODO: Raise exceptions through the ExceptionHandler class.
             System.out.println("Connection login error: " + exc.toString());
@@ -123,7 +130,12 @@ public final class ClientConnection {
             obj.put("surname", surname);
             obj.put("email", email);
             outWriter.println(obj);
-            return Boolean.parseBoolean(inReader.readLine().toString());
+            boolean returnValue = Boolean.parseBoolean(inReader.readLine().toString());
+            if (returnValue)
+            {
+                userType = "custom";
+            }
+            return returnValue;
         } catch (Exception exc) {
             //TODO: Raise exceptions through the ExceptionHandler class.
             //System.out.println("Connection Add User error: " + exc.toString());
@@ -144,11 +156,17 @@ public final class ClientConnection {
     public static boolean AddOAuthUser(String id, String username) {
         JSONObject obj = new JSONObject();
         try {
+            oauthID = id;
             obj.put("type", "addOAuthUser");
             obj.put("id", id);
             obj.put("username", username);
             outWriter.println(obj);
-            return Boolean.parseBoolean(inReader.readLine().toString());
+            boolean returnValue = Boolean.parseBoolean(inReader.readLine().toString());
+            if (returnValue)
+            {
+                userType = "oauth";
+            }
+            return returnValue;
         } catch (Exception exc) {
             //TODO: Raise exceptions through the ExceptionHandler class.
             System.out.println("Connection Add OAuth User error: " + exc.toString());
@@ -252,15 +270,13 @@ public final class ClientConnection {
     /**
      * GetOAuthKills - get the number of client's zombie kills from the server.
      *
-     * @param id - client's id.
-     *
      * @return - return the number of client's zombie kills or -1 if it failed.
      */
-    public static int GetOAuthKills(String id) {
+    public static int GetOAuthKills() {
         JSONObject obj = new JSONObject();
         try {
             obj.put("type", "getOAuthKills");
-            obj.put("id", id);
+            obj.put("id", oauthID);
             outWriter.println(obj);
             return Integer.parseInt(inReader.readLine().toString());
         } catch (Exception exc) {
@@ -298,18 +314,17 @@ public final class ClientConnection {
     /**
      * SetOAuthKills - send the number of client's zombie kills to the server to be
      * saved
-     *
-     * @param id - client's id
+     * 
      * @param zombieKills - client's number of zombie kills.
      *
      * @return - returns true if the client's zombie kills was saved on the
      * server or false if it failed.
      */
-    public static boolean SetOAuthKills(String id, String zombieKills) {
+    public static boolean SetOAuthKills(String zombieKills) {
         JSONObject obj = new JSONObject();
         try {
             obj.put("type", "setOAuthKills");
-            obj.put("id", id);
+            obj.put("id", oauthID);
             obj.put("zombieKills", zombieKills);
             outWriter.println(obj);
             return Boolean.parseBoolean(inReader.readLine().toString());
@@ -373,16 +388,14 @@ public final class ClientConnection {
     /**
      * AddOAuthOneKill - adds one kill to the client's total number of kills.
      *
-     * @param id - client's id.
-     *
      * @return - returns true if the one kill was added server side and false if
      * it failed.
      */
-    public static boolean AddOAuthOneKill(String id) {
+    public static boolean AddOAuthOneKill() {
         JSONObject obj = new JSONObject();
         try {
             obj.put("type", "addOAuthOneKill");
-            obj.put("id", id);
+            obj.put("id", oauthID);
             outWriter.println(obj);
             return Boolean.parseBoolean(inReader.readLine().toString());
         } catch (Exception exc) {
@@ -545,6 +558,33 @@ public final class ClientConnection {
         catch (Exception exc)
         {
             System.out.println("Get internet IP address error:" + exc.toString());
+            return "";
+        }
+    }
+    
+    /**
+     * getIP - Gets the user type for example custom or oauth.
+     * 
+     * @return - returns the user type for example custom or oauth.
+     */
+    
+    public static String getUserType()
+    {
+        try
+        {
+            if (userType == "")
+            {
+                System.out.println("User type not set");
+                return "";
+            }
+            else
+            {
+                return userType;
+            }
+        }
+        catch (Exception exc)
+        {
+            System.out.println("User type error: " + exc.toString());
             return "";
         }
     }

@@ -238,8 +238,8 @@ public class Mob extends Thread {
                     swapControllers = true;
                     
                     if (ClientConnection.getUserType().equals("oauth")) {
-                        ClientConnection.AddOAuthUser();
-                    } else if (ClientConnection.getUserType().equals("costume")) {
+                        ClientConnection.AddOAuthOneKill();
+                    } else if (ClientConnection.getUserType().equals("custom")) {
                         ClientConnection.AddOneKill();
                     }
                     
