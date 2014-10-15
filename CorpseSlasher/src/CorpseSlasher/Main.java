@@ -253,15 +253,6 @@ public class Main extends SimpleApplication implements ScreenController {
         this.nifty  = nifty;
         this.screen = screen;
         nifty.setIgnoreKeyboardEvents(true);
-        usernameTxt   = nifty.getScreen("#Login_Screen").findNiftyControl("#Username_Input_ID", TextField.class);
-        passwordTxt   = nifty.getScreen("#Login_Screen").findNiftyControl("#Password_Input_ID", TextField.class);
-        accUser       = nifty.getScreen("New_Account_Screen").findNiftyControl("#Username_Input_ID_2", TextField.class);
-        accEmail      = nifty.getScreen("New_Account_Screen").findNiftyControl("#Email_Input_ID", TextField.class);
-        accSurname    = nifty.getScreen("New_Account_Screen").findNiftyControl("#Surname_Input_ID", TextField.class);
-        accName       = nifty.getScreen("New_Account_Screen").findNiftyControl("#Name_Input_ID", TextField.class);
-        accPassword   = nifty.getScreen("New_Account_Screen").findNiftyControl("#Password_Input_ID_2", TextField.class);
-        accPasswordRE = nifty.getScreen("New_Account_Screen").findNiftyControl("#Password_Input_ID_2_2", TextField.class);
-        retUser       = nifty.getScreen("Retrieve_Password").findNiftyControl("#Username_Input_ID_3", TextField.class);
     }
 
     @Override
@@ -284,7 +275,9 @@ public class Main extends SimpleApplication implements ScreenController {
      * After a successful login the loading screen is loaded and the game starts
      * to load
      */
-    public void loadingScreen() {
+    public void loadingScreen() {        
+        usernameTxt   = nifty.getScreen("#Login_Screen").findNiftyControl("#Username_Input_ID", TextField.class);
+        passwordTxt   = nifty.getScreen("#Login_Screen").findNiftyControl("#Password_Input_ID", TextField.class);
         boolean success  = ClientConnection.Login(usernameTxt.getRealText(), passwordTxt.getRealText());
         System.out.println("loading screen - " + success + " " + usernameTxt.getRealText() + " " + passwordTxt.getRealText());
         String  username = usernameTxt.getRealText();
@@ -333,6 +326,12 @@ public class Main extends SimpleApplication implements ScreenController {
      * data to the database and logins in
      */
     public void createNewAccount() {
+        accUser       = nifty.getScreen("New_Account_Screen").findNiftyControl("#Username_Input_ID_2", TextField.class);
+        accEmail      = nifty.getScreen("New_Account_Screen").findNiftyControl("#Email_Input_ID", TextField.class);
+        accSurname    = nifty.getScreen("New_Account_Screen").findNiftyControl("#Surname_Input_ID", TextField.class);
+        accName       = nifty.getScreen("New_Account_Screen").findNiftyControl("#Name_Input_ID", TextField.class);
+        accPassword   = nifty.getScreen("New_Account_Screen").findNiftyControl("#Password_Input_ID_2", TextField.class);
+        accPasswordRE = nifty.getScreen("New_Account_Screen").findNiftyControl("#Password_Input_ID_2_2", TextField.class);        
         String username = accUser.getRealText();
 
         if (accPassword.getRealText().equals(accPasswordRE.getRealText())) {
@@ -385,6 +384,7 @@ public class Main extends SimpleApplication implements ScreenController {
      * Goes to the login screen
      */
     public void retrievePasswordAndGoBack() {
+        retUser       = nifty.getScreen("Retrieve_Password").findNiftyControl("#Username_Input_ID_3", TextField.class);
         if (retUser.getRealText().contains("@")) {
             ClientConnection.RetrievePasswordInputEmail(retUser.getRealText());
             nifty.gotoScreen("#Login_Screen");
