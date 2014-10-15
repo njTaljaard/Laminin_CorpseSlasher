@@ -105,6 +105,7 @@ public class Main extends SimpleApplication implements ScreenController {
         }
         gSettings = new AppSettings(true);
         gSettings.setResolution(width, height);
+        gSettings.setFullscreen(false);
         UI.init(assetManager, inputManager, audioRenderer, guiViewPort, stateManager, this, gameScene);
         UI.setRes(width, height);
         flyCam.setEnabled(false);
@@ -177,7 +178,6 @@ public class Main extends SimpleApplication implements ScreenController {
 
         UI.setRes(width, height);
         UI.updateRes();
-        gSettings.setFullscreen(false);
         gSettings.setResolution(width, height);
         this.setSettings(gSettings);
         UI.setSettings(gSettings);
