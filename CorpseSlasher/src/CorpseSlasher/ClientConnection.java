@@ -72,6 +72,7 @@ public final class ClientConnection {
      * @return if login was successful or not.
      */
     public static boolean Login(String username, String password) {
+        System.out.println("login function");
         JSONObject obj = new JSONObject();
         try {
             obj.put("type", "login");

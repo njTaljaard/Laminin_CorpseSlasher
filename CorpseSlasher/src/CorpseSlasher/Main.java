@@ -231,6 +231,7 @@ public class Main extends SimpleApplication implements ScreenController {
     }
 
     public void relog() {
+        System.out.println("relog function");
         gameScene.relog(cam, 0);
         ClientConnection.loggedIn = true;
         ClientConnection.relog = false;
@@ -252,15 +253,15 @@ public class Main extends SimpleApplication implements ScreenController {
         this.nifty  = nifty;
         this.screen = screen;
         nifty.setIgnoreKeyboardEvents(true);
-        usernameTxt   = screen.findNiftyControl("#Username_Input_ID", TextField.class);
-        passwordTxt   = screen.findNiftyControl("#Password_Input_ID", TextField.class);
-        accUser       = screen.findNiftyControl("#Username_Input_ID_2", TextField.class);
-        accEmail      = screen.findNiftyControl("#Email_Input_ID", TextField.class);
-        accSurname    = screen.findNiftyControl("#Surname_Input_ID", TextField.class);
-        accName       = screen.findNiftyControl("#Name_Input_ID", TextField.class);
-        accPassword   = screen.findNiftyControl("#Password_Input_ID_2", TextField.class);
-        accPasswordRE = screen.findNiftyControl("#Password_Input_ID_2_2", TextField.class);
-        retUser       = screen.findNiftyControl("#Username_Input_ID_3", TextField.class);
+        usernameTxt   = nifty.getScreen("#Login_Screen").findNiftyControl("#Username_Input_ID", TextField.class);
+        passwordTxt   = nifty.getScreen("#Login_Screen").findNiftyControl("#Password_Input_ID", TextField.class);
+        accUser       = nifty.getScreen("New_Account_Screen").findNiftyControl("#Username_Input_ID_2", TextField.class);
+        accEmail      = nifty.getScreen("New_Account_Screen").findNiftyControl("#Email_Input_ID", TextField.class);
+        accSurname    = nifty.getScreen("New_Account_Screen").findNiftyControl("#Surname_Input_ID", TextField.class);
+        accName       = nifty.getScreen("New_Account_Screen").findNiftyControl("#Name_Input_ID", TextField.class);
+        accPassword   = nifty.getScreen("New_Account_Screen").findNiftyControl("#Password_Input_ID_2", TextField.class);
+        accPasswordRE = nifty.getScreen("New_Account_Screen").findNiftyControl("#Password_Input_ID_2_2", TextField.class);
+        retUser       = nifty.getScreen("Retrieve_Password").findNiftyControl("#Username_Input_ID_3", TextField.class);
     }
 
     @Override
@@ -285,6 +286,7 @@ public class Main extends SimpleApplication implements ScreenController {
      */
     public void loadingScreen() {
         boolean success  = ClientConnection.Login(usernameTxt.getRealText(), passwordTxt.getRealText());
+        System.out.println("loading screen - " + success + " " + usernameTxt.getRealText() + " " + passwordTxt.getRealText());
         String  username = usernameTxt.getRealText();
 
         if (success) {
