@@ -144,6 +144,9 @@
 			03/10/2014	\> Version 2.0	\> Added Nifty GUI limitations.					\> Gerhard Smit\\
 			03/10/2014	\> Version 2.0	\> Added overcoming Nifty GUI limitations.		\> Gerhard Smit\\
 			10/10/2014	\> Version 3.0	\> Changed title page							\> Nico Taljaard\\
+			16/10/2014	\> Version 3.1	\> Changed architectural scope.					\> Nico Taljaard\\
+			16/10/2014	\> Version 3.1	\> Added overcoming game limitations.			\> Nico Taljaard\\
+			16/10/2014	\> Version 3.1	\> Final read through.							\> Nico Taljaard\\
 		\end{tabbing}
 		
 	\newpage
@@ -163,7 +166,7 @@
 		\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} Vision }}} \addcontentsline{toc}{section}{Vision}
 		\vspace{0.2in}
 		
-		The vision of this project is to create a game that supports multiple platforms, for example android devices and windows computers. The game should be connected to a server where game data can be saved and retrieved real time. The user should be able to log in using a custom log in or an OAuth log in that uses social media like Facebook and Google+. There must also be a live leader board and achievements. It must be able to develop the game in three months. The project must be developed using only open source and freeware technologies.
+		The vision of this project is to create a game that supports multiple platforms, for example android devices and windows computers. The game should be connected to a server where game data can be saved and retrieved real time. The user should be able to login using a custom login or an OAuth log in that uses social media like Facebook and Google+. There must also be a live leader board and achievements. It must be able to develop the game in three months. The project must be developed using only open-source and freeware technologies.
 					
 		\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} Scope}}} \addcontentsline{toc}{section}{Scope}
 		
@@ -221,6 +224,7 @@
   		\item Compatibility, the game will not necessarily work with all hardware.
   		\item Game engine itself has performance limitation where it does not use all available resources.
   		\item The game should be able to run on mobile and desktop. This leads to having lower performance settings on android then on desktop.
+  		\item Android support by engine exists but not all defined aspects work correctly on each version.
   		\item There is no requirement for having multiple maps or enemies.
   		\item Social OAuth login is only required for Facebook and Google+.
 		\end{itemize}
@@ -231,7 +235,18 @@
 			\subsection*{ Architectural scope }
 			\addcontentsline{toc}{subsection}{Architectural scope}
 			\vspace{0.1in}	
-			We will be providing a persistance infrastructure in the form of a database which will allow us to store user information such as email addresses, usernames, passwords and game information i.e. Character location, Health and Experience. There will be a reporting infrastructure between the client and the server for updating the leaderboard, to display the progress of multiple users. As a nice to have we would like to add another reporting infrastructure on the server side to allow for printing of graphs related to client logging and more. There is an infrustracture in place for process execution which controls the frame updates, user-interfaces being called at the appropriate times also there are server side process execution infrastructures handled purely by the server, which sends and receives data from the client also sending through an email to the user with password details. There is a login infrastructure in place using social media (OAuth) to login or a custom login where an account is required. 
+			
+			This project has a wide variety of architectural aspects in the for of:
+			\begin{itemize}
+				\item Client connections.
+				\item Back-end server.
+				\item Persistence.
+				\item OAuth.
+				\item An amount of patterns \& strategies.
+			\end{itemize}
+			Our architectural layout will consist of the game with client side processing, a back-end server with a persistent database to store client details as well as their kill count and experience. On server has concurrent client connection support with pipe \& filter to control received information, with a persistence connection for each client where the database controls the concurrency. On client side a server connection is created on start-up, a user can login with our custom login or through social media using OAuth to verify the detail and retrieve required information. Support will be added where achievements can be posted on the players social media page after a certain amount of kills. The game supports concurrency for scene updates to improve performance. \\ \\
+			
+			A clear distinction is made between client, server \& persistence by only allowing communication to these of these aspects through connections available on any IP \& socket specified. Doing so allows freedom to abstract each to a separate host and distribute process requirements.
 				
 			\vspace{0.2in}
 			\subsection*{ Quality requirements }
@@ -348,7 +363,8 @@
 					General security conditions.
 					\begin{itemize}
 						\item Use OAuth LDAP for connection to social media e.g. Facebook, Google+.
-						\item Password encryption on database side as well as when signing in through custom loggin.
+						\item Password encryption on database to reduce transparency.
+						\item Password encryption with custom login by using AES and network IP.
 						\item Password retrieval only to an know uses with a verified email address.
 						\item Clean up all incoming data on client and server for incorrect formats, data types \& lengths.
 						\item Test if the incoming data comes from authenticated user.
@@ -378,10 +394,8 @@
 						\item We use SMTP to send out mails.
 						\item We use HTTP to do the OAuth authorization.
 						\item We use TCP/IP to connect client to server and exchange data between client and server.
-						\item We use Nifty GUI to display GUI's in the game.
+						\item We use Nifty GUI to display GUI's in the game. \\
 					\end{itemize}
-				
-				\newpage			
 				
 				The system will be accessible by human users through the following channels:
 				\begin{itemize}
@@ -404,27 +418,26 @@
 		
 			
 				\begin{enumerate}
-					\item \textbf{Open source}
-					\\Research open source or freeware technologies available; this includes freely available art work.
+					\item \textbf{Open-source}
+					\\Research open-source or freeware technologies available; This includes freely available art work.
 					
 					\item \textbf{Cross-platform}
 					\\The game needs to run on at least two different platforms (desktop and mobile) or can be an HTML application that can be wrapped for different platforms.
 					
 					\item \textbf{Using OAuth login and posts}
-					\\OAuth integration; Facebook, Twitter or G+ login and achievement updates.
+					\\OAuth integration; Facebook \& G+ login and achievement updates.
 					
 					\item \textbf{Custom login}
 					\\if user does not want to use OAuth, he or she can use custom login.
 					
 					\item \textbf{Encryption}
-					\\Passwords needs to be encrypted when stored.
+					\\Passwords needs to be encrypted when in transition \& when stored.
 					
 					\item \textbf{Recover password}
 					\\Add forgot password feature.
 									
 					\item \textbf{Live Leader Board}
 					\\The game needs to have a points system that updates real time.
-					
 					
 				\end{enumerate}
 			
@@ -439,9 +452,8 @@
 		\begin{itemize}
 		\item Game :
 		\begin{itemize}
-		\item Concurrency : All the mobs that are in the update radius are updated per frame to a new position, state or animation.
-		\item Queuing : The thread pooling in place makes use of a blocking queue.
-		\item Layering : The game/client side makes use of a layering system through the update, where a game update occurs and then the update is sent to the character and mod handler to update their respective locations or states.
+		\item Concurrency : All the mobs to update on there separate threads when they are within the defined radius per frame to its new position, state \& animation.
+		\item Layering : This is implemented to abstract game aspects to simplify communication channels, controller \& updater separation, allow plug-ability for aspects for future expansion.
 		\item Interpreter : The opening of user-interface screens are being sent to a single class to open the correct screen.
 		\item Iterator : When an update to the size of the user-interface is being made all the screens are updated in succession.
 		\end{itemize}
@@ -449,13 +461,13 @@
 		\begin{itemize}
 		\item Facade : There is a single input class that acts as in interface for all the server classes.
 		\item Interpreter : There is a single input class redirecting all the commands coming from the client to the different server classes.
-		\item Layering : Multiple layers have been implemented on the server side, to allow for better security and simplicity.
+		\item Layering : Multiple layers have been implemented on the server side, to allow for better security, simplicity \& plug-ability.
 		\item Blackboard system : The oauth classes posts on the user's social media page on his behalf.
-		\item Event-drive : When a server call or event is requested from the client side, the server processes that query that was sent. 
+		\item Event-driven : When a server call or event is requested from the client side, the server processes that query that was sent. 
 		\item MVC : The client connection is the view, server is the controller and the database is the model.
-		\item Multitier : The structure that exists between the client and the server.
-		\item Pipe and filter : The connection between the server and the client is the pipe while the server itself acts as the filter.
-		\item Service orientated : There are multiple plugable aspects regarding the server such as the ability to send emails and the database being used.
+		\item Multi-tier : The structure that exists between the client and the server.
+		\item Pipe \& filter : The connection between the server and the client is the pipe while the server itself acts as the filter for incoming requests.
+		\item Service orientated : There are multiple pluggable aspects regarding the server such as the ability to send emails and the database being used.
 		\end{itemize}
 		\end{itemize}
 		\vspace{0.2in}
@@ -477,7 +489,6 @@
 				\item Server:
 					\begin{itemize}
 						\item Thread pooling is implemented by Java thread pool executor for all incoming connections so that each thread has sufficient time for CPU access and no dead lock can occur because each thread runs on each own instance of the server.
-						\item Reopening JDBC for each request to free up memory space and cpu cycles.
 					\end{itemize}
 			\end{itemize}
 			
@@ -542,7 +553,7 @@
 					\\jSpiderMonkey will be used to handle client side networking within the jMonkeyEngine framework as a nice to have for later purposes of multiplayer functionality as nice to have.
 					
 					\item \textbf{Persistence}
-					\\MySQL will be used to store all data which is accessible through a JDBC. MySQL is easy to use and very powerful as it allows for over 100000 concurrent connections at a time, it has a huge support community, it is also very easy to intergrate with Java.
+					\\MySQL will be used to store all data which is accessible through a JDBC. MySQL is easy to use and very powerful as it allows for over 100000 concurrent connections at a time, it has a huge support community, it is also very easy to intergrate with Java. \\
 				\end{enumerate}
 			
 			\begin{itemize}
@@ -561,7 +572,7 @@
 						\item STMP for password recovery.
 					\end{itemize}
 				\item Operating system: \\
-					  Windows 7 \& 8, Andriod 2.2+
+					  Windows 7 \& 8, Linux, Andriod 2.2+
 			\end{itemize}
 			
 		\vspace{0.2in}
@@ -581,8 +592,8 @@
 						\item Creating a scene in the scene composer and loading into Android does not load textures with.
 						\item Textures do not load correctly with models.
 						\item Ghost collision boxes does not detect any collision or overlapping of other collision boxes.
-						\item JoyStick events are not created to be used for Android requires TouchEvent to processes camera and movement.
-						\item Frame limitation of 60 frames per second. \\
+						\item JoyStick events are not supported by Android requires TouchEvents.
+						\item Process limitation. \\
 					\end{itemize}
 				
 				\item Nifty GUI when using Java:
@@ -608,14 +619,28 @@
 			
 			\begin{enumerate}
 				\item Game:
-				
-				\item UI: \item There is no work around for this issue of the font and text size not being adjustable through Java, a look at moving over to another Library in the future is the best solution.
-				
+					\begin{itemize}
+						\item Limiting processing required per frame update. This is done by limiting:
+							\begin{itemize}
+								\item Model \& vertex count.
+								\item Lighting \& shadows.
+								\item Post-processing.
+							\end{itemize}
+						\item Removing positional adapting audio.
+						\item Android:
+							\begin{itemize}
+								\item Reapplying textures of models have been loaded from the scene.
+								\item TouchEvents are designed depending on player thumb positions.
+								\item Reduce size, complexity and processing.\\
+							\end{itemize}
+					\end{itemize}
+				\item UI: 
+					\begin{itemize}
+						\item There is no work around for this issue of the font and text size not being adjustable through Java, a look at moving over to another Library in the future is the best solution.
+					\end{itemize}
 				\item Server:
 					\begin{itemize}
 						\item Format the string values to a JSON object(which is a normal string that is in the JSON format). All passwords are encrypted that is sent from client to server.
-					\end{itemize}
-					\begin{itemize}
 						\item Use the main class to write to the audit and error log files. Because the main class is a static class and only uses one thread, all the threads can call the main's functions to write to the logs for them. Seeing as the main class is the only one writing to the files, the main can keep the files open and does not have to worry about other threads wanting access to the files. You can see this method as making your main class the "queue" for all the thread's errors and audits that needs to be written to the files. 
 					\end{itemize}
 			\end{enumerate}
