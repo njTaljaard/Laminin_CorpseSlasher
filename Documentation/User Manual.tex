@@ -5,6 +5,8 @@
 \usepackage{lipsum}
 \usepackage{hyperref}
 \usepackage{tocloft}
+\usepackage{graphicx}
+\usepackage{float}
 
 \usepackage{setspace, amsmath}
 
@@ -106,8 +108,10 @@
 	{\LARGE \bf Change Log}\\[2em]
 	
 	\begin{tabbing}
-		\hspace*{2.5cm}\=\hspace*{2.5cm}\=\hspace*{8cm}\=\hspace*{3cm} \kill
-		
+			\hspace*{2.5cm}\=\hspace*{2.5cm}\=\hspace*{8cm}\=\hspace*{3cm} \kill 
+			13/10/2014\> Version 1.0\> Document Created. \\
+			15/10/2014\> Version 1.0\> Finished compiling and installing. \\
+			17/10/2014\> Version 1.0 \> Finished off how to use and maintenance.		\\
 	\end{tabbing}
 	
 		\newpage
@@ -152,14 +156,42 @@ or just run, ant compile jar run.
 	\begin{enumerate}
 		\item Ensure that localhost:32323 is available on the machine which you hope to use as the server.
 		\item Create a MySQL connection on the same machince you are using the server for on the following address : localhost/corpseslasher.
-		\item 
+		\item There is a variety of ways to run the actual game, you can use JMonkey to create an executable that can be run from anywhere you generate the executable file, or run it straight from the IDE by clicking the green run arrow at the top of the IDE toolbar, the other method of running the game is to use the command line or terminal through the use of ant as mentioned above.
+		\item Running the actual server is the same as mentioned as above, but you also require a MySQL connection to be active, through the use of any MySQL Server service such as MySQL-Workbench or XAMPP.
 	\end{enumerate}
-	
+	\newpage
 		\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} How to use }}} \addcontentsline{toc}{section}{How to use}
 	\vspace{0.1in}
-	
+	\begin{enumerate}
+	\item When the game starts up there is a login screen which appears, there are 5 possible options available.
+		\begin{itemize}
+			
+			\item Custom login - There is a username and password textfield box that will be in the center of the screen enter your details if you already have an active account, click login and the game will start if all is successful.\\
+			\item Facebook login \& Google+ login - There is small Facebook and Google+ button just above login, click on either one ,depending on which social media you decide to use to login in with, and the game will either minimize or you will have to minimize the game by alt tabbing out. You will find a browser that should be open on the desired, social media follow the instructions that will come up, accept any requests to post to your wall or send notifications to your account, after a while the game will either open up again logged in, or you will have to click on the game tab on the task bar for the game to maximize again. \\
+			\item Create new account - This will open up a new screen where you can create yourself a new account, at this screen there will be a list of textfields to enter each one must be entered correctly, once all the details have been entered and you are satisfied with everything, select create account and if the desired username exists and all the details are approved, the game will automatically start and you can play. If there was an error, then you will be sent to the login screen with an error message saying what was wrong, you can also go back to the login screen by clicking the go back button. \\
+			\item Retrieve password - This will open up a new screen where you can either enter your username or your email address, after doing this clicking the retrieve password button will send you back to the login screen and then if the credentials you entered were correct you will receive an email with your password in it. You can also go back to the login screen by clicking the back button. \\
+			\item Quit game - This will end the game and close any connection to the server and send you back to the desktop. \\
+		
+		\end{itemize}
+		
+		\item After the login process has ended, you will be inside the game, there will be a character, which is you, that will be on the screen, there is a health bar at the top of screen which will automatically fill up as you leave the detection range of a zombie. You are able to walk around using the mouse and keyboard, the mouse is used to look around and to attack, to attack you have to press the left mouse button, to look around just move the mouse left to right, up and down. The keyboard is used for walking around on the map, you have 4 keys available \textbf{W} for waliking forwards \textbf{A} for strafing to the left\textbf{S} for waliking backwards \textbf{D} for strafing to the right. \\
+		
+		\item Now that you are able to walk and move around you will find many zombies stuck on the island with you, all you have to do is run around and kill as many zombies as you desire, when you gain the aggro of a zombie the border of the screen changes and it will go away as you lose aggro again, when you are attacked there will be blood splatter that will come on the screen, this will only last for a second. If you attack a zombie enough it will die, after a while it will respawn again, ready to kill, if you are killed you will be respawned at the start location of the game again. \\
+		
+		\item To open the options menu simply hit the escape key which will open a screen from which you can change certain settings, to exit this screen simply hit the escape key again. \textbf{NOTE: This screen does not pause the game you are still viable to being attacked by zombies even in the options screen}. \\
+		
+		\begin{itemize}
+			\item Display settings - This will open the display settings tab, which allows you to change to your desired resolution settings hitting apply will also require a manual restart of the game. \\ 
+			\item Graphics settings - This will open the graphics settings tab, which allows you to change graphical settings such as water effects and other terrain details to either increase performance or visuals, clicking apply will not require a manual restart of the game. \\
+			\item Audio settings - This will open the audio settings tab, which allows you to change audio settings of the game, such as the footsteps, combat or dialog levels, there is also a master volume slider to change all of them, clicking apply will change the volume and you won't need to restart. \\
+			\item Leader board - This will open a leader board screen where you are able to see the current scores of other players, this is a live leader board meaning any kill will be updated and displayed at the refresh of the screen. \\
+			\item Logout - This will send you back to the login screen, read above for details on the login screen. \\
+			\item Quit game - This will end the game and close any connection to the server and send you back to the desktop. \\
+		\end{itemize}		   
+	\end{enumerate}
 		\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} Maintainence }}} \addcontentsline{toc}{section}{Maintainence}
 	\vspace{0.1in}
+	In the case of any errors that could occur, setting all the values to true in the GameSettings.ini will allow the game to always load, provided your system meets the minimum requirements of the game. Make sure that there is always an internet connection present while the game is running, if you have access to the server, read the log files to check for any errors that could have occurred, or any suspicious server activities as invalid requests, or retrievals or data being sent. The game is open source, as well as the server, thus any modifications are welcome, all functions are detailed and explained to help in the case of debugging is required.  
 	
 
 % % % % % % % % % % % % % % %
