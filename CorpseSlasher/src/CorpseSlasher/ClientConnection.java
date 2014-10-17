@@ -31,6 +31,7 @@ public final class ClientConnection {
     private static Socket clientSocket;
     private static BufferedReader inReader;
     private static PrintWriter outWriter;
+    //private static final String hostAddress = "localhost";
     private static final String hostAddress = "192.168.0.1";
     private static final int hostPortNumber = 32323;
     private static String username_ = "";
@@ -39,12 +40,10 @@ public final class ClientConnection {
     public static String userId = "";
     public static boolean loggedIn = false;
     public static boolean relog = false;
-    /**
-     * key - is the secret key used for the encryption.
-     */
+
     private static byte[] key = {
             0x74, 0x68, 0x69, 0x73, 0x49, 0x73, 0x41, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x4b, 0x65, 0x79
-    };//"thisIsASecretKey";
+    };
 
     public ClientConnection() {
         StartClientConnection();

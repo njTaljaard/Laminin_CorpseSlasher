@@ -18,13 +18,17 @@ public class ServerUnitTesting {
      * @return true if all the tests was successful and false if not.
      */
     public static boolean test() {
+        //boolean custom = false;
+        // oauthFacebook = false;
+        //boolean oauthGoogle = false;
         System.out.println("Start of server unit test.");
         System.out.println("/////////////////////////////////////////////");
         if (!ClientConnection.StartClientConnection())
         {
             System.out.println("Can't connect to server");
         }
-        //user one
+        System.out.println("Custom user testing: ");
+        //custom user one
         String username1 = "u10651994";
         String password1 = "9876543210";
         String name1 = "Martin";
@@ -63,6 +67,7 @@ public class ServerUnitTesting {
                                             System.out.println("Unit test was successful");
                                             System.out.println("End of server unit test.");
                                             System.out.println("/////////////////////////////////////////////");
+                                            //custom = true;
                                             return true;
                                         } else {
                                             System.out.println("Unit test failed beacause of logout not working.");
@@ -132,6 +137,24 @@ public class ServerUnitTesting {
             return false;
         }
     }
+    
+    /**
+     * createOAuthUser test's the addUser function.
+     *
+     * @param id - user's id.
+     * @param username - user's username.
+     * 
+     * @return true if it was successful and false if not.
+     */
+    public static boolean createOAuthUser(String id, String username) {
+        try {
+            return ClientConnection.AddOAuthUser(id, username);
+
+        } catch (Exception exc) {
+            System.out.println("ServerUnitTest create OAuth user error: " + exc.toString());
+            return false;
+        }
+    }
 
     /**
      * login test's the Login function.
@@ -169,6 +192,21 @@ public class ServerUnitTesting {
             return ClientConnection.CheckUsernameAvailable(username);
         } catch (Exception exc) {
             System.out.println("ServerUnitTest usernameAvailble error: " + exc.toString());
+            return false;
+        }
+    }
+    
+    /**
+     * oauthIdAvailable test's the checkOauthIdAvailable function.
+     *
+     * @param id - user's id.
+     * @return true if it was successful and false if not.
+     */
+    public static boolean oauthIdAvailable(String id) {
+        try {
+            return ClientConnection.checkOauthIdAvailable(id);
+        } catch (Exception exc) {
+            System.out.println("ServerUnitTest oauth ID available error: " + exc.toString());
             return false;
         }
     }
@@ -222,6 +260,20 @@ public class ServerUnitTesting {
             return false;
         }
     }
+    
+    /**
+     * addOAuthKill test's the AddOAuthOneKill function.
+     *
+     * @return true if it was successful and false if not.
+     */
+    public static boolean addOAuthKill() {
+        try {
+            return ClientConnection.AddOAuthOneKill();
+        } catch (Exception exc) {
+            System.out.println("ServerUnitTest add a OAuth kill error: " + exc.toString());
+            return false;
+        }
+    }
 
     /**
      * addKill test's the AddOneKill function.
@@ -252,6 +304,21 @@ public class ServerUnitTesting {
             return false;
         }
     }
+    
+    /**
+     * setOAuthKills test's the SetOAuthKills function.
+     *
+     * @param numKills - number of the user's kills.
+     * @return true if it was successful and false if not.
+     */
+    public static boolean setOAuthKills(String numKills) {
+        try {
+            return ClientConnection.SetOAuthKills(numKills);
+        } catch (Exception exc) {
+            System.out.println("ServerUnitTest set OAuth kills error: " + exc.toString());
+            return false;
+        }
+    }
 
     /**
      * getKills test's the GetKills function.
@@ -264,6 +331,20 @@ public class ServerUnitTesting {
             return ClientConnection.GetKills(username);
         } catch (Exception exc) {
             System.out.println("ServerUnitTest get kills error: " + exc.toString());
+            return -1;
+        }
+    }
+    
+    /**
+     * getOAuthKills test's the GetOAuthKills function.
+     *
+     * @return true if it was successful and false if not.
+     */
+    public static int getOAuthKills() {
+        try {
+            return ClientConnection.GetOAuthKills();
+        } catch (Exception exc) {
+            System.out.println("ServerUnitTest get OAuth kills error: " + exc.toString());
             return -1;
         }
     }

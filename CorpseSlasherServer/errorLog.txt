@@ -205,3 +205,10 @@ Date: 2014/09/26 11:53:29, Class: ClientConnection, Function: run, Error: java.n
 Date: 2014/10/06 15:27:35, Class: ClientConnection, Function: run, Error: java.net.SocketException: Connection reset
 Date: 2014/10/06 15:36:17, Class: ClientConnection, Function: run, Error: java.net.SocketException: Connection reset
 Date: 2014/10/06 15:37:02, Class: ClientConnection, Function: run, Error: java.net.SocketException: Connection reset
+Date: 2014/10/15 12:45:48, Class: ClientConnection, Function: run, Error: java.net.SocketException: Connection reset
+Date: 2014/10/15 12:45:48, Class: ClientConnection, Function: run, Error: java.net.SocketException: Connection reset
+Date: 2014/10/15 12:47:45, Class: ClientConnection, Function: run, Error: java.net.SocketException: Connection reset
+Date: 2014/10/15 12:49:19, Class: ClientConnection, Function: run, Error: java.net.SocketException: Connection reset
+Date: 2014/10/15 13:52:59, Class: ClientConnection, Function: run, Error: java.net.SocketException: Connection reset
+Date: 2014/10/15 14:53:54, Class: ClientConnection, Function: run, Error: java.net.SocketException: Connection reset
+Date: 2014/10/17 09:04:04, Class: ClientConnection, Function: run, Error: java.net.SocketException: Connection reset

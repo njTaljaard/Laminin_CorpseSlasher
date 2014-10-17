@@ -510,7 +510,7 @@ public class Database {
                     arrFinal[2][i] = arrUser[2][user];
                     user++;
                 }
-                else if (Integer.parseInt(arrUser[2][user]) > Integer.parseInt(arrOAuthUser[2][oauth]))
+                else if (Integer.parseInt(arrUser[1][user]) > Integer.parseInt(arrOAuthUser[1][oauth]))
                 {
                     arrFinal[0][i] = arrUser[0][user];
                     arrFinal[1][i] = arrUser[1][user];
