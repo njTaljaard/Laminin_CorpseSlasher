@@ -3,6 +3,7 @@ package CorpseSlasher;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
+import com.jme3.animation.SkeletonControl;
 import com.jme3.scene.Node;
 import com.jme3.math.Vector3f;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
@@ -107,25 +108,16 @@ public class Mob extends Thread {
         ragdoll = new ModelRagdoll(0.01f, "bennettzombie_body.001-ogremesh");
         
         if (ragdoll != null) {
-            ragdoll.addBoneName("hips");
-            ragdoll.addBoneName("spine");
-            ragdoll.addBoneName("chest");
-            ragdoll.addBoneName("neck");
-            ragdoll.addBoneName("head");
-            ragdoll.addBoneName("shoulder.L");
-            ragdoll.addBoneName("shoulder.R");
-            ragdoll.addBoneName("upper_arm.L");
-            ragdoll.addBoneName("upper_arm.R");
-            ragdoll.addBoneName("forearm.L");
-            ragdoll.addBoneName("forearm.R");
-            ragdoll.addBoneName("hand.L");
-            ragdoll.addBoneName("hand.R");
-            ragdoll.addBoneName("thigh.L");
-            ragdoll.addBoneName("thigh.R");
-            ragdoll.addBoneName("shin.L");
-            ragdoll.addBoneName("shin.R");
-            ragdoll.addBoneName("foot.L");
-            ragdoll.addBoneName("foot.R");
+            SkeletonControl skeleton = GameWorld.getSkeletonControl(mob);
+            
+            if (skeleton != null) {
+                for (int i = 0; i < skeleton.getSkeleton().getBoneCount(); i++) {
+                    ragdoll.addBoneName(skeleton.getSkeleton().getBone(i).getName());
+                }
+            } else {
+                ExceptionHandler.throwError("Skeleton controller not retrieved from player.", "Character - Ragdoll");
+            }
+            
             ragdoll.setEnabled(false);
             ragdoll.addCollisionListener(ragdoll);
         } else {

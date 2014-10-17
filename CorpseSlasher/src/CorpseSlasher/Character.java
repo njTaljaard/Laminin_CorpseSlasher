@@ -3,6 +3,7 @@ package CorpseSlasher;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
+import com.jme3.animation.Skeleton;
 import com.jme3.animation.SkeletonControl;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
@@ -98,7 +99,7 @@ public class Character {
             characterControl.setGravity(new Vector3f(0, -2000, 0));
             characterControl.setJumpForce(new Vector3f(0, 4, 0));
             characterControl.setApplyPhysicsLocal(true);
-            characterControl.setJumpForce(new Vector3f(0,0,0));
+            characterControl.setJumpForce(new Vector3f(0,160,0));
         } else { 
             ExceptionHandler.throwError("BetterCharacterControl not initialized succesfully", "Character - Control");
         }
@@ -112,26 +113,16 @@ public class Character {
         ragdoll = new ModelRagdoll(0.5f, "Cube-ogremesh");
         
         if (ragdoll != null) {
-            ragdoll.addBoneName("spine1");
-            ragdoll.addBoneName("spine2");
-            ragdoll.addBoneName("spine3");
-            ragdoll.addBoneName("spine4");
-            ragdoll.addBoneName("spine5");
-            ragdoll.addBoneName("neck");
-            ragdoll.addBoneName("head");
-            ragdoll.addBoneName("upper_arm.r");
-            ragdoll.addBoneName("upper_arm.l");
-            ragdoll.addBoneName("lower_arm.r");
-            ragdoll.addBoneName("lower_arm.l");
-            ragdoll.addBoneName("hand.r");
-            ragdoll.addBoneName("hand.l");
-            ragdoll.addBoneName("upper_leg.r");
-            ragdoll.addBoneName("upper_leg.l");
-            ragdoll.addBoneName("lower_leg.r");
-            ragdoll.addBoneName("lower_leg.l");
-            ragdoll.addBoneName("foot.r");
-            ragdoll.addBoneName("foot.l");
-            ragdoll.addBoneName("Sword");
+            SkeletonControl skeleton = GameWorld.getSkeletonControl(player);
+            
+            if (skeleton != null) {
+                for (int i = 0; i < skeleton.getSkeleton().getBoneCount(); i++) {
+                    ragdoll.addBoneName(skeleton.getSkeleton().getBone(i).getName());
+                }
+            } else {
+                ExceptionHandler.throwError("Skeleton controller not retrieved from player.", "Character - Ragdoll");
+            }
+            
             ragdoll.setEnabled(false);
         } else {
             ExceptionHandler.throwError("Ragdoll not succesfully initialized.", "Character - Ragdoll");
@@ -211,6 +202,10 @@ public class Character {
             
             walkDirection = motionController.updateCharacterMotion();
             characterControl.setWalkDirection(walkDirection.normalize().multLocal(GameWorld.playerWalkSpeed));
+            
+            if (motionController.jump) {
+                characterControl.jump();
+            }
             
             if (motionController.walk) {
                 Audio.playCharacterWalk();
