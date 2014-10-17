@@ -109,6 +109,9 @@
 	\begin{tabbing}
 		\hspace*{2.5cm}\=\hspace*{2.5cm}\=\hspace*{8cm}\=\hspace*{3cm} \kill
 		
+		13/10/2014 	\> Version 1.0  \> Created Document.									\>Gerhard Smit\\
+		17/10/2014 	\> Version 1.0  \> Completed Document.									\> Martin Schoeman\\
+		
 	\end{tabbing}
 	
 		\newpage
@@ -128,15 +131,33 @@
 	\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} Unit testing }}} \addcontentsline{toc}{section}{Unit testing}
 	\vspace{0.1in}
 	
+	We have unit testing for the server. That not only test the servers functionality, but also test that the connection functionality between the game and the server works. The unit test runs every function that is available for a custom user from the server and checks if the result is what is expected. The unit testing exists in its own class in the game and uses mock data for the testing.
+	
 	\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} Integration testing }}} \addcontentsline{toc}{section}{Integration testing}
 	\vspace{0.1in}
+	
+	When any addition, deletion or editing is made to the project, the unit test is run and the addition, deletion or editing along with the entire project is tested by the developer with user testing. This ensures that addition, deletion or editing is bug free. If a bug is detected, it is logged and immediately worked on to get fixed. 
 	
 	\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} Non-functional testing }}} \addcontentsline{toc}{section}{Non-functional testing}
 	\vspace{0.1in}
 	
+	Security:
+	\begin{enumerate}
+		\item All the content of each function that the server has, are contained in a try catch. Where if an error is thrown, the error is sent to the error handler. The error handler logs the error in the form of time, date, error, the class and function where the error was thrown from.
+	\item All content of each function on the game side are contained in a try catch and if the an error is thrown, the error is printed in the logger.
+	\item Game side has if statements to check if objects are initialized before the objects are used.
+	\end{enumerate}
+	
+	Performance:
+	\begin{enumerate}
+		\item The game is played and CPU, GPU, RAM, VRAM and frame rate it monitored by using msi afterburner.
+		\item Multiple instances of server calls was spammed asynchronously to the server to check the server stability with multithreading.
+	\end{enumerate}
+	
 	\section*{\colorbox{black}{\makebox[\textwidth-2\fboxsep][l]{\bfseries\color{red} Usability testing }}} \addcontentsline{toc}{section}{Usability testing}
 	\vspace{0.1in}
 	
+	We used random users to play our game for the first time and give us feed back. We use the feed back to improve the game. The random users exist of users that is use to play a lot of games and users that is not use to playing games. Example of results are the users wanted a jump function with space bar.
 
 % % % % % % % % % % % % % % %
 % 							%

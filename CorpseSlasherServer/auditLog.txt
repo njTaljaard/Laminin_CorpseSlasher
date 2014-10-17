@@ -177,3 +177,11 @@ Date: 2014/10/17 09:03:42, Username: u10651994, Query: addOneKill
 Date: 2014/10/17 09:03:42, Username: u10651994, Query: getKills
 Date: 2014/10/17 09:03:42, Username: u10651994, Query: retrievePassword
 Date: 2014/10/17 09:03:52, Username: unknown, Query: retrievePasswordInputEmail
+Date: 2014/10/17 10:22:43, Username: nic, Query: login
+Date: 2014/10/17 10:22:58, Username: nic, Query: login
+Date: 2014/10/17 10:24:48, Username: nic, Query: login
+Date: 2014/10/17 10:25:53, Username: nic, Query: addOneKill
+Date: 2014/10/17 10:26:11, Username: nic, Query: addOneKill
+Date: 2014/10/17 10:28:24, Username: nic, Query: login
+Date: 2014/10/17 10:29:36, Username: Enter Username, Query: login
+Date: 2014/10/17 10:29:44, Username: nic, Query: login
