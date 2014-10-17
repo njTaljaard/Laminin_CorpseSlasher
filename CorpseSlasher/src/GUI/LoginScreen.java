@@ -143,7 +143,7 @@ public class LoginScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new LabelBuilder("#New_Account_ID", "Create New Account") {
+                                control(new ButtonBuilder("#New_Account_ID", "Create New Account") {
                                     {
                                         marginLeft("-8%");
                                         marginBottom("-44%");
@@ -154,7 +154,7 @@ public class LoginScreen extends Screens {
                                         color("#ff0000");
                                     }
                                 });
-                                control(new LabelBuilder("#Retrieve_Password_ID", "Retrieve Password") {
+                                control(new ButtonBuilder("#Retrieve_Password_ID", "Retrieve Password") {
                                     {
                                         marginLeft("8%");
                                         marginBottom("-44%");
