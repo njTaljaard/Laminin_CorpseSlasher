@@ -284,6 +284,7 @@ public class Main extends SimpleApplication implements ScreenController {
      * to load
      */
     public void loadingScreen() {
+        try{
         usernameTxt = nifty.getScreen("#Login_Screen").findNiftyControl("#Username_Input_ID", TextField.class);
         passwordTxt = nifty.getScreen("#Login_Screen").findNiftyControl("#Password_Input_ID", TextField.class);
 
@@ -312,18 +313,6 @@ public class Main extends SimpleApplication implements ScreenController {
             }
         } else {
             message = "Username or password incorrect";
-
-            /*
-             *  guiViewPort.getProcessors().removeAll(guiViewPort.getProcessors());
-             * inputManager.setCursorVisible(false);
-             *
-             * if (ClientConnection.relog) {
-             *    relog();
-             * } else {
-             *    loadGame();
-             *    UI.destroyLogin();
-             * }
-             */
         }
 
         ele.show();
@@ -332,6 +321,11 @@ public class Main extends SimpleApplication implements ScreenController {
 
         errorFound = true;
         tf.setText(message);
+        }
+        catch(Exception e)
+        {
+            System.out.println("There was an error in the login screen");
+        }
     }
 
     /**
@@ -346,6 +340,7 @@ public class Main extends SimpleApplication implements ScreenController {
      * data to the database and logins in
      */
     public void createNewAccount() {
+        try{
         accUser       = nifty.getScreen("New_Account_Screen").findNiftyControl("#Username_Input_ID_2", TextField.class);
         accEmail      = nifty.getScreen("New_Account_Screen").findNiftyControl("#Email_Input_ID", TextField.class);
         accSurname    = nifty.getScreen("New_Account_Screen").findNiftyControl("#Surname_Input_ID", TextField.class);
@@ -398,6 +393,10 @@ public class Main extends SimpleApplication implements ScreenController {
         tf.setText(message);
         errorFound = true;
         goBack();
+        }
+        catch(Exception e){
+            System.out.println("There was an error in the create new account screen");
+        }
     }
 
     /**
@@ -417,6 +416,7 @@ public class Main extends SimpleApplication implements ScreenController {
      * Goes to the login screen
      */
     public void retrievePasswordAndGoBack() {
+        try{
         retUser = nifty.getScreen("Retrieve_Password").findNiftyControl("#Username_Input_ID_3", TextField.class);
 
         if (retUser.getRealText().contains("@")) {
@@ -425,6 +425,10 @@ public class Main extends SimpleApplication implements ScreenController {
         } else {
             ClientConnection.RetrievePassword(retUser.getRealText());
             nifty.gotoScreen("#Login_Screen");
+        }
+        }
+        catch(Exception e){
+            System.out.println("There was an error in the retrieve password screen");
         }
     }
 
