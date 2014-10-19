@@ -99,7 +99,7 @@ public class SettingsScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new ButtonBuilder("", "Graphics Settings") {
+                                /*control(new ButtonBuilder("", "Graphics Settings") {
                                     {
                                         marginTop("2%");
                                         marginLeft("5%");
@@ -109,7 +109,7 @@ public class SettingsScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                         interactOnClick("goTo(Graphics_Extension)");
                                     }
-                                });
+                                });*/
                                 control(new ButtonBuilder("", "Sound Settings") {
                                     {
                                         marginTop("2%");
@@ -189,7 +189,7 @@ public class SettingsScreen extends Screens {
                                         interactOnClick("goTo(Display_Settings)");
                                     }
                                 });
-                                control(new ButtonBuilder("", "Graphics Settings") {
+                                /*control(new ButtonBuilder("", "Graphics Settings") {
                                     {
                                         marginTop("2%");
                                         marginLeft("5%");
@@ -198,7 +198,7 @@ public class SettingsScreen extends Screens {
                                         align(Align.Left);
                                         font("Interface/Fonts/zombie.fnt");
                                     }
-                                });
+                                });*/
                                 control(new ButtonBuilder("", "Sound Settings") {
                                     {
                                         marginTop("2%");
@@ -478,7 +478,7 @@ public class SettingsScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                     }
                                 });
-                                control(new ButtonBuilder("", "Graphics Settings") {
+                                /*control(new ButtonBuilder("", "Graphics Settings") {
                                     {
                                         marginTop("2%");
                                         marginLeft("5%");
@@ -488,7 +488,7 @@ public class SettingsScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                         interactOnClick("goTo(Graphics_Extension)");
                                     }
-                                });
+                                });*/
                                 control(new ButtonBuilder("", "Sound Settings") {
                                     {
                                         marginTop("2%");
@@ -612,7 +612,7 @@ public class SettingsScreen extends Screens {
                                         interactOnClick("goTo(Display_Settings)");
                                     }
                                 });
-                                control(new ButtonBuilder("", "Graphics Settings") {
+                                /*control(new ButtonBuilder("", "Graphics Settings") {
                                     {
                                         marginTop("2%");
                                         marginLeft("5%");
@@ -622,7 +622,7 @@ public class SettingsScreen extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                         interactOnClick("goTo(Graphics_Extension)");
                                     }
-                                });
+                                });*/
                                 control(new ButtonBuilder("", "Sound Settings") {
                                     {
                                         marginTop("2%");

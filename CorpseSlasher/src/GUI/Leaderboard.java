@@ -92,7 +92,7 @@ public class Leaderboard extends Screens {
                                         interactOnClick("goTo(Display_Settings)");
                                     }
                                 });
-                                control(new ButtonBuilder("", "Graphics Settings") {
+                                /*control(new ButtonBuilder("", "Graphics Settings") {
                                     {
                                         marginTop("2%");
                                         marginLeft("5%");
@@ -102,7 +102,7 @@ public class Leaderboard extends Screens {
                                         font("Interface/Fonts/zombie.fnt");
                                         interactOnClick("goTo(Graphics_Extension)");
                                     }
-                                });
+                                });*/
                                 control(new ButtonBuilder("", "Sound Settings") {
                                     {
                                         marginTop("2%");
